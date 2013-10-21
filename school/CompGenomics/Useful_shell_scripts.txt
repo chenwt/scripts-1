@@ -1,0 +1,13 @@
+Useful_shell_scripts
+
+#find the number of directories and output the names
+find . -type d -print | sed s/\.\\/// > files.downloaed
+
+find . -type f -name '*.bam'
+
+du -ah --max-depth=2 | grep -v "*.bam*"
+
+#compare two files side-by-side and output the different rows
+ sdiff -s LIHC_exome_analysis_id.txt.sorted exome/files.downloaed | cut -f1 >LIHC_exome_analysis_id.txt_leftpart
+
+ diff --suppress-common-lines files_exome_downloaded.txt LAML_exome_analysis_id_sorted.txt | grep "^>"| sed "s/>//" > LAML_exome_analysis_id_2.txt

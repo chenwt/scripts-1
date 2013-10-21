@@ -1,0 +1,14 @@
+blca
+brca
+coad
+hnsc
+kirc
+lgg
+luad
+lusc
+ov
+prad
+skcm
+stad
+thca
+ucec

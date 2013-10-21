@@ -1,0 +1,194 @@
+\documentclass{beamer}
+\usepackage{amscd,amsfonts,amsmath,amssymb,latexsym,amsthm,geometry,booktabs,float}
+\usepackage[mathscr]{eucal}
+\usepackage{graphicx}
+%\usepackage{movie15}
+
+\newcommand\R{\mathbb{R}}
+\newcommand\I{\mathbb{I}}
+\newcommand\C{\mathcal{C}}
+\newcommand\X{\mathcal{X}}
+\newcommand\T{\mathcal{T}}
+\newcommand\h{\mathcal{H}}
+\newcommand\Oh{\mathcal{O}}
+\newcommand\M{\mathcal{M}}
+\newcommand\B{\mathcal{B}}
+
+\mode<presentation>
+\usetheme{Montpellier}%Berlin, classic, copenhagen, bars, Darmstadt, Dresden, Frankfurt, Ilmenau, lined, Malmoe, Montpellier, Singapore, Warsaw, Berkeley, Rochester
+%\usetheme[secheader]{Madrid}
+%\usecolortheme{whale}%seahorse, whale, dolphin, crane, beetle, rose, dove, fly, orchid, albatross, lily
+%color setting more or less matching U of A colors
+
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!55!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=red!50!black}
+\setbeamercolor*{palette quarternary}{use=structure,fg=white,bg=structure.fg!55!black}
+\setbeamertemplate{navigation symbols}{}
+
+
+\title[Project updates]{Project updates}
+
+\subtitle{AML WXS analysis \\
+	     PAN Cancer methylation }
+\author{Jing He}
+
+%\institute[University of Arizona]{Program in Applied Mathematics, University of Arizona}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    {
+    \tableofcontents[currentsection]
+        }
+  \end{frame}
+}
+
+\begin{document}
+\today
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\section{AML WXS }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reminder}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+   \frametitle{Reminder \ldots}
+   \begin{itemize}
+      \item what we have ? 
+	      \begin{itemize}
+	      	\item16 patients with matched normal, tumor and relapsed sample, whole exome sequencing 
+	      \end
+	\item what's our hypothesis ?
+	  \begin{itemize}
+	      	\item MRs related to relapse; mutations related to MRs; 
+	  \end
+      \item what we've done ? 
+      	  \begin{itemize}
+	      	\item a list of potential MRs ( Yi shai); somatic mutations and CNVs of the 16 patients
+	  \end
+   \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{MRs_Mutations_CNVs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+   \frametitle{Table of CNVs and Mutations associated with MRs}
+   
+   \begin{itemize}
+      \item Graduate students are poor.  \LaTeX is free!
+      
+      \item Available on all Windows, Mac \& Linux
+      
+      \item .tex files are ASCII files and very portable are portable, and the output is in PDF, DVI or PS.
+      \begin{itemize}
+         \item Every computer can open a PDF, not so with Word or Powerpoint
+      \end{itemize}
+   \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+   \frametitle{Advantages continued\ldots}
+   \begin{itemize}
+      \item Typesetting is much better, more professional.  This is especially true for mathematics.  Can be formatted to suit various publication styles easily.
+      
+      \item Styles for different publication styles are easily available, as are Templates for letters, articles, books, reports etc. (\emph{just ask Google!})
+      
+      \item Bibliography management
+   \end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+   \frametitle{Still more advantages}
+   \begin{itemize}
+      \item Commands are easy to learn, though daunting at first
+      
+      \item Never crash!
+      
+      \item Can compile huge books\ldots $\approx70,000$ pages
+   \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+   \frametitle{Disadvantages of \LaTeX}
+   \begin{enumerate}
+      \item Font selection not as easy as Word.
+      
+      \item Difficult to flow text around pictures\slash figures
+      
+      \item If you write few documents, or only want short documents with little math
+      \begin{enumerate}
+        \item[a.)] The first time you write in \LaTeX, it will likely take longer than you would like\ldots
+      \end{enumerate}
+      
+      \item Does not \emph{directly} support drawing figures\ldots you need other software
+   \end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+   \frametitle{Disadvantages of \LaTeX, continued}
+   \begin{enumerate}
+      \item[5.] Spelling\slash Grammar not as convenient to check as in Word
+      
+      \item[6.] Must remember commands
+      
+      \item[7.] Not straightforward for creating complex tables
+   \end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Where is \LaTeX}
+\begin{frame}
+   \frametitle{How do I get it?}
+   \begin{itemize}
+      \item \href{http://support.math.arizona.edu/tex/}{http://support.math.arizona.edu/tex/} for all your needs
+      
+      \item Good IDEs:
+        \begin{enumerate}
+           \item Kile (\emph{Linux})
+           
+           \item TeXnicCenter (\emph{Windows})
+           
+           \item WinEdt (\emph{Windows, clearly})
+           
+           \item TeXShop (\emph{Mac})
+        \end{enumerate}
+   \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{How do we use \LaTeX}
+\subsection{Basic file}
+\begin{frame}
+   \frametitle{A Skeleton file}
+      $\%$ my first LaTeX file!\\
+      $\slash$ documentclass$[$12pt$]\{$article$\}$\\
+        \hskip 1cm $\%$preamble\\
+        \hskip 1cm $\slash$ usepackage$\{$graphix, amsmath$\}$\\
+      $\slash$ begin$\{$document$\}$\\
+         \hskip 1cm $\slash$ section$\{$This is a section title$\}$\\
+         \hskip 1cm $\slash$ subsection$\{$This is a subsection title$\}$\\
+         \hskip 1cm $\slash$ subsubsection$\{$This is\ldots you get the point$\}$\\
+          \hskip 2cm $\slash$ par First Paragraph goes here.\\
+          \vskip .5cm
+          \hskip 2cm $\slash$ par Second Paragraph is here, and has some math.  $\$\slash$sqrt$\{ \slash$frac$\{\slash$alpha$\}\{\slash$pi$\}\} \slash$leq $\slash$epsilon$\$$\\
+      \slash end$\{$document$\}$
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Some Examples}
+\begin{frame}
+   \frametitle{Real, live \LaTeX}
+   \begin{itemize}
+      \item For a comprehensive list of commands, go Google\ldots
+   \end{itemize}
+\end{frame}
+
+
+
+
+\end{document}

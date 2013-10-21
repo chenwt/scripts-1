@@ -1,0 +1,35 @@
+\documentclass[10pt, letterpaper, twoside, english]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+%\usepackage[tableposition=top]{caption}
+\usepackage{fullpage}
+\usepackage{array} 
+\usepackage{graphicx}
+\usepackage{subfig}
+%\usepackage{hyperref}
+\pdfpageheight\paperheight
+\pdfpagewidth\paperwidth
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\SweaveOpts{results=hide}
+
+\title{AML Whole Exome Sequencing pipeline}
+\maketitle
+
+\section{Data}
+All whole exome sequencing sra files were firstly downloaded from NCBI(http://trace.ncbi.nlm.nih.gov/).
+64 samples from 22 patients were downloaded, including 3 Primary Blood Derived Cancer (Peripheral Blood), 19 ecurrent Blood Derived Cancer (Bone Marrow), 19 Primary Blood Derived Cancer (Bone Marrow), 2 Blood Derived Normal, 20 Bone Marrow Normal, and 1 Recurrent Blood Derived Cancer(Peripheral Blood)
+
+\subsection{Checking for confounding factors}
+
+\begin{figure}
+\begin{center}
+\subfloat[]{\includegraphics[width=0.45\columnwidth]{figures/FABbarPlots}}
+\subfloat[]{\includegraphics[width=0.45\columnwidth]{figures/FABsurvival}}
+\end{center}
+\caption{FAB classes can act as confounding factors.
+}
+\label{fig:FABconfounding}
+\end{figure}
+
+\end{document}

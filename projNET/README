@@ -1,0 +1,13 @@
+README
+WorkFlow
+1. get the bam file  and create corresponsing directory, 
+    #naming strategy <ACnum> for each bam file
+2. run BAFpipeline in each <ACnum> directory
+    #  BAF/chrCHR.freq files
+3. run_PlotFreq.r 
+    # the display the histogram of B allele frequency, chromosome level
+    # in <ACnum>/res directory
+4. run_myBBViterbi_v1.r
+    #this is for the first version, which can detect chr10, but cannot detect chr13.
+    run_myBBViterbi_v1.1.r
+    

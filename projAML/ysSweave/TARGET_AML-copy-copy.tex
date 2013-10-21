@@ -1,0 +1,550 @@
+\documentclass[10pt, letterpaper, twoside, english]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+%\usepackage[tableposition=top]{caption}
+\usepackage{fullpage}
+\usepackage{array} 
+\usepackage{graphicx}
+\usepackage{subfig}
+%\usepackage{hyperref}
+\pdfpageheight\paperheight
+\pdfpagewidth\paperwidth
+\begin{document}
+% \SweaveOpts{concordance=TRUE}
+% \SweaveOpts{results=hide}
+
+\title{Identifying subclass-independant master regulators of relapse in pediatric acute myeloid leukemia}
+\author{Yishai Shimoni \and Jing He \and Gonzalo Lopez \and Paola Nicoletti \and Mariano Alvarez \and Andrea Califano}
+\maketitle
+
+
+\section{introduction}
+Acute myeloid leukemia (AML) is caused by a maturation arrest 
+and by enhanced proliferation of myeloid precursor cells. 
+This includes precursors of red blood cells, platelets, granulocytes, or monocytes.
+As a result, AML has very diverse symptoms, diverse presentation,
+and a diverse gene expression signature. 
+Nevertheless, it is considered as a single disease and most variants are treated similarly.
+AML incidence has peaks in infants under one year old. 
+It then remains low through adolecense, when it starts to increase 
+from 15 per $10^5$ per year in early adulthood
+to 35 per $10^5$ per year at the age of 90 years.
+In adults, AML may arise de-novo from a somatic mutation, 
+or it may be caused by some underlying syndrome, 
+or by exposure to irradiation or to chemotherapy.
+The latter causes are much less common in pediatric patients.
+
+AML has been clinically divided into several sub-classes, 
+known as the French-American-British (FAB) classification,
+based on cytogenic abnormalities and on morphological characterstics of the leukemic cells.
+These subclasses are denoted M0 to M7.
+More recently, patient stratification is done by risk-group, 
+which determines the aggressiveness of the treatment the patient receives.
+Patients with monosomy7, monosomy5, del5q, or FLT3/ITD are considered high risk,
+while patients presenting t(8;21), Inv(16), NPM mutations (FLT3/ITD negative), or CEBPA mutations
+are considered to have a more favorable prognosis.
+
+In both classification strategies all patients, except M3 patients, 
+receive similar chemotherapy,
+consisting of a catarabine/anthracycline backbone. 
+The intensity of the treatment is determined by the risk stratification,
+by the response to treatment, and by the adverse effects of treatment.
+Approximately 90\% of patients achieve initial remission,
+but between 30\% and 40\% experience a relapse of the disease within two years.
+The molecular or genetic reasons for relapse are largely unknown, 
+and patients who relapse are usually non-responsive to further chemotherapy.
+Early indications point to a benefit of stem cell transplantation.
+However, currently, most relapse patients require irradiation and bone marrow transplantation,
+which have a low success rate.
+Thus, mortality in relapse patients is close to 80\%, 
+and overall mortality is between 30\% and 40\%.
+
+Pediatric AML is known to be similar to adult AML both in clinical presentation 
+and in the prevalent mutations and cytogenic abnormalities.
+The main difference between the two categories is thought to be in the abundance of each
+of the mutations and abnormalities.
+However, an important advantage of using pediatric AML data is the lack of patients who
+develop AML as a result of an underlying condition or previous treatment.
+Additionally, the diversity in environmental exposure is smaller in such patients
+compared to the general adult population.
+
+We therefore focus on data on pediatric AML from the
+therapeutically applicable reseach to generate effective treatment (TARGET) initiative.
+Pre-treatment gene expression data for 215 patients is available 
+(using Affymetrix gene ST arrays),
+as well as copy number variation (CNV) data (using Affymetrix SNP 6.0 arrays).
+Additionally, whole exome sequencing was performed for 22 patients with matching 
+normal blood samples, pre-treatment bone marrow samples, and post-relapse bone marrow samples.
+
+In this research we use master regulator analysis methods to identify genes that
+are responsible for relapse in AML patients. 
+We use multiple reciprocal computational analysis methods to find the candidate genes, 
+and validate these predictions using independent data sets,
+and using mouse models.
+
+\section{Results}
+\subsection{Checking for confounding factors}
+Master regulator analysis (MARINA) looks at each potential regulatory gene 
+and the set of genes it is predicted to regulate (its regulon).
+If the expression of the regulon changes in a way that is consistent with the predicted 
+effect of the regulator on the gene
+(e.g. that a gene that most of the genes that are predicted to be up-regulated are differentially
+over expressed in the phenotype compared to normal, 
+and most of the genes that are predicted to be down-regulated are differentially
+under expressed in the phenotype compared to normal),
+we call such a gene a master regulator (MR) of the change in phenotype.
+In this context the phenotype of interest are patients who undergo relapse, 
+and the controls are censored patients.
+
+One potential problem with this type of analysis may arise if the control or phenotype patients 
+are not uniformly distributed between the subclasses in the data.
+In this scenario, MARINA might find the MRs of the subclasses, 
+instead of the MRs of the relapse.
+Fig.~\ref{fig:FABconfounding}a 
+compares the distribution of relapse and censored patients in each of the FAB subclasses
+that have sufficient numbers of patients (M1, M2, M4, and M5),
+where we see that indeed there is a bias such that the percentage of relapse patients
+increases from M1 to M2 to M4 and is highest for M5.
+A similar result can be seen in Fig.~\ref{fig:subclassKM}, 
+where the survival curves are shown for each of the subclasses.
+Here, too, class M5 has the worse prognosis, followed by M4.
+
+
+% <<label=loadData,echo=FALSE,include=FALSE>>=
+% set.seed(1)
+% aml_clinical <- read.csv('../../data/AML/TARGET_AML_ClinicalDataSet_20120702.txt',sep="\t",na.strings=c(".","N/A"))
+% aml_clinical$USI <- tolower(aml_clinical$USI)
+% aml <- read.table(file='../../data/AML/expression/level3/TARGET_RMA_norm_GE_Level3_uniq.exp',sep='\t',header=T,row.names=1,)
+% aml <- as.matrix(aml[,-1])
+% # keep data only for patients in the expression data that have clinical data
+% intersecting.samples <- intersect(colnames(aml),aml_clinical$USI)
+% # sample 'pasdfk' was found to be an extreme outlier by PCA and should be removed from the analysis,
+% # also samples 'pasfew' and 'pasecw' were identified as outliers by tSNE
+% intersecting.samples <- setdiff(intersecting.samples,c("pasdfk"))#,"pasfew","pasecw"))
+% aml_clinical <- aml_clinical[match(intersecting.samples,aml_clinical$USI),]
+% row.names(aml_clinical) <- aml_clinical$USI
+% aml <- aml[,intersecting.samples]
+% rm(intersecting.samples)
+% @
+
+% <<label=plotBarPlots,echo=FALSE,include=FALSE>>=
+% mytable <-table(aml_clinical$FAB,aml_clinical$EFS.event.type.ID)
+% pr <- prop.table(mytable,1)
+% pr[setdiff(row.names(pr),c("M1","M2","M4","M5")),] = 0
+% pdf('figures/FABbarPlots.pdf')
+% barplot(t(pr),col=c("red","yellow","green","purple","blue"),legend.text=colnames(pr),ylab="Percentage")
+% dev.off()
+% rm(pr,mytable)
+% @
+
+\begin{figure}
+\begin{center}
+\subfloat[]{\includegraphics[width=0.45\columnwidth]{figures/FABbarPlots}}
+\subfloat[]{\includegraphics[width=0.45\columnwidth]{figures/FABsurvival}}
+\end{center}
+\caption{FAB classes can act as confounding factors.
+a) Proportions of event-free survival statuses per subclass.
+The analsys was only performed on subcllasses with more than 20 patients.
+The proportions of patients who have undergone relapse (blue), induction failure (purple),
+death without remission (green), death (yellow) or censored (red).
+It can be seen that M5 has the lowest proportion of censored patients, 
+followed by M4, with M2 and M1 having the most favorable prognosis.
+b) Event-free survival plots for FAB subclasses.
+The survival curves show that the four clinical subclasses show some separation in prognosis,
+where M5 patients have the worse prognosis, followed by M4 and M2, and M1 patients having the best prognosis.
+}
+\label{fig:FABconfounding}
+\end{figure}
+
+% <<label=subclassKM,echo=FALSE,include=FALSE>>=
+% require(survival)
+% survObj <- Surv(time=aml_clinical$EFS.time..days.,event=aml_clinical$EFS.event.type.ID!="Censored")
+% sf <- survfit(survObj~aml_clinical$FAB)
+% pdf('figures/FABsurvival.pdf')
+% plot(sf[c(2,3,4,5),],col=rainbow(4),lwd=2,xlab="Time (days)",ylab="% survival")
+% legend(x="bottomleft",legend=c("M1","M2","M4","M5"),lty=1,col=rainbow(4),lwd=2,bty="n",y.intersp=0.8,cex=0.8)
+% dev.off()
+% rm(sf)
+% @
+
+An additional problem may arise if the subclasses are sufficiently distinct from each other,
+so that the mechanism leading to relapse may be different in each subclass.
+This can be manifested in the amount of separation in the gene expression profile of patients
+beloging to each subcalss. 
+Fig.~\ref{fig:FABconfounding}b shows a t-SNE dimensional reduction of the gene expression data,
+colored by their FAB clasification,
+and with markers indicating outcome.
+This dimensional reduction clearly shows a tendency for samples from the same clinical subclasses
+to be closer together,
+and raises the question whether a single analysis for relapse can be performed accross all subclasses.
+However, the subclasses do not separate into distinct clusters,
+thus still allowing for the possibility that the subclasses represent gradual differences
+in mechanism rather than distinct disease models.
+
+A similar analysis was done for each one of the clinical variables that were available,
+where it was found that expression is biased by the following variables:
+t(8;21), t(9;11)(p22;q23), inv(16), complexity, FLT/ITD3 positive, NPM mutation and CEBPA mutation
+(plots available in file \verb!tsne_clinical_variables.pdf!).
+However, these variables are all taken under consideration when determining the FAB classification 
+and are therefore controled for when selecting FAB classifications as the classifiers.
+
+
+% <<label=expressionTsne,echo=FALSE,include=FALSE>>=
+% pc <- princomp(aml)
+% require(tsne)
+% require(graph)
+% require(amap)
+% clrs <- c("black","blue","red","green","gray")
+% names(clrs) <- c("M1","M2","M4","M5","Other")
+% pchs <- c(0:2)
+% names(pchs) <- c("Relapse","Cencored","Deceased")
+% pch <- pchs[match(aml_clinical$EFS.event.type.ID,c("Relapse","Censored"),nomatch=3)]
+
+% ecb <- function(aml_tsne,y){
+%   plot(x=aml_tsne,col=clrs[match(aml_clinical$FAB,names(clrs),nomatch=5)],pch=pch+15)
+%   points(aml_tsne,pch=pch)
+% }
+% aml_tsne <- tsne(X=Dist(t(aml),method="euclidean"),initial_config=pc$loadings[,1:2],
+%                  min_cost=0.73,max_iter=5000,perplexity=10)#,epoch_callback=ecb)
+% pdf('figures/aml_tsne_FAB.pdf')
+% ecb(aml_tsne)
+% legend(x="topright",fill=clrs,legend=names(clrs),bty="n",y.intersp=0.8,cex=0.8)
+% legend(x="topleft",pch=pchs,legend=names(pchs),bty="n",y.intersp=0.8,cex=0.8)
+% dev.off()
+% source('createTsnePdf.R')
+% @
+
+
+A more current method of patient stratification is by risk group, as detrmined by the several criteria,
+as described below.
+Low risk patients are patients with one of the following:
+t(8;21), Inv(16), NPM mutations and FLT3/ITD negative, or CEBPA mutations.
+High risk patients with monosomy7, monosomy5, del5q, or FLT3/ITD positive.
+% <<echo=FALSE,label=tsneRisk,include=FALSE>>=
+% high_risk <- aml_clinical$monosomy.5=="Yes" | aml_clinical$monosomy.7=="Yes" | 
+%   aml_clinical$del5q=="Yes" | aml_clinical$FLT3.ITD.positive.=="Yes"
+% low_risk <- (aml_clinical$t.8.21.=="Yes" | aml_clinical$inv.16.=="Yes" | 
+%   aml_clinical$NPM.mutation.=="Yes" | aml_clinical$CEBPA.mutation.=="Yes") & !high_risk
+% risk <- 2-low_risk+high_risk
+% rm(high_risk,low_risk)
+% pdf('figures/aml_tsne_risk.pdf')
+% plot(x=aml_tsne,col=rainbow(3)[risk],pch=pch+15)
+% points(x=aml_tsne,pch=pch)
+% legend(x="topleft",pch=pchs,legend=names(pchs),bty="n",y.intersp=0.8,cex=0.8)
+% legend(x="topright",legend=paste(c("Low","Std.","High"),"Risk"),fill=rainbow(3),bty="n",y.intersp=0.8,cex=0.8)
+% dev.off()
+% @
+A t-SNE analysis colored by the risk groups (Fig.~\ref{fig:tsneRisk}) shows that the risk groups 
+provide high separation and high consistency in their gene experssion pattern, 
+but do not provide further separation compared to the FAB classification.
+Furthermore, Kaplan-Meier survival curves of the risk groups (Fig.~\ref{fig:KMrisk})
+show that the separation between the low and standard risk groups is not large.
+We therefore use FAB classifications for the rest of the analysis.
+
+\begin{figure}
+\begin{center}
+\subfloat[]{\includegraphics[width=0.45\columnwidth]{figures/aml_tsne_FAB}}
+\subfloat[]{\includegraphics[width=0.45\columnwidth]{figures/aml_tsne_risk}}
+\end{center}
+\caption{Dimensional reduction of gene expression data, colored by FAB classification. 
+T-SNE was used to visually display the expression data. 
+Each point represents a sample, and samples that are close have a similar gene expression profile.
+The shape of the markers represents the event-free 
+status (square - relapse, circle-cencored, triangle - death without remission). 
+a) Samples are colored by their FAB classification 
+FAB classes M2, M4, and M5 exhibit similarity, but they do not form distinct clusters;
+b) Samples are colored by their risk group 
+(low, standard and igh risk are red, green and blue, respectively ).
+The groups present some separation, but do not offer better separation than the FAB classifications.
+}
+\label{fig:expressionTsne}
+\end{figure}
+
+% <<label=KMrisk,echo=FALSE,include=FALSE>>=
+% pdf(width=10, height=5, 'figures/riskSurvival.pdf')
+% plotSurv <- function(survObj,variable,col,legend){
+%   plot(survfit(survObj~variable),col=col,lwd=2,xlab="Time (days)",ylab="% survival")
+%   legend(x="topright",legend=legend,fill=col,bty="n",y.intersp=0.8,cex=0.8)
+% }
+% plotSurv(survObj,risk,col=rainbow(3),legend=paste(c("Low","Std.","High"),"Risk"))
+% dev.off()
+% @
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.9\columnwidth]{figures/riskSurvival}
+\end{center}
+\caption{Event-free survival curves for risk groups.
+The survival curves show good separation between risk groups, 
+especially good prognosis of the low risk group. 
+The separation between the high and standard risk groups
+}
+\label{fig:KMrisk}
+\end{figure}
+
+MARINA analysis was run using the R package marina.\Sexpr{package.version('marina')} on each FAB subclass,
+where control patients were censored patients, and the phenotype was defined by relapse patients.
+We excluded patients who were reported as "Death", "Death without remission", or "Induction failure".
+The regulon that we use was created by running ARACNe on the same expression data.
+%and combining it with protein-protein networks using Bayesian integration.
+Additionally, in order to allow estimating the reproducability of the results we randomly 
+choose a training and validation subsets in the ratio of 3:1, respectively.
+% <<echo=FALSE,label=runMarina,include=FALSE,results=hide>>=
+% require(marina)
+% require(org.Hs.eg.db)
+% load('../../data/AML/expression/interactome/laml_target-regulon.rda')
+% tfRegul <- regul
+% annot <- org.Hs.egSYMBOL
+% annot <- as.list(annot[mappedkeys(annot)])
+% x <- org.Hs.egSYMBOL2EG
+% x <- as.list(x[mappedkeys(x)])
+% row.names(aml) <- x[row.names(aml)]
+% rm(x,regul)
+
+% holdback.samples <- colnames(aml) %in% sample(x=colnames(aml),size=dim(aml)[2]/4)
+
+% pdf('figures/marinaPlot.pdf')
+% source('runMarinaRelapse.r')
+% marinaFAB <- runMarinaRelapse(subclassParam=aml_clinical$FAB,regul=tfRegul,plot=T,reps=500,subset=!holdback.samples)
+% bonferoniMRs <- combineMarinaResults(marinaRes=marinaFAB)
+% dev.off()
+
+% pdf('figures/mrMarinaPlotperFAB.pdf')
+% sapply(X=names(marinaFAB),FUN=function(FAB) {
+%   plot(marinaFAB[[FAB]],mr=names(bonferoniMRs))
+%   title(paste(FAB,"patients"))
+% })
+% dev.off()
+% @
+
+The analysis sorts all genes according to their differential expression in relapse patients
+compared to censored samples.
+Then, for each gene in the list of potential regulators a list is created of 
+the target genes it downregulates and the genes it upregulates.
+The gene-set enrichment is calculated for each set and the sum of these enrichment scores
+represents the change in activity of that regulator between the two phenotypes.
+Fig.~\ref{fig:marinaResults} shows the top 30 predicted master regulators (MRs) for each subclass,
+showing, from left to right: the calculated p-value; the location of the activated genes (red)
+and repressed genes (blue) in the ranked list of genes (ranked by differential expression), 
+the change in activity (blue - low to red - high), the differential expression, 
+and the rank of the change in expression.
+
+% <<label=saveMRregulons,echo=FALSE>>=
+% file.remove(dir(pattern='mrs.txt'))
+% for(i in which(names(tfRegul) %in% names(annot[annot %in% names(bonferoniMRs)]))){
+%   geneID <- names(tfRegul)[i]
+%   write.table(x=unique(as.character(annot[names(tfRegul[[i]]$tfmode)])),
+%               file=paste(annot[geneID],'mrs.txt'),quote=F,sep='\n',row.names=F,col.names=F)
+% }
+% rm(geneID,i)
+% @
+
+% <<label=marinaSig,echo=FALSE>>=
+% load('../../data/AML/expression/interactome/laml_target_sig-regulon.rda')
+% sigRegul <- regul
+% pdf(file='figures/marinaPlotFAB_sig.pdf')
+% marinaFABsig <- runMarinaRelapse(subclassParam=aml_clinical$FAB,plot=T,reps=500,regul=sigRegul,subset=!holdback.samples)
+% dev.off()
+% bonferoniSigMRs <- combineMarinaResults(marinaRes=marinaFABsig)
+% @
+
+The results from all the marina analysis were combined using Stauffer's method, 
+and after Bonferoni correction we are left with the follwing
+%$\Sexpr{length(bonferoniMRs)}$
+master regulators:
+%\Sexpr{paste(names(sort(bonferoniMRs)),collapse=", ")}. 
+Clustering the validation data using the activity of the significant master regulators 
+(Fig.~\ref{fig:clusterPlot}A)
+reveals 4 clusters which separate the classes by their relapse, 
+but not by any other clinical information (such as the FAB classification or their risk group).
+This can also be seen by the survival curves for each one of these clusters 
+(Fig.~\ref{fig:clusterPlot}B).
+% <<label=clusterByMR,echo=FALSE,include=FALSE,results=hide>>=
+% amlVp <- vp(eset=aml,regulon=tfRegul)
+% row.names(amlVp) <- annot[row.names(amlVp)]
+% amlVp_mr <- amlVp[names(bonferoniMRs),]
+% require(gplots)
+% source('amlClusterPlot.r')
+% pdf('figures/mrClusterPlots.pdf')
+% k=4
+% tree <- amlClusterPlot(aml=amlVp_mr,k=k)
+% plotSurv(survObj=survObj,variable=tree,col=rainbow(k),legend=paste("cluster",c(1:k)))
+
+% tree_noHoldback <- amlClusterPlot(aml=amlVp_mr,k=k,subset=!holdback.samples)
+% plotSurv(survObj=survObj[!holdback.samples,],variable=tree_noHoldback,col=rainbow(k),legend=paste("cluster",c(1:k)))
+
+% tree_holdback <- amlClusterPlot(aml=amlVp_mr,k=k,subset=holdback.samples)
+% plotSurv(survObj=survObj[holdback.samples,],variable=tree_holdback,col=rainbow(k),legend=paste("cluster",c(1:k)))
+% dev.off()
+
+% pdf('figures/KM_MR_perFab.pdf')
+% source('KMbyMRperSubclass.r')
+% KMbyMRperSubclass(survObj=survObj,MRclass=tree,subclass=aml_clinical$FAB)
+% dev.off()
+% @
+
+
+\begin{figure}
+\begin{center}
+\subfloat[]{\includegraphics[page=1,width=0.45\columnwidth]{figures/marinaPlot}}
+\subfloat[]{\includegraphics[page=2,width=0.45\columnwidth]{figures/marinaPlot}}\\
+\subfloat[]{\includegraphics[page=3,width=0.45\columnwidth]{figures/marinaPlot}}
+\subfloat[]{\includegraphics[page=4,width=0.45\columnwidth]{figures/marinaPlot}}
+\end{center}
+\caption{MARINA results for each FAB class with sufficient samples.}
+\label{fig:marinaResults}
+\end{figure}
+
+The above analysis was performed to identify transcriptional master regulators.
+Gene expression of the downstream genes of TFs may be a good proxy for their activity levels, 
+but they are normally difficult targets for drug therapy, 
+and they also tend to be poor biomarkers.
+We tehrefore ran the same analysis using signaling molecules.
+The results for signaling molecules may be more noisy, 
+but they have a better chance to be relevant drug targets or biomarkers.
+% <<label=clusterBySigMr,echo=FALSE>>=
+% amlVpSig <- vp(eset=aml,regulon=sigRegul)
+% row.names(amlVpSig) <- annot[row.names(amlVpSig)]
+% amlVp_mrSig <- amlVpSig[names(bonferoniSigMRs),]
+% require(gplots)
+% pdf('figures/mrSigClusterPlots.pdf')
+% treeSig <- amlClusterPlot(aml=amlVp_mrSig,k=k)
+% plotSurv(survObj=survObj,variable=treeSig,col=rainbow(k),legend=paste("cluster",c(1:4)))
+
+% treeSig_noHoldback <- amlClusterPlot(aml=amlVp_mrSig,k=k,subset=!holdback.samples)
+% plotSurv(survObj=survObj[!holdback.samples,],variable=treeSig_noHoldback,col=rainbow(k),legend=paste("cluster",c(1:4)))
+
+% treeSig_holdback <- amlClusterPlot(aml=amlVp_mrSig,k=k,subset=holdback.samples)
+% plotSurv(survObj=survObj[holdback.samples,],variable=treeSig_holdback,col=rainbow(k),legend=paste("cluster",c(1:4)))
+% dev.off()
+
+% pdf('figures/KMsignalingMR_perFab.pdf')
+% KMbyMRperSubclass(survObj=survObj,MRclass=treeSig,subclass=aml_clinical$FAB)
+% dev.off()
+% @
+This analysis provides an additional 
+%$\Sexpr{length(bonferoniSigMRs)}$
+master regulators:
+%\Sexpr{paste(names(sort(bonferoniSigMRs)),collapse=", ")}. 
+The analysis using the signaling molecules also allows stratification of the validation samples
+into 4 groups that have distinct relapse curves.
+(Fig.~\ref{fig:clusterPlot}C,D) 
+
+\begin{figure}
+\begin{center}
+\subfloat[]{\includegraphics[width=0.45\columnwidth,page=5]{figures/mrClusterPlots}}
+\subfloat[]{\includegraphics[width=0.45\columnwidth,page=6]{figures/mrClusterPlots}}\\
+\subfloat[]{\includegraphics[width=0.45\columnwidth,page=5]{figures/mrSigClusterPlots}}
+\subfloat[]{\includegraphics[width=0.45\columnwidth,page=6]{figures/mrSigClusterPlots}}
+\end{center}
+\caption{Hierarchical clustering and survival plots of the training samples 
+according to the virtual proteomics of the top master regulators, 
+where the separation into clusters was performed using the top 4 branches of the 
+hierarchical clustering. 
+a) Hierarchical clustering using activity of TF MRs; 
+b) relapse plots for the groups defined by the hierarchical clustering of TF MRs;
+c) a) Hierarchical clustering using activity of signaling MRs; 
+b) relapse plots for the groups defined by the hierarchical clustering of signaling MRs}
+\label{fig:clusterPlot}
+\end{figure}
+
+% <<label=tsneVp,echo=FALSE>>=
+% # for this analysis we want the whole data again
+% amlVp_allMr <- rbind(amlVp_mr,amlVp_mrSig)
+% pdf(width=10, height=5, 'figures/tsneByVp.pdf')
+% amlVp_tsne <- tsne(X=t(amlVp_allMr),initial_config=pc$loadings[,1:2],
+%                    max_iter=5000,perplexity=10,min_cost=0.65)#,epoch_callback=ecb)
+% amlVpSig_tsne <- tsne(X=as.dist(signatureDistance(dset=amlVpSig,scale.=F)),
+%                       initial_config=pc$loadings[,1:2],
+%                       max_iter=5000,perplexity=10,min_cost=0.65)
+% ecb(aml_tsne=amlVp_tsne)
+% legend(x="topright",fill=clrs,legend=names(clrs),bty="n",y.intersp=0.8,cex=0.8)
+% legend(x="topleft",pch=pchs,legend=names(pchs),bty="n",y.intersp=0.8,cex=0.8)
+% title("tSNE using VP")
+% ecb(aml_tsne=amlVpSig_tsne)
+% legend(x="topright",fill=clrs,legend=names(clrs),bty="n",y.intersp=0.8,cex=0.8)
+% legend(x="topleft",pch=pchs,legend=names(pchs),bty="n",y.intersp=0.8,cex=0.8)
+% title("tSNE using Vp of signaling molecules")
+% dev.off()
+% @
+
+To try and get results that are more consistent across other datasets it is possible to run the same
+analysis using regulons that were derived from other datasets. 
+One of the most relevant datasets may be the AML data provided by the cancer genome atlas (TCGA).
+This data consists of gene expression data of RNA-seq data for 179 adult AML paatients.
+Although this data-set involves a different platform and adult patients, 
+since the diseases are considered clinically similar it is hypothesised that the results
+may be similar, and that any result that comes up in both datasets may be more relevant.
+We therefore performed a similar analysis using a regulon derived from the TCGA data.
+% <<label=TCGamarina,echo=FALSE>>=
+% load('../../data/AML/expression/interactome/laml_tcga-regulon.rda')
+% tcgaRegul <- regul
+% pdf(file='figures/marinaPlotFAB_tcga.pdf')
+% marinaFABtcga <- runMarinaRelapse(subclassParam=aml_clinical$FAB,plot=T,reps=500,regul=tcgaRegul,
+%                                   subset=!holdback.samples)
+% dev.off()
+% bonferoniTcgaMRs <- combineMarinaResults(marinaRes=marinaFABtcga)
+
+% load('../../data/AML/expression/interactome/laml_tcga_sig-regulon.rda')
+% tcgaSigRegul <- regul
+% pdf(file='figures/marinaPlotFAB_tcga_sig.pdf')
+% marinaFABtcgaSig <- runMarinaRelapse(subclassParam=aml_clinical$FAB,plot=T,reps=500,regul=tcgaSigRegul,
+%                                      subset=!holdback.samples)
+% dev.off()
+% bonferoniTcgaSigMRs <- combineMarinaResults(marinaRes=marinaFABtcgaSig)
+% combinedTfMRs <- intersect(names(bonferoniTcgaMRs),names(bonferoniMRs))
+% combinedSigMRs <- intersect(names(bonferoniTcgaSigMRs),names(bonferoniSigMRs))
+% @
+This provides a similar list of TF and signaling MRs. 
+The overlapping MRs are:
+%\Sexpr{paste(combinedTfMRs,collapse=", ")}
+for the TFs and
+%\Sexpr{paste(combinedSigMRs,collapse=", ")}
+for signaling molecules.
+
+% <<label=use_combined_MRs,echo=FALSE>>=
+% cVP <- rbind(amlVp[combinedTfMRs,],amlVpSig[combinedSigMRs,])
+% pdf('figures/combinedTcgaTargetMRs.pdf')
+% combinedTree <- amlClusterPlot(aml=cVP,k=k,subset=holdback.samples)
+% plotSurv(survObj=survObj[holdback.samples,],variable=combinedTree,col=rainbow(k),legend=paste("cluster",c(1:4)))
+% dev.off()
+% @
+
+Finally, we would like to see whether these MRs also apply for an independent validation data set.
+One way to try this is using the TCGA data for adult AML patients.
+Although there are some known age-related differneces in gene expression,
+the diseases are clinically very similar, 
+which leads to the hypothesis that the relapse mechanism should be similar in both diseases.
+We therefore use the gene expression data of the master regulators determined above to classify the 
+samples in the TCGa dataset.
+% <<label=classifyTCGA,echo=FALSE>>=
+% ## load data
+% tcga_aml <- read.table('h:/data/AML/TCGA_AML/laml_tcga_rnaseq_geneid.exp',header=T)
+% row.names(tcga_aml) <- substr(tcga_aml$probe,2,20)
+% tcga_aml <- tcga_aml[,-c(1,2)]
+% tcga_aml <- as.matrix(tcga_aml)
+% colnames(tcga_aml) <- gsub(pattern='[.]',replacement="-",x=substr(colnames(tcga_aml),1,12))
+% ## load clinical data
+% tcga_aml_clinical <- read.csv('h:/data/AML/TCGA_AML/clinical_patient_laml.txt',sep='\t',na.strings=c("[Not Available]","[Not Applicable]"))
+
+% ## clean up the data:
+% # remove samples that don't have either days_to_death or days_to_last_followup
+% eventTime <- tcga_aml_clinical$days_to_death
+% eventTime[is.na(eventTime)] <- tcga_aml_clinical$days_to_last_followup[is.na(eventTime)]
+% # or samples that are in the M3 FAB subclass
+% FAB <- substr(x=tcga_aml_clinical$leukemia_french_american_british_morphology_code,start=1,stop=2)
+% I <- is.na(eventTime)
+% keep <- !I & !(FAB %in% c("M3")) & tcga_aml_clinical$days_to_birth>(-55*365)
+% # and keep only samples that have both expressiono and clinical data
+% intersecting.samples <- intersect(colnames(tcga_aml),tcga_aml_clinical$bcr_patient_barcode[keep])
+% tcga_aml <- tcga_aml[,intersecting.samples]
+% tcga_aml_clinical <- tcga_aml_clinical[match(intersecting.samples,tcga_aml_clinical$bcr_patient_barcode),]
+% # recalculate stuff that we need later
+% FAB <- substr(x=tcga_aml_clinical$leukemia_french_american_british_morphology_code,start=1,stop=2)
+% eventTime <- tcga_aml_clinical$days_to_death
+% eventTime[is.na(eventTime)] <- tcga_aml_clinical$days_to_last_followup[is.na(eventTime)]
+% @
+
+\end{document}
+% <<label=saveImage>>=
+% save.image(file='aml.Rdata')
+% @

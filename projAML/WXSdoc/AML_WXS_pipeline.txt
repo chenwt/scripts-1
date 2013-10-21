@@ -1,0 +1,34 @@
+##------------------------------AML WXS pipeline
+
+Step 1: download data
+
+Step 2: decrypt sra files
+
+Step 3: convert to SAM and BAM files using sratoolkit
+
+		remove duplicates
+			$SAMTOOLS rmdup $BAMFILE $RMDUPBAM
+
+step 4: calculate MD again and index
+		$SAMTOOLS calmd -rEAb  $RMDUPBAM $REF > $CALMDBAM
+
+step 5: link files
+		calculate avg depth of coverage (distribution of depth of coverage)
+
+step 6: pairwise comparison ( 19 pairs) 
+		
+		samtools mpileup -DSu -d 400 -q 1 -C 50 -f $REF $TUMOR1 $TUMOR2 | bcftools view -bvcgT pair - > $uid.compare.bcf
+
+step 7: filtering raw variants
+		
+		PL_CUTOFF=40;
+		CLR_CUTOFF=20;
+		DP4 > 2
+		PV4 <1e-6
+		
+step 8: annoatation of filtered variants
+		SnpEff 
+
+step 9: Visulization of results
+
+

@@ -1,0 +1,56 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\author{Jing He}
+\title{project intent letter}
+
+\begin{document}
+\begin{center}
+\large\textbf{Project Intent Letter} 
+\\
+\textbf{ Albert Lee; Jing He }
+\end{center}
+
+\section{exploring questions:}
+\begin{enumerate}
+\item  Disease Severity Scoring using ICU data. We were trying to improve the ICU scoring system to provide insight to the ICU patients.
+\item  To predict mortality in ICU. This is one of the questions we are going to explore to see the features related to mortality difference.
+\item  Discover the ICU admission and release pattern. We want to see whether there are difference between those patients who readmitted after released from ICU and those who don't go back.
+\item  SAPS II is a severity of disease classification system. Its name stands for "Simplified Acute Physiology Score" \ref{2}
+\end{enumerate}
+% Acute myeloid leukemia (AML) is leukemia with a high relapse rate [REF]
+% In this project, we intent to use the knowledge base approach to elucidate the factors that cause difference between AML patients with remission and without remission.
+\section{data:}
+ We will use MIMIC(Multiparameter Intelligent Monitoring in Intensive Care) data, which were 
+ collected between $2001~2008$ from varies ICU(medical, surgical, corony care, and neonatal) to finish all those analysis.\ref{1} 
+
+When looking at the primary data, we found over 1000 patients from neonatal ICU. Also, we may want to start from one specific disease, Acute Myeloid Leukemia(AML).Acute myeloid leukemia (AML) is a cancer characterized by the increase the number of myeloid cells in the marrow and halt in maturation. The survival rate among patients who are less than 65 years of age is 40\% \ref{3}.Pediatric AML is a disease with a high relapse rate.
+
+In this project, we intent to use the knowledge base approach to elucidate the factors that are associated with AML patients with remission and without remission. 
+
+
+We are going to look at  lab test, demographics, ICD9, medications, notes, procedures to explore the potential patients stratification over time. 
+
+\section{Description of dataset:}
+
+We will use time series analysis to study time-course association, natural language processing techniques to look into the notes and free text, machine learning tools. 
+
+For exploratory analysis, we looked at the total patients size for AML using ICD9 code of this disease. There are 137 pateints according to our search. We will continue analysis those patients as the start of our project.
+
+
+\begin{thebibliography}{9}
+
+\bibitem{lamport94}
+ \label{1} http://ccforum.com/content/15/2/R95
+\bibitem{lamport94}
+ \label{2} Le Gall, Lemeshow, Saulnier, 1993
+\bibitem{lamport94}
+ \label{3} Lowenberg, Bob, Downing, James R. \& Burnett, Alan (1999). Acute Myeloid Leukemia. New England Journal of Medicine, 341, 1051-1062.
+
+\end{thebibliography}
+
+\end{document}

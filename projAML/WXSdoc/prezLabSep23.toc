@@ -1,0 +1,7 @@
+\beamer@endinputifotherversion {3.20pt}
+\beamer@sectionintoc {1}{AML WXS }{2}{0}{1}
+\beamer@subsectionintoc {1}{1}{Why use \LaTeX }{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{Where is \LaTeX }{9}{0}{1}
+\beamer@sectionintoc {2}{How do we use \LaTeX }{10}{0}{2}
+\beamer@subsectionintoc {2}{1}{Basic file}{11}{0}{2}
+\beamer@subsectionintoc {2}{2}{Some Examples}{12}{0}{2}

@@ -1,0 +1,25 @@
+
+ ###------------------------------call raw variants
+ MYREF='/ifs/scratch/c2b2/ys_lab/jh3283/school/compGenomic/samtools/wu_build36.fasta'
+ # if [ -f = "samtools_callSomaticVar.sh" ] ;then  cp ../samtools_callSomaticVar.sh . ; fi
+ # for chrom in `seq 1 22` X Y 
+ # do
+ # 	qsub -N myjobCall$chrom -e ./logs -o ./logs -b y -l mem=8G,time=2:: -S /bin/sh -cwd "samtools mpileup -DSuf $MYREF tumor.$chrom.bam normal.$chrom.bam | bcftools view -bvcgT pair -p 1.1 - > $chrom.var.bcf"
+ # 	# qsub -N myjobCall$chrom -e ./logs -o ./logs -b y -l mem=8G,time=2:: -S /bin/sh -cwd "./samtools_callSomaticVar.sh $chrom"
+ # done
+ # echo "Pileup Done!" >> logsrun
+
+# for chrom in `seq 1 22` X Y 
+# do
+# 	qsub -N myjobCall$chrom -e ./logs -o ./logs -b y -l mem=8G,time=2:: -S /bin/sh -cwd "bcftools view $chrom.var.bcf | vcfutils.pl varFilter -D 60 > $chrom.var.vcf"
+
+# done
+# echo "Pileup Done!" >> logsrun
+
+#call somatic variantsq
+for chrom in `seq 1 22` X Y
+do
+ 	ruby ~yshen/scratch/do_filter-somatic.rb -v $chrom.var.vcf
+done
+echo "Calling somatic variants DONE!" >> logsrun
+

@@ -1,0 +1,111 @@
+\documentclass[a4paper,11pt]{article}\usepackage{graphicx, color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\definecolor{fgcolor}{rgb}{0.2, 0.2, 0.2}
+\newcommand{\hlnumber}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0.501960784313725,0,0.329411764705882}{\textbf{#1}}}%
+\newcommand{\hlstring}[1]{\textcolor[rgb]{0.6,0.6,1}{#1}}%
+\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlargument}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hlcomment}[1]{\textcolor[rgb]{0.180392156862745,0.6,0.341176470588235}{#1}}%
+\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{0.43921568627451,0.47843137254902,0.701960784313725}{#1}}%
+\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hlassignement}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.588235294117647,0.709803921568627,0.145098039215686}{#1}}%
+\newcommand{\hlslot}[1]{\textit{#1}}%
+\newcommand{\hlsymbol}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlprompt}[1]{\textcolor[rgb]{0.2,0.2,0.2}{#1}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\author{Jing He}
+\title{project intent letter}
+
+\begin{document}
+\begin{center}
+\large\textbf{Project Intent Letter} 
+\\
+\textbf{ Albert Lee; Jing He }
+\end{center}
+
+\section{exploring questions:}
+\begin{enumerate}
+\item  Disease Severity Scoring using ICU data. We were trying to improve the ICU scoring system to provide insight to the ICU patients.
+\item  To predict mortality in ICU. This is one of the questions we are going to explore to see the features related to mortality difference.
+\item  Discover the ICU admission and release pattern. We want to see whether there are difference between those patients who readmitted after released from ICU and those who don't go back.
+\item  SAPS II is a severity of disease classification system. Its name stands for "Simplified Acute Physiology Score" \ref{2}
+\end{enumerate}
+% Acute myeloid leukemia (AML) is leukemia with a high relapse rate [REF]
+% In this project, we intent to use the knowledge base approach to elucidate the factors that cause difference between AML patients with remission and without remission.
+\section{data:}
+ We will use MIMIC(Multiparameter Intelligent Monitoring in Intensive Care) data, which were 
+ collected between $2001~2008$ from varies ICU(medical, surgical, corony care, and neonatal) to finish all those analysis.\ref{1} 
+
+When looking at the primary data, we found over 1000 patients from neonatal ICU. Also, we may want to start from one specific disease, Acute Myeloid Leukemia(AML).Acute myeloid leukemia (AML) is a cancer characterized by the increase the number of myeloid cells in the marrow and halt in maturation. The survival rate among patients who are less than 65 years of age is 40\% \ref{3}.Pediatric AML is a disease with a high relapse rate.
+
+In this project, we intent to use the knowledge base approach to elucidate the factors that are associated with AML patients with remission and without remission. 
+
+
+We are going to look at  lab test, demographics, ICD9, medications, notes, procedures to explore the potential patients stratification over time. 
+
+\section{Description of dataset:}
+
+We will use time series analysis to study time-course association, natural language processing techniques to look into the notes and free text, machine learning tools. 
+
+For exploratory analysis, we looked at the total patients size for AML using ICD9 code of this disease. There are 137 pateints according to our search. We will continue analysis those patients as the start of our project.
+
+
+\begin{thebibliography}{9}
+
+\bibitem{lamport94}
+ \label{1} http://ccforum.com/content/15/2/R95
+\bibitem{lamport94}
+ \label{2} Le Gall, Lemeshow, Saulnier, 1993
+\bibitem{lamport94}
+ \label{3} Lowenberg, Bob, Downing, James R. \& Burnett, Alan (1999). Acute Myeloid Leukemia. New England Journal of Medicine, 341, 1051-1062.
+
+\end{thebibliography}
+
+\end{document}

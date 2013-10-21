@@ -1,0 +1,16 @@
+install.packages("lsa")
+install.packages("useful")
+install.packages("ggplot2")
+install.packages("gplots")
+install.packages("ClassDiscovery")
+install.packages("amap")
+install.packages("glmnet")
+install.packages("plyr")
+install.packages("randomForest")
+install.packages("RColorBrewer")
+install.packages("RTextTools")
+install.packages("glmnet")
+
+source("http://bioconductor.org/biocLite.R")
+biocLite("bioDist")
+

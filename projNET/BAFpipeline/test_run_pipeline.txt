@@ -1,0 +1,8 @@
+./BAFpipeline/bed_to_pileup.sh /ifs/scratch/c2b2/ys_lab/jh3283/net/BAFPipeTemp /ifs/scratch/c2b2/ngs_lab/db2175/Projects/BAF/DBSNPData/DBSNPCommonSNPsbedfiles/dbSNP135commonchrCHR.bed /ifs/scratch/c2b2/ys_lab/jh3283/net/ac16.bam /ifs/scratch/c2b2/ys_lab/jh3283/net/AC16dbSNP135commmonchrCHR.pileup
+
+## should use python 2.6.5 version, qrsh or qlogin will use 2.5, which will cause error.
+/ifs/scratch/c2b2/ys_lab/jh3283/net/BAFpipeline/pileup_to_freq.sh /ifs/scratch/c2b2/ys_lab/jh3283/net/AC16/pileup/AC16dbSNP135commmonchrCHR.pileup /ifs/scratch/c2b2/ys_lab/jh3283/net/AC16/freq/AC16dbSNP135commmonchrCHR.freq
+
+/ifs/scratch/c2b2/ys_lab/jh3283/net/BAFpipeline/BAFPLOT.sh /ifs/scratch/c2b2/ngs_lab/db2175/Projects/BAF/DBSNPData/DBSNPCommonSNPsbedfiles/dbSNP135commonchrCHR.bed /ifs/scratch/c2b2/ys_lab/jh3283/net/ac16.bam /ifs/scratch/c2b2/ys_lab/jh3283/net/AC16/BAF AC16_BAF_PLOT AC16bafplot.pdf
+
+

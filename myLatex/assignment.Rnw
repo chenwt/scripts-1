@@ -1,0 +1,118 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{listings}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+
+\begin{document}
+\large\textbf{ 4761, Assignment 2} \\
+
+\textbf{Jing HE:jh3283 }
+\newline (*)Assume noncoding DNA nucleotides are independent, and can be A/C/G/T with equal probabilities.
+\newline 1. Given two random sequences of length l , X=x1x2.xl and Y=y1y2...yl :\\
+a. What are the chances of the sequences to be identical? \\
+\textbf{Sol:}  Per the assumption, each base has equal probability, therefore, for each base the probability of being identical is 1/4. 
+And also each base is independent, so for two sequence of length \emph{l}, the probability is: (1/4)\*{\emph{l}}\\
+
+b.To have at most 2 mismatches when comparing $x_i$ to $y_i$ for all \emph{i}? \\
+\textbf{Sol:} One base mismatch probability = $\dfrac{3}{4}$, Let n be the number of mismatches, so 
+\begin{equation*}
+	 \begin{aligned}
+	P(n<=2) & = P(n=0) + P(n=1) + P(n=2) \\
+		& = (\dfrac{1}{4})^{l}+\dfrac{3}{4}*(\dfrac{1}{4})^{l-1}+(\dfrac{3}{4})^2*(\dfrac{1}{4})^{l-2} \\
+		& = \dfrac{13}{4^{l}} 
+	 \end{aligned}
+\end{equation*}
+
+c.What are the expectation and variance of the number of matches?\\
+\textbf{Sol:} for bionomial distribution,X ~ B(l,1/4), the mean is $(\dfrac{\emph{l}}{4})$ \\
+the variance is $\dfrac{3l}{16}$ \\
+
+d.For a general l, approximate the chance of the aforementioned two sequences to have at most $40\%$ identical positions, for a general \emph{l}. \\
+\textbf{Sol:} set the variable as X, the chance of have most $40\%$ identical positions can be expressed as 
+\begin{equation*}
+    % \begin{aligned}
+    p(x\leq x_{0}) =\sum _{i=0}^{x_{0}}c_{l}^{i}(\dfrac{1}{4})^{i}(\dfrac{3}{4})^{l-i}
+    % \end{aligned} 
+\end{equation*} 
+
+e.Compute the value of this approximation for $\emph{l}=5$. \\
+\textbf{Sol:} for binomial distribution, we can use normal distribution to approximate it, $E(x)= np = \Sexpr{5*0.25}$, $Var(x)=np(1-p) = \Sexpr{5*0.25*0.75}$, the approximation is $\frac{p(0.4*5 + 0.5 -1.25)}{{\Sexpr{5*0.25*0.75}}^{0.5}}$ = $\dfrac{pnorm(1.25)}{sqrt(0.9375)} $ = $\Sexpr{pnorm(1.25)/sqrt(0.9375)}$ \\
+
+f.Compute the exact value for $l=5$. \\
+\textbf{Sol:} for exact binomial distribtuion $k=2$, $n=5$, $p=0.25$ , the result = $sum(dbinom(0:2,5,0.25))$ :$\Sexpr{sum(dbinom(0:2,5,0.25))}$ \\
+
+g. Your null hypothesis is that X has no relation to Y. Your alternative hypothesis is that X is a laboratory observation of Y, but the lab has 0.05 chance to err at each base. You observe 14 matches out of $\emph{l}=20$. Apply the likelihood ratio test and report conclusion. \\
+\textbf{Sol:} Per the questions before, let x as the matching bases, x follows a binomial, $B(n,\theta)$, distribution. For the null hypothesis, 
+\begin{equation*}
+  \begin{aligned}
+    L(0) & = C_{l}^{n}{\theta_{0}}^{n}{(1-\theta_{0})}^{l-n}, \theta_0 = 0.25 \\
+    L(1) & = C_{l}^{n}{\theta_{1}}^{n}{(1-\theta_{1})}^{l-n}, \theta_1 =0.95 \\
+    \dfrac{L(0)}{L(1)} & = {\dfrac{0.25}{0.95}}^{n}{\dfrac{0.75}{0.05}}^{l-n} \\ 
+    l=20,n=14, & = \Sexpr{(0.25/0.95)^14 * (0.75/0.05)^6}
+   % \log{L(\theta)} & = \log{(_{x}^{l})} + x\log{\theta} + (l-x)\log{(1-\theta)} \\
+    % \hat{\theta}_{MLE} & = \dfrac{x}{l} \\
+   % Then,									&  \\
+    % \lambda(x) & = \dfrac{L(\hat{\theta}_{MLE})}{L(0.95\%)} \\
+   		 % & =\dfrac{C_{l}^{x}({\dfrac{x}{l}})^{x}(1-{\dfrac{x}{l}})^{l-x}} {C_{l}^{x} ({0.95}^{x}{0.05}^{l-x})}  \\
+	% since, \dfrac{x}{l} = \dfrac{1}{4}		&\\
+     % \lambda(x) & = (\dfrac{5}{19})^{x}15^{l-x} \\
+     % Then, 									& \\
+     % \log{\lambda(x)} & =(\log{\dfrac{1}{57}}{x} + {l}{\log{15}}) \\
+     % when, l=20, x=17						&\\
+     % -2 * \log{\lambda(17)} & = 29.14174 
+  \end{aligned}
+\end{equation*}
+Since the ratio is relatively small, we can infer that there is significant difference, so, X and Y are related to each other.\\
+
+\textbf{A random, uniform genome of 3Gbp is sequenced, with 150 million short reads of length 80 each, that are located randomly and uniformly along the genome}.\\
+a.  What is the chance of nucleotide $\# 34,567,890$ on chromosome 12 not to have any reads?\\
+
+\textbf{Sol:} Note that, the distribution of reads in each base follows Possion distribution $P(\lambda) ~ \dfrac{{\lambda}^{k}{e}^{-\lambda}}{k!}$, the expectation of this 
+\begin{equation*}
+	\begin{aligned}
+	E(x)&=\dfrac{150 * 10^{6} * 80}{3 * 10^9} = 4 \\
+	Then,\lambda &= 4, Prob(x=0)  \\
+  & =\dfrac{{4}^{0}{e}^{-4}}{0!} = \Sexpr{dpois(0,4)}
+	\end{aligned}
+\end{equation*}
+There are 2.9451Gb bases covered by more one or more reads.\\
+
+b.	How many bases are expected to be covered by one or more reads?\\
+\textbf{Sol:} As noted before, the probability of one base being covered without any reads is $\Sexpr{dpois(0,4)}$, per the assumption, the Expected bases is:
+$E(x > = 1) = 3 * 10^{9} *(1- 0.0183)$ = $\Sexpr{3*10^9*(1- 0.0183)}$ \\
+
+c.	What is the chance that $>$ 55Mbp are not covered? \\
+\textbf{Sol:} note that, $\dfrac{55*10^{6}}{3*10^{9}}=\Sexpr{ppois(55*10^6 /(3*10^9),4,lower.tail=T)}$. \\
+
+\textbf{For a non coding RNA sequence z1z2...zk define a sequence of events s$\substack{(k-2)}$... where $S_i$ is the presence of a stop codon starting at the ith position along the sequence}. \\
+a.	Which pairs of such events are independent? \\
+\textbf{Sol:} since on codon is three bases,therefore, for any $|j-i| > 2 $, ($s_i\perp s_j$), and for events pairs such as ($s_i$, $s_{i+1}$),($s_i$,$s_{i+2}$), they are not independent. \\
+
+b.	What is the chance of this RNA sequence being consistent with being coding? (having start / stop codons in frame only at the beginning / end)
+\newline \textbf{Sol:} Note that, there is only one common start codon AUG, and three stop codon:UAG,UGA and UAA, for every three bases, $Prob(StartCodon)=\dfrac{1}{64}$, and $Prob(StopCodon)=\dfrac{3}{64}$, and, for the given sequence, the probability of reading frame start at the $1_{st}$ base is $\dfrac{1}{3}$, so,
+\begin{equation*}
+	% \begin{aligned}
+Prob(s_1=start,s_{n-2}=stop) =\dfrac{1}{3} * \dfrac{1}{64}*
+{(\dfrac{61}{64})}^{(\dfrac{k-6}{3})}*\dfrac{3}{64}\\ 
+	% \end{aligned}
+\end{equation*}
+
+c.	What can you say about the distribution of the number C of codons along the frame $(z_1z_2z_3)(z_4z_5z_6)$ \ldots till the first stop codon?\\
+\textbf{Sol:} Note that, this situation is to model the number of sucessful trails of non-stop codon before 1 stop codon, there are three reading frames, starting at $s_1,s_2 or s_3$ C follows a negative binomial distribution. $C ~ NB(1:p)$, for each base 
+\begin{equation*}
+	\begin{aligned}
+		Prob(InFrame) & = \dfrac{1}{3}\\
+		Prob(StopCodon) & =\dfrac{3}{64} 
+	\end{aligned}
+\end{equation*}
+so fore event $s_i$, the probability of not being stop codon\: $p =\dfrac{63}{64} = \Sexpr{63/64}$,
+Therefore, $Prob(c) =\dfrac{1}{64}*{(\dfrac{63}{64})}^{c}$ equation(1) \\
+
+d.	What value of C would allow you to reject the null assumption (*) with p-value of 0.001? \\
+\textbf{Sol:} As noted in problem $3.c$, If the probability of equation$(1) < 0.001$, then we can reject the null assumption. solve $\dfrac{1}{64}*{(\dfrac{63}{64})}^{c}\leq 0.001$ $=>$ C = $\Sexpr{log(0.064)/(log(63/64))}$ = 175 \\
+
+disclosure: Discussed with Kuixi,Zhu, finish all questions individually, using R for the probability  calculation. \\
+\end{document}

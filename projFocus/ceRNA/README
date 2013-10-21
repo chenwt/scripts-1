@@ -1,0 +1,5 @@
+1.gtBatch_v2.sh #TCGA folder
+ # download TCGA WGS bam file:
+2. getInBamlist.sh : prepare pairwise bamlist input for samtools calling
+  eg: getInBamlist.sh /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/input_getBamlist.txt
+3. qsub_samtools_paired_calling.sh

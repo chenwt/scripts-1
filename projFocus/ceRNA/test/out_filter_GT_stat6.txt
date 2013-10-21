@@ -1,0 +1,2 @@
+Number_of_total_snp	filtered_out1	filtered_out2	filtered_out3	Number_of_final
+100	2	16	0	82

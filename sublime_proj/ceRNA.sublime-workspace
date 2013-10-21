@@ -1,0 +1,1044 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Fi",
+				"FINAL"
+			],
+			[
+				"R",
+				"RUBY"
+			],
+			[
+				"ns",
+				"nsnp"
+			],
+			[
+				"get",
+				"get_nth_line"
+			],
+			[
+				"ge",
+				"getline"
+			],
+			[
+				"line",
+				"linecache"
+			],
+			[
+				"cn",
+				"cnt_f3"
+			],
+			[
+				"n",
+				"nsnp"
+			],
+			[
+				"out",
+				"outpstat"
+			],
+			[
+				"fout",
+				"fout2"
+			],
+			[
+				"filt",
+				"filtered_out2"
+			],
+			[
+				"ou",
+				"output"
+			],
+			[
+				"sa",
+				"samples"
+			],
+			[
+				"j",
+				"join"
+			],
+			[
+				"cnt",
+				"cnt_f3"
+			],
+			[
+				"all",
+				"allgt"
+			],
+			[
+				"fi",
+				"fisher_cut"
+			],
+			[
+				"log",
+				"logfac"
+			],
+			[
+				"g",
+				"gt"
+			],
+			[
+				"n_a",
+				"n_ab"
+			],
+			[
+				"n_",
+				"n_aa"
+			],
+			[
+				"con",
+				"continue"
+			],
+			[
+				"sam",
+				"samples"
+			],
+			[
+				"ma",
+				"maf_cut"
+			],
+			[
+				"int",
+				"integer"
+			],
+			[
+				"gt",
+				"gtlist"
+			],
+			[
+				"fil",
+				"file_len"
+			],
+			[
+				"lin",
+				"line_crt"
+			],
+			[
+				"pip",
+				"pipeout"
+			],
+			[
+				"pipe",
+				"pipeout"
+			],
+			[
+				"pi",
+				"pipein"
+			],
+			[
+				"res",
+				"restd"
+			],
+			[
+				"f",
+				"filein"
+			],
+			[
+				"data",
+				"datad"
+			],
+			[
+				"file",
+				"filein"
+			],
+			[
+				"bam",
+				"bamd"
+			],
+			[
+				"G",
+				"GLOBAL"
+			],
+			[
+				"BA",
+				"BAM"
+			],
+			[
+				"BAM",
+				"BAM1"
+			],
+			[
+				"O",
+				"OUT"
+			],
+			[
+				"dat",
+				"datad"
+			],
+			[
+				"kmer",
+				"kmerDic"
+			],
+			[
+				"ke",
+				"kmerDic"
+			],
+			[
+				"str",
+				"strip"
+			],
+			[
+				"pa",
+				"patn"
+			],
+			[
+				"col",
+				"colannot"
+			],
+			[
+				"cou",
+				"countTuNo"
+			],
+			[
+				"cout",
+				"countdf"
+			],
+			[
+				"co",
+				"colannot"
+			],
+			[
+				"count",
+				"countdf"
+			],
+			[
+				"sc",
+				"scDict"
+			],
+			[
+				"temp",
+				"tempsc"
+			],
+			[
+				"fn",
+				"fnR"
+			],
+			[
+				"re",
+				"result"
+			],
+			[
+				"unip",
+				"unipro2genename"
+			],
+			[
+				"use",
+				"useMart"
+			],
+			[
+				"l",
+				"lncrna_mat"
+			],
+			[
+				"tmp",
+				"tmp_lncrna"
+			],
+			[
+				"read",
+				"readtable"
+			],
+			[
+				"gene",
+				"genename2entrez"
+			],
+			[
+				"en",
+				"ensembl_genes"
+			],
+			[
+				"geno",
+				"genomic_coordinate"
+			],
+			[
+				"meth",
+				"methd"
+			],
+			[
+				"tum",
+				"tumAcro"
+			],
+			[
+				"len",
+				"length"
+			],
+			[
+				"x",
+				"xlab"
+			],
+			[
+				"wh",
+				"white"
+			],
+			[
+				"lu",
+				"leukemia_french_american_british_morphology_code"
+			],
+			[
+				"lab",
+				"label"
+			],
+			[
+				"mix",
+				"mixCoeff"
+			],
+			[
+				"la",
+				"label"
+			],
+			[
+				"Num",
+				"Num_of_Clones"
+			],
+			[
+				"Clon",
+				"CloneNum"
+			],
+			[
+				"S",
+				"SMs"
+			],
+			[
+				"Cod",
+				"Coding_Num"
+			],
+			[
+				"W",
+				"WGS_Num"
+			],
+			[
+				"row",
+				"rownames"
+			],
+			[
+				"mixt",
+				"mixtureCoefficient"
+			],
+			[
+				"mi",
+				"mixtureCoefficient"
+			],
+			[
+				"num",
+				"numClone"
+			],
+			[
+				"merg",
+				"merge_recurse"
+			],
+			[
+				"labe",
+				"labelFAB"
+			],
+			[
+				"gs",
+				"gsetname"
+			],
+			[
+				"ti",
+				"title"
+			],
+			[
+				"Surv",
+				"Survival"
+			],
+			[
+				"sur",
+				"survfit"
+			],
+			[
+				"ov",
+				"overall_survival_months"
+			],
+			[
+				"over",
+				"overall_survival_status"
+			],
+			[
+				"pati",
+				"patient_id"
+			],
+			[
+				"pat",
+				"patient_id"
+			],
+			[
+				"dataS",
+				"dataSurv"
+			],
+			[
+				"tu",
+				"tumAcro2"
+			],
+			[
+				"ins",
+				"intersect"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/test.py",
+			"settings":
+			{
+				"buffer_size": 4353,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
+			"settings":
+			{
+				"buffer_size": 2311,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/jh3283/Dropbox/wimh.txt",
+			"settings":
+			{
+				"buffer_size": 3777,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
+			"settings":
+			{
+				"buffer_size": 478,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
+			"settings":
+			{
+				"buffer_size": 344,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterGATK_Annovar.sh",
+			"settings":
+			{
+				"buffer_size": 3647,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/combine_VCF.sh",
+			"settings":
+			{
+				"buffer_size": 45,
+				"line_ending": "Unix",
+				"name": "#!/bin/bash"
+			}
+		}
+	],
+	"build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
+	"command_palette":
+	{
+		"height": 367.0,
+		"selected_items":
+		[
+			[
+				"sid",
+				"View: Toggle Side Bar"
+			],
+			[
+				"si",
+				"View: Toggle Side Bar"
+			],
+			[
+				"side",
+				"View: Toggle Side Bar"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"mini",
+				"View: Toggle Minimap"
+			],
+			[
+				"pyt",
+				"Set Syntax: Python"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"package instal",
+				"Package Control: Install Package"
+			],
+			[
+				"package control in",
+				"Package Control: Install Package"
+			],
+			[
+				"package use",
+				"Preferences: Package Control Settings – User"
+			],
+			[
+				":w",
+				":w - Save"
+			],
+			[
+				":q",
+				"Set Syntax: SQL"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/gatk_annotate_variants.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_filteringGenotype.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/samtools_paired_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/samtools_joint_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterSNP.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/filterSNP_noHWE.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_samtools_joint_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/fitler1_GT.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_getGenotypeMatrix.sh",
+		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
+		"/Users/jh3283/Dropbox/classML/HW/HW2/jh3283-HW2.tex",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_samtools_paired_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/getInBamlist.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_gatk_annotate.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/splitChr_bam.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/integrateChr_vcf.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_steps.sh",
+		"/Volumes/ac_lab/jh3283/scripts/sftp-config.json",
+		"/Users/jh3283/classPython/test.txt",
+		"/Users/jh3283/classPython/rosalind_1d_clumpFind.py",
+		"/Users/jh3283/classPython/rosalind_1b_revDNA.py",
+		"/Users/jh3283/classPython/rosalind_1c_pm.py",
+		"/Volumes/ac_lab/jh3283/scripts/projRe/get_tssCount.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projRe/do_designTCGAsample.py",
+		"/Users/jh3283/classPython/rosalind_revDNA_1b.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/lncRNA/do_lncRNA_v1.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/lncRNA/step_2_assemble.sh",
+		"/Users/jh3283/scripts/myUseful/latex/prezLabSep23_2.tex",
+		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/get_Pvaluefor_consistent.sh",
+		"/Users/jh3283/Dropbox/classML/HW/HW1.tex",
+		"/Users/jh3283/Dropbox/classML/HW/sinusreg.m",
+		"/Users/jh3283/Dropbox/classML/HW/hw1.m",
+		"/Users/jh3283/Dropbox/classML/HW/logireg.m",
+		"/Users/jh3283/Dropbox/classML/HW/polyreg.m",
+		"/Volumes/ac_lab/jh3283/scripts/projAML/methyl/01_processAMLMeth.r",
+		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/run_getMethMat.r",
+		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/getMethMat.r",
+		"/Users/jh3283/Dropbox/wimh.txt",
+		"/Users/jh3283/classPython/rosalind_day1.py",
+		"/Users/jh3283/classPython/rosalind_ini5.txt",
+		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/merge.pl",
+		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/mergePIDfreq.py",
+		"/Volumes/ac_lab/jh3283/SCRATCH/database/geneIDconverter/convertUniproID.r",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projAML/WXS/callVars/result/PARGVC-TuA_PARGVC-NoA.var.vcf.somaticfiltered.vcf.summary.exome_summary.csv",
+		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/preProcessMeth.sh",
+		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/SublimeSimpleSync.sublime-settings",
+		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/SimpleSync.sublime-settings",
+		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
+		"/Users/jh3283/projPAN/ucec/file2D.txt",
+		"/Users/jh3283/projAML/genelist_mutated_overlap.txt",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/myethy/panMethFunctions.r",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/myethy/myFMethy.r",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/meth/getBestProbe.r",
+		"/Users/jh3283/projPAN/luad/file2D.txt",
+		"/Users/jh3283/projPAN/kirc/file2D.txt",
+		"/Users/jh3283/projPAN/hnsc/file2D.txt",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/myethy/allMethfiles2download.txt",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/myethy/files_coad.txt",
+		"/Users/jh3283/Dropbox/compGenomic/code/vizFormatPSB.r",
+		"/Users/jh3283/Dropbox/compGenomic/Draft/draft/draft.rnw",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/myethy/coad/files2download.txt",
+		"/Users/jh3283/Dropbox/compGenomic/projcompgenomic/Jing_analysis/wd/snpeffVCF/wholeGenome.SMs.wc",
+		"/Users/jh3283/Dropbox/compGenomic/projcompgenomic/Jing_analysis/wd/snpeffVCF/codingSMs.wc",
+		"/Volumes/ac_lab/jh3283/YS2559/scripts/AML/TARGET_AML.Rnw",
+		"/Users/jh3283/Dropbox/compGenomic/Draft/word/22geneRankList.txt",
+		"/Users/jh3283/Dropbox/compGenomic/Draft/word/466GenesRankList.txt",
+		"/Volumes/ac_lab/jh3283/SCRATCH/ref/RefSeq_Gene_TSS.txt",
+		"/Users/jh3283/Dropbox/compGenomic/code/gsea_compGenom.r",
+		"/Users/jh3283/Dropbox/compGenomic/code/celine_gsea_functions_withPlot_modified.R",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projAML/WXS/reports/TARGET_AML_WXS.Rnw",
+		"/Users/jh3283/SCRATCH",
+		"/Users/jh3283/Desktop/heatmap.2.r",
+		"/Users/jh3283/Dropbox/compGenomic/code/run_mixtools.r",
+		"/Users/jh3283/projAML/TARGET_AML_WXS.Rnw",
+		"/Users/jh3283/projPAN/getRegulLen.r",
+		"/Users/jh3283/projPAN/preViz_methyTCGA.r",
+		"/Volumes/ac_lab/jh3283/SCRATCH/projPanCancer/compare/getRegulLen.r",
+		"/Users/jh3283/Dropbox/compGenomic/Draft/draft/draft.bib",
+		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Exonic Region",
+			"a",
+			"Time",
+			"time",
+			"Time",
+			"time",
+			"Time",
+			"1",
+			"out",
+			"OUT",
+			" #        CMD=\" qsub -o $OUT.log.gatk.o -e $OUT.log.gatk.e -l mem=8G,time=5:: ${MYSCDIR}/gatk_annotate_variants.sh $OUT $INP $GLOBAL\"\n #        echo $CMD\n	# # CMD=\" qsub -o $OUT.log.anno.o -e $OUT.log.anno.e -l mem=5G,time=5:: sh $ANNOVAR/do_annovar_all.sh $OUT annovar_$OUT\"\n	# $CMD",
+			"inp",
+			"1",
+			"call",
+			"bam",
+			"BAM",
+			"bam",
+			"BAM",
+			"MYSCDIR",
+			"DepthPerAlleleBySample",
+			"INP",
+			"/\n",
+			"\n",
+			"mv",
+			")",
+			"\n        legacy_sample_id             :",
+			"\n        legacy_sample_id             : ",
+			"itermized",
+			"\\t",
+			")",
+			"!!!\n",
+			"%in%",
+			"numSample",
+			"tx_by_gene",
+			" \n",
+			"myethy",
+			"/",
+			"https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/coad/cgcc/jhu-usc.edu/humanmethylation450/methylation/jhu-usc.edu_COAD.HumanMethylation450.Level_3.6.6.0.tar.gz",
+			"barcode",
+			"meth",
+			"methd",
+			"R",
+			"meth",
+			"tmp",
+			"])",
+			"tmp <- tmp[-(which(sapply(tmp,is.null),arr.ind=TRUE))]",
+			"tmp",
+			"cnv",
+			"cnvd",
+			" \n",
+			"cnv",
+			"https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/",
+			"correlat",
+			"	Level_3	DNA Methylation	Available - Open Access	Download\nMD5 \nView Files",
+			"\\nHumanMethylation",
+			"	HumanMethylation27",
+			"	HumanMethylation27\nView Files",
+			"	HumanMethylation27MD5 \nView Files",
+			"	Level_3	DNA Methylation	Available - Open Access	Download\nMD5 \nView Files",
+			"450",
+			"450/",
+			"6.6.0",
+			"COAD	HumanMethylation27	",
+			"COAD	HumanMethylation450	",
+			"Level_3	DNA Methylation	Available - Open Access	Download\nMD5 \nView Files",
+			"Level_3",
+			"lab",
+			"label",
+			"them",
+			"R",
+			"awk",
+			"vim",
+			"latex",
+			"dataplot_merge",
+			"dataTree$Num_of_somatic_mutations_WGS",
+			"mixCoeff",
+			"dplot2",
+			"datamc2DF",
+			"datamc",
+			"clone",
+			"clinical",
+			"dataplot_merge",
+			"pdsurv",
+			"orange",
+			"lightblue",
+			"quote",
+			"color key",
+			"data_clean",
+			"heterogeneity index",
+			"tumAcro1 <- \"blca\"\n# tumAcro2 <- \"brca\"\n",
+			"getTFlen",
+			"regul",
+			"screen",
+			"vim",
+			"lengths",
+			"Clonality and heterogeneity",
+			"network"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"",
+			"\\tHumanMethylation",
+			"    HumanMethylation27",
+			"    HumanMethylation27MD5",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/test.py",
+					"settings":
+					{
+						"buffer_size": 4353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								269,
+								269
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 4.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
+					"settings":
+					{
+						"buffer_size": 2311,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1348,
+								1348
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/jh3283/Dropbox/wimh.txt",
+					"settings":
+					{
+						"buffer_size": 3777,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1294,
+								1294
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 680.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
+					"settings":
+					{
+						"buffer_size": 478,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								478,
+								478
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
+					"settings":
+					{
+						"buffer_size": 344,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								344,
+								344
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterGATK_Annovar.sh",
+					"settings":
+					{
+						"buffer_size": 3647,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2675,
+								2675
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/combine_VCF.sh",
+					"settings":
+					{
+						"buffer_size": 45,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								45,
+								45
+							]
+						],
+						"settings":
+						{
+							"auto_name": "#!/bin/bash",
+							"incomplete_sync": null,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 125.0
+	},
+	"output.latex_log":
+	{
+		"height": 118.0
+	},
+	"output.sftp":
+	{
+		"height": 131.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"glo",
+				"global_setting_GRC37lite.sh"
+			],
+			[
+				"sam",
+				"samtools_paired_calling.sh"
+			],
+			[
+				"",
+				"global_setting_b37.sh"
+			],
+			[
+				"mer",
+				"projAML/WXS/merge.pl"
+			],
+			[
+				"/meth/",
+				"projPanCancer/meth/getMethMat.r"
+			],
+			[
+				"/meth/getme",
+				"projPanCancer/meth/getMethMat.r"
+			],
+			[
+				"/meth/run",
+				"projPanCancer/meth/run_getMethMat.r"
+			],
+			[
+				"meth/get",
+				"projPanCancer/meth/getMethMat.r"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 215.0,
+	"status_bar_visible": true
+}

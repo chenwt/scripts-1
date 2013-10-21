@@ -1,0 +1,20 @@
+getwd()
+[1] "/Users/samandnike/Dropbox/scripts/myUseful"
+> source("myIO.r")
+Error in source("myIO.r") : myIO.r:1:7: unexpected string constant
+1: print "Hi R in sublime!"
+         ^
+> source("myIO.r")
+Error in source("myIO.r") : myIO.r:1:7: unexpected string constant
+1: print "Hi R in sublime!"
+         ^
+> source("myIO.r")
+Error in source("myIO.r") : myIO.r:1:7: unexpected string constant
+1: print "Hi R in sublime"
+         ^
+> source("myIO.r")
+> source("myIO.r")
+[1] "Hi R in sublime"
+> source("myIO.r")
+> 
+> 
