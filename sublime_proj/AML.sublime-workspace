@@ -4,16 +4,224 @@
 		"selected_items":
 		[
 			[
-				"B",
-				"BPATH"
+				"col",
+				"colnames"
+			],
+			[
+				"in",
+				"in_file"
+			],
+			[
+				"out",
+				"output_file"
+			],
+			[
+				"de",
+				"detags"
+			],
+			[
+				"data",
+				"dataMat"
+			],
+			[
+				"inp",
+				"inp1Dict"
+			],
+			[
+				"line",
+				"lineList"
+			],
+			[
+				"Fi",
+				"FINAL"
+			],
+			[
+				"R",
+				"RUBY"
+			],
+			[
+				"ns",
+				"nsnp"
+			],
+			[
+				"get",
+				"get_nth_line"
+			],
+			[
+				"ge",
+				"getline"
+			],
+			[
+				"cn",
+				"cnt_f3"
+			],
+			[
+				"n",
+				"nsnp"
+			],
+			[
+				"fout",
+				"fout2"
+			],
+			[
+				"filt",
+				"filtered_out2"
+			],
+			[
+				"ou",
+				"output"
+			],
+			[
+				"sa",
+				"samples"
+			],
+			[
+				"j",
+				"join"
+			],
+			[
+				"cnt",
+				"cnt_f3"
+			],
+			[
+				"all",
+				"allgt"
+			],
+			[
+				"fi",
+				"fisher_cut"
+			],
+			[
+				"log",
+				"logfac"
+			],
+			[
+				"g",
+				"gt"
+			],
+			[
+				"n_a",
+				"n_ab"
+			],
+			[
+				"n_",
+				"n_aa"
+			],
+			[
+				"con",
+				"continue"
+			],
+			[
+				"sam",
+				"samples"
+			],
+			[
+				"ma",
+				"maf_cut"
+			],
+			[
+				"int",
+				"integer"
+			],
+			[
+				"gt",
+				"gtlist"
+			],
+			[
+				"fil",
+				"file_len"
+			],
+			[
+				"lin",
+				"line_crt"
+			],
+			[
+				"pip",
+				"pipeout"
+			],
+			[
+				"pipe",
+				"pipeout"
+			],
+			[
+				"pi",
+				"pipein"
+			],
+			[
+				"res",
+				"restd"
+			],
+			[
+				"f",
+				"filein"
+			],
+			[
+				"file",
+				"filein"
+			],
+			[
+				"bam",
+				"bamd"
 			],
 			[
 				"G",
 				"GLOBAL"
 			],
 			[
-				"data",
-				"dataset1a"
+				"BA",
+				"BAM"
+			],
+			[
+				"BAM",
+				"BAM1"
+			],
+			[
+				"O",
+				"OUT"
+			],
+			[
+				"dat",
+				"datad"
+			],
+			[
+				"kmer",
+				"kmerDic"
+			],
+			[
+				"ke",
+				"kmerDic"
+			],
+			[
+				"str",
+				"strip"
+			],
+			[
+				"pa",
+				"patn"
+			],
+			[
+				"cou",
+				"countTuNo"
+			],
+			[
+				"cout",
+				"countdf"
+			],
+			[
+				"co",
+				"colannot"
+			],
+			[
+				"count",
+				"countdf"
+			],
+			[
+				"sc",
+				"scDict"
+			],
+			[
+				"temp",
+				"tempsc"
 			],
 			[
 				"fn",
@@ -50,10 +258,6 @@
 			[
 				"en",
 				"ensembl_genes"
-			],
-			[
-				"get",
-				"getStart"
 			],
 			[
 				"geno",
@@ -104,10 +308,6 @@
 				"CloneNum"
 			],
 			[
-				"dat",
-				"dataTree2"
-			],
-			[
 				"S",
 				"SMs"
 			],
@@ -126,10 +326,6 @@
 			[
 				"mixt",
 				"mixtureCoefficient"
-			],
-			[
-				"col",
-				"colnames"
 			],
 			[
 				"mi",
@@ -199,16 +395,12 @@
 	"build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
 	"command_palette":
 	{
-		"height": 247.0,
+		"height": 367.0,
 		"selected_items":
 		[
 			[
-				"ins",
-				"Package Control: Install Package"
-			],
-			[
-				"mini",
-				"View: Toggle Minimap"
+				"sid",
+				"View: Toggle Side Bar"
 			],
 			[
 				"si",
@@ -217,6 +409,14 @@
 			[
 				"side",
 				"View: Toggle Side Bar"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"mini",
+				"View: Toggle Minimap"
 			],
 			[
 				"pyt",
@@ -264,17 +464,41 @@
 	},
 	"file_history":
 	[
-		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/samtools_call_exomeSMs.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/do_annotate_gatk_annovar.sh",
-		"/Users/jh3283/Desktop/wdd_hw.tex",
-		"/Volumes/ac_lab/jh3283/SCRATCH/projAML/WXS/callVars/result_anno/input_gatk_vcfs_gatk_fail_1.txt",
-		"/Volumes/ac_lab/jh3283/SCRATCH/projFocus/ceRNA/anno/vcfs_problematic_size_gatk_annovar.txt",
-		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/do_filtering_gatk_annovar.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/global_setting_GRC37lite.sh",
-		"/Volumes/ac_lab/jh3283/tools/mutable/gatk_annotate_variants_Jing.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/annotate_gatk_annovar.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/annotate_gatk_annovar.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/do_anaIntegrate.r",
+		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/test/convertGeneName2EntrezID_1col.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_resmExpMat.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/annot_SNP.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/combine_VCF.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterGATK_Annovar.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/test.py",
+		"/Users/jh3283/Dropbox/wimh.txt",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/gatk_annotate_variants.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_filteringGenotype.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/samtools_paired_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/samtools_joint_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterSNP.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/filterSNP_noHWE.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_samtools_joint_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/fitler1_GT.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_getGenotypeMatrix.sh",
+		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/jh3283/Dropbox/classML/HW/HW2/jh3283-HW2.tex",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_samtools_paired_calling.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/getInBamlist.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_gatk_annotate.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/splitChr_bam.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/integrateChr_vcf.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_steps.sh",
+		"/Volumes/ac_lab/jh3283/scripts/sftp-config.json",
+		"/Users/jh3283/classPython/test.txt",
+		"/Users/jh3283/classPython/rosalind_1d_clumpFind.py",
+		"/Users/jh3283/classPython/rosalind_1b_revDNA.py",
+		"/Users/jh3283/classPython/rosalind_1c_pm.py",
+		"/Volumes/ac_lab/jh3283/scripts/projRe/get_tssCount.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projRe/do_designTCGAsample.py",
+		"/Users/jh3283/classPython/rosalind_revDNA_1b.py",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/lncRNA/do_lncRNA_v1.r",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/lncRNA/step_2_assemble.sh",
 		"/Users/jh3283/scripts/myUseful/latex/prezLabSep23_2.tex",
@@ -287,7 +511,6 @@
 		"/Volumes/ac_lab/jh3283/scripts/projAML/methyl/01_processAMLMeth.r",
 		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/run_getMethMat.r",
 		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/getMethMat.r",
-		"/Users/jh3283/Dropbox/wimh.txt",
 		"/Users/jh3283/classPython/rosalind_day1.py",
 		"/Users/jh3283/classPython/rosalind_ini5.txt",
 		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/merge.pl",
@@ -295,7 +518,6 @@
 		"/Volumes/ac_lab/jh3283/SCRATCH/database/geneIDconverter/convertUniproID.r",
 		"/Volumes/ac_lab/jh3283/SCRATCH/projAML/WXS/callVars/result/PARGVC-TuA_PARGVC-NoA.var.vcf.somaticfiltered.vcf.summary.exome_summary.csv",
 		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/preProcessMeth.sh",
-		"/Volumes/ac_lab/jh3283/scripts/sftp-config.json",
 		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/SublimeSimpleSync.sublime-settings",
 		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/SimpleSync.sublime-settings",
 		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
@@ -333,7 +555,7 @@
 	],
 	"find":
 	{
-		"height": 42.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -348,16 +570,35 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"$i.filtered.vcf",
-			"filtered.vcf",
-			"then",
-			"filtered.vcf",
-			"ExomeOrWGS",
-			"filtered.vcf.ann.vcf",
-			"extracolumn",
-			"$OUT",
+			"Yishai Shimoni",
+			"top",
+			"outlogf.write",
+			"print",
+			"Exonic Region",
+			"a",
+			"Time",
+			"time",
+			"Time",
+			"time",
+			"Time",
+			"1",
 			"out",
 			"OUT",
+			" #        CMD=\" qsub -o $OUT.log.gatk.o -e $OUT.log.gatk.e -l mem=8G,time=5:: ${MYSCDIR}/gatk_annotate_variants.sh $OUT $INP $GLOBAL\"\n #        echo $CMD\n	# # CMD=\" qsub -o $OUT.log.anno.o -e $OUT.log.anno.e -l mem=5G,time=5:: sh $ANNOVAR/do_annovar_all.sh $OUT annovar_$OUT\"\n	# $CMD",
+			"inp",
+			"1",
+			"call",
+			"bam",
+			"BAM",
+			"bam",
+			"BAM",
+			"MYSCDIR",
+			"DepthPerAlleleBySample",
+			"INP",
+			"/\n",
+			"\n",
+			"mv",
+			")",
 			"\n        legacy_sample_id             :",
 			"\n        legacy_sample_id             : ",
 			"itermized",
@@ -498,7 +739,7 @@
 	},
 	"output.sftp":
 	{
-		"height": 100.0
+		"height": 131.0
 	},
 	"replace":
 	{
@@ -510,6 +751,18 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"glo",
+				"global_setting_GRC37lite.sh"
+			],
+			[
+				"sam",
+				"samtools_paired_calling.sh"
+			],
+			[
+				"",
+				"global_setting_b37.sh"
+			],
 			[
 				"mer",
 				"projAML/WXS/merge.pl"

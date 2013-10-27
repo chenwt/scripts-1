@@ -29,7 +29,7 @@ export NGSSHELL="/ifs/data/c2b2/ngs_lab/ngs/code/shell/"
 export FIXMATE="$PICARD/FixMateInformation.jar"
 export FIXSTAT="$PICARD/CollectInsertSizeMetrics.jar"
 export GCbias="$PICARD/CollectGcBiasMetrics.jar"
-
+alias python="/nfs/apps/python/2.6.5/bin/python"
 
 ## obsolete since WGS is also now using BWA mem , hence the new bwa-0.7.3 version and new indexes of the ref genome
 ## BWA-aln settings for WGS

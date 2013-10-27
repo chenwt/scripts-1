@@ -24,7 +24,7 @@ ExomeOrWGS=$2
 	## OLD python version
 	## 	python /ifs/scratch/c2b2/ngs_lab/sz2317/scripts/underWork/WGS/Mutable/mutableannotateVCF.py -c /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/cancergenecensus.txt -v /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/CosmicCodingMuts_v65_28052013_noLimit.vcf -d /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/drugNameIDGene.csv -i germline-filtered.vcf > germline-filtered.vcf.ann.vcf
 	## New python script version
-	python /ifs/scratch/c2b2/ngs_lab/sz2317/scripts/underWork/WGS/Mutable/mutableannotateVCF.py -c /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/cancergenecensus.txt -v /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/CosmicCodingMuts_v65_28052013_noLimit.vcf -d /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/drugNameIDGene.csv -m /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/CosmicMutantExportIncFus_v66_250713.tsv -i $i.germline-filtered.vcf > $i.germline-filtered.vcf.ann.vcf
+	python /ifs/home/c2b2/ac_lab/jh3283/tools/mutable/mutableannotateVCF.py -c /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/cancergenecensus.txt -v /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/CosmicCodingMuts_v65_28052013_noLimit.vcf -d /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/drugNameIDGene.csv -m /ifs/data/c2b2/ngs_lab/ngs/resources/mutable/CosmicMutantExportIncFus_v66_250713.tsv -i $i.germline-filtered.vcf > $i.germline-filtered.vcf.ann.vcf
 	if [[ $? != 0 ]]
 	then
 		echo "ERROR: Exonic Region Step 2 Cosmic Annotation $i "

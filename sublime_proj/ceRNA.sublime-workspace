@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"out",
+				"outTagMat"
+			],
+			[
+				"col",
+				"colnames"
+			],
+			[
+				"de",
+				"detags"
+			],
+			[
+				"data",
+				"dataMat"
+			],
+			[
+				"inp",
+				"inp1Dict"
+			],
+			[
+				"line",
+				"lineList"
+			],
+			[
 				"Fi",
 				"FINAL"
 			],
@@ -24,20 +48,12 @@
 				"getline"
 			],
 			[
-				"line",
-				"linecache"
-			],
-			[
 				"cn",
 				"cnt_f3"
 			],
 			[
 				"n",
 				"nsnp"
-			],
-			[
-				"out",
-				"outpstat"
 			],
 			[
 				"fout",
@@ -136,10 +152,6 @@
 				"filein"
 			],
 			[
-				"data",
-				"datad"
-			],
-			[
 				"file",
 				"filein"
 			],
@@ -182,10 +194,6 @@
 			[
 				"pa",
 				"patn"
-			],
-			[
-				"col",
-				"colannot"
 			],
 			[
 				"cou",
@@ -379,63 +387,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/test.py",
-			"settings":
-			{
-				"buffer_size": 4353,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
-			"settings":
-			{
-				"buffer_size": 2311,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Users/jh3283/Dropbox/wimh.txt",
-			"settings":
-			{
-				"buffer_size": 3777,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
-			"settings":
-			{
-				"buffer_size": 478,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
-			"settings":
-			{
-				"buffer_size": 344,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterGATK_Annovar.sh",
-			"settings":
-			{
-				"buffer_size": 3647,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/combine_VCF.sh",
-			"settings":
-			{
-				"buffer_size": 45,
-				"line_ending": "Unix",
-				"name": "#!/bin/bash"
-			}
-		}
 	],
 	"build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
 	"command_palette":
@@ -509,6 +460,16 @@
 	},
 	"file_history":
 	[
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/EdgeR.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_resmExpMat.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/annot_SNP.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/combine_VCF.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterGATK_Annovar.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/test.py",
+		"/Users/jh3283/Dropbox/wimh.txt",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/gatk_annotate_variants.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_filteringGenotype.r",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/samtools_paired_calling.sh",
@@ -519,14 +480,11 @@
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/fitler1_GT.py",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_getGenotypeMatrix.sh",
 		"/Users/jh3283/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
-		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
 		"/Users/jh3283/Dropbox/classML/HW/HW2/jh3283-HW2.tex",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_samtools_paired_calling.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/getInBamlist.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/qsub_gatk_annotate.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/splitChr_bam.sh",
-		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/integrateChr_vcf.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/do_steps.sh",
 		"/Volumes/ac_lab/jh3283/scripts/sftp-config.json",
@@ -549,7 +507,6 @@
 		"/Volumes/ac_lab/jh3283/scripts/projAML/methyl/01_processAMLMeth.r",
 		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/run_getMethMat.r",
 		"/Volumes/ac_lab/jh3283/scripts/projPanCancer/meth/getMethMat.r",
-		"/Users/jh3283/Dropbox/wimh.txt",
 		"/Users/jh3283/classPython/rosalind_day1.py",
 		"/Users/jh3283/classPython/rosalind_ini5.txt",
 		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/merge.pl",
@@ -609,6 +566,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"top",
+			"outlogf.write",
+			"print",
 			"Exonic Region",
 			"a",
 			"Time",
@@ -728,214 +688,8 @@
 	"groups":
 	[
 		{
-			"selected": 2,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/test.py",
-					"settings":
-					{
-						"buffer_size": 4353,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								269,
-								269
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 4.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/global_setting_GRC37lite.sh",
-					"settings":
-					{
-						"buffer_size": 2311,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1348,
-								1348
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/Users/jh3283/Dropbox/wimh.txt",
-					"settings":
-					{
-						"buffer_size": 3777,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1294,
-								1294
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 680.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_Bamlist_joint.sh",
-					"settings":
-					{
-						"buffer_size": 478,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								478,
-								478
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test.sh",
-					"settings":
-					{
-						"buffer_size": 344,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								344,
-								344
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterGATK_Annovar.sh",
-					"settings":
-					{
-						"buffer_size": 3647,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2675,
-								2675
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/combine_VCF.sh",
-					"settings":
-					{
-						"buffer_size": 45,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								45,
-								45
-							]
-						],
-						"settings":
-						{
-							"auto_name": "#!/bin/bash",
-							"incomplete_sync": null,
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
