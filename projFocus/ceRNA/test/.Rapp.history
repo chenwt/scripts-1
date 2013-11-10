@@ -1,0 +1,445 @@
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
+dataSurv <- read.table("/Users/jh3283/Dropbox/compGenomic/projCompGenomic/Jing_analysis/survivial/patient_infor.txt",header=T,sep="\t")#
+#somatic mutation#
+wgs <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/wd/snpeffVCF/wholeGenome.SMs.wc",header=F)#
+colnames(wgs) <- c("patient_id","Num_of_somatic_mutations_WGS")#
+coding <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/wd/snpeffVCF/codingSMs.wc",header=F)#
+colnames(coding) <- c("patient_id","Num_of_somatic_mutations_coding")#
+#clone number and mixture coeff#
+    mixCoeff <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/wd/lagDiff10p/mixture_coefficient2.txt",header=T)#
+    mixCoeff$sample <- gsub(".somaticfiltered.freq","",mixCoeff$sample)#
+numClone <- as.data.frame(unique(cbind(mixCoeff$sample,mixCoeff$k)))#
+colnames(numClone) <- c("patient_id","Num_of_Clones")#
+    mixCoeff2 <- as.data.frame(mixCoeff[order(mixCoeff$sample,mixCoeff$lambda,decreasing=T),])#
+    mixCoeff2 <- mixCoeff[mixCoeff$k==3,]#
+mixtureCoefficient <- as.data.frame(t(sapply(unique(mixCoeff2$sample),function(x){mixCoeff2[grep(x,mixCoeff2$sample),3]})))#
+mixtureCoefficient <- as.data.frame(t(apply(mixtureCoefficient,1,function(x){sort(x)})))#
+colnames(mixtureCoefficient) <- c("Clone1","Clone2","Clone3")#
+mixtureCoefficient$patient_id <- row.names(mixtureCoefficient)
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
+dim(dataTree)
+head(dataTree)
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")#
+dataTree <- dataTree[,c("patient_id","leukemia_french_american_british_morphology_code",#
+                "Num_of_somatic_mutations_WGS","Num_of_somatic_mutations_coding",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3")]
+head(dataTree)
+sapply(dataTree$Num_of_somatic_mutations_WGS,FUN=function(x){ (x- mean(dataTree$Num_of_somatic_mutations_WGS))/var(dataTree$Num_of_somatic_mutations_WGS)})
+sapply(dataTree$Num_of_somatic_mutations_WGS,FUN=function(x){ (x- mean(dataTree$Num_of_somatic_mutations_WGS))/sqrt(var(dataTree$Num_of_somatic_mutations_WGS))})
+dataTree$patient_id[c(1,5)]
+dataTree$patient_id[c(1,2,5)]
+getExtremZscore <- function(y){ # y should be a vector or list with names#
+    y[which(abs(sapply(y,FUN=function(x){(x- mean(y))/sqrt(var(y))})) > 1)]#
+}
+getExtremZscore(dataTree$Num_of_somatic_mutations_WGS)
+getExtremZscore <- function(y) which(abs(sapply(y,FUN=function(x){(x- mean(y))/sqrt(var(y))})) > 1)
+getExtremZscore(dataTree$Num_of_somatic_mutations_WGS)
+getExtremZscore(dataTree$Num_of_somatic_mutations_coding)
+dataTree$patient_id[ getExtremZscore(dataTree$Num_of_somatic_mutations_coding)]
+colnames <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3")
+getExtremZscore
+getExtremZscore(dataTree$Num_of_Clones)
+mode(dataTree$Num_of_Clones)
+table(dataTree$Num_of_Clones)
+sort(table(dataTree$Num_of_Clones)[1,])
+sort(as.data.frame(table(dataTree$Num_of_Clones)))
+sort(as.data.frame(table(dataTree$Num_of_Clones))
+)
+as.data.frame(table(dataTree$Num_of_Clones))
+which.max(as.data.frame(table(dataTree$Num_of_Clones))[,2])
+max(as.data.frame(table(dataTree$Num_of_Clones))[,2])
+as.data.frame(table(dataTree$Num_of_Clones))[1,] > as.data.frame(table(dataTree$Num_of_Clones))[1,[which.max(as.data.frame(table(dataTree$Num_of_Clones))[,2])]
+as.data.frame(table(dataTree$Num_of_Clones))
+with(dataTree)
+mean(dataTree$Num_of_Clones)
+mean(dataTree$Num_of_Clones)dataSurv <- read.table("/Users/jh3283/Dropbox/compGenomic/projCompGenomic/Jing_analysis/survivial/patient_infor.txt",header=T,sep="\t")#
+#somatic mutation#
+wgs <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/wd/snpeffVCF/wholeGenome.SMs.wc",header=F)#
+colnames(wgs) <- c("patient_id","Num_of_somatic_mutations_WGS")#
+coding <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/wd/snpeffVCF/codingSMs.wc",header=F)#
+colnames(coding) <- c("patient_id","Num_of_somatic_mutations_coding")#
+#clone number and mixture coeff#
+    mixCoeff <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/wd/lagDiff10p/mixture_coefficient2.txt",header=T)#
+    mixCoeff$sample <- gsub(".somaticfiltered.freq","",mixCoeff$sample)#
+numClone <- as.data.frame(unique(cbind(mixCoeff$sample,as.numeric(mixCoeff$k))))#
+colnames(numClone) <- c("patient_id","Num_of_Clones")#
+    mixCoeff2 <- as.data.frame(mixCoeff[order(mixCoeff$sample,mixCoeff$lambda,decreasing=T),])#
+    mixCoeff2 <- mixCoeff[mixCoeff$k==3,]#
+mixtureCoefficient <- as.data.frame(t(sapply(unique(mixCoeff2$sample),function(x){mixCoeff2[grep(x,mixCoeff2$sample),3]})))#
+mixtureCoefficient <- as.data.frame(t(apply(mixtureCoefficient,1,function(x){sort(x)})))#
+colnames(mixtureCoefficient) <- c("Clone1","Clone2","Clone3")#
+mixtureCoefficient$patient_id <- row.names(mixtureCoefficient)#
+#
+# dataSurv <- read.table("/Users/jh3283/Dropbox/compGenomic/projCompGenomic/Jing_analysis/survivial/patient_infor.txt",header=T,sep="\t")#
+# dataSurv <- dataSurv[,c("patient_id", "overall_survival_months","overall_survival_status","vital_status","leukemia_french_american_british_morphology_code")]#
+# dplot  <- cbind (mixtureCoefficient, dataSurv[dataSurv$patient_id %in% row.names(mixtureCoefficient),])#
+require(reshape)#
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")#
+dataTree <- dataTree[,c("patient_id","leukemia_french_american_british_morphology_code",#
+                "Num_of_somatic_mutations_WGS","Num_of_somatic_mutations_coding",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3")]#
+colnames <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3")
+colnames(dataTree) <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3")
+with(dataTree)
+attach(dataTree)
+getExtremZscore <- function(y) which(abs(sapply(y,FUN=function(x){(x- mean(y))/sqrt(var(y))})) > 1)
+getExtremZscore(Num_of_Clones)
+mean(Num_of_Clones)
+class(Num_of_Clones)
+getExtremZscore(as.numeric(as.character(Num_of_Clones)))
+hclust(dataTree[,c("Clone1","Clone2","Clone3")])
+hclust(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))
+hclust(na.omit(dataTree[,c("Clone1","Clone2","Clone3"))])
+hclust(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))
+dataTree[,c("Clone1","Clone2","Clone3")]
+na.omit(dataTree[,c("Clone1","Clone2","Clone3")])
+class(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))
+?hclust
+hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))
+summary(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))))
+summary(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))))$order
+hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))$order
+hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))$labels
+cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+install.packages("party")
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
+head(dataTree)
+dataTree2
+dataTree2 <- dataTree[,c("PID","FAB","Status")]#
+dataTree2$SMs[uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less#
+dataTree2$SMs[- uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+dataTree2$MixCoeff <- cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+colnames(dataTree) <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","Status")#
+attach(dataTree)#
+#
+# mapping quantified data into two factor data#
+getExtremZscore <- function(y) which(abs(sapply(y,FUN=function(x){(x- mean(y))/sqrt(var(y))})) > 1)#
+# y should be a vector or list with names#
+dataTree2 <- dataTree[,c("PID","FAB","Status")]#
+dataTree2$SMs[uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less#
+dataTree2$SMs[- uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+dataTree2$MixCoeff <- cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+attach(dataTree)#
+#
+# mapping quantified data into two factor data#
+getExtremZscore <- function(y) which(abs(sapply(y,FUN=function(x){(x- mean(y))/sqrt(var(y))})) > 1)#
+# y should be a vector or list with names#
+dataTree2 <- dataTree[,c("PID","FAB","Status")]#
+dataTree2$SMs[unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less#
+dataTree2$SMs[- uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+dataTree2$MixCoeff <- cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))
+getExtremZscore(WGS_Num)
+WGS_Num
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")#
+dataTree <- dataTree[,c("patient_id","leukemia_french_american_british_morphology_code",#
+                "Num_of_somatic_mutations_WGS","Num_of_somatic_mutations_coding",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","vital_status")]#
+colnames(dataTree) <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","Status")
+getExtremZscore(WGS_Num)
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")#
+dataTree <- dataTree[,c("patient_id","leukemia_french_american_british_morphology_code",#
+                "Num_of_somatic_mutations_WGS","Num_of_somatic_mutations_coding",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","vital_status")]#
+colnames(dataTree) <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","Status")
+WGS_Num
+dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
+head(dataTree)
+dataTree <- dataTree[,c("patient_id","leukemia_french_american_british_morphology_code",#
+                "Num_of_somatic_mutations_WGS","Num_of_somatic_mutations_coding",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","vital_status")]
+head(dataTree)
+colnames(dataTree) <- c("PID","FAB",#
+                "WGS_Num","Coding_Num",#
+                "Num_of_Clones",#
+                "Clone1","Clone2","Clone3","Status")
+attach(dataTree)
+dataTree2 <- dataTree[,c("PID","FAB","Status")]#
+dataTree2$SMs[unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less
+dataTree2$SMs[- uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+dataTree2$MixCoeff <- cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+junk1 <- c(1,2,3,4)
+junk1[c(1,3)] <- "yes"
+junk1[-c(1,3)] <- "no"
+junk1
+dataTree2$SMs <-dataTree$WGS_Num#
+dataTree2$SMs[unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less#
+dataTree2$SMs[-uniqe(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+d
+dataTree2 <- dataTree[,c("PID","FAB","Status")]#
+dataTree2$SMs <-dataTree$WGS_Num#
+dataTree2$SMs[unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less#
+dataTree2$SMs[-unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+#
+dataTree2$CloneNum <- dataTree$Num_of_Clones#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+#
+dataTree2$MixCoeff <- cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+Num_of_Clones
+as.numeric(as.character(Num_of_Clones))
+getExtremZscore(as.numeric(as.character(Num_of_Clones)))
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))
+<- 1
+]
+dataTree2$CloneNum <- as.numeric(as.character(dataTree$Num_of_Clones))#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+#
+dataTree2$MixCoeff <- cutree(hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")]))),k=2)
+hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))$labels
+mc.hclust <- hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))#
+dataTree2$mixCoeff <- rep(NA,nrow(dataTree2))#
+dataTree2$MixCoeff[mc.hclust$labels] <- cutree(mc.hclust,k=2)
+dataTree2$MixCoeff[as.factor(mc.hclust$labels)] <- cutree(mc.hclust,k=2)
+as.factor(mc.hclust$labels)
+class(as.factor(mc.hclust$labels))
+class(as.numeric(mc.hclust$labels))
+dataTree2$MixCoeff[as.numeric(mc.hclust$labels)]
+mc.hclust <- hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))#
+dataTree2$mixCoeff <- rep(NA,nrow(dataTree2))#
+dataTree2$MixCoeff[as.numeric(mc.hclust$labels)] <- cutree(mc.hclust,k=2)
+dt.ctree <- ctree(Status ~ FAB + SMs + CloneNum + MixCoeff,  data=dataTree2)
+library("party")#
+dt.ctree <- ctree(Status ~ FAB + SMs + CloneNum + MixCoeff,  data=dataTree2)
+plot(dt.ctree)
+plot(dt.ctree,type="simple")
+dataTree2
+plot(ctree(Status ~ FAB + SMs + CloneNum ,  data=dataTree2))
+?ctree
+plot(dt.ctree, terminal_panel = node_boxplot, drop_terminal = TRUE)
+dt.ctree <- ctree(Status ~ FAB + SMs + CloneNum ,  data=dataTree2)
+plot(dt.ctree, terminal_panel = node_boxplot, drop_terminal = TRUE)
+dataTree2 <- dataTree[,c("PID","FAB","Status")]#
+dataTree2$SMs <- dataTree$WGS_Num#
+dataTree2$SMs[unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 1 # too more or to less#
+dataTree2$SMs[-unique(c(getExtremZscore(WGS_Num), getExtremZscore(Coding_Num)))] <- 0 # regular number#
+#
+dataTree2$CloneNum <- as.numeric(as.character(dataTree$Num_of_Clones))#
+dataTree2$CloneNum[getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 1 # too more or too less#
+dataTree2$CloneNum[-getExtremZscore(as.numeric(as.character(Num_of_Clones)))] <- 0 # too more or too less#
+mc.hclust <- hclust(dist(na.omit(dataTree[,c("Clone1","Clone2","Clone3")])))#
+dataTree2$mixCoeff <- rep(0,nrow(dataTree2))#
+dataTree2$mixCoeff[as.numeric(mc.hclust$labels)] <- cutree(mc.hclust,k=2)
+dataTree2
+plot(ctree(Status ~ FAB + SMs + CloneNum ,  data=dataTree2))
+save(dataTree2,"~/Dropbox/compGenomic/projCompGenomic/PSB_draft/dTree.rda")
+save(dataTree2,file="~/Dropbox/compGenomic/projCompGenomic/PSB_draft/dTree.rda")
+getwd()
+label <- read.table("~/Dropbox/compGenomic/projCompGenomic/Jing_analysis/survivial/tree_label.txt",header=T, sep="\t")
+label
+colnames(label) <- c("patient_id","label")#
+# levels(dataplot_merge$overall_survival_status) <- c(0, 1)#
+# cluster <- cbind(patient_id=names(cutree(hclust(dist(as.matrix(dplot2))),k=2)), cluster=cutree(hclust(dist(as.matrix(dplot2))),k=2))#
+pdsurv <- merge(dataplot_merge,label,by="patient_id")#
+myfit1 <- survfit(Surv(time=pdsurv$overall_survival_months,#
+                      event=as.numeric(as.character(pdsurv$overall_survival_status))) ~ pdsurv$label, data=pdsurv)
+dataSurv <- read.table("/Users/jh3283/Dropbox/compGenomic/projCompGenomic/Jing_analysis/survivial/patient_infor.txt",header=T,sep="\t")
+dataSurv <- dataSurv[,c("patient_id", "overall_survival_months","overall_survival_status","vital_status","leukemia_french_american_british_morphology_code")]
+pdsurv <- merge(dataSurv,label,by="patient_id")
+myfit1 <- survfit(Surv(time=pdsurv$overall_survival_months,#
+                      event=as.numeric(as.character(pdsurv$overall_survival_status))) ~ pdsurv$label, data=pdsurv)
+pdsurv <- merge(dataSurv,label,by="patient_id")
+pdsurv
+?survfit
+require("survival")
+myfit1 <- survfit(Surv(time=pdsurv$overall_survival_months,#
+                      event=as.numeric(as.character(pdsurv$label))) ~ pdsurv$label, data=pdsurv)
+pdsurv <- merge(dataSurv,label,by="patient_id")
+levels(dataplot_merge$label)
+levels(pdsurv$label) <- c(0, 1)
+levels(pdsurv$label)
+pdsurv <- merge(dataSurv,label,by="patient_id")
+levels(pdsurv$label)
+levels(pdsurv$label) <- c(0, 1)
+time=pdsurv$overall_survival_months,#
+                      event=as.numeric(as.character(pdsurv$label))
+Surv(time=pdsurv$overall_survival_months,#
+                      event=as.numeric(as.character(pdsurv$label)))
+myfit1 <- survfit(Surv(time=pdsurv$overall_survival_months,#
+                      event=as.numeric(as.character(pdsurv$label))) ~ pdsurv$label, data=pdsurv)
+plot(myfit1,  mark.time=TRUE, #
+ col=c("red","blue"), lty=1, lwd=1, cex=1, log=FALSE, xscale=1, yscale=1,  #
+ firstx=0, firsty=1,ymin=0, #
+ xlab="Survival Time (Month)", ylab="", xaxs="S")#
+legend("bottomleft", c("Living","Deceased"), col=c("blue","red"),lty = 1,cex=0.8) #
+title("Kaplan-Meier Curves\nfor AML Patients Survival")
+pdsurv
+pdsurv <- merge(dataSurv,label,by="patient_id")
+pdsurv
+pdf(file="~/Dropbox/compGenomic/Draft/Viz/survival_kp_new.pdf")#
+#
+plot(myfit1,  mark.time=TRUE, #
+ col=c("red","blue"), lty=1, lwd=1, cex=1, log=FALSE, xscale=1, yscale=1,  #
+ firstx=0, firsty=1,ymin=0, #
+ xlab="Survival Time (Month)", ylab="", xaxs="S")#
+legend("bottomleft", c("Living","Deceased"), col=c("blue","red"),lty = 1,cex=0.8) #
+title("Kaplan-Meier Curves\nfor AML Patients Survival") #
+#
+dev.off()
+?fisher.test
+ftx <- c(3, 11)
+fty <- c(5, 9 )
+fisher.test(ftx,fty)
+fisher.test(fty,ftx)
+chisq.test(ftx,fty)
+fisher.test(rbind(fty,ftx))
+rbind(ftx,fty)
+plot(myfit1,  mark.time=TRUE, #
+ col=c("red","blue"), lty=1, lwd=1, cex=1, log=FALSE, xscale=1, yscale=1,  #
+ firstx=0, firsty=1,ymin=0, #
+ xlab="Survival Time (Month)", ylab="", xaxs="S")#
+legend("bottomleft", c("Predict Living"," Predict Deceased"), col=c("blue","red"),lty = 1,cex=0.8) #
+title("Kaplan-Meier Curves\nfor AML Patients Survival")
+pdf(file="~/Dropbox/compGenomic/Draft/Viz/survival_kp_new.pdf")#
+#
+plot(myfit1,  mark.time=TRUE, #
+ col=c("red","blue"), lty=1, lwd=1, cex=1, log=FALSE, xscale=1, yscale=1,  #
+ firstx=0, firsty=1,ymin=0, #
+ xlab="Survival Time (Month)", ylab="", xaxs="S")#
+legend("bottomleft", c("Predict Living","Predict Deceased"), col=c("blue","red"),lty = 1,cex=0.8) #
+title("Kaplan-Meier Curves\nfor AML Patients Survival") #
+#
+dev.off()
+q()
+strsplit("a.b.c",".")
+strsplit("a.b.c","\.")
+strsplit("a.b.c","\.",perl=T)
+?readLines
+?match
+dcov <- matrix(0,0,0,0.5,byrow=T)
+dcov <- matrix(c=(0,0,0,0.5),byrow=T)
+dcov <- matrix(c(0,0,0,0.5),byrow=T)
+dcov
+dcov <- matrix(c(0,0,0,0.5),nrow=2)
+dcov
+det(dcov)
+?det()
+x <- matrix(1:4, ncol = 2)
+det(x)
+require(Multivar)
+install.packages("Multivar")
+Sigma <- matrix(c(10,3,3,2),2,2)#
+Sigma#
+var(mvrnorm(n=1000, rep(0, 2), Sigma))
+require(MASS)
+Sigma <- matrix(c(10,3,3,2),2,2)#
+Sigma#
+var(mvrnorm(n=1000, rep(0, 2), Sigma))
+mvrnorm(n=1000, rep(0, 2), Sigma)
+??mvrnorm
+sigma
+Sigma
+mvrnorm(n=10, rep(0, 2), Sigma)
+vibn.kde <- kde2d(mvrnorm(n=1000, rep(0, 2), Sigma)[,1],mvrnorm(n=1000, rep(0, 2), Sigma)[,2],n=50)
+contour(vibn.kde)
+image(vibn.kde)
+persp(bivn.kde)
+persp(vibn.kde)
+persp(vibn.kde,phi = 45, theta = 30, shade = .1, border = NA)
+load(iris)
+data
+testmx <- matrix(rnorm(n=4),nrow=2)
+testmx %*% t(testmx)
+testmx
+testmx <- matrix(rnorm(n=4),nrow=1)
+testmx %*% t(testmx)
+sqrt((testmx - mean(testmx))^2)
+sqrt(sum((testmx - mean(testmx))^2))
+t(testmx) %*% (testmx)
+testmx %*% t(testmx)
+sum((testmx - mean(testmx))^2)
+sqrt(testmx ^ 2)
+sqrt(sum(testmx ^ 2))
+sqrt(sum(testmx ^ 2)) ^2
+db = read.table("http://freakonometrics.free.fr/db.txt",header=TRUE,sep=";")
+head(db)
+X3bis=rep(NA,length(X3))
+attach(db)
+X3bis=rep(NA,length(X3))
+X3bis[X3%in%c("A","C","D")]="ACD"
+?glm
+0.99 * 0.0001
+0.99 * 0.0001 /(0.99 * 0.0001 + 0.02 * (1-0.0001))
+log2
+log(2)
+factorial(4)
+factorial(4)/(2*factorial(2))
+2^3
+?solve
+factorial(2x)/(2*factorial(x)) = 2^(2x-1)
+factorial(2*x)/(2*factorial(x)) = 2^(2*x-1)
+solve(factorial(2*x)/(2*factorial(x)) = 2^(2*x-1))
+install.packages("grplasso")
+require("grplasso")
+data(splice)
+ls()
+head(splice)
+contr <- rep(list("contr.sum"), ncol(splice) - 1)
+str(contr)
+setwd("/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/")
+source("grpLassoSNP.r")
+source("grpLassoSNP.r")
+str(fit.splice)
+dim(splice)
+source("grpLassoSNP.r")
+plot(fit.splice)
+plot(fit.splice)
+prob
+plot(fit.splice)
+lambda
+x
+plot.grplasso(fit.splice)
+plot(fit.splice,log="x")
+data(splice)#
+contr <- list(Pos.1 = "contr.sum", Pos.2 = "contr.sum")#
+lambda <- lambdamax(y ~ Pos.1 * Pos.2, data = splice, model = LogReg(),#
+contrasts = contr, standardize = TRUE) * 0.8^(0:8)#
+fit <- grplasso(y ~ Pos.1 * Pos.2, data = splice, model = LogReg(),#
+lambda = lambda, contrasts = contr, standardize = TRUE,#
+control = grpl.control(trace = 0, inner.loops = 0,#
+update.every = 1, update.hess = "lambda"))#
+plot(fit, log = "x")
+install.packages("grpreg")
+install.packages("DESeq2")
+source("http://bioconductor.org/biocLite.R")#
+    biocLite("DESeq2")
+source("http://bioconductor.org/biocLite.R")
+?biocLite
+biocLite()
+source("http://bioconductor.org/biocLite.R")
+biocLiet()
+biocLite()
+biocLite("DESeq2")
+library("DESeq2")

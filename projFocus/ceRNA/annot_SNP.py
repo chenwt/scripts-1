@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-#input:<file: snp/gene one each line to be annotated> <file: database file including the annotation infor,chr,start,end,strand/if gene,use entrez id>
+#input:	<file: .mat file with snp/gene one each line to be annotated> 
+#	<file: database file including the annotation infor,chr,start,end,strand/if gene,use entrez id>
 #output:<file: annotat snp/gene with chr,start,end,strand>
-#TODO:
+#TODO: ADD codes to do quality checking for database file! 
 
 import os
 import sys, getopt
@@ -33,11 +34,13 @@ print('Input file:' + inp1)
 print('Database file:' + inp2)
 print('Output file:'+ outp)
 print('Log file:'+ outlog)
+###-------------test_ues------------------
 # ~/scripts/projFocus/ceRNA/test
 # inp1 = '/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result_snp/run1/brca_snpGT_run1.mat'
 # inp2 = '/ifs/scratch/c2b2/ac_lab/jh3283/database/affymetrix/GPL6801-4019.txt.bed'
 # outp = inp1 + ".annot"
 # outlog = outp + ".log"
+#--------------test_end------------------
 outlogf = open(outlog,"w")
 
 outlogf.write('Input file:' + inp1)
@@ -46,7 +49,7 @@ outlogf.write('Output file:'+ outp)
 outlogf.write('Log file:'+ outlog)
 
 outpf = open(outp,"w")
-
+#load file to be annotated
 inp1Dict = {}
 with open(inp1) as inf:
   for i,line in enumerate(inf):
@@ -56,6 +59,8 @@ with open(inp1) as inf:
       [key,val]= line.split("\t",1)
       inp1Dict[key] = val
 
+#load and annotate using database file
+#chrList = range(1,23) + ['X','Y','x','y'] 
 with open(inp2) as inf2:
   for i, line in enumerate(inf2):
     if i == 0:

@@ -1,194 +1,269 @@
+% A Readymade beamer presentation template
+% Version 1.1
+% Relase date: May 2, 2010
+% Released at http://www.stattler.com
+% by Rifat Jahan
+
 \documentclass{beamer}
-\usepackage{amscd,amsfonts,amsmath,amssymb,latexsym,amsthm,geometry,booktabs,float}
-\usepackage[mathscr]{eucal}
-\usepackage{graphicx}
-%\usepackage{movie15}
-
-\newcommand\R{\mathbb{R}}
-\newcommand\I{\mathbb{I}}
-\newcommand\C{\mathcal{C}}
-\newcommand\X{\mathcal{X}}
-\newcommand\T{\mathcal{T}}
-\newcommand\h{\mathcal{H}}
-\newcommand\Oh{\mathcal{O}}
-\newcommand\M{\mathcal{M}}
-\newcommand\B{\mathcal{B}}
-
-\mode<presentation>
-\usetheme{Montpellier}%Berlin, classic, copenhagen, bars, Darmstadt, Dresden, Frankfurt, Ilmenau, lined, Malmoe, Montpellier, Singapore, Warsaw, Berkeley, Rochester
-%\usetheme[secheader]{Madrid}
-%\usecolortheme{whale}%seahorse, whale, dolphin, crane, beetle, rose, dove, fly, orchid, albatross, lily
-%color setting more or less matching U of A colors
-
-\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!55!black}
-\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=red!50!black}
-\setbeamercolor*{palette quarternary}{use=structure,fg=white,bg=structure.fg!55!black}
-\setbeamertemplate{navigation symbols}{}
-
-
-\title[Project updates]{Project updates}
-
-\subtitle{AML WXS analysis \\
-	     PAN Cancer methylation }
-\author{Jing He}
-
-%\institute[University of Arizona]{Program in Applied Mathematics, University of Arizona}
-
-\AtBeginSection[]
-{
-  \begin{frame}<beamer>
-    \frametitle{Outline}
-    {
-    \tableofcontents[currentsection]
-        }
-  \end{frame}
+%\usecolortheme[named=green]{structure}
+\mode<presentation> {
+\usetheme{Madrid} % My favorite!
+%\usetheme{Boadilla} % Pretty neat, soft color.
+%\usetheme{default}
+%\usetheme{Warsaw}
+%\usetheme{Bergen} % This template has nagivation on the left
+%\usetheme{Frankfurt} % Similar to the default with an extra region at the top.
+%\usecolortheme{seahorse} % Simple and clean template
+%\usetheme{Darmstadt} % not so good
+% Uncomment the following line if you want page numbers and using Warsaw theme
+% \setbeamertemplate{footline}[page number]
+%\setbeamercovered{transparent}
+\setbeamercovered{invisible}
+% To remove the navigation symbols from the bottom of slides%
+\setbeamertemplate{navigation symbols}{} 
 }
+% \texttt{}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{color}
+
+%\usepackage{bm} 
+% For typesetting bold math (not \mathbold)
+%\logo{\includegraphics[height=0.6cm]{yourlogo.eps}}
+%
+\title[AML WXS]{TARGET AML Whole Exome Sequencing Analysis}
+%
+\author{Jing He}
+% \institute[U of X]
+% {
+% University of [...] \\
+% \medskip
+% {\emph{email@domain.ca}}
+% }
+\date{\today}
+% \today will show current date. 
+% Alternatively, you can specify a date.
 
 \begin{document}
-\today
-\begin{frame}
-  \titlepage
-\end{frame}
 
-
-\section{AML WXS }
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Reminder}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-   \frametitle{Reminder \ldots}
-   \begin{itemize}
-      \item what we have ? 
-	      \begin{itemize}
-	      	\item16 patients with matched normal, tumor and relapsed sample, whole exome sequencing 
-	      \end
-	\item what's our hypothesis ?
-	  \begin{itemize}
-	      	\item MRs related to relapse; mutations related to MRs; 
-	  \end
-      \item what we've done ? 
-      	  \begin{itemize}
-	      	\item a list of potential MRs ( Yi shai); somatic mutations and CNVs of the 16 patients
-	  \end
-   \end{itemize}
+%--- the titlepage frame -------------------------%
+\begin{frame}{}
+\titlepage
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{MRs_Mutations_CNVs}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-   \frametitle{Table of CNVs and Mutations associated with MRs}
-   
-   \begin{itemize}
-      \item Graduate students are poor.  \LaTeX is free!
-      
-      \item Available on all Windows, Mac \& Linux
-      
-      \item .tex files are ASCII files and very portable are portable, and the output is in PDF, DVI or PS.
-      \begin{itemize}
-         \item Every computer can open a PDF, not so with Word or Powerpoint
-      \end{itemize}
-   \end{itemize}
+%% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Today, I am going to give some updates on the projects I worked on after last presentation.
+%% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\begin{frame}{Outline}
+\begin{itemize}
+	% \item \textbf{AML WXS analysis}
+	% \begin{itemize}
+		\item Reminder
+		\item MRs and CNVs
+		\item MRs and Somatic Mutations
+		\item Mutation's MAF
+	% \end{itemize}
+\end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% I continued work on AML Whole Exome data analysis; 
+% and also PAN cancer methylation data preprocessing,
+% The result of PAN meth has been partially reported in Federico's last report
+% Today I am going to update AML WXS data analysis
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 \begin{frame}
-   \frametitle{Advantages continued\ldots}
-   \begin{itemize}
-      \item Typesetting is much better, more professional.  This is especially true for mathematics.  Can be formatted to suit various publication styles easily.
-      
-      \item Styles for different publication styles are easily available, as are Templates for letters, articles, books, reports etc. (\emph{just ask Google!})
-      
-      \item Bibliography management
-   \end{itemize}
-
+\frametitle{Reminder}
+\begin{itemize}
+	\item What we have?
+	\begin{itemize}
+		\item 16 patients with matched normal, tumor and relapse sample,
+			whole exome sequencing
+	\end{itemize}	
+	\item What's our hypothesis?
+	\begin{itemize}
+		\item are there MRs that can predict relapse?  
+	\end{itemize}
+	\item What's been done?
+	\begin{itemize}
+		\item potential MRs (from Yishai)
+		\item Somatic mutations and CNVs of the 16 patients  
+	\end{itemize}
+\end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Firstly, a brief reminder of what's the project about
+% I worked with Yishai for the TARGET AML project, 
+% trying to identify potential MRs for pediatric AML relapse
+% WXS data analysis is part of this project, in which, 
+% we try to explain or connect MRs activity with genomic variations
+% Here goes what I have,
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-   \frametitle{Still more advantages}
-   \begin{itemize}
-      \item Commands are easy to learn, though daunting at first
-      
-      \item Never crash!
-      
-      \item Can compile huge books\ldots $\approx70,000$ pages
-   \end{itemize}
+\frametitle{Connecting MRs with CNVs}
+ \begin{itemize}
+  	\item Patient level MRs activity and CNV
+  	% \item 
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=0.8\paperwidth]{fig/fig_mr_cnv_viper.pdf}
+\end{figure}
 
 \end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% With the MRs and Genomic Variants on hand, the next step is to connect them
+% From the CNV level, 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-   \frametitle{Disadvantages of \LaTeX}
-   \begin{enumerate}
-      \item Font selection not as easy as Word.
-      
-      \item Difficult to flow text around pictures\slash figures
-      
-      \item If you write few documents, or only want short documents with little math
-      \begin{enumerate}
-        \item[a.)] The first time you write in \LaTeX, it will likely take longer than you would like\ldots
-      \end{enumerate}
-      
-      \item Does not \emph{directly} support drawing figures\ldots you need other software
-   \end{enumerate}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
-   \frametitle{Disadvantages of \LaTeX, continued}
-   \begin{enumerate}
-      \item[5.] Spelling\slash Grammar not as convenient to check as in Word
-      
-      \item[6.] Must remember commands
-      
-      \item[7.] Not straightforward for creating complex tables
-   \end{enumerate}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Where is \LaTeX}
-\begin{frame}
-   \frametitle{How do I get it?}
-   \begin{itemize}
-      \item \href{http://support.math.arizona.edu/tex/}{http://support.math.arizona.edu/tex/} for all your needs
-      
-      \item Good IDEs:
-        \begin{enumerate}
-           \item Kile (\emph{Linux})
-           
-           \item TeXnicCenter (\emph{Windows})
-           
-           \item WinEdt (\emph{Windows, clearly})
-           
-           \item TeXShop (\emph{Mac})
-        \end{enumerate}
-   \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{How do we use \LaTeX}
-\subsection{Basic file}
-\begin{frame}
-   \frametitle{A Skeleton file}
-      $\%$ my first LaTeX file!\\
-      $\slash$ documentclass$[$12pt$]\{$article$\}$\\
-        \hskip 1cm $\%$preamble\\
-        \hskip 1cm $\slash$ usepackage$\{$graphix, amsmath$\}$\\
-      $\slash$ begin$\{$document$\}$\\
-         \hskip 1cm $\slash$ section$\{$This is a section title$\}$\\
-         \hskip 1cm $\slash$ subsection$\{$This is a subsection title$\}$\\
-         \hskip 1cm $\slash$ subsubsection$\{$This is\ldots you get the point$\}$\\
-          \hskip 2cm $\slash$ par First Paragraph goes here.\\
-          \vskip .5cm
-          \hskip 2cm $\slash$ par Second Paragraph is here, and has some math.  $\$\slash$sqrt$\{ \slash$frac$\{\slash$alpha$\}\{\slash$pi$\}\} \slash$leq $\slash$epsilon$\$$\\
-      \slash end$\{$document$\}$
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Some Examples}
-\begin{frame}
-   \frametitle{Real, live \LaTeX}
-   \begin{itemize}
-      \item For a comprehensive list of commands, go Google\ldots
-   \end{itemize}
-\end{frame}
+\frametitle{Connecting MRs with CNVs (cont\dots)}
 
+ \begin{itemize}
+  	\item ZNF34, ZNF793,ZNF667,ZNF256,RUNX2's down regulation may 
+  		caused by gene amplification in Tumor, but not in relapse.
+	\item ZAK, IR6F1, DISP1 up regulation might caused by gene duplication in Relapse, but not in tumor.
+  	\item Patient PARIEG has more CNV in relapse sample, \\ 
+  			clinical: trisomy chromosome 8, t(7;11)(p15;p15)
+  	\item PARUNX has more CNV in Tumor sample, \\
+  			clinical: der(6)t(1;6)(q21;q27),t(7;12)(q36;p13),+19
+\end{itemize}
 
+\end{frame}
+%% % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with somatic mutations}
+ \begin{itemize}
+ 	\item There is {\color{red} NO} Mutations in MRs
+  	\item Find Association between common MRs and common mutated genes 
+  	\begin{itemize}
+	  	\item Common mutated genes: appear in at least 2 patients out of 16 patients
+	  	\item P-value of $4*10^{-5}$ to randomness 
+	  	% \item Probability of at least 2 patients have the same mutation
+	  	% \item Given the number of raw variants \\
+	  	 % p-value to get the mutation randomly
+	  	 % in at least 2 patients have one common mutation is $3.85 * 10^{-05}$
+  	\end{itemize}
+\end{itemize}
+\end{frame}
+%% % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with somatic mutations (cont\dots)}
+\begin{itemize}
+	\item Connecting MRs and mutated genes with PPI network
+	\item PPI database: STRING; PREPPI
+	\item Methods: 
+\end{itemize}
+	\begin{figure}
+		\includegraphics[width=0.85\paperwidth]{fig/fig_methods_mr_mtg_ppi.png}
+	\end{figure}
+\end{frame}
+%% % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%SORRB3 is related to cytoskeleton, AR is presented in prostate cancer
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}
+% \frametitle{Stochastic of finding mutations\dots}
+% \begin{itemize}
+% 	\item Why we stochastic evaluation is important?
+% 		\begin{itemize}
+% 			\item 
+% 		\end{itemize}
+% 	\item Probability of at least 2 patients have the same mutation: 
+% 			\begin{itemize}
+% 				\item  M = \#Mutations; N= \# of patients
+% 				\item  
+% 			\end{itemize}
+% 	\item Given the number of raw variants, p-value of at 
+% 	least 2 patients have 1 common mutation is $3.85 * 10^{-05}$
+% \end{itemize}
+% \end{frame}
+%% % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MRs' association with Mutations using PrePPI 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] % Notice the [fragile] option beside \begin{frame} %
+\frametitle{Connecting MRs with somatic mutations (cont\dots) }
+\centering Number of overlapped first order PrePPI interactors \\
+ for MRs and Mutated Genes
+\begin{figure}
+   \includegraphics[width= 0.5\paperwidth]{fig/fig_heatmap_mr_mutgene_stat.pdf}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MRs associate with Mutations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with somatic mutations (cont\dots)}
+	\centering MRs and associated mutated genes by PPI
+\begin{figure}
+	\includegraphics[width=0.9\paperwidth]{fig/fig_mr_mtg_ppi.pdf}
+\end{figure}
+% \includegraphics[width=1\textwidth]{}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mutated Genes with Minor Allele Frequency 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] % Notice the [fragile] option beside \begin{frame} %
+\frametitle{Connecting MRs with somatic mutations (cont\dots)}
+\begin{itemize}
+	\item MR AR (Androgen receptor) has directly connection with Mutation.
+	\item Mutated gene KRAS, NRAS, JAK2, GATA2 
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] % Notice the [fragile] option beside \begin{frame} %
+\frametitle{Looking back to patient's mutation locus}
+\centering Mutated Genes with Minor Allele Frequency  
+\begin{figure}
+   \includegraphics[width=0.95\paperwidth]{fig/fig_mtg_freq_v2.pdf}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] 
+\frametitle{Looking back to patient's mutation locus (cont\dots) }
+\begin{figure}[ht]
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{NRAS}
+   \includegraphics[width=0.3\paperwidth]{fig/NRAS.pdf}
+% \includegraphics...
+% \label{fig:minipage1}
+\end{minipage}
+% \quad
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{KCNJ12,KCNJ18}
+   \includegraphics[width=0.3\paperwidth]{fig/KCNJ12_KCNJ18.pdf}
+% \includegraphics...
+% \label{fig:minipage2}
+\end{minipage}
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{NRAS}
+   \includegraphics[width=0.3\paperwidth]{fig/TET2.pdf}  
+% \includegraphics...
+% \label{fig:minipage1}
+\end{minipage}
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{NRAS}
+   \includegraphics[width=0.3\paperwidth]{fig/CRIPAK.pdf} 
+% \includegraphics...
+% \label{fig:minipage1}
+\end{minipage}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\centering \textbf{ACKNOWLEDGEMENT}
+\begin{itemize}
+	\item \centering Yishai 
+	\item \centering Joshua 
 
-\end{document}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% End of slides
+\end{document} 

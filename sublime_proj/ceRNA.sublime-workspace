@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"chrom",
+				"chroms"
+			],
+			[
+				"temp",
+				"tempLen"
+			],
+			[
+				"val",
+				"val_es"
+			],
+			[
 				"out",
 				"outTagMat"
 			],
@@ -214,10 +226,6 @@
 			[
 				"sc",
 				"scDict"
-			],
-			[
-				"temp",
-				"tempsc"
 			],
 			[
 				"fn",
@@ -460,6 +468,11 @@
 	},
 	"file_history":
 	[
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/README.sh",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/uTest_snp_exp.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/logitReg.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/pVal_adj.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/linkSNP_EXP.py",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/EdgeR.r",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_resmExpMat.py",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/annot_SNP.py",

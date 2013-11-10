@@ -64,9 +64,9 @@ $cmd
 #fi
 
 #annovar
-cmd="/ifs/scratch/c2b2/ngs_lab/sz2317/softwares/annovar/do_annovar_all.sh ${wd}/${bamname1}"_"${bamname2}.var.vcf.gatk.vcf ${wd}/${bamname1}"_"${bamname2}.var.vcf.gatk.vcf.annovar.vcf"
-echo $cmd
-$cmd
+#cmd="/ifs/scratch/c2b2/ngs_lab/sz2317/softwares/annovar/do_annovar_all.sh ${wd}/${bamname1}"_"${bamname2}.var.vcf.gatk.vcf ${wd}/${bamname1}"_"${bamname2}.var.vcf.gatk.vcf.annovar.vcf"
+#echo $cmd
+#$cmd
 
 #if [[ $? == 0 ]]
 #then
@@ -79,9 +79,9 @@ $cmd
 #
 
 #filtering
-cmd="/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_filtering_gatk_annovar.sh ${wd}/${bamname1}"_"${bamname2}.var.vcf.gatk.vcf.annovar.vcf -E"
-echo $cmd
-$cmd
+#cmd="/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_filtering_gatk_annovar.sh ${wd}/${bamname1}"_"${bamname2}.var.vcf.gatk.vcf.annovar.vcf -E"
+#echo $cmd
+#$cmd
 #if [[ $? == 0 ]]
 #then
 #  echo "FILTERING $bamname1_$bamname2 DONE!" 
