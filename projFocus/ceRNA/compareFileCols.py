@@ -64,8 +64,8 @@ for i in range(len(comm)):
 #print ",".join(map(str,idx_colN2))
 
 def outMyIdx(valArray,idxArray):
+  valOutArray = []
   if len(idxArray) < len(valArray):
-    valOutArray = []
     for idx in idxArray:
       valOutArray.append(valArray[idx])
   return(valOutArray)
