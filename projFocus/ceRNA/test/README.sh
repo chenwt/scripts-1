@@ -80,7 +80,52 @@
 #mv compareFileRows.py ../
 #rm *test*
 
+#head -20 /ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projFocus/ceRNA/data/methy/brca_meth_matrix_l3.mat.anno > input_test_meth_all.txt
+#~/tools/python/Python_current/python do_Beta2M_meth.py input_test_meth_all.txt 
+#mv do_Beta2M_meth.py ../do_Beta2M_meth.py
+#
 
-head -20 /ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projFocus/ceRNA/data/methy/brca_meth_matrix_l3.mat.anno > input_test_meth_all.txt
-~/tools/python/Python_current/python do_Beta2M_meth.py input_test_meth_all.txt 
-mv do_Beta2M_meth.py ../do_Beta2M_meth.py
+##### test for make_Mat_cnv_level3.py
+#head -5 /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/CNV_snparray/level3/input_getMat_tu.txt > input_test_cnv_tu.txt
+#cnt=0
+#for line in `cat input_test_cnv_tu.txt`
+#do
+#  let cnt++
+#  cat /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/CNV_snparray/level3/$line > test_cnv_$cnt.txt 
+#done
+#ls test_cnv_?.txt |tr "\t" "\n" > input_test_cnv_tu.txt
+#~/tools/python/Python_current/python make_Mat_cnv_level3.py 
+
+#~/tools/python/Python_current/python make_Mat_cnv_level3.py -i input_test_cnv_tu.txt -o output_test.txt 
+#mv make_Mat_cnv_level3.py ../
+
+
+#####------test for make_Mat_cnvByGene_level3.py------
+####
+getNcol2Test() {
+  file=$1
+  numCol=9
+  #awk -F"\t" 'BEGIN{OFS="\t"}{ out=$1;for(i=2; i<=9; i++){out=out"\t"$i};print out }' $file > $file.9cols
+  #awk -F"\t" 'BEGIN{ORS="\t"}{for(i=1; i<=9; i++) print $i;print "\n" }' $file > $file.9cols
+
+}
+#getNcol2Test test_meth_chr22.mat
+#getNcol2Test test_exp_chr22.mat 
+#getNcol2Test test_snp_chr22.mat 
+#sed -i "1isnpID\tchrom\tpos\tstrand\tsample1\tsample2\tsample3\tsample4\tsample5" test_snp_chr22.mat.9cols 
+#sed -i "1imethID\tchrom\tpos\tstrand\tsample1\tsample2\tsample3\tsample4\tsample5" test_meth_chr22.mat.9cols 
+#sed -i "1igeneid\tchrom\tpos\tstrand\tsample1\tsample2\tsample3\tsample4\tsample5" test_exp_chr22.mat.9cols 
+
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/test/merge_snp_meth_cnvl3_v1.py -s test_snp_chr22.mat.9cols -m test_meth_chr22.mat.9cols -c input_test_cnv_tu.txt -g test_exp_chr22.mat.9cols -o test_output_Gene_snp_meth_cnv.mat
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/test/make_Mat_cnvByGene_level3.py -h  
+#mv merge_snp_meth_cnvl3_v1.py ../
+
+
+####-------------test_for_prepareing_files-------
+~/tools/python/Python_current/python getSingleTSS_exp.py test_exp_chr22.mat.9cols test_exp_chr22.mat.9cols.uniTSS 
+#~/tools/python/Python_current/python getCols.py -i test_exp_chr22.mat.9cols  -c input_test.txt -o output_test_exp_chr22_newcols.txt
+
+###------test_for_grprep.r-------
+#testinput is test_output_Gene_snp_meth_cnv.mat
+#mv test_output_Gene_snp_meth_cnv.mat input_test_gene_snp_meth_cnv.mat
+#mv test_exp_chr22.mat.9cols input_test_exp_chr22.mat.9cols

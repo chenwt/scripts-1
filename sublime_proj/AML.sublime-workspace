@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"s1",
+				"s1temp"
+			],
+			[
+				"cnt",
+				"cnt_res"
+			],
+			[
+				"pro",
+				"process"
+			],
+			[
+				"arg",
+				"argv"
+			],
+			[
+				"sa",
+				"sample1Alt"
+			],
+			[
+				"samp",
+				"sample1Ref"
+			],
+			[
+				"form",
+				"formatArray"
+			],
+			[
+				"sample",
+				"sample1Array"
+			],
+			[
 				"col",
 				"colnames"
 			],
@@ -72,16 +104,8 @@
 				"output"
 			],
 			[
-				"sa",
-				"samples"
-			],
-			[
 				"j",
 				"join"
-			],
-			[
-				"cnt",
-				"cnt_f3"
 			],
 			[
 				"all",
@@ -395,9 +419,13 @@
 	"build_system": "Packages/LaTeXTools/LaTeX.sublime-build",
 	"command_palette":
 	{
-		"height": 367.0,
+		"height": 87.0,
 		"selected_items":
 		[
+			[
+				"tog si",
+				"View: Toggle Side Bar"
+			],
 			[
 				"sid",
 				"View: Toggle Side Bar"
@@ -464,6 +492,8 @@
 	},
 	"file_history":
 	[
+		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/do_final_filter.py",
+		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/test/do_final_filter.py",
 		"/Volumes/ac_lab/jh3283/scripts/projAML/WXS/test/convertGeneName2EntrezID_1col.r",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/get_resmExpMat.py",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/annot_SNP.py",
@@ -797,7 +827,7 @@
 	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 215.0,
 	"status_bar_visible": true
 }

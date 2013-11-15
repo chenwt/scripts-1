@@ -7,12 +7,21 @@
 
 
 setwd("/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/")
-
+require("grpreg")
 ## Linear regression
 data(birthwt.grpreg)
 X <- as.matrix(birthwt.grpreg[,-1:-2])
 y <- birthwt.grpreg$bwt
 group <- c(1,1,1,2,2,2,3,3,4,5,5,6,7,8,8,8)
+fit <- grpreg(X,y,group,penalty="grLasso")
+plot(fit)
+fit <- grpreg(X,y,group,penalty="grMCP")
+plot(fit)
+fit <- grpreg(X,y,group,penalty="grSCAD")
+plot(fit)
+fit <- grpreg(X,y,group,penalty="gMCP")
+plot(fit)
+select(fit,"AIC")
 
 ## Logistic regression
 y <- birthwt.grpreg$low

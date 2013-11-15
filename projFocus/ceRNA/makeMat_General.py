@@ -2,7 +2,7 @@
 # input:   <file: file name per line> 
 #	  <string: the col number for data:default first column is the key,and every file has the same row number>
 # output: <.mat file integrate> <file: stats about the filtering>
-#TODO: MAKE SURE DATA IS IN THE SECOND COLUMN OF EACH FILE
+#TODO: MAKE SURE THE MEMORY SIZE IS ENOUGTH BEFORE RUNNING THIS
 #J.HE
 
 import os
@@ -26,12 +26,12 @@ nval = 2
 try:
   opts, args = getopt.getopt(argv,"hi:c:e:o:",["ifile=","valCol=","rowEsp=","ofile="])
 except getopt.GetoptError:
-  print 'test_rnaExpMat.py -i <inputfile> -c <2:column of value> -o <outputfile> -e <2: rows to escape for each file>'
+  print 'makeMat_General.py -i <inputfile> -c <2:column of value> -o <outputfile> -e <2: rows to escape for each file>'
   sys.exit(2)
 for opt, arg in opts:
   if opt == '-h':
-     print 'test_rnaExpMat.py -i <inputfile> -o <outputfile>'
-     sys.exit()
+    print 'makeMat_General.py -i <inputfile> -c <2:column of value> -o <outputfile> -e <2: rows to escape for each file>'
+    sys.exit()
   elif opt in ("-i", "--ifile"):
      inp = arg
   elif opt in ("-c", "--ifile"):
@@ -80,7 +80,8 @@ with open(inp) as f:
 		farray.append(line_crt)	
 
 # data
-a=[open(i,'r',81920) for i in farray]
+#81920 for 400 file,163840 
+a=[open(i,'r',163840) for i in farray]
 for k in range(cntRow):
 	expt=[0] * cntCol
 	if k < nesp:

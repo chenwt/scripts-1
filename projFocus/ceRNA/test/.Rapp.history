@@ -1,3 +1,37 @@
+dim(wgs)
+dim(coding)
+cbind(wgs,coding)
+colnames(dataSurv)
+colnames(dataSurv) <- gsub("PID","patient_id",colnames(dataSurv))
+colnames(dataSurv)
+colnames(wgs)
+head(wgs)
+colnames(numClone)
+head(numClone)
+head(mixtureCoefficient)
+mixtureCoefficient$patient_id <- rownames(mixtureCoefficient)
+mixtureCoefficient$patient_id <- row.names(mixtureCoefficient)
+mixtureCoefficient
+colnames(numClone) <- c("patient_id","Num_of_Clones")#
+    mixCoeff2 <- as.data.frame(mixCoeff[order(mixCoeff$sample,mixCoeff$lambda,decreasing=T),])#
+    mixCoeff2 <- mixCoeff[mixCoeff$k==3,]#
+mixtureCoefficient <- as.data.frame(t(sapply(unique(mixCoeff2$sample),function(x){mixCoeff2[grep(x,mixCoeff2$sample),3]})))#
+mixtureCoefficient <- t(apply(mixtureCoefficient,1,function(x){sort(x)}))#
+colnames(mixtureCoefficient) <- c("Clone1","Clone2","Clone3")
+mixtureCoefficient
+class(mixtureCoefficient)
+row.names(mixtureCoefficient)
+mixtureCoefficient <- as.data.frame(t(sapply(unique(mixCoeff2$sample),function(x){mixCoeff2[grep(x,mixCoeff2$sample),3]})))#
+mixtureCoefficient <- as.data.frame(t(apply(mixtureCoefficient,1,function(x){sort(x)})))
+colnames(mixtureCoefficient) <- c("Clone1","Clone2","Clone3")#
+mixtureCoefficient$patient_id <- row.names(mixtureCoefficient)
+mixtureCoefficient
+dataTree <- merge_recurse(df=list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
+require(reshape)
+dataTree <- merge_recurse(df=list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
+??merge_recurse
+?merge_recurse
+?merge()
 dataTree <- merge_recurse(list(dataSurv,wgs,coding,numClone,mixtureCoefficient),by="patient_id")
 dataSurv <- read.table("/Users/jh3283/Dropbox/compGenomic/projCompGenomic/Jing_analysis/survivial/patient_infor.txt",header=T,sep="\t")#
 #somatic mutation#
@@ -401,45 +435,9 @@ factorial(4)/(2*factorial(2))
 factorial(2x)/(2*factorial(x)) = 2^(2x-1)
 factorial(2*x)/(2*factorial(x)) = 2^(2*x-1)
 solve(factorial(2*x)/(2*factorial(x)) = 2^(2*x-1))
-install.packages("grplasso")
-require("grplasso")
-data(splice)
-ls()
-head(splice)
-contr <- rep(list("contr.sum"), ncol(splice) - 1)
-str(contr)
 setwd("/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/")
 source("grpLassoSNP.r")
 source("grpLassoSNP.r")
-str(fit.splice)
-dim(splice)
 source("grpLassoSNP.r")
-plot(fit.splice)
-plot(fit.splice)
-prob
-plot(fit.splice)
-lambda
-x
-plot.grplasso(fit.splice)
-plot(fit.splice,log="x")
-data(splice)#
-contr <- list(Pos.1 = "contr.sum", Pos.2 = "contr.sum")#
-lambda <- lambdamax(y ~ Pos.1 * Pos.2, data = splice, model = LogReg(),#
-contrasts = contr, standardize = TRUE) * 0.8^(0:8)#
-fit <- grplasso(y ~ Pos.1 * Pos.2, data = splice, model = LogReg(),#
-lambda = lambda, contrasts = contr, standardize = TRUE,#
-control = grpl.control(trace = 0, inner.loops = 0,#
-update.every = 1, update.hess = "lambda"))#
-plot(fit, log = "x")
-install.packages("grpreg")
-install.packages("DESeq2")
-source("http://bioconductor.org/biocLite.R")#
-    biocLite("DESeq2")
-source("http://bioconductor.org/biocLite.R")
-?biocLite
-biocLite()
-source("http://bioconductor.org/biocLite.R")
-biocLiet()
-biocLite()
-biocLite("DESeq2")
-library("DESeq2")
+dim(X)
+head(X)
