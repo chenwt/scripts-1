@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"out",
+				"outSampleIdx"
+			],
+			[
+				"outT",
+				"outTagMat"
+			],
+			[
+				"outMat",
+				"outTagMat_header"
+			],
+			[
+				"reg",
+				"reg_lasso"
+			],
+			[
+				"data",
+				"datacolDesign"
+			],
+			[
 				"chrom",
 				"chroms"
 			],
@@ -16,20 +36,12 @@
 				"val_es"
 			],
 			[
-				"out",
-				"outTagMat"
-			],
-			[
 				"col",
 				"colnames"
 			],
 			[
 				"de",
 				"detags"
-			],
-			[
-				"data",
-				"dataMat"
 			],
 			[
 				"inp",
@@ -468,6 +480,12 @@
 	},
 	"file_history":
 	[
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/nlme.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/grpLassoSNP.r",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterSNP_utest_KWtest_v2.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterSNP_utest_KWtest_v2.1.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/filterSNP_test.py",
+		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/getDEG_Mat_edgeR.r",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/README.sh",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/uTest_snp_exp.py",
 		"/Volumes/ac_lab/jh3283/scripts/projFocus/ceRNA/test/logitReg.py",
@@ -579,6 +597,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"inpg",
+			"exp(t(edata))/(1+exp(t(edata))) ",
 			"top",
 			"outlogf.write",
 			"print",

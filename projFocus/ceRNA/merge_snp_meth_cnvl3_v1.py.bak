@@ -68,7 +68,7 @@ def num2Chrom(num):
     num = 'Y' 
   else:
     num = num + 1
-  return(num)
+  return(str(num))
 
 ##load all cnv filenames 
 fnArray = []
@@ -78,56 +78,29 @@ with open(inpc) as inpf:
 
 nCNVSamples = len(fnArray)
 ###----loading_Gene_Information----
-#chromArray = [[]] * 24
+allChroms = map(str,range(22)) + ['X','Y']
 chromArray = [[] for _ in range(24)]
+genePosDict  = {}
 with open(inpg) as inpgf:
-  #for line in inpgf.readlines():
   for i,line in enumerate(inpgf):
     if i == 0:
       headerExp = line.strip()
     else:
       [identifer,chrom,pos,strand] = line.strip().split("\t")[:4]
-      chrom = chrom2Num(chrom)
-      chromArray[chrom].append(int(pos))
-#      if i == 4:
-#        sys.exit()
-#      else:
-#        continue
+      if chrom  in allChroms: 
+	genePosDict[(chrom,pos)] = identifer
+	chrom = chrom2Num(chrom)
+	chromArray[chrom].append(int(pos))
+      else:
+	continue
 inpgf.close()
 outlogf.write("number_of_genes\t" + str(i) + "\n")
-#print chromArray[1] 
-#print chromArray[21] 
 
 for chromPosArray in chromArray:
   chromPosArray.sort(key=int)
 # chromPosArray.sort(key=lambda tup:tup[0])
 ## print "chrom\t" + str(chromArray.index(chromPosArray)) +"\tgenes:\t" + str(len(chromPosArray)) 
-#print chromArray[1] 
-#print chromArray[21] 
 
-# def inRegion(seg1,seg2):
-#  """evaluation whether seg1 in in seg2"""
-#   seg1Array = map(int,seg1.split("_"))
-#   seg2Array = map(int,seg2.split("_"))
-#   if len(seg1Array) == len(seg2Array) and len(seg1Array) == 3:
-#     if seg1Array[0] == seg2Array[0]:
-#       if seg1Array[2] < seg2Array[1] or seg1Array[1] > seg2Array[2]:
-#         flag = 0
-#       else:
-#         flag = 1
-#     else:
-#       flag = 0
-#   else:
-#     flag = 0
-#   return(flag)
-
-def isCNV(x):
-  ''' evaluation whether a deletion is significant or not according to the cutoff'''
-  x = float(x)
-  if x > amp_cut or x < del_cut:
-    return(1)
-  else:
-    return(0)
 
 #####--------------------------------loading CNV data. 
 ###CAUTIONS: MAKE SURE THE INPUT CNV FILE NAMES ARE THE SAME ORDER AS IN THE SNP AND METH FILE
@@ -143,35 +116,37 @@ for fn in fnArray:
       else:
         [identifier,chrom,pStart,pEnd,probeNum,val] = line.strip().split("\t")
         if float(val) > amp_cut or float(val) < del_cut: #filter out cnv value
-          chrom = chrom2Num(chrom)
-          tempStart = int(pStart) - region_cut
-          tempEnd = int(pEnd) + region_cut
-          for pts in [p for p in chromArray[chrom] if p > tempStart and p < tempEnd]:
-	    if pts in chromDict[chrom].keys():
-                chromDict[chrom][pts].append([pStart,pEnd,val,idfile])
-            else:
-                chromDict[chrom][pts] = [[pStart,pEnd,val,idfile]]
+	  if chrom in allChroms:
+	     chrom = chrom2Num(chrom)
+             tempStart = int(pStart) - region_cut
+             tempEnd = int(pEnd) + region_cut
+             for pts in [p for p in chromArray[chrom] if p > tempStart and p < tempEnd]:
+	       if pts in chromDict[chrom].keys():
+                   chromDict[chrom][pts].append([pStart,pEnd,val,idfile])
+               else:
+                   chromDict[chrom][pts] = [[pStart,pEnd,val,idfile]]
+	  else:
+	    continue
         else:
           continue
     print str(idfile + 1) + "\tcnv level3 file processed..."
     fntempf.close()
-#    outlogf.write(str(i)+ fn + " processed...\n")
   except IOError as e:
     print "I/O error({0}): {1}".format(e.errno, e.strerror)
     sys.exit()
 
 outlogf.write("number_of_cnv_level3_files\t" + str(idfile + 1) + "\n")  
 
-### output the result
+###-------------- output the result
 #loop the chromDictArray for each chrom
 cnt_out = 0 
 def myCol(matrix,i):
   return([row[i] for row in matrix])
 
 outf = open(out,'w')
-outf.write("chr_pos_of_gene\tGenomicVariation\t" + "\t".join(fnArray ) + "\n")
+outf.write("entrezID\tGenomicVariation\t" + "\t".join(fnArray ) + "\n")
 print "writing gene_cnv points...."
-###TODO: how to deal with one sample have multiple cnv near one gene
+####TODO: how to deal with one sample have multiple cnv near one gene
 for idx,oneChromDict in zip(range(len(chromDict)),chromDict):
   chromID = num2Chrom(idx) 
   #iterate all pos in each gene
@@ -183,13 +158,15 @@ for idx,oneChromDict in zip(range(len(chromDict)),chromDict):
         tempCNVall[id_cnv] = val_cnv
       cnt_out = cnt_out + 1
     #print str(chromID) +"_" + str(genePos) + "\t" + "cnv"+"\t"+"\t".join(map(str,tempCNVall))
-    outf.write(str(chromID) +"_" + str(genePos) + "\t" + "cnv"+"\t"+"\t".join(map(str,tempCNVall)) + "\n")
+    #outf.write(str(chromID) +"_" + str(genePos) + "\t" + "cnv"+"\t"+"\t".join(map(str,tempCNVall)) + "\n")
+    outf.write(genePosDict[(chromID,str(genePos))] + "\t" + "cnv" + "\t" + "\t".join(map(str,tempCNVall)) + "\n")
     #if cnt_out == 5:
     #  sys.exit()
     #else:
     #  continue
 print "cnvs_gene:\t" + str(cnt_out) 
 outlogf.write("cnvs_gene:\t" + str(cnt_out) + "\n")  
+
 #####-----------------------loading_snp_and_meth_data
 #SNP_A-1780977   22      30598097        -       2       2       2       2       2
 cnt_out = 0 
@@ -198,31 +175,32 @@ with open(inps) as inpsf:
   for i,line in enumerate(inpsf):
     if i == 0:
       headerSnp = line.strip()
-      #print headerSnp
     else:
       [idsnp, chrom, pos, strand,val ] = line.strip().split("\t",4)
-      chrom = chrom2Num(chrom)
-      tempStart = int(pos) - region_cut
-      tempEnd = int(pos) + region_cut
-      for pts in [p for p in chromArray[chrom] if p > tempStart and p < tempEnd]:
-	if pts in chromDict[chrom].keys():
-            chromDict[chrom][pts].append([idsnp,pos,strand,val])
-	    #print "\t".join(map(str,chromDict[chrom][pts]))
-        else:
-            chromDict[chrom][pts] = [[idsnp,pos,strand,val]]
-	    #print "\t".join(map(str,chromDict[chrom][pts]))
+      if chrom in allChroms: 
+        chrom = chrom2Num(chrom)
+        tempStart = int(pos) - region_cut
+        tempEnd = int(pos) + region_cut
+        for pts in [p for p in chromArray[chrom] if p > tempStart and p < tempEnd]:
+	  if pts in chromDict[chrom].keys():
+	    chromDict[chrom][pts].append([idsnp,pos,strand,val])
+          else:
+	    chromDict[chrom][pts] = [[idsnp,pos,strand,val]]
+      else:
+        continue
 #output      
 print "writing gene_snp points...."
-for idx,oneChromDict in zip(range(len(chromDict)),chromDict):
+for idx,oneChromDict in zip(range(24),chromDict):
   chromID = num2Chrom(idx) 
   #iterate all pos in each gene
   for genePos in oneChromDict.keys():
     for points in oneChromDict[genePos]:
-      #print str(chromID) +"_" + str(genePos) + "\t"+"\t".join(map(str,points))
-      outf.write(str(chromID) +"_" + str(genePos) + "\t" + ":".join(map(str,points[:3])) + "\t" + "\t".join(map(str,points[3:]))+ "\n")
+      #outf.write(str(chromID) +"_" + str(genePos) + "\t" + ":".join(map(str,points[:3])) + "\t" + "\t".join(map(str,points[3:]))+ "\n")
+      outf.write(genePosDict[(chromID,str(genePos))] +  "\t" + ":".join(map(str,points[:3])) + "\t" + "\t".join(map(str,points[3:]))+ "\n")
       cnt_out = cnt_out + 1
 print "snps_gene:\t" + str(cnt_out)     
 outlogf.write("snp_gene:\t" + str(cnt_out) + "\n")  
+
 #####-----------------------loading_meth_data
 #cg00013618      22      22380839        .       1.71570599317   2.52565971329   2.56578258431   3.47841779479   2.16615579851
 cnt_out = 0 
@@ -250,8 +228,9 @@ for idx,oneChromDict in zip(range(len(chromDict)),chromDict):
   for genePos in oneChromDict.keys():
     for points in oneChromDict[genePos]:
       #print str(chromID) +"_" + str(genePos) + "\t"+"\t".join(map(str,points))
-      outf.write(str(chromID) +"_" + str(genePos) + "\t" + ":".join(map(str,points[:3])) + "\t" + "\t".join(map(str,points[3:]))+ "\n")
-      cnt_out = cnt_out + 1
+      #outf.write(str(chromID) +"_" + str(genePos) + "\t" + ":".join(map(str,points[:3])) + "\t" + "\t".join(map(str,points[3:]))+ "\n")
+      outf.write(genePosDict[(chromID,str(genePos))] + "\t" + ":".join(map(str,points[:3])) + "\t" + "\t".join(map(str,points[3:]))+ "\n")
+      cnt_out = cnt_out + 1 
     if cnt_out == 5:
       sys.exit()
     else:

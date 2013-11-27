@@ -63,7 +63,7 @@ fout = open(outp,'w')
 #write  header
 with open(inp) as inf:
   allsamples = [" "] * (cntCol + 1)
-  allsamples[0] = "GeneSymbol"
+  allsamples[0] = "entrezID"
   for i, line in enumerate(inf):
   	line_crt = line.strip()
 	allsamples[(i+1)] = line_crt
@@ -93,11 +93,8 @@ for k in range(cntRow):
 			[key, e] = line.split("\t")[:2]
 			expt[ncol] = int(e)
 			ncol = ncol + 1
-			keynew = key.split("|")[0]
-		if not keynew == '?':
-		  fout.write(keynew + "\t"+"\t".join(map(str,expt)) + "\n")
-		else:
-		  continue
+			keynew = key.split("|")[1]
+		fout.write(keynew + "\t"+"\t".join(map(str,expt)) + "\n")
 
 print "Number_of_gene" + "\t" + "Number_of_samples" + "\n"
 print str(cntRow) + "\t" + str(cntCol) + "\n"

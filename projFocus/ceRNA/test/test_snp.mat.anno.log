@@ -1,0 +1,8 @@
+Input file:test_snp.mat
+Database file:/ifs/home/c2b2/ac_lab/jh3283/SCRATCH/database/projFocusRef/annot_GenomeWideSNP_6_5cols_clean.txt
+Output file:test_snp.mat.anno
+Log file:test_snp.mat.anno.log
+input snps:	9
+drop snps:	1
+output snps:	8
+drop snp:	SNP_A-1969580

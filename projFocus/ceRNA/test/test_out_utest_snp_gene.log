@@ -1,0 +1,7 @@
+Input file:	test.snp.an
+Database file:	test.exp.an
+Output file:	test_out_utest_snp_gene
+Log file:	test_out_utest_snp_gene.log
+Total Number of Genes input:	9
+Total gene_snp pair tested:	38
+Total gene_snp pair passed fdr 0.01	0

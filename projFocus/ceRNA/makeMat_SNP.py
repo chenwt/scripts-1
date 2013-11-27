@@ -32,9 +32,9 @@ for opt, arg in opts:
     outp = arg
     outpstat = outp + "_stat"
 
-conf_cut = 0.05
+conf_cut = 0.1
 maf_cut = 0.05
-fisher_cut =  0.001
+fisher_cut =  10**(-8)
 
 print "input file:" + inp
 print "output file:" + outp
@@ -135,7 +135,7 @@ for k in range(nsnp):
 			if(maf > maf_cut):
 		#	filter3 fisher test
 				ftest = fisherTest(gt)
-				if ftest > fisher_cut:
+				if ftest > float(fisher_cut):
 					fout.write(key +"\t"+ "\t".join(map(str,gt)) + "\n")
 				else :
 					cnt_f3 = cnt_f3 + 1
