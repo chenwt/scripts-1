@@ -14,12 +14,13 @@
 \usepackage{tabularx} 
 \usepackage{footnote}
 \usepackage{Sweave}
+\usepackage{hyperref}
 \graphicspath{ {/Users/jh3283/Dropbox/} } 
-
+\hypersetup{ colorlinks, linkcolor=blue}
  
 % \doublespacing
 \singlespacing
-\title{explain ceRNA effect from genomic muatations}
+\title{Explain ceRNA effect from genomic muatations}
 \author{Jing He\,$^{1\,2*}$,Hus-Sheng}
 \affil[1]{Department of Biomedical Informatics, Columbia Medical Center}
 \affil[2]{Center for Computational Biology and Bioinformatics}
@@ -47,7 +48,12 @@ Find snps that are associated with DEGs, and explian it's effect using network a
 \section{Methods}
 
 1.SNPs association with Gene Expression
-	UTest
+	* SNP filtering process 1:
+		- SNP quality, 
+		- SNP MAF
+		- HWE test
+	*association study :
+		- Cohen's Kappa  \url{http://en.wikipedia.org/wiki/Cohen's_kappa}
 	feature selection methods：group lasso
 	hierachary structure:
 2. TSS 

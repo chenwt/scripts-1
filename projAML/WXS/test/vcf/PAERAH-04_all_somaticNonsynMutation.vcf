@@ -1,0 +1,136 @@
+##fileformat=VCFv4.1
+##samtoolsVersion=0.1.19-44428cd
+##reference=file:///ifs/scratch/c2b2/ac_lab/jh3283/ref/GRCh37-lite.fa
+##contig=<ID=1,length=249250621,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=2,length=243199373,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=3,length=198022430,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=4,length=191154276,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=5,length=180915260,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=6,length=171115067,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=7,length=159138663,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=8,length=146364022,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=9,length=141213431,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=10,length=135534747,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=11,length=135006516,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=12,length=133851895,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=13,length=115169878,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=14,length=107349540,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=15,length=102531392,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=16,length=90354753,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=17,length=81195210,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=18,length=78077248,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=19,length=59128983,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=20,length=63025520,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=21,length=48129895,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=22,length=51304566,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=X,length=155270560,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=Y,length=59373566,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=MT,length=16569,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000207.1,length=4262,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000226.1,length=15008,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000229.1,length=19913,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000231.1,length=27386,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000210.1,length=27682,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000239.1,length=33824,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000235.1,length=34474,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000201.1,length=36148,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000247.1,length=36422,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000245.1,length=36651,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000197.1,length=37175,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000203.1,length=37498,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000246.1,length=38154,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000249.1,length=38502,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000196.1,length=38914,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000248.1,length=39786,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000244.1,length=39929,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000238.1,length=39939,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000202.1,length=40103,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000234.1,length=40531,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000232.1,length=40652,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000206.1,length=41001,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000240.1,length=41933,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000236.1,length=41934,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000241.1,length=42152,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000243.1,length=43341,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000242.1,length=43523,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000230.1,length=43691,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000237.1,length=45867,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000233.1,length=45941,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000204.1,length=81310,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000198.1,length=90085,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000208.1,length=92689,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000191.1,length=106433,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000227.1,length=128374,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000228.1,length=129120,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000214.1,length=137718,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000221.1,length=155397,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000209.1,length=159169,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000218.1,length=161147,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000220.1,length=161802,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000213.1,length=164239,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000211.1,length=166566,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000199.1,length=169874,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000217.1,length=172149,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000216.1,length=172294,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000215.1,length=172545,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000205.1,length=174588,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000219.1,length=179198,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000224.1,length=179693,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000223.1,length=180455,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000195.1,length=182896,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000212.1,length=186858,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000222.1,length=186861,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000200.1,length=187035,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000193.1,length=189789,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000194.1,length=191469,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000225.1,length=211173,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##contig=<ID=GL000192.1,length=547496,URL=ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/special_requests/GRCh37-lite.fa.gz>
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Raw read depth">
+##INFO=<ID=DP4,Number=4,Type=Integer,Description="# high-quality ref-forward bases, ref-reverse, alt-forward and alt-reverse bases">
+##INFO=<ID=MQ,Number=1,Type=Integer,Description="Root-mean-square mapping quality of covering reads">
+##INFO=<ID=FQ,Number=1,Type=Float,Description="Phred probability of all samples being the same">
+##INFO=<ID=AF1,Number=1,Type=Float,Description="Max-likelihood estimate of the first ALT allele frequency (assuming HWE)">
+##INFO=<ID=AC1,Number=1,Type=Float,Description="Max-likelihood estimate of the first ALT allele count (no HWE assumption)">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=IS,Number=2,Type=Float,Description="Maximum number of reads supporting an indel and fraction of indel reads">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele, in the same order as listed">
+##INFO=<ID=G3,Number=3,Type=Float,Description="ML estimate of genotype frequencies">
+##INFO=<ID=HWE,Number=1,Type=Float,Description="Chi^2 based HWE test P-value based on G3">
+##INFO=<ID=CLR,Number=1,Type=Integer,Description="Log ratio of genotype likelihoods with and without the constraint">
+##INFO=<ID=UGT,Number=1,Type=String,Description="The most probable unconstrained genotype configuration in the trio">
+##INFO=<ID=CGT,Number=1,Type=String,Description="The most probable constrained genotype configuration in the trio">
+##INFO=<ID=PV4,Number=4,Type=Float,Description="P-values for strand bias, baseQ bias, mapQ bias and tail distance bias">
+##INFO=<ID=INDEL,Number=0,Type=Flag,Description="Indicates that the variant is an INDEL.">
+##INFO=<ID=PC2,Number=2,Type=Integer,Description="Phred probability of the nonRef allele frequency in group1 samples being larger (,smaller) than in group2.">
+##INFO=<ID=PCHI2,Number=1,Type=Float,Description="Posterior weighted chi^2 P-value for testing the association between group1 and group2 samples.">
+##INFO=<ID=QCHI2,Number=1,Type=Integer,Description="Phred scaled PCHI2.">
+##INFO=<ID=PR,Number=1,Type=Integer,Description="# permutations yielding a smaller PCHI2.">
+##INFO=<ID=QBD,Number=1,Type=Float,Description="Quality by Depth: QUAL/#reads">
+##INFO=<ID=RPB,Number=1,Type=Float,Description="Read Position Bias">
+##INFO=<ID=MDV,Number=1,Type=Integer,Description="Maximum number of high-quality nonRef reads in samples">
+##INFO=<ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias (v2) for filtering splice-site artefacts in RNA-seq data. Note: this version may be broken.">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
+##FORMAT=<ID=GL,Number=3,Type=Float,Description="Likelihoods for RR,RA,AA genotypes (R=ref,A=alt)">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="# high-quality bases">
+##FORMAT=<ID=DV,Number=1,Type=Integer,Description="# high-quality non-reference bases">
+##FORMAT=<ID=SP,Number=1,Type=Integer,Description="Phred-scaled strand bias P-value">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="List of Phred-scaled genotype likelihoods">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	TARGET-20-PAERAH-04A-01D
+1	28800270	.	C	T,A,X	-0	.	DP=259;VDB=7.680000e-02;RPB=-2.486575e-01;AF1=0;AC1=0;DP4=100,130,2,0;MQ=60;FQ=-282;PV4=0.19,0.12,1,1	GT:PL:GQ	0/0:0,255,255,255,255,255,255,255,255,255:99
+1	115258744	.	C	A,X	-0	.	DP=531;RPB=1.341732e+00;AF1=0;AC1=0;DP4=256,240,1,0;MQ=56;FQ=-282;PV4=1,3.9e-06,1,0.18	GT:PL:GQ	0/0:0,255,255,255,255,255:99
+1	216405329	.	C	A,X	225	.	DP=162;VDB=1.908914e-01;RPB=2.069304e+00;AF1=0.5;AC1=1;DP4=70,35,31,24;MQ=58;FQ=225;PV4=0.23,0.18,1,1	GT:PL:GQ	0/1:255,0,255,255,255,255:99
+2	232263247	.	C	G,T,X	-0	.	DP=126;VDB=4.800000e-02;RPB=1.314501e-01;AF1=0;AC1=0;DP4=36,65,0,2;MQ=57;FQ=-282;PV4=0.54,3.8e-09,5.9e-05,1	GT:PL:GQ	0/0:0,255,255,255,255,255,255,255,255,255:99
+2	237405937	.	G	C,X	-0	.	DP=259;RPB=1.579643e+00;AF1=0;AC1=0;DP4=156,93,1,0;MQ=59;FQ=-282;PV4=1,4.2e-08,1,0.076	GT:PL:GQ	0/0:0,255,255,255,255,255:99
+3	85961619	.	C	T,X	225	.	DP=189;VDB=5.955861e-02;RPB=-1.943425e-01;AF1=0.5;AC1=1;DP4=39,46,47,31;MQ=55;FQ=225;PV4=0.084,0.00049,1,1	GT:PL:GQ	0/1:255,0,255,255,255,255:99
+4	66217160	.	A	T,X	225	.	DP=296;VDB=3.199709e-01;RPB=6.016499e-01;AF1=0.5;AC1=1;DP4=92,75,59,50;MQ=59;FQ=225;PV4=0.9,0.012,1,1	GT:PL:GQ	0/1:255,0,255,255,255,255:99
+4	106157971	.	C	T,X	225	.	DP=72;VDB=1.399864e-01;RPB=4.481594e-01;AF1=0.5;AC1=1;DP4=31,10,22,8;MQ=59;FQ=225;PV4=1,0.13,0.41,0.18	GT:PL:GQ	0/1:255,0,255,255,255,255:99
+4	106182928	.	G	T,X	225	.	DP=250;VDB=4.864625e-01;RPB=-1.256434e+00;AF1=0.5;AC1=1;DP4=84,62,51,44;MQ=60;FQ=225;PV4=0.6,0.23,0.016,0.37	GT:PL:GQ	0/1:255,0,255,255,255,255:99
+5	82948512	.	G	T,A,X	-0	.	DP=211;VDB=6.080000e-02;RPB=-1.516953e+00;AF1=0;AC1=0;DP4=104,102,0,2;MQ=60;FQ=-282;PV4=0.5,0.012,1,0.45	GT:PL:GQ	0/0:0,255,255,255,255,255,255,255,255,255:99
+5	140188642	.	G	A,X	200	.	DP=99;VDB=1.932392e-01;RPB=7.657610e-01;AF1=0.5;AC1=1;DP4=18,27,4,24;MQ=56;FQ=203;PV4=0.034,1,0.16,1	GT:PL:GQ	0/1:230,0,255,255,255,255:99
+5	176696730	.	C	T,A,X	-0	.	DP=379;VDB=6.363195e-02;RPB=1.134264e+00;AF1=0;AC1=0;DP4=125,238,2,1;MQ=59;FQ=-282;PV4=0.28,0.046,0.0078,0.15	GT:PL:GQ	0/0:0,255,255,255,255,255,255,255,255,255:99
+10	88764111	.	C	T,X	-0	.	DP=165;RPB=6.613407e-01;AF1=0;AC1=0;DP4=81,83,0,1;MQ=54;FQ=-282;PV4=1,1,0.04,1	GT:PL:GQ	0/0:0,255,255,255,255,255:99
+13	46170726	.	A	G,X	9.52	.	DP=460;VDB=2.436673e-06;RPB=9.150403e+00;AF1=0.5;AC1=1;DP4=231,109,61,13;MQ=53;FQ=12.3;PV4=0.016,1,3.4e-13,0.5	GT:PL:GQ	0/1:39,0,255,255,255,255:41
+13	46170735	.	C	T,X	51	.	DP=464;VDB=3.363456e-17;RPB=-1.947849e-01;AF1=0.5;AC1=1;DP4=194,111,64,41;MQ=54;FQ=54;PV4=0.64,2.7e-09,2e-45,0.016	GT:PL:GQ	0/1:81,0,255,255,255,255:84
+20	40743865	.	C	T,X	-0	.	DP=462;RPB=7.285980e-01;AF1=0;AC1=0;DP4=210,186,0,1;MQ=58;FQ=-282;PV4=0.47,1,1,1	GT:PL:GQ	0/0:0,255,255,255,255,255:99
+Y	15417380	.	C	T,X	-0	.	DP=172;VDB=4.160000e-02;RPB=-1.163373e+00;AF1=0;AC1=0;DP4=57,111,1,1;MQ=60;FQ=-282;PV4=1,1,1,1	GT:PL:GQ	0/0:0,255,255,255,255,255:99

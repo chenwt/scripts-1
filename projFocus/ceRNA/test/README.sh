@@ -151,11 +151,14 @@ getNcol2Test() {
 
 
 ####-------------------test for regression
-awk 'NR==1||$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/brca_exp_l3_731_DEG.mat.singleTSS.anno > input_test_reg_exp.mat
-awk 'NR==1||$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/brca_gene_DEG_cnv_731.mat > input_test_reg_cnv.mat
-awk 'NR==1||$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/snp/brca_gene_snp_chr9_KWtest.mat.anno.adjPass_1e-06.mat > input_test_reg_snp.mat 
-awk '$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/snp/brca_gene_snp_chr6_KWtest.mat.anno.adjPass_1e-06.mat >> input_test_reg_snp.mat 
+#awk 'NR==1||$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/brca_exp_l3_731_DEG.mat.singleTSS.anno > input_test_reg_exp.mat
+#awk 'NR==1||$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/brca_gene_DEG_cnv_731.mat > input_test_reg_cnv.mat
+#awk 'NR==1||$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/snp/brca_gene_snp_chr9_KWtest.mat.anno.adjPass_1e-06.mat > input_test_reg_snp.mat 
+#awk '$1=="ESR1"{print $0}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/snp/brca_gene_snp_chr6_KWtest.mat.anno.adjPass_1e-06.mat >> input_test_reg_snp.mat 
 ##creat a fake snp mat data
 #cp /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/test_knowBRCA.gene_snp_meth_cnv test_input_grpLassoSNP.txt
 #Rscript grpLassoSNP.r 
 
+##do this test in scratch----
+cp input_test_reg*.mat /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/test/ 
+#echo "/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/grpLassoSNP_test.r input_test_reg_snp.mat input_test_reg_exp.mat input_test_reg_cnv.mat 0 " | qsub -l mem=4g,time=:30: -N test_grpreg -cwd 
