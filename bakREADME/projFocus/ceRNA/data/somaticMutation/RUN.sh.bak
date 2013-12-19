@@ -1,0 +1,31 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+#tar -xvzf TCGA_BRCA_somaticMutation_level2.tar.gz 
+
+#awk '{print substr($16,0,19)}' genome.wustl.edu__Illumina_Genome_Analyzer_DNA_Sequencing_level2.maf |sort|uniq > patientsID 
+#wc -l patientsID 
+#awk 'END{print NR}' genome.wustl.edu__Illumina_Genome_Analyzer_DNA_Sequencing_level2.maf 
+#
+##check gene mutation recurrence
+#grep -w NCOA3 genome.wustl.edu__Illumina_Genome_Analyzer_DNA_Sequencing_level2.maf |awk '{print $5,$6,$7}' |sort |uniq -c |sort -k1rg |less 
+#
+#get sampleID
+
+#awk 'NR==1{for(i=5;i<=NF;i++){print $i;}}' ../../result/exp/brca_exp_l3_731_DEG.mat.singleTSS.anno > samples_final_expression.txt 
+#
+#head -1 genome.wustl.edu__Illumina_Genome_Analyzer_DNA_Sequencing_level2.maf > brca_somatic_mutation_selectedSamples_level2.maf
+#for pid in `cat samples_final_expression.txt`
+#do
+#  p=`echo $pid|awk '{print substr($1,0,19)}'|tr "." "-"`
+#  #echo $p
+#  grep $p genome.wustl.edu__Illumina_Genome_Analyzer_DNA_Sequencing_level2.maf >> brca_somatic_mutation_selectedSamples_level2.maf
+#done
+
+
+## change the sample name to same format as in the .maf file
+
+#awk '{print substr($1,0,19)}' samples_final_expression.txt |tr "." "-" > samples_final_expression_barcode.txt
+#python ~/scripts/projFocus/ceRNA/test/getSomMutMatrix.py -m brca_somatic_mutation_selectedSamples_level2.maf -o brca_som_selectedSample_level2.mat -s samples_final_expression_barcode.txt
+

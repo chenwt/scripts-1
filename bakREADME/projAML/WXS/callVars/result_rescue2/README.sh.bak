@@ -1,0 +1,65 @@
+#!/bin/bash
+#$-cwd
+#$ -l mem=8g,time-4::
+#By: J.He
+
+#TODO: 
+
+
+#Aftering samtools calling... do annotation using gatk and annovar...
+####---prepare for the input files
+#wd=`pwd`
+#if [ -f input_annotation_rescue.txt ]
+#then
+#  rm input_annotation_rescue.txt
+#fi
+#
+#for line in `cat rescue_pid_calling.txt`
+#do
+#  pid=`echo $line|awk -F- '{print $1}'`
+#  t=`echo $line|awk -F- '{print $2}'`
+#  if [ $t == 'Re' ]
+#  then 
+#      bam1=`ls ../$pid*bam|grep "\-04"`
+#  fi
+#   if [ $t == 'Tu' ]
+#  then 
+#      bam1=`ls ../$pid*bam|grep "\-09"`
+#  fi
+#  bam2=`ls ../$pid*bam|egrep "\-14"`
+#  #echo "tumor "$bam1
+#  #echo "normal "$bam2
+#  bam1link=`readlink -f $bam1` 
+#  bam2link=`readlink -f $bam2` 
+#  vcf=`ls ../result/$line*NoA.var.vcf`
+#  vcflink=`readlink -f $vcf`
+#  #echo $vcflink
+#  echo -e $vcflink"\t"$bam1link"\t"$bam2link >> input_annotation_rescue.txt
+#  if [ ! -d log ]
+#  then
+#    mkdir log
+#  fi
+#  #echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_annotate_gatk_annovar.sh $vcflink $bam1link $bam2link" 
+#  ### approximnate 10 hrs for this step, require more memory for java vm
+#  #echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_annotate_gatk_annovar.sh $vcflink $bam1link $bam2link" | qsub -l mem=20g,time=8:: -N anno_$pid -cwd -e log/ -o log/  >> log/log.qsub
+#  #### 
+# 
+# # wc -l $vcflink.gatk.vcf
+# # sed -i "/;;/d" $vcflink.gatk.vcf
+#  #echo "/ifs/scratch/c2b2/ngs_lab/sz2317/softwares/annovar/do_annovar_all.sh $vcflink.gatk.vcf $vcflink.gatk.vcf.annovar.vcf "
+#  #echo "/ifs/scratch/c2b2/ngs_lab/sz2317/softwares/annovar/do_annovar_all.sh $vcflink.gatk.vcf ${wd}/$vcflink.gatk.vcf.annovar.vcf " |qsub -l mem=8g,time=20:: -N annovar_$pid -e log/ -o log/ -cwd >> log/log.qsub
+#  echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_filtering_gatk_annovar.sh $vcflink.gatk.vcf.summary.genome_summary.csv.vcf -E "
+#  #tail -1 log/log.qsub
+#
+#done
+
+#echo "/ifs/scratch/c2b2/ngs_lab/sz2317/softwares/annovar/do_annovar_all.sh /ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result/PANLRE-TuA_PANLRE-NoA.var.vcf.gatk.vcf /ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result/PANLRE-TuA_PANLRE-NoA.var.vcf.gatk.vcf.annovar.vcf" | qsub -l mem=20g,time=8:: -N annovar2_PANLRE-TuA -cwd -e log/ -o log/
+
+
+find /ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result/ -atime -1 -name *var.vcf.gatk.vcf.summary.genome_summary.csv.vcf.filtered.vcf.ann.vcf -exec cp {} . \;
+
+#cat input_annotation_rescue.txt 
+
+#for line in `cat input_annotation_rescue.txt`
+#do
+   

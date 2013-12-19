@@ -3,7 +3,8 @@
 #input: <file: expression and snp gt for one gene > 
 #output: <file: gene: snp with weight 
 #Usage: Rscript grplassoSNP.r input
-#Description: require package irr, grpreg,gplots
+#Description: This is used in projFocus/ceRNA/grpreg, to select SNPs contributing to gene differential expression
+#             require package irr, grpreg,gplots
 #             Major change: with transformation, 
 #                           functionlized all main parts, 
 #                           residual calculation corrected

@@ -42,7 +42,8 @@ calledInfo = allData$calledInfo#[1:20,]
 gtInfo = allData$gtInfo#[1:20,]
 annoInfo = allData$annoInfo#[1:20,]
 
-plotBigTable = function(gtInfo,rawcount,annoInfo,calledInfo,scaleCell,plotStep){
+
+plotBigTable = function(gtInfo,rawcount,annoInfo,calledInfo,scaleCell,plotStep,title){
   ##Desp: plot mutations data 
   #Display: final mutation: 0/1 binary in calledInfo dataset
   #       raw maf infor: alt:ref in rawcount dataset(only output those in mutation cells)
@@ -133,7 +134,7 @@ plotBigTable = function(gtInfo,rawcount,annoInfo,calledInfo,scaleCell,plotStep){
   cellTextColors=c("white","blue")
   calledInfoTxt =ifelse(calledInfo==cellBgColors[1],cellTextColors[1],cellTextColors[2])
   
-  pdf(paste("imagePlotAllMutations_step", plotStep,".pdf",sep=""),
+  pdf(paste(title, plotStep,".pdf",sep=""),
       height=numRow/numCol*40,width=40, onefile=TRUE, 
       family='Helvetica', pointsize=12)
   scaleCell = 10
@@ -220,7 +221,38 @@ plotBigTable = function(gtInfo,rawcount,annoInfo,calledInfo,scaleCell,plotStep){
   dev.off()
 } 
 
-plotBigTable(gtInfo,rawcount,annoInfo,calledInfo,10,2)
+plotBigTable(gtInfo,rawcount,annoInfo,calledInfo,10,1, "imagePlotAllMutations_step")
+plotBigTable(gtInfo,rawcount,annoInfo,calledInfo,10,2, "imagePlotAllMutations_step")
+
+#plot scatter plot for one patients
+rawcountPlot = apply(rawcount,c(1,2),function(x){
+  temp = as.character(x)
+  alt = as.numeric(unlist(strsplit(temp,"/"))[1])
+  ref = as.numeric(unlist(strsplit(temp,"/"))[2])
+  return(alt/ref)
+  })
+
+pdf("scatterPlotFinalMAF.pdf")
+layout(matrix(1:16,byrow=T,nrow=4))
+for (i in seq(1,48,by=3)){
+  print(paste(i+1,i+2))
+  plot(rawcountPlot[,c(i+1,i+2)] * 100, 
+       pch="*",col="blue",cex=1.5,
+       xlim=c(0,100),ylim=c(0,100),
+       mar=c(0.1, 0.1, 0.1, 0.1))
+}
+dev.off()
+
+##pos control
+gene = read.table("/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/reports/result_labmetgNov/fig/positiveControlGene.txt",sep="\t")
+posGene = gene$V1
+posGeneIndex = annoInfo$Gene %in% posGene == TRUE
+rawcount = allData$rawcount[posGeneIndex,]
+calledInfo = allData$calledInfo[posGeneIndex,]
+gtInfo = allData$gtInfo[posGeneIndex,]
+annoInfo = allData$annoInfo[posGeneIndex,]
+
+plotBigTable(gtInfo,rawcount,annoInfo,calledInfo,10,2,"imagePlotPositiveControlGene_step")
 
 
 #other function
@@ -243,5 +275,5 @@ plotBigTable(gtInfo,rawcount,annoInfo,calledInfo,10,2)
 #     
 #   }
   
-  return(colorlevels)
-}
+#  return(colorlevels)
+#}

@@ -1,0 +1,13 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+
+
+#ln -s ../../data/methy/brca_meth_matrix_l3.mat.anno.Mval brca_meth_matrix_l3.mat.anno.Mval
+#ln -s ../linkSNP_EXP/edgeR_brca_l3DEGMat.txt.anno.comm edgeR_brca_l3DEGMat.txt.anno.comm
+#sed -i "1s/-/\./g" brca_meth_matrix_l3.mat.anno.Mval  
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/compareFileCols.py -s brca_meth_matrix_l3.mat.anno.Mval -e edgeR_brca_l3DEGMat.txt.anno.comm
+awk 'NR==1{print NF}' brca_meth_matrix_l3.mat.anno.Mval.comm
+awk 'NR==1{print NF}' edgeR_brca_l3DEGMat.txt.anno.comm 
+

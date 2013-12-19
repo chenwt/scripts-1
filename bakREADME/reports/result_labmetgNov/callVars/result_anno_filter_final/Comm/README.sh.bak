@@ -1,0 +1,9 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+
+/ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript mergeComm.r all_chrPos
+colcount PAERAH_CommTuRe.txt
+
+

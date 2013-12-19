@@ -1,0 +1,74 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+mkfifo pipein pipeout
+
+#./qsub_samtools_call_exomeSMs_update.sh pre_rescue_calling_1_04_14.txt 
+#grep 14A pre_rescue_calling_1.txt  >> pre_rescue_calling_1_04_14.txt
+#./qsub_samtools_call_exomeSMs_update.sh pre_rescue_calling_1_04_14.txt 
+#Fri Oct 25 14:12:12 UTC 2013
+#/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_annotate_gatk_annovar.sh PAERAH-04A_PAERAH-14A.var.vcf ../PAERAH-04A.rmdup.new.bam ../PAERAH-14A.rmdup.new.bam
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_test.txt 
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_2_04_14.txt
+#sed -i "/;;/d" PANLIZ-04A_PANLIZ-14A.var.vcf
+
+#find log/ -atime -1 -name "pipeline*e*" -exec grep -l "GATK" {} \; |xargs ls -alth 
+#ls -alth input*3*.txt
+
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_3_PAERAH.txt
+
+#find log/ -atime -1 -name 'pipe*e*' -exec grep 'fail GATK' {} \;
+
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_3_PAERAH.txt
+#less log/pipeline_PAERAH-04A_PAERAH-14A.o95290
+
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_3_PASFEW.txt 
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_3_PARUNX.txt 
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_3_PANLIZ.txt  
+#~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh input_pipe_3_PARUCB.txt 
+#grep PANVGP input_pipe_1_04_14.txt > input_pipe_3_PANVGP.txt 
+#grep PAMYAS input_pipe_1_04_14.txt > input_pipe_3_PAMYAS.txt 
+#grep PANSBH input_pipe_1_04_14.txt > input_pipe_3_PANSBH.txt 
+#grep PARIEG input_pipe_1_04_14.txt > input_pipe_3_PARIEG.txt 
+#grep PANLRE input_pipe_1_04_14.txt > input_pipe_3_PANLRE.txt 
+
+#find log/ -atime -1 -name 'pipe*e*' -exec grep -l 'ERROR' {} \; >pipein &
+#cat pipein |awk -F'/|_' '{split($4,a,".");print $3"_"a[1]".var.vcf"}' > pipeout &
+#for line in `cat pipeout`
+#do 
+#  sed -i "/;;/d" $line 
+#done 
+#
+#find log/ -atime -1 -name 'pipe*e*' -exec grep -l 'ERROR' {} \;  
+#~/scripts/projaml/wxs/qsub_samtools_call_exomesms_update.sh input_pipe_3_PANVGP.txt
+#~/scripts/projaml/wxs/qsub_samtools_call_exomesms_update.sh input_pipe_3_PAMYAS.txt
+#~/scripts/projaml/wxs/qsub_samtools_call_exomesms_update.sh input_pipe_3_PANSBH.txt
+#~/scripts/projaml/wxs/qsub_samtools_call_exomesms_update.sh input_pipe_3_PARIEG.txt
+#~/scripts/projaml/wxs/qsub_samtools_call_exomesms_update.sh input_pipe_3_PANLRE.txt
+
+#cp ~/scripts/projAML/WXS/qsub_samtools_call_exomeSMs_update.sh qsub_samtools_call_exomeSMs_local.sh
+#cp ~/scripts/projAML/WXS/samtools_call_exomeSMs_stepwise.sh .
+### modify the two .sh scripts 
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PASFEW.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PARUNX.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PANLIZ.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PARUCB.txt
+
+#find log/ -atime -1 -name 'anno*' -exec grep -l 'COMPLETE' {} \; 
+
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PASFEW.txt
+rm pipein pipeout
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PANVGP.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PAMYAS.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PANSBH.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PARIEG.txt
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PANLRE.txt
+
+#grep PAERAH input_pipe_2_04_14.txt > input_pipe_3_PAERAH.txt 
+#sed -i "/;;/d" PAERAH-04A_PAERAH-14A.var.vcf
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PAERAH.txt
+ls -alth *var.vcf.gatk.vcf.annovar.vcf.filtered.vcf.ann.vcf.tsv
+#grep PAERAH input_pipe_2_04_14.txt > input_pipe_3_.txt 
+#sed -i "/;;/d" PAERAH-04A_PAERAH-14A.var.vcf
+#/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_rescue/qsub_samtools_call_exomeSMs_local.sh input_pipe_3_PAERAH.txt

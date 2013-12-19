@@ -1,0 +1,270 @@
+% A Readymade beamer presentation template
+% Version 1.1
+% Relase date: May 2, 2010
+% Released at http://www.stattler.com
+% by Rifat Jahan
+
+\documentclass{beamer}
+%\usecolortheme[named=green]{structure}
+\mode<presentation> {
+\usetheme{Madrid} % My favorite!
+%\usetheme{Boadilla} % Pretty neat, soft color.
+%\usetheme{default}
+%\usetheme{Warsaw}
+%\usetheme{Bergen} % This template has nagivation on the left
+%\usetheme{Frankfurt} % Similar to the default with an extra region at the top.
+%\usecolortheme{seahorse} % Simple and clean template
+%\usetheme{Darmstadt} % not so good
+% Uncomment the following line if you want page numbers and using Warsaw theme
+% \setbeamertemplate{footline}[page number]
+%\setbeamercovered{transparent}
+\setbeamercovered{invisible}
+% To remove the navigation symbols from the bottom of slides%
+\setbeamertemplate{navigation symbols}{} 
+}
+% \texttt{}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{hyperref}
+
+%\usepackage{bm} 
+% For typesetting bold math (not \mathbold)
+%\logo{\includegraphics[height=0.6cm]{yourlogo.eps}}
+%
+\title[AML WXS]{TARGET AML Whole Exome Sequencing Analysis}
+%
+\author{Jing He}
+% \institute[U of X]
+% {
+% University of [...] \\
+% \medskip
+% {\emph{email@domain.ca}}
+% }
+\date{\today}
+% \today will show current date. 
+% Alternatively, you can specify a date.
+
+\begin{document}
+
+%--- the titlepage frame -------------------------%
+\begin{frame}{}
+\titlepage
+\end{frame}
+%% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% Today, I am going to give some updates on the projects I worked on after last presentation.
+%% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\begin{frame}{Outline}
+\begin{itemize}
+	% \item \textbf{AML WXS analysis}
+	% \begin{itemize}
+		\item Reminder
+		\item MRs and CNVs
+		\item MRs and Somatic Mutations
+		\item Mutation's MAF
+	% \end{itemize}
+\end{itemize}
+\end{frame}
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% I continued work on AML Whole Exome data analysis; 
+% and also PAN cancer methylation data preprocessing,
+% The result of PAN meth has been partially reported in Federico's last report
+% Today I am going to update AML WXS data analysis
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\begin{frame}
+\frametitle{Reminder}
+\begin{itemize}
+	\item What we have?
+	\begin{itemize}
+		\item 16 patients with matched normal, tumor and relapse sample,
+			whole exome sequencing
+	\end{itemize}	
+	\item What's our hypothesis?
+	\begin{itemize}
+		\item are there MRs that can predict relapse?  
+	\end{itemize}
+	\item What's been done?
+	\begin{itemize}
+		\item potential MRs (from Yishai)
+		\item Somatic mutations and CNVs of the 16 patients  
+	\end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Firstly, a brief reminder of what's the project about
+% I worked with Yishai for the TARGET AML project, 
+% trying to identify potential MRs for pediatric AML relapse
+% WXS data analysis is part of this project, in which, 
+% we try to explain or connect MRs activity with genomic variations
+% Here goes what I have,
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with CNVs}
+ \begin{itemize}
+  	\item Patient level MRs activity and CNV
+  	% \item 
+\end{itemize}
+
+\begin{figure}
+	\includegraphics[width=0.8\paperwidth]{fig/fig_mr_cnv_viper.pdf}
+\end{figure}
+
+\end{frame}
+%% % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% With the MRs and Genomic Variants on hand, the next step is to connect them
+% From the CNV level, 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with CNVs (cont\dots)}
+
+ \begin{itemize}
+  	\item ZNF34, ZNF793,ZNF667,ZNF256,RUNX2's down regulation may 
+  		caused by gene amplification in Tumor, but not in relapse.
+	\item ZAK, IR6F1, DISP1 up regulation might caused by gene duplication in Relapse, but not in tumor.
+  	\item Patient PARIEG has more CNV in relapse sample, \\ 
+  			clinical: trisomy chromosome 8, t(7;11)(p15;p15)
+  	\item PARUNX has more CNV in Tumor sample, \\
+  			clinical: der(6)t(1;6)(q21;q27),t(7;12)(q36;p13),+19
+\end{itemize}
+
+\end{frame}
+%% % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with somatic mutations}
+ \begin{itemize}
+ 	\item There is {\color{red} NO} Mutations in MRs
+  	\item Find Association between common MRs and common mutated genes 
+  	\begin{itemize}
+	  	\item Common mutated genes: appear in at least 2 patients out of 16 patients
+	  	\item P-value of $4*10^{-5}$ to randomness 
+	  	% \item Probability of at least 2 patients have the same mutation
+	  	% \item Given the number of raw variants \\
+	  	 % p-value to get the mutation randomly
+	  	 % in at least 2 patients have one common mutation is $3.85 * 10^{-05}$
+  	\end{itemize}
+\end{itemize}
+\end{frame}
+%% % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with somatic mutations (cont\dots)}
+\begin{itemize}
+	\item Connecting MRs and mutated genes with PPI network
+	\item PPI database: STRING; PREPPI
+	\item Methods: 
+\end{itemize}
+	\begin{figure}
+		\includegraphics[width=0.85\paperwidth]{fig/fig_methods_mr_mtg_ppi.png}
+	\end{figure}
+\end{frame}
+%% % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%SORRB3 is related to cytoskeleton, AR is presented in prostate cancer
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \begin{frame}
+% \frametitle{Stochastic of finding mutations\dots}
+% \begin{itemize}
+% 	\item Why we stochastic evaluation is important?
+% 		\begin{itemize}
+% 			\item 
+% 		\end{itemize}
+% 	\item Probability of at least 2 patients have the same mutation: 
+% 			\begin{itemize}
+% 				\item  M = \#Mutations; N= \# of patients
+% 				\item  
+% 			\end{itemize}
+% 	\item Given the number of raw variants, p-value of at 
+% 	least 2 patients have 1 common mutation is $3.85 * 10^{-05}$
+% \end{itemize}
+% \end{frame}
+%% % % % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MRs' association with Mutations using PrePPI 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] % Notice the [fragile] option beside \begin{frame} %
+\frametitle{Connecting MRs with somatic mutations (cont\dots) }
+\centering Number of overlapped first order PrePPI interactors \\
+ for MRs and Mutated Genes
+\begin{figure}
+   \includegraphics[width= 0.5\paperwidth]{fig/fig_heatmap_mr_mutgene_stat.pdf}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MRs associate with Mutations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Connecting MRs with somatic mutations (cont\dots)}
+	\centering MRs and associated mutated genes by PPI
+\begin{figure}
+	\includegraphics[width=0.9\paperwidth]{fig/fig_mr_mtg_ppi.pdf}
+\end{figure}
+% \includegraphics[width=1\textwidth]{}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mutated Genes with Minor Allele Frequency 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] % Notice the [fragile] option beside \begin{frame} %
+\frametitle{Connecting MRs with somatic mutations (cont\dots)}
+\begin{itemize}
+	\item MR AR (Androgen receptor) has directly connection with Mutation.
+	\item Mutated gene KRAS, NRAS, JAK2, GATA2 
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] % Notice the [fragile] option beside \begin{frame} %
+\frametitle{Looking back to patient's mutation locus}
+\centering Mutated Genes with Minor Allele Frequency  
+\begin{figure}
+   \includegraphics[width=0.95\paperwidth]{fig/fig_mtg_freq_v2.pdf}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] 
+\frametitle{Looking back to patient's mutation locus (cont\dots) }
+\begin{figure}[ht]
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{NRAS}
+   \includegraphics[width=0.3\paperwidth]{fig/NRAS.pdf}
+% \includegraphics...
+% \label{fig:minipage1}
+\end{minipage}
+% \quad
+\centering
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{KCNJ12,KCNJ18}
+   \includegraphics[width=0.3\paperwidth]{fig/KCNJ12_KCNJ18.pdf}
+% \includegraphics...
+% \label{fig:minipage2}
+\end{minipage}
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{NRAS}
+   \includegraphics[width=0.3\paperwidth]{fig/TET2.pdf}  
+% \includegraphics...
+% \label{fig:minipage1}
+\end{minipage}
+\begin{minipage}[b]{0.45\linewidth}
+	% \caption{NRAS}
+   \includegraphics[width=0.3\paperwidth]{fig/CRIPAK.pdf} 
+% \includegraphics...
+% \label{fig:minipage1}
+\end{minipage}
+\end{figure}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\centering \textbf{ACKNOWLEDGEMENT}
+\begin{itemize}
+	\item \centering Yishai 
+	\item \centering Joshua 
+
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% End of slides
+\end{document} 

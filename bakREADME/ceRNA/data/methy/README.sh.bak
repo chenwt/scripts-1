@@ -1,0 +1,51 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+
+#tar -xvzf a2fe59d4-af59-46f1-ae9e-5c89968087b7.tar.tar.gz
+#awk 'BEGIN{
+#      OFS="\t"
+#    }
+#    {if (length($2) > 25){
+#      nf=split($2,a,","); print $1,a[nf]".txt"; }
+#    else if (length($2) <=25 && length($2) >19) 
+#      print $1,$2".txt";
+#    }' FILE_SAMPLE_MAP.txt > input_renameFiles.txt
+#head -2 input_renameFiles.txt
+
+#~/scripts/projFocus/ceRNA/renameFiles.sh input_renameFiles.txt
+#ls -alth TCGA*|awk '$5<21M{print $9}' > input_getMat_met27k.txt
+#ls -alth TCGA*|awk '$5>=21M{print $9}' > input_getMat_met450k.txt
+#ls -alth TCGA* |wc 
+#wc input_getMat_*
+#wc ../TCGA_barcode_all_in_cnv_meth_snp_EXP.txt
+
+#file=`head -1 input_getMat_met450k.txt `
+#cat $file |awk 'BEGIN{FS=OFS="\t";print "Identifier","Chrom","Pos","strand","gene"}NR>2{
+#    print $1,$4,$5,".",$3}' > ~/SCRATCH/database/projFocusRef/annot_meth450k.bed
+
+#file=`head -1 input_getMat_met27k.txt `
+#cat $file |awk 'BEGIN{FS=OFS="\t";print "Identifier","Chrom","Pos","strand","gene"}NR>2{
+#    print $1,$4,$5,".",$3}' > ~/SCRATCH/database/projFocusRef/annot_meth27k.bed
+
+
+#echo `date` >> log.README
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/makeMat_General.py -i input_getMat_met27k.txt -c 2 -e 2 -o brca_meth27k_matrix_l3.mat >> log.README
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/makeMat_General.py -i input_getMat_met450k.txt -c 2 -e 2 -o brca_meth450k_matrix_l3.mat >> log.README
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/compareFileRows.py -i brca_meth27k_matrix_l3.mat -m brca_meth450k_matrix_l3.mat -o brca_meth_matrix_l3.mat
+#cat brca_meth_matrix_l3.mat.log 
+#wc -l brca_meth27k_matrix_l3.mat
+#awk 'NR==1{print NF}' brca_meth27k_matrix_l3.mat
+#wc -l brca_meth450k_matrix_l3.mat
+#awk 'NR==1{print NF}' brca_meth450k_matrix_l3.mat
+#wc -l brca_meth_matrix_l3.mat
+#awk 'NR==1{print NF}' brca_meth_matrix_l3.mat
+
+#file=`head -1 input_getMat_met450k.txt `
+#cat $file |awk 'BEGIN{FS=OFS="\t";print "Identifier","Chrom","Pos","strand"}NR>2{
+#    print $1,$4,$5,"."}' > ~/SCRATCH/database/projFocusRef/annot_meth450k_4cols.bed
+#
+#/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python_current/python ~/scripts/projFocus/ceRNA/annot_SNP.py -i brca_meth_matrix_l3.mat -d ~/SCRATCH/database/projFocusRef/annot_meth450k_4cols.bed -o brca_meth_matrix_l3.mat.anno 
+
+~/tools/python/Python_current/python ~/scripts/projFocus/ceRNA/do_Beta2M_meth.py brca_meth_matrix_l3.mat.anno

@@ -1,0 +1,44 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+#while read line; do ./get_inputAnnoBamlist.sh  input_GatkAnnov_annot.txt; done <vcf.list
+#while read line; do ./get_inputAnnoBamlist.sh ${line} input_GatkAnnov_annot.txt; done <vcf.list
+#./qsub_do_annotata.sh 
+#for line in `cat input_gatk_paireAnnotation_probamaitic_samples.txt`; do grep ${line} input_gatk_paireAnnotation.txt >> input_gatk_paireAnnotation.txt_problematic_samples.txt; done
+# ./qsub_do_annotata.sh input_gatk_paireAnnotation.txt_problematic_samples_3.txt 
+#
+#for line in `ls ../result/*NoA.var.vcf.gatk.vcf`; do readlink -f ${line} >> vcfs_gatk.txt; done
+#
+#Sat Oct 19 01:55:34 UTC 2013
+#Sat Oct 19 09:58:12 EDT 2013
+#./qsub_annovar.sh vcf_gatk_annotated.txt 
+#grep "^Annovar COMPLETE" *|grep ^annovar | wc
+#cd log
+#grep "^Annovar COMPLETE" annovar2*|awk 'BEGIN{FS="_"}{split($3,a,".");print $2"_"a[1]".var.vcf.gatk.vcf"}'|sort > ../vcf_fail_2.temp
+#
+#./qsub_annovar.sh vcf_annovar_fail_2.txt
+#./get_inputAnnoBamlist.sh vcfs_gatk_fail_1.txt input_gatk_vcfs_gatk_fail_1.txt
+#
+#Sun Oct 20 17:32:43 UTC 2013
+#find . -atime 1|xargs grep "Failed GATK-ANNOTATE" >../gatk_fail_2.txt
+#
+#./qsub_do_annotata.sh input_gatk_vcfs_gatk_fail_2.txt 
+#find . -atime -1 -name "*var\.vcf\.gatk\.vcf" |cut -d"/" -f2 >> vcfs_gatk_fail1_resub_success.txt
+#for line in PARGVC-TuA_PARGVC-NoA.var.vcf.gatk.vcf
+#PAMYAS-TuA_PAMYAS-NoA.var.vcf.gatk.vcf
+#PARUNX-TuA_PARUNX-NoA.var.vcf.gatk.vcf
+#PAERAH-TuA_PAERAH-NoA.var.vcf.gatk.vcf
+#PATABB-TuA_PATABB-NoA.var.vcf.gatk.vcf
+#PANTWV-ReA_PANTWV-NoA.var.vcf.gatk.vcf
+#PANGTF-ReA_PANGTF-NoA.var.vcf.gatk.vcf
+#PAERAH-ReA_PAERAH-NoA.var.vcf.gatk.vcf;do rdf PAERAH-ReA_PAERAH-NoA.var.vcf.gatk.vcf >>input_annovar_vcfs_gatk_fail1_resub_success.txt; done 
+#Mon Oct 21 09:12:46 EDT 2013
+#for line in ./PARGVC-TuA_PARGVC-NoA.var.vcf.gatk.vcf
+#./PAKKBK-ReA_PAKKBK-NoA.var.vcf.gatk.vcf
+#./PAMYAS-ReA_PAMYAS-NoA.var.vcf.gatk.vcf;do rdf ./PAMYAS-ReA_PAMYAS-NoA.var.vcf.gatk.vcf >> input_annovar_vcfs_gatk_fail2_success.txt;done 
+#./qsub_annovar.sh input_annovar_vcfs_gatk_fail2_success.txt 
+#find . -atime -0.5 -name "*var.vcf.gatk.vcf.summary.exome_summary.csv.vcf" -exec mv -t ../result_anno_filter/ {} \+
+#find . -name "*NoA.var.vcf.gatk.vcf.annovar.vcf" -exec mv -t ../result_anno_filter/ {} \+
+readlink -f PARIEG-TuA_PARIEG-NoA.var.vcf.gatk.vcf >input_annovar_PARIEG-TuA.txt
+./qsub_annovar.sh input_annovar_PARIEG-TuA.txt 

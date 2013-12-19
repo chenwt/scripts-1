@@ -1,0 +1,186 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+#for line in `find ../result_anno_filter -name "*NoA.var.vcf.gatk.vcf.summary.exome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv" -exec ls {} \;|cut -d/ -f3 |cut -d_ -f1 |cut -d- -f1|sort |uniq `; do md $line;done
+#ls -d */ |xargs rm -R
+
+#header=`head -1 ../result_anno_filter/PASFEW-ReA_PASFEW-NoA.var.vcf.gatk.vcf.summary.exome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv`
+#for gene in `cat FPgenes_POTENTIAL.txt`
+#do
+#  for line in `ls ../result_anno_filter/*tsv`
+#  do  
+#    pid=`echo $line|awk -F/ '{print substr($3,0,6)}'`
+#    type=`echo $line|awk -F/ '{split($3,a,"-");print substr(a[2],0,2)}'`
+#    cat $line | egrep -v "\ssynonymousSNV" |grep PASS |grep -v GERMLINE|egrep -v "\s${gene}" > ${pid}-${type}.somatic.FINAL
+#    cat $line | egrep -v "\ssynonymousSNV" |grep PASS |grep GERMLINE|egrep -v "\s${gene}"  > ${pid}-${type}.germline.FINAL
+#    sed -i "1i${header}" ${pid}-${type}.somatic.FINAL
+#    sed -i "1i${header}" ${pid}-${type}.germline.FINAL
+#  done 
+#done
+#echo "xyy" >junk
+#header=`head -1 ../result_anno_filter/PASFEW-ReA_PASFEW-NoA.var.vcf.gatk.vcf.summary.exome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv`
+#sed -i "1i${header}" junk
+#cat junk
+
+#header=`head -1 ../result_anno_filter/PASFEW-ReA_PASFEW-NoA.var.vcf.gatk.vcf.summary.exome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv`
+#for line in `ls *FINAL*`
+#do
+#  sed -i "1i${header}" ${line}
+#done
+
+#for gene in `cat FPgenes_POTENTIAL.txt`
+#do
+#  for file in `ls *FINAL`
+#  do
+#    egrep -v "\s${gene}" ${file} 
+#  done
+#done
+#ls *somatic.FINAL |cut -d'-' -f1|uniq -c |awk '$1>1{print $2}'|sort > PID.txt
+#cp ../../PID_16.txt .
+
+#if [ ! -f PANTWV-Tu.somatic.FINAL ]
+#then
+#   grep PASS ../result_anno_filter/PANTWV-TuA_PANTWV-NoA.var.vcf.gatk.vcf.summary.genome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv |grep -v GERMLINE|awk -F"\t" '$9!~/^synonymousSNV/{print $0}' > PANTWV-Tu.somatic.FINAL  
+#grep PASS /ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_anno/PARIEG-TuA_PARIEG-NoA.var.vcf.gatk.vcf.summary.genome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv |grep -v GERMLINE|awk -F"\t" '$9!~/^synonymousSNV/{print $0}' > PARIEG-Tu.somatic.FINAL  
+##fi
+##
+##
+#header=`head -1 ../result_anno_filter/PASFEW-ReA_PASFEW-NoA.var.vcf.gatk.vcf.summary.exome_summary.csv.vcf.filtered.vcf.ann.vcf.tsv`
+##sed -i "1i${header}" PANTWV-Tu.somatic.FINAL
+#sed -i "1i${header}" PARIEG-Tu.somatic.FINAL
+##
+####echo "MUC" >> junk
+####echo "ABC" >> junk
+####echo "MUC4" >>junk
+#for line in `ls *somatic*`
+#do
+#  for gene in `cat FPgenes_POTENTIAL.txt`
+#  do
+#    #sed -i "/$gene/d" junk 
+#    sed -i "/$gene/d" $line 
+#  done
+#done
+#
+#suf1="-Tu.somatic.FINAL"
+#suf2="-Re.somatic.FINAL"
+#
+#mkdir Comm
+#mkdir TuOnly
+#mkdir ReOnly
+
+#for pid in `cat PID_16.txt`
+#do
+# mkfifo pipe1 pipe2
+# awk 'NR>1{print $1"_"$2}' ${pid}${suf1} > pipe1 & 
+# awk 'NR>1{print $1"_"$2}' ${pid}${suf2} > pipe2 &
+# echo -e "PID:$pid--------"
+# comm=`cat pipe1 pipe2 |sort|uniq -c|awk '$1==2{print $2}' |wc -l` 
+# cntT=`wc -l ${pid}${suf1}`
+# cntR=`wc -l ${pid}${suf2}`
+# echo -e "Tumor:$cntT\tRelapse:$cntR\tComm:$comm"
+# rm pipe1 pipe2
+#done 
+#cd somFinal/
+#for pid in `cat ../PID_16.txt`
+#do
+#  ~/tools/python/Python_current/python ~/scripts/projAML/WXS/mergeTuReFinal.py ${pid}
+#done
+
+#mv mergeTuReFinal.py ~/scripts/projAML/WXS/mergeTuReFinal.py
+
+#cut -f1 *CommTuRe* |sort |uniq -c|sort -k 1 -n |awk '$1>1{print $2}' > pipein &
+#grep -f pipein *CommTuRe* |less -S
+#mv *TuOnly* TuOnly/
+#mv *ReOnly* ReOnly/
+#mkdir somFinal
+#mv *somatic* somFinal/
+
+#pushd Comm/
+#header=`head -1 ../TuOnly/PAERAH_TuOnly.txt`
+#mv ../somFinal/*CommTuRe* .
+#for line in `ls *CommTuRe*`
+#do
+##  sed -i "1d" ${line}
+#  sed -i "1i${header}\t${header}" ${line} 
+#done
+###Getting recurrent mutation 
+#
+#
+#cut -f1 *CommTuRe* |sort |uniq -c|sort -k 1 -n |awk '{print $2}' > all_chrPos
+
+#awk 'NR>1{print $16}' *CommTuRe*
+#pushd ../
+
+#for line in `ls Comm/*CommTuRe*`
+#do
+#  echo $line
+#  awk -F"\t" '$48!="1"&&$34>20{print $0 }' $line > $line".new" 
+#  mv $line".new" $line
+#done
+#
+#cut -f1 Comm/*CommTuRe* |sort |uniq -c|sort -k 1 -n |awk '{print $2}' > Comm/all_chrPos
+#rm pipeout pipein
+#
+#-----------------------------------------------Nov_11_Refiltering----------
+#ls ../result_anno_filter/*var.vcf.gatk.vcf.summary.*_summary.csv.vcf.filtered.vcf.ann.vcf|tr "\t" "\n" > input_final_filter.txt 
+#head -1 input_final_filter.txt 
+
+#for line in `cat input_final_filter.txt`
+#do
+#  filename=`echo $line |awk -F/ '{split($NF,a,".");print a[1]}'` 
+#  #echo $filename
+#  ~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_final_filter.py -i $line -o $filename.somFinal.tsv 
+#done
+#---------debugging for some files
+#awk 'NR==6||NR==14||NR==18||NR==21{print $0}' input_final_filter.txt > input_final_filter_rescure.txt
+#for line in `cat input_final_filter_rescure.txt`
+#do
+#  sample1=`echo $line |awk -F/ '{split($NF,a,".");split(a[1],b,"_");print b[1]}'` 
+#  sample2=`echo $line |awk -F/ '{split($NF,a,".");split(a[1],b,"_");print b[2]}'` 
+#  sed -i "1i#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t${sample1}\t${sample2}" $line 
+#  ~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_final_filter.py -i $line -o ${sample1}_${sample2}.somFinal.tsv 
+#done
+
+
+####---------filtering_at_FINAL
+doFilter() {
+  for line in `cat $1`
+  do
+    sample1=`echo $line |awk -F/ '{split($NF,a,".");split(a[1],b,"_");print substr(b[1],0,9)}'` 
+    #filename=`echo $line |awk -F/ '{split($NF,a,".");print a[1]}'` 
+    echo $sample1 >> README.log
+    ~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_final_filter.py -i $line -o $sample1.somatic.FINAL -f FPgenes_POTENTIAL.txt >> README.log 
+  done
+}
+#find ../result_rescue2/ -name *csv.vcf.filtered.vcf.ann.vcf -exec readlink -f {} \; >> input_do_filter_rescure2.txt
+#doFilter input_do_filter_rescure2.txt 
+
+#for file in `cat rescue_pid_calling.txt`
+#do
+#  ls -alth ../result_anno_filter/$file*vcf
+#  pid=`echo $file|cut -d- -f1`
+#  ls -alth ../result_rescue/$pid*vcf
+#done
+
+##~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/do_final_filter.py -i ../result_anno_filter/PAEEYP-ReA_PAEEYP-NoA.var.vcf.gatk.vcf.summary.exome_summary.csv.vcf.filtered.vcf.ann.vcf -o PAEEYP-Re.somatic.FINAL -f FPgenes_POTENTIAL.txt 
+
+#-------integrate final mutations by pid
+#cd somFinal/
+#for pid in `cat ../PID_16.txt`
+#do
+#  ~/tools/python/Python_current/python ~/scripts/projAML/WXS/mergeTuReFinal.py ${pid}
+#done
+#
+##cd somFinal/
+#for gene in `cat ../MRs_from_Yishai.txt`
+#do
+#  grep $gene *FINAL
+#done
+#
+##cd somFinal/
+#for gene in `awk '{print $8}' *FINAL |sort|uniq `
+#do
+#  grep $gene *FINAL|wc -l  
+#done
+#
+

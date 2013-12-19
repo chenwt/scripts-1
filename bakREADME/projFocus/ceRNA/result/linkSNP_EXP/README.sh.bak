@@ -1,0 +1,91 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+
+#mkfifo pipein pipeout
+
+#Oct 27,2013
+#sed -i "/spljxn/d" FILE_SAMPLE_MAP_EXP.txt
+#sed -i "/translated/d" FILE_SAMPLE_MAP_EXP.txt
+#rm files_TCGAID.exp
+#rm files_TCGAID.snp 
+#for file in `cat files.exp` ; do grep ${file} FILE_SAMPLE_MAP_EXP.txt |awk '{ split($2,a,"-");print a[3]"-"substr(a[4],0,2)}' >> files_TCGAID.exp; done
+#for file in `cat files.snp` ; do grep ${file} FILE_SAMPLE_MAP_SNP.txt |awk '{ split($2,a,"-");print a[3]"-"substr(a[4],0,2)}' >> files_TCGAID.snp; done
+#comm -3 <(sort files_TCGAID.snp) <(sort files_TCGAID.exp) 
+#cat files_TCGAID.snp files_TCGAID.exp |sort |uniq -c |awk '$1>1{print $2}' > commPID 
+ 
+#grep -f commPID FILE_SAMPLE_MAP_EXP.txt  
+#grep -f commPID FILE_SAMPLE_MAP_SNP.txt  
+
+#rm files_PID
+#for file in `cat files.exp` ; do grep ${file} FILE_SAMPLE_MAP_EXP.txt |awk '{ split($2,a,"-");print $1"\t"a[3]"-"substr(a[4],0,2)}' >> files_PID; done
+#for file in `cat files.snp` ; do grep ${file} FILE_SAMPLE_MAP_SNP.txt |awk '{ split($2,a,"-");print $1"\t"a[3]"-"substr(a[4],0,2)}' >> files_PID; done
+#sed -i "s/\_/./g" test.snp.annot 
+#sed -i "s/-/./g" test.snp.annot 
+#sed -i "s/\_/./g" test.exp.annot 
+#sed -i "s/-/./g" test.exp.annot 
+#sed "s/\_/\./g" files_PID > files_PID.new
+#sed -i "s/-/./g" files_PID.new
+#
+#/nfs/apps/python/2.6.5/bin/python replaceHeader.py -i test.snp.annot  -d files_PID.new -o test.pid.snp.annot
+#/nfs/apps/python/2.6.5/bin/python replaceHeader.py -i test.exp.annot  -d files_PID.new -o test.pid.exp.annot
+#sed "1 s/\_/./g" EdgeR_run1DEGMat.txt.annot > EdgeR_run1DEGMat.txt.annot.pid 
+#sed -i "1 s/-/./g" EdgeR_run1DEGMat.txt.annot.pid 
+#sed "1 s/\_/./g" brca_snpGT_run1.mat.annot.new > brca_snpGT_run1.mat.annot.new.pid
+#sed -i "1 s/-/./g" brca_snpGT_run1.mat.annot.new.pid
+#/nfs/apps/python/2.6.5/bin/python replaceHeader.py -i EdgeR_run1DEGMat.txt.annot.pid  -d files_PID.new -o EdgeR_run1DEGMat.txt.annot.clean
+#/nfs/apps/python/2.6.5/bin/python replaceHeader.py -i brca_snpGT_run1.mat.annot.new.pid  -d files_PID.new -o brca_snpGT_run1.mat.annot.new.pid.clean
+
+
+#awk '{print $1"\t"$2}' FILE_SAMPLE_MAP_EXP.txt > pipein &
+#awk '{print $1"\t"$2}' FILE_SAMPLE_MAP_SNP.txt |cat pipein - |sort -k 2  |sed "s/\_/./g"|sed "s/-/./g" |sed "/^\s+/d"> FILE_SAMPLE_MAP.txt
+#sed -i 1d FILE_SAMPLE_MAP.txt
+#/nfs/apps/python/2.6.5/bin/python replaceHeader.py -i EdgeR_run1DEGMat.txt.annot.pid  -d FILE_SAMPLE_MAP.txt -o EdgeR_run1DEGMat.txt.annot.clean
+#/nfs/apps/python/2.6.5/bin/python replaceHeader.py -i brca_snpGT_run1.mat.annot.new.pid  -d FILE_SAMPLE_MAP.txt -o brca_snpGT_run1.mat.annot.new.pid.clean
+
+#/nfs/apps/python/2.6.5/bin/python getPairData.py -s brca_snpGT_run1.mat.annot.new.pid.clean -e EdgeR_run1DEGMat.txt.annot.clean
+
+#awk -F"\t" '{print NF}' brca_snpGT_run1.mat.annot.new.pid.clean.pair |sort|uniq
+#awk -F"\t" '{print NF}' EdgeR_run1DEGMat.txt.annot.clean.pair|sort |uniq 
+#
+
+#awk '$2=="22"{print $0}' brca_snpGT_run1.mat.annot.new.pid.clean.pair > ~/scripts/projFocus/ceRNA/test/test.snp
+#awk '$2=="22"{print $0}' EdgeR_run1DEGMat.txt.annot.clean.pair |head -10 > ~/scripts/projFocus/ceRNA/test/test.exp
+
+#/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/uTest_snp_exp.py -s brca_snpGT_run1.mat.annot.new.pid.clean.pair -e EdgeR_run1DEGMat.txt.annot.clean.pair -o out_uTest_brca_snp_exp_pair.txt  
+#cat out_uTest_brca_snp_exp_pair.txt |sort -k 4 -n  |less -S
+
+##----Nov 8, 2013---do U test
+# prepare file
+#ln -s ../exp/edgeR_brca_l3DEGMat.txt.anno edgeR_brca_l3DEGMat.txt.anno  
+#ln -s ../snp/brca_snp_level3_839.mat.anno brca_snp_level3_839.mat.anno
+# file quality checking
+#head -1 edgeR_brca_l3DEGMat.txt.anno |awk '{print NF}'
+#head -1 brca_snp_level3_839.mat.anno |awk '{print NF}'
+
+#echo "TCGA-A8-A08H-01A-21D-A011-01.txt" >>test.txt
+#echo "- - + + " >>test.txt
+#sed -i "1s/-/\./g" test.txt
+#sed -i "1s/-/\./g" edgeR_brca_l3DEGMat.txt.anno
+#sed -i "1s/-/\./g" brca_snp_level3_839.mat.anno
+
+#head -1 edgeR_brca_l3DEGMat.txt.anno |sed "s/\t/\n/g" |awk 'NR>4{print substr($1,0,19)}' |sort > pipein &
+#head -1 brca_snp_level3_839.mat.anno  |sed "s/\t/\n/g" |awk 'NR>4{print substr($1,0,19)}'|sort > pipeout &
+#comm -12 pipein pipeout > commPID.temp
+
+
+#/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/uTest_snp_exp.py -s brca_snpGT_run1.mat.annot.new.pid.clean.pair -e EdgeR_run1DEGMat.txt.annot.clean.pair -o out_uTest_brca_snp_exp_pair.txt  
+
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/compareFileCols.py -s brca_snp_level3_839.mat.anno -e edgeR_brca_l3DEGMat.txt.anno 
+
+#head -1 brca_snp_level3_839.mat.anno.comm|awk '{print NF}'
+#head -1 edgeR_brca_l3DEGMat.txt.anno.comm|awk '{print NF}'
+
+#head -20 brca_snp_level3_839.mat.anno.comm > test_brca_snp_level3_839.mat.anno.comm
+#/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/test/uTest_snp_exp.py -s brca_snp_level3_839.mat.anno.comm -e edgeR_brca_l3DEGMat.txt.anno.comm -o brca_snp_expDEG_anno.comm.utest  
+#/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/uTest_snp_exp.py -s brca_snp_level3_839.mat.anno.comm -e edgeR_brca_l3DEGMat.txt.anno.comm -o brca_snp_expDEG_anno.comm.utest  
+
+#awk 'NR == 1; NR > 1 {print $0 | "sort -k1rn"}' brca_snp_expDEG_anno.comm.utest|uniq  > brca_snp_expDEG_anno.comm.utest.sorted
+/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/uTest_snp_exp.py -s brca_snp.mat.anno.comm.finalTuSample -e brca_exp.mat.anno.comm.finalTuSample.singleTSS -o brca_snp_uTest.sig.mat.anno.comm.finalTuSample 
+#rm pipein pipeout
