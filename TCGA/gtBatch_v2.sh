@@ -35,11 +35,11 @@ do
 	# echo $cmd 
 	$cmd
 
-	cmd="~/scripts/projFocus/ceRNA/splitChr_bam.sh ${barcode}.bam"
+#	cmd="~/scripts/projFocus/ceRNA/splitChr_bam.sh ${barcode}.bam"
 	# scd="/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/"
 	# echo ${cmd}
-	echo ${cmd} | qsub -l mem=4g,time=20:: -cwd -N split_${barcode} -e ${logd} -o ${logd}  >> ${logd}qsub.log
-	tail -1 ${logd}qsub.log
+	#echo ${cmd} | qsub -l mem=4g,time=20:: -cwd -N split_${barcode} -e ${logd} -o ${logd}  >> ${logd}qsub.log
+	#tail -1 ${logd}qsub.log
 
 done < $FILENAME
 echo -e "#----------------END------------------"
