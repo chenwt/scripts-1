@@ -6,7 +6,7 @@
 
 coorFile=$1
 bamFile=$2
-outputFile=$1"_bamACGT.txt"
+outputFile=$1"_"$2"_ACGT.txt"
 echo -e "bamfile\tchr\tpos\tTotal\tTotal_Alt\tA\tC\tG\tT" > $outputFile
 cnt_bam=0
 for bam in `cat $bamFile`

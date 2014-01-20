@@ -4,7 +4,7 @@
 #output:
 #Descripiton: This is to use ridge linear fitting mode to fitting cnv+somatic mutation, and cnv+somatic + snp,
 # 			  calculating the significance of SNPs' contribution for gene expression
-# 
+# Path: /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/test
 
 
 getArgs = function(){
@@ -32,7 +32,7 @@ if(sysInfo['sysname']=="Darwin" ){
   setwd("/Volumes//ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
 }else if(sysInfo['sysname']=="Linux" ){
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
-  # setwd("/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
+  setwd("/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
 }
 
 args = getArgs()
@@ -58,9 +58,11 @@ print(paste("current working directory",getwd()))
 
 
 ###------------test-start-------
+cwd         = getwd()
 inputsnp    = "input_snp_COL6A2"
 inputexp    = "input_exp_COL6A2"
 inputcnv    =  "input_cnv_COL6A2"
+inputsom    =  "input_som_COL6A2"
 inputsom    = args$som
 plotFlag    = args$plotFlag
 outputcoeff = paste(cwd,"/grplasso_coeff_",sep="")
@@ -72,5 +74,15 @@ print(paste("current working directory",getwd()))
 
 # load data
 allData = getData(inputexp=inputexp,inputsnp=inputsnp,inputcnv=inputcnv)
-dataExp = allData$dataExp
-dataSnp = allData$dataSnp
+allData = getAllData(inputexp=inputexp,inputsnp=inputsnp,inputcnv=inputcnv,inputsom=inputsom)
+
+##----test
+allMergeData = allData$data_merge
+data = allMergeData
+#-----model-exp~cnv-som
+fitCnvSom = function(data){
+	require(MASS)
+	fit1 = lm(data[,1] ~ data[,'cnv'] + data[,'som'])    
+  fit2 = lm(data[,1] ~ data[,-1])
+  anova(fit1,fit2)
+}

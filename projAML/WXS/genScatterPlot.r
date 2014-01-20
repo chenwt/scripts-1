@@ -12,26 +12,17 @@ scatterPlot = function(X,Y,label,title,...){
 }
 
 data = read.table("fig/rawVariantCount.txt",sep="\t",header=T)
-corTest = cor.test(data$ReA,data$TuA)
-paste("correlation:",round(corTest$estimate,3)," pvalue:",round(corTest$p.value,3),sep="")
 pdf("fig/scatterPlotRawMutation.pdf")
 scatterPlot(Y=data$TuA,X=data$ReA,data$Patient,title="Raw Variannts Number")
 dev.off()
 
-
 data = read.table("fig/rawReadsNumbersCount.txt",sep="\t",header=T)
-corTest = cor.test(data$Relapse,data$Tumor)
-paste("correlation:",round(corTest$estimate,3)," pvalue:",round(corTest$p.value,3),sep="")
-
 pdf("fig/scatterPlotrawReadsNumber.pdf")
 scatterPlot(X=data$Relapse, Y=data$Tumor,label=data$PID,title="Raw Reads Number")
 dev.off()
 
 ###----use another version of scatter plot 
 data =read.table("fig/finalVrariantCount.txt",sep="\t",header=T)
-corTest = cor.test(data$Re,data$Tu)
-paste("correlation:",round(corTest$estimate,3)," pvalue:",round(corTest$p.value,3),sep="")
-
 pdf("fig/scatterPlotFinalVrariantCount.pdf")
 #---
 X=data$Re

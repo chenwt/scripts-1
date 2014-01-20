@@ -50,6 +50,49 @@ getData = function(inputexp,inputsnp,inputcnv){
               genename = genename))
 }
 
+getAllData = function(inputexp,inputsnp,inputcnv,inputsom){
+  #-------load exp data
+  dataExp             = read.table(inputexp,header =T)
+  rownames(dataExp)   = as.character(dataExp[,1])
+  genename            = dataExp[,1] 
+  dataExp             = sapply(dataExp[,-c(1:4)],
+                              function(x){as.numeric(as.character(x))})
+  dataExpNorm           = normalize(dataExp)
+  #names(dataExpNorm)    = "exp"
+
+  #--------load snp data
+  dataSnp             = read.table(inputsnp,header =T)
+  rownames(dataSnp)   = dataSnp[,2]
+  dataSnp             = dataSnp[,-c(1:2)]
+  #snp data QC:1. delete all 0 snp
+  dataSnp             = dataSnp[rowSums(dataSnp)>0,]
+
+  if (nrow(dataSnp) > 0 ){
+      ##load cnv data
+      dataCnv             = read.table(inputcnv,header = T)
+      rownames(dataCnv)   = dataCnv[,2]
+      dataCnv             = dataCnv[,-c(1:2)]
+      ##load somatic mutation data
+      dataSom             = read.table(inputsom,header = T)
+      rownames(dataSom)   = "som"
+      dataSom             = dataSom[,-c(1:5)]
+      ##------
+      names(dataExpNorm)      = sapply(names(dataExpNorm),subStr1To19)
+      names(dataCnv)      = sapply(names(dataCnv),subStr1To19)
+      names(dataSnp)      = sapply(names(dataSnp),subStr1To19)
+
+      data_merge  = t(rbind(dataExpNorm,dataCnv,dataSnp,dataSom))
+    }
+  return(list(dataSnp=dataSnp,
+              dataExp=dataExp,
+              dataCnv=dataCnv,
+              dataSom=dataSom,
+              data_merge=data_merge,
+              genename = genename))
+}
+
+subStr1To19 = function(x){ substr(x,1,19)}
+
 normalize = function(x){
   x = sapply(x,as.numeric)
   return((x - mean(x)) / sd(x))
