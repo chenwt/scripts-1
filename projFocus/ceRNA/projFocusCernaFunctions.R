@@ -23,7 +23,8 @@ getData = function(inputexp,inputsnp,inputcnv){
   ##load exp data
   dataExp             = read.table(inputexp,header =T)
   rownames(dataExp)   = dataExp[,1]
-  genename            = dataExp[,1] 
+  genename            = dataExp[,1]
+  print(class(dataExp))
   dataExp             = sapply(dataExp[,-c(1:4)],
                               function(x){as.numeric(as.character(x))})
   dataExpNorm           = normalize(dataExp)
@@ -51,14 +52,14 @@ getData = function(inputexp,inputsnp,inputcnv){
 }
 
 getAllData = function(inputexp,inputsnp,inputcnv,inputsom){
+  ##when all data avaiable
   #-------load exp data
   dataExp             = read.table(inputexp,header =T)
   rownames(dataExp)   = as.character(dataExp[,1])
   genename            = dataExp[,1] 
   dataExp             = sapply(dataExp[,-c(1:4)],
                               function(x){as.numeric(as.character(x))})
-  dataExpNorm           = normalize(dataExp)
-  #names(dataExpNorm)    = "exp"
+  dataExpNorm           = as.data.frame(t(normalize(dataExp)))
 
   #--------load snp data
   dataSnp             = read.table(inputsnp,header =T)
@@ -75,19 +76,17 @@ getAllData = function(inputexp,inputsnp,inputcnv,inputsom){
       ##load somatic mutation data
       dataSom             = read.table(inputsom,header = T)
       rownames(dataSom)   = "som"
-      dataSom             = dataSom[,-c(1:5)]
+      dataSom             = dataSom[,-c(1:2)]
       ##------
-      names(dataExpNorm)      = sapply(names(dataExpNorm),subStr1To19)
+      names(dataSom)      = sapply(names(dataSom),subStr1To19)
       names(dataCnv)      = sapply(names(dataCnv),subStr1To19)
       names(dataSnp)      = sapply(names(dataSnp),subStr1To19)
+      names(dataExpNorm)  = sapply(names(dataExpNorm),subStr1To19)
 
-      data_merge  = t(rbind(dataExpNorm,dataCnv,dataSnp,dataSom))
+      data_merge  = t(rbind(dataExpNorm,dataCnv,dataSom,dataSnp))
     }
-  return(list(dataSnp=dataSnp,
-              dataExp=dataExp,
-              dataCnv=dataCnv,
-              dataSom=dataSom,
-              data_merge=data_merge,
+
+  return(list(data_merge=data_merge,
               genename = genename))
 }
 

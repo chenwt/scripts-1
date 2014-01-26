@@ -1,0 +1,4 @@
+<html><head><link rel=stylesheet href=R2HTML.css type=text/css> </head><body bgcolor="#E5F5FF">  <center> <img src=R2HTMLlogo.gif> <hr size=1></center><br>
+<br><li><a class=command href='./projFocusWorkFlow_main.html#Num2' target=main> HTML.title("Project Focus ceRNA Work flow and Status", HR = 1)</a>
+<br><li><a class=command href='./projFocusWorkFlow_main.html#Num3' target=main> HTML.title("outline", HR = 3)</a>
+<br><li><a class=command href='./projFocusWorkFlow_main.html#Num4' target=main> calFtest = function(data, type = "snp") {    switch(type, snp = {        fit1 = lm(data[, 1] ~ 1 + data[, "cnv"] + data[, "som"])        fit2 = lm(data[, 1] ~ 1 + data[, -1])        fresult = anova(fit1, fit2)        names(fresult) = c("ResDf", "RSS", "DF", "SumOfSquare",             "F", "PrGreaterThanF")    }, som = {    }, cnv = {    }, indel = {    })    return(pvalFtest = fresult$PrGreaterThanF[2])}</a>

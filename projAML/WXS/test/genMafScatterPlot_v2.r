@@ -47,7 +47,7 @@ rawcountPlot = apply(rawcount,c(1,2),function(x){
   temp = as.character(x)
   alt = as.numeric(unlist(strsplit(temp,"/"))[1])
   ref = as.numeric(unlist(strsplit(temp,"/"))[2])
-  return(alt/ref)
+  return(alt/(alt+ref))
   })
 
 ##---debuging PARVUA tumor relapse order
@@ -99,6 +99,7 @@ dev.off()
 
 ##---output relapse specific mutations
 out = rep("",6)
+chrPos = rownames(rawcountPlot)
 for (i in seq(1,16,by=1)){
    pid = patientID[i]
    comment = "relapse specific"

@@ -10,10 +10,11 @@
 sysInfo = Sys.info()
 if(sysInfo['sysname']=="Darwin" ){
   source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
-  setwd("/Volumes//ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
+  #setwd("/Volumes//ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
 }else if(sysInfo['sysname']=="Linux" ){
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
-  setwd("/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
+  print("loaded from Linux")
+  #setwd("/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/chr21/test")
 }
 
 getArgs = function(){
