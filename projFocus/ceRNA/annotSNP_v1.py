@@ -8,16 +8,14 @@
 import os
 import sys, getopt
 
-
 argv = sys.argv[1:]
 inp1 = ''
 inp2 = ''
 outp = ''
-usage = 'python annotSNP_v2.py -i <inputfile> -d <snp annotation file> -o <output file name>' 
 try:
   opts,args = getopt.getopt(argv,"hi:d:o:",["ifile=","dbfile'","ofile="])
 except getopt.GetoptError:
-  print 
+  print 'python annot_SNP.py -i <inputfile> -d <snp annotation file> -o <output file name>' 
   sys.exit(2)
 
 for opt, arg in opts:

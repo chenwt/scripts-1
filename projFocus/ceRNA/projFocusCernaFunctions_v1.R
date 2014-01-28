@@ -18,6 +18,78 @@ getArgs = function(){
   return(optionsArgs)
 }
 
+
+getData = function(inputexp,inputsnp,inputcnv){
+  ##load exp data
+  dataExp             = read.table(inputexp,header =T)
+  rownames(dataExp)   = dataExp[,1]
+  genename            = dataExp[,1]
+  print(class(dataExp))
+  dataExp             = sapply(dataExp[,-c(1:4)],
+                              function(x){as.numeric(as.character(x))})
+  dataExpNorm           = normalize(dataExp)
+  #---------loading snp data
+  dataSnp             = read.table(inputsnp,header =T)
+  rownames(dataSnp)   = dataSnp[,2]
+  dataSnp             = dataSnp[,-c(1:2)]
+  #snp data QC:1. delete all 0 snp
+  dataSnp             = dataSnp[rowSums(dataSnp)>0,]
+
+  if (nrow(dataSnp) > 0 ){
+      ##load cnv data
+      dataCnv             = read.table(inputcnv,header =T)
+      rownames(dataCnv)   = dataCnv[,2]
+      dataCnv             = dataCnv[,-c(1:2)]
+
+      ##------
+      data_merge  = t(rbind(dataExpNorm,dataCnv,dataSnp))
+    }
+  return(list(dataSnp=dataSnp,
+              dataExp=dataExp,
+              dataCnv=dataCnv,
+              data_merge=data_merge,
+              genename = genename))
+}
+
+getAllData = function(inputexp,inputsnp,inputcnv,inputsom){
+  ##when all data avaiable
+  #-------load exp data
+  dataExp             = read.table(inputexp,header =T)
+  rownames(dataExp)   = as.character(dataExp[,1])
+  genename            = dataExp[,1] 
+  dataExp             = sapply(dataExp[,-c(1:4)],
+                              function(x){as.numeric(as.character(x))})
+  dataExpNorm           = as.data.frame(t(normalize(dataExp)))
+
+  #--------load snp data
+  dataSnp             = read.table(inputsnp,header =T)
+  rownames(dataSnp)   = dataSnp[,2]
+  dataSnp             = dataSnp[,-c(1:2)]
+  #snp data QC:1. delete all 0 snp
+  dataSnp             = dataSnp[rowSums(dataSnp)>0,]
+
+  if (nrow(dataSnp) > 0 ){
+      ##load cnv data
+      dataCnv             = read.table(inputcnv,header = T)
+      rownames(dataCnv)   = dataCnv[,2]
+      dataCnv             = dataCnv[,-c(1:2)]
+      ##load somatic mutation data
+      dataSom             = read.table(inputsom,header = T)
+      rownames(dataSom)   = "som"
+      dataSom             = dataSom[,-c(1:2)]
+      ##------
+      names(dataSom)      = sapply(names(dataSom),subStr1To19)
+      names(dataCnv)      = sapply(names(dataCnv),subStr1To19)
+      names(dataSnp)      = sapply(names(dataSnp),subStr1To19)
+      names(dataExpNorm)  = sapply(names(dataExpNorm),subStr1To19)
+
+      data_merge  = t(rbind(dataExpNorm,dataCnv,dataSom,dataSnp))
+    }
+
+  return(list(data_merge=data_merge,
+              genename = genename))
+}
+
 formatColname = function(d){
   vapply(colnames(d),FUN=subStr1To19,'a')
 }
@@ -51,6 +123,10 @@ formatData = function(inputFile,t='exp'){
 
 subStr1To19 = function(x){ substr(x,1,19)}
 
+# normalize = function(x){
+#   x = sapply(x,as.numeric)
+#   return((x - mean(x)) / sd(x))
+# }
 
 normalize = function(x){
   xx = vapply(x,FUN=as.numeric,1.1)
@@ -65,26 +141,6 @@ toRange01 = function(x){
   y = (x - min(x) + 0.01 * min(x))/(max(x) + 0.01 * max(x) - min(x))
   z = sapply(y,function(xx) min(xx,1))
   return(z)
-}
-
-kappaDist = function(dataSnp){
-  library(irr)
-  cntsnp = ncol(dataSnp)
-  cntsample = nrow(dataSnp)
-  kcval = matrix(NA, nrow=cntsnp, ncol= cntsnp)
-  ###--TODO make it a parallel computing
-  for ( i in 1:cntsnp){
-    temp = as.data.frame(matrix(1,cntsample, 2))
-    temp[,1] = dataSnp[,i]
-    for ( j in i:cntsnp)    
-    {temp[,2] = dataSnp[,j]
-     kp2 = kappa2(ratings= temp)
-     kcval[i,j]  = kcval[j,i] = kp2$value
-    }
-  }
-  colnames(kcval) = colnames(dataSnp)
-  rownames(kcval) = colnames(dataSnp)
-  return(kcval)
 }
 
 sigmoid  = function(x){
@@ -132,6 +188,26 @@ getGroup = function(kcval_svd,kcval){
   return(unlist(group))
 }
 
+##----------------------------
+#
+fitCnv = function(X,y,plotflag){
+  linFit = lm(y ~ 1 + X)
+  beta     = coef(linFit,s=min(ridgefit$lambda))
+  # residual = y - beta[1]- X * beta[2]
+  residual = linFit$residuals 
+  RSS      = sum((residual)^2)       
+
+  if(plotflag == 1){
+    plot(y=y,x=X,xlab="cnv",ylab="normalized expression")
+    curve (beta[1] + beta[2]*x, add=TRUE,col="blue")
+    curve (cbind(1,x) %*% beta, add=TRUE,col="red")
+  }
+  
+  return(list(beta   =beta[-1],
+              RSS    =RSS,
+              residuals = residual))
+}
+
 ##cohen's kappe- svd - k-means grouping of variable
 groupVars = function(dataSnp,dataCnv,plotflag){
   library(irr)
@@ -164,28 +240,6 @@ groupVars = function(dataSnp,dataCnv,plotflag){
   }
   return(group)
 }
-
-##----------------------------
-#
-fitCnv = function(X,y,plotflag){
-  linFit = lm(y ~ 1 + X)
-  beta     = coef(linFit,s=min(ridgefit$lambda))
-  # residual = y - beta[1]- X * beta[2]
-  residual = linFit$residuals 
-  RSS      = sum((residual)^2)       
-
-  if(plotflag == 1){
-    plot(y=y,x=X,xlab="cnv",ylab="normalized expression")
-    curve (beta[1] + beta[2]*x, add=TRUE,col="blue")
-    curve (cbind(1,x) %*% beta, add=TRUE,col="red")
-  }
-  
-  return(list(beta   =beta[-1],
-              RSS    =RSS,
-              residuals = residual))
-}
-
-
 
 
 regfit      = function(X, y, group, plotflag=0){

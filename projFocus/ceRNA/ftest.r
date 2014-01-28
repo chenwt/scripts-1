@@ -51,6 +51,7 @@ inputsnp    = args['snp']
 inputexp    = args['exp']
 inputcnv    = args['cnv']
 inputsom    = args['som']
+inputtype   = args['type'] #1,2,3
 output      = paste(cwd,"/fTest_pval.txt",sep="")
 print(paste("current working directory",getwd()))
 
@@ -70,8 +71,8 @@ print(paste("current working directory",getwd()))
 # load data
 allData = getAllData(inputexp=inputexp,inputsnp=inputsnp,inputcnv=inputcnv,inputsom=inputsom)
 allMergeData = allData$data_merge
-#-----model-exp~cnv-som
 require(MASS)
+#-----model-exp=snp+cnv+som
 calFtest = function(data,type="snp",outputFile=output,gene=gene){
   ##type: som, cnv, indel, snp
   switch(type,
@@ -91,3 +92,9 @@ calFtest = function(data,type="snp",outputFile=output,gene=gene){
   write.table(as.matrix(result),file=output,col.names=F,quote=F,sep="\t",append=T)
 }
 calFtest(allMergeData, outputFile=output, gene=gene)
+#---model-exp=snp+cnv
+
+#---model-exp=snp+som
+
+#--add indel in the future
+

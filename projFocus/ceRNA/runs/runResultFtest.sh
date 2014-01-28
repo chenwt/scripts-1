@@ -33,6 +33,21 @@ function extractAllData4Gene()
   extractOneData4Gene $gene ${somfile}
 }
 
+function extractAllData4Gene_GCgene()
+{
+  #only changes the snp data searching space
+  gene=$1
+  expfile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/brca_exp_l3_731_DEG.mat.singleTSS.anno
+  snpfile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/snp/test/brca_GWASCataLogGene_snp_KWtest.mat.anno.adjPass_1.0.mat
+  cnvfile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/cnv/brca_gene_DEG_cnv_731.mat
+  somfile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/som/brca_somForDeg.mat
+  extractOneData4Gene $gene ${expfile}
+  extractOneData4Gene $gene ${snpfile}
+  extractOneData4Gene $gene ${cnvfile}
+  extractOneData4Gene $gene ${somfile}
+
+}
+
 function pSystime()
 {
   #function to print current system time
@@ -76,12 +91,23 @@ function runFtest() {
       cntSnp=`awk 'END{print NR}' ${gene}_brca_gene_snp_chr${chr}_KWtest.mat.anno.adjPass_1e-06.mat`
       cntCnv=`awk 'END{print NR}' ${gene}_brca_somForDeg.mat `
       cntSom=`awk 'END{print NR}' ${gene}_brca_gene_DEG_cnv_731.mat `
+      ##neet to add cntIndel in future
       flag=1
       if [ $cntSnp -eq 1 ] ; then  exit; fi
-      if [ $cntCnv -gt 1 ] & [ $cntSom -gt 1 ] ; then
-          /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript ~/scripts/projFocus/ceRNA/ftest.r --exp ${gene}_brca_exp_l3_731_DEG.mat.singleTSS.anno  --snp ${gene}_brca_gene_snp_chr${chr}_KWtest.mat.anno.adjPass_1e-06.mat --som ${gene}_brca_somForDeg.mat --cnv ${gene}_brca_gene_DEG_cnv_731.mat --gene $gene 
-      else
-        echo -e "$gene\tNA\tNA" >> $outputFile
+      
+      #case one only cnv
+      if [ $cntCnv -gt 1 ]  & [ ! $cntSom -gt 1] ; then
+          /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript ~/scripts/projFocus/ceRNA/ftest_v2.r --type 2 --exp ${gene}_brca_exp_l3_731_DEG.mat.singleTSS.anno  --snp ${gene}_brca_gene_snp_chr${chr}_KWtest.mat.anno.adjPass_1e-06.mat --som ${gene}_brca_somForDeg.mat --cnv ${gene}_brca_gene_DEG_cnv_731.mat --gene $gene --out ${outputFile}_snp_cnv 
+
+      elif [ ! $cntCnt -gt 1 ] & [ $cntSom -gt 1] ; then
+
+          /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript ~/scripts/projFocus/ceRNA/ftest_v2.r --type 3 --exp ${gene}_brca_exp_l3_731_DEG.mat.singleTSS.anno  --snp ${gene}_brca_gene_snp_chr${chr}_KWtest.mat.anno.adjPass_1e-06.mat --som ${gene}_brca_somForDeg.mat --cnv ${gene}_brca_gene_DEG_cnv_731.mat --gene $gene --out ${outputFile}_snp_som 
+	  	
+      elif [ $cntCnv -gt 1 ] & [ $cntSom -gt 1 ] ; then
+          /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript ~/scripts/projFocus/ceRNA/ftest_v2.r --type 1 --exp ${gene}_brca_exp_l3_731_DEG.mat.singleTSS.anno  --snp ${gene}_brca_gene_snp_chr${chr}_KWtest.mat.anno.adjPass_1e-06.mat --som ${gene}_brca_somForDeg.mat --cnv ${gene}_brca_gene_DEG_cnv_731.mat --gene $gene --out ${outputFile}_snp_cnv_som 
+
+      else  
+        echo -e "$gene" >> ${outputFile}_snp
       fi
       pSystime 
       echo -e "cleaning file..."

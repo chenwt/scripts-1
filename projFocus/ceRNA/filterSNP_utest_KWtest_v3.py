@@ -178,7 +178,6 @@ cnt_out = 0
 chromDict = [{} for _ in range(24)]
 pvalArray = []
 
-outpf            = open(outp,'w')
 snpdataDict      = {}
 cnt_out          = 0
 snpNameSet = set()

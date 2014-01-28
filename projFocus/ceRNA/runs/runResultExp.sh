@@ -23,6 +23,11 @@
 
 
 ####-------------------------run after Jan.2014 for known snp/genes
+head -1 brca_exp_l3_731_DEG.mat.singleTSS.anno > header 
+cp brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc
+cat header brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc > brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno 
+rm brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc
+
 while read line 
 do
 grep -w $line brca_exp_l3_731_DEG.mat.singleTSS.anno >> brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno

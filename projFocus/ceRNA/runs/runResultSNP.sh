@@ -70,15 +70,19 @@ function chrFilterSNP_kSnpLose(){
       }
 
 
-for snpfile in `ls brca_snp_tumor_731_chr*.mat.anno`
-do 
-  head -1 brca_snp_tumor_731.mat.anno > test/${snpfile}_GWASCataSNP.anno
-  grep -wf ../../knowledgeBase/GWAS_catalog_brca_SNPid.txt brca_snp_tumor_731.mat.anno >> test/${snpfile}_GWASCataSNP.anno
-  echo -e "done with $snpfile"
-done 
+#for snpfile in `ls brca_snp_tumor_731_chr*.mat.anno`
+#do 
+#  head -1 brca_snp_tumor_731.mat.anno > test/${snpfile}_GWASCataSNP.anno
+#  grep -wf ../../knowledgeBase/GWAS_catalog_brca_SNPid.txt brca_snp_tumor_731.mat.anno >> test/${snpfile}_GWASCataSNP.anno
+#  echo -e "done with $snpfile"
+#done 
 #gene geneName for snps
-#chrFilterSNP_lose "13"
-#chrFilterSNP_loose "11"
+for chr in `seq 1 22` X Y
+do
+ chrFilterSNP_lose "$chr"
+done 
+###-----redo KW test on new snp matrix 
 
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/filterSNP_utest_KWtest_v3.py -s /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/snpArray/brca_snp_tumor_731.mat.anno  -e /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/brca_exp_l3_731_DEG.mat.singleTSS.anno  -o brca_snp_tumor_KWtest.mat.anno -j 1e-2
 
 

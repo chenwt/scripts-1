@@ -13,16 +13,17 @@ argv = sys.argv[1:]
 inp1 = ''
 inp2 = ''
 outp = ''
-usage = 'python annotSNP_v2.py -i <inputfile> -d <snp annotation file> -o <output file name>' 
+usage = 'python annotSNP_v2.py -i <inputfile> -d <snp annotation file> -o <output file name> ' 
+example = '~/tools/python/Python_current/python annot_SNP.py -i ~/SCRATCH/projFocus/ceRNA/data/snpArray/brca_snp_brca_snp_level3_839.mat -d ~/SCRATCH/database/projFocusRef/ann    ot_GenomeWideSNP_6_5cols_clean.txt -o ~/SCRATCH/projFocus/ceRNA/data/snpArray/brca_snp_839.mat.annot'
 try:
   opts,args = getopt.getopt(argv,"hi:d:o:",["ifile=","dbfile'","ofile="])
 except getopt.GetoptError:
-  print 
+  print usage +"\n" + example 
   sys.exit(2)
 
 for opt, arg in opts:
   if opt == '-h':
-    print 'python annot_SNP.py -i <inputfile> -d <snp annotation file> -o <output file name>' 
+    print usage +"\n" + example 
     sys.exit()
   elif opt in ("-i","--ifile"):
     inp1 = arg
@@ -61,26 +62,21 @@ outKey = []
 with open(inp2) as inf2:
   for i, line in enumerate(inf2):
     if i == 0:
-      outHeader2 = line.strip()
-      # print outHeader2 + "\t" + outHeader1
+      #outHeader2 = line.strip()
+      outHeader2 = "\t".join(map(str,line.strip().split("\t")[:4]))
       outpf.write(outHeader2 + "\t" + outHeader1)
     else :
       [key,info1,info2,info3,dbsnpid]  = line.strip().split("\t")
-    # print key,info1,info2,info3
       if key in inp1Dict:
 	cnt_out = cnt_out + 1
         outpf.write(dbsnpid + "\t" + info1 + "\t" + \
                     info2 + "\t" + info3+ "\t" + inp1Dict[key])
-        # print i, key,info1,info2,info3
 	outKey.append(key)
       else :
         continue
 outlogf.write("drop snps:\t" + str(len(inp1Dict.keys()) - len(outKey)) + "\n")
 outlogf.write("output snps:\t" + str(cnt_out) + "\n")
 
-#for key in inp1Dict.keys() :
-#  if key not in outKey:
-#    outlogf.write("drop snp:\t" + key + "\n")
 
 outpf.close()
 outlogf.close()
