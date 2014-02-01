@@ -1,0 +1,88 @@
+#!/bin/bash
+#By: J.He
+#TODO: 
+
+#awk 'BEGIN{OFS=FS="\t"}{print $7,FILENAME,$10,$11,$12,$13,$29,$30,$31,$32}' *CommTuRe* |sort > allGenes.temp
+##for gene in `cat ../MRs_from_Yishai.txt`
+##do
+##   grep $gene allGenes.temp 
+##done
+#sed -i "1iGeneName\tPID\tTuRef\tTuAlt\tNoRef\tNoAlt\tReRef\tRefAlt\tNoRef\tNoAlt" allGenes.temp
+#
+#awk 'BEGIN{OFS=FS="\t"}{print $7,FILENAME,$10,$11,$12,$13}' *ReOnly* |sort > allReOnly.temp
+
+#sed -i '/MUC/d;/OR/d;/orf/d;/NBPF/d;/HLA/d' *somatic.FINAL
+#awk '($28==0&&$14==0)||NR==1{print FILENAME"\t"$0}' *CommTuRe* > ALL.CommTuRe.txt
+#awk '{print FILENAME"\t"$0}' *ReOnly* > ALL.ReOnly.txt
+#awk '$2!="chrom_pos"{split($2,a,"_");print a[1]"\t"a[2]}' *ReOnly* |sort -k 1,1d -k 2,2n |uniq > coord_ALL.ReOnly.txt
+#grep 03A bams.txt > bams_Tumor.txt
+#grep 09A bams.txt >>bams_Tumor.txt
+
+###----get all mutations which has 0 alt allele in normal sample
+#awk '$14==0||NR==1{print FILENAME,$0}' *FINAL* > ALL.NoAlt_0.txt
+#
+#for chr in `seq 1 22 ` X Y
+#do
+#  awk -v chr=$chr 'BEGIN{OFS="\t"}$2==chr||NR==1{print $0}' ALL.NoAlt_0.txt >> ALL.NoAlt_0.sorted.txt 
+#done
+#awk '$2!="chrom"&&NR>1{print $2"\t"$3}' ALL.NoAlt_0.sorted.tkkxt > coord_ALL.NoAlt.txt 
+#grep 04A bams.txt > bams_Relpase.txt
+#grep 40A bams.txt >>bams_Relpase.txt
+
+
+##----get reads of coordinates in relapse sample
+
+#sort -k 1,1d -k 2,2n coord_ALL.NoAlt.txt|uniq > coord_ALL.NoAlt_sort.txt
+#/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/test/getATGC.sh coord_ALL.NoAlt_sort.txt bams_Relapse.txt
+#sed -ic "s/\/ifs\/scratch\/c2b2\/TCGA\/data\/AML\/29212\/reads\/AML\///g" coord_ALL.NoAlt_sort.txt_bamACGT.txt
+
+#awk 'BEGIN{FS=OFS="\t";print "PIDRe-chr-pos","Total_Ref","Total_Alt","Alt_A","Alt_C","Alt_G","Alt_T"}
+#    NR>1&&$5>0{
+#      split($1,a,"/");split(a[3],b,"-");
+#      print b[3]"-"$2"-"$3,$4-$5,$5,$6,$7,$8,$9}' coord_ALL.NoAlt_sort.txt_bamACGT.txt|uniq > coord_bamACGT_clean_TumorOnlyGene_RelapseDepth.txt
+#
+#for pid in `cat ../PID_16.txt`
+#do
+#  ~/tools/python/Python_current/python ~/scripts/projAML/WXS/mergeTuReFinal.py ${pid}
+#done
+
+#~/scripts/projAML/WXS/getATGC.sh coord_ALL.ReOnly.txt bams_Tumor.txt
+#sed -ic "s/\/ifs\/scratch\/c2b2\/TCGA\/data\/AML\/29212\/reads\/AML\///g" coord_ALL.ReOnly.txt_bamACGT.txt 
+#mv coord_ALL.ReOnly.txt_bamACGT.txt coord_ALL.ReOnly.txt_bamACGT.txtc
+#~/scripts/projAML/WXS/getATGC.sh coord_ALL.ReOnly.txt bams_Tumor2.txt
+#sed -i "s/\/ifs\/scratch\/c2b2\/TCGA\/data\/AML\/29212\/reads\/AML\///g" coord_ALL.ReOnly.txt_bamACGT.txt >> coord_ALL.ReOnly.txt_bamACGT.txtc
+#mv coord_ALL.ReOnly.txt_bamACGT.txtc coord_ALL.ReOnly.txt_bamACGT.txt
+#awk 'BEGIN{FS=OFS="\t";print "PIDTu-chr-pos","Total_Ref","Total_Alt","Alt_A","Alt_C","Alt_G","Alt_T"}
+#    NR>1&&$5>0{
+#      split($1,a,"/");split(a[1],b,"-");
+#      print b[3]"-"$2"-"$3,$4-$5,$5,$6,$7,$8,$9}' coord_ALL.ReOnly.txt_bamACGT.txt|uniq > coord_bamACGT_clean_RelapseOnlyGene_TumorDepth.txt
+#
+#
+#awk '$1!="chrom_pos"{split($1,a,"_");print substr(FILENAME,0,6)"-"a[1]"-"a[2]"\t"$10"\t"$11"\t"$12"\t"$13}' *TuOnly* |sort -k 1,1d -k 2,2d -k 3,3n |uniq > coord_ALL.TuOnly.txt
+#head coord_ALL.TuOnly.txt
+
+#awk 'FNR==NR{a[$1]=$2"\t"$3"\t"$4"\t";next} if($1 in a) print ' coord_bamACGT_clean_RelapseOnlyGene_TumorDepth.txt coord_ALL.TuOnly.txt
+
+#awk '{print $1"\t"$2"\t"$2+1}' coord_ALL.NoAlt_sort.txt |uniq >coord_ALL.NoAlt_sort.bed
+
+#echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/getATGC.sh coord_ALL.NoAlt.txt bams.txt " |qsub -l mem=8g,time=40:: -cwd -N count -e log/ -o log/ 
+
+#for bam in `cat bams.txt`
+##do
+#  pid=`echo $bam|awk 'BEGIN{FS="/"}{print substr($13,11,9)}' `
+#  echo $pid
+#  echo "/ifs/data/c2b2/ngs_lab/ngs/usr/bin/samtools mpileup -uf /ifs/scratch/c2b2/ac_lab/jh3283/ref/GRCh37-lite.fa -l /ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/result_anno_filter_final/somFinal/coord_ALL.NoAlt_sort.bed $bam |bcftools view -A - > ${pid}_all_somaticNonsynMutationRaw.vcf" |qsub -l mem=8g,time=:30: -N ${pid} -o log/ -e log/ -cwd
+#done
+
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/genSomatciMutationForAllPatients.py -d rawvcf/ -t raw -o All_patients_AlleleFreq_raw.txt
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/genSomatciMutationForAllPatients.py -d gtvcf/ -t maf -o All_patients_AlleleFreq_dp4.txt
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/genSomatciMutationForAllPatients.py -d gtvcf/ -t gt -o All_patients_AlleleFreq_gt.txt
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/genSomatciMutationForAllPatients.py -d rawcount/ -t rawcount -o All_patients_AlleleFreq_rawcount.txt
+
+#head -1 All_patients_AlleleFreq_rawcount.txt > All_patients_AlleleFreq_rawcount_sorted.txt
+#awk 'NR>1{print $0}' All_patients_AlleleFreq_rawcount.txt|sort -k 1,1d >>All_patients_AlleleFreq_rawcount_sorted.txt
+
+
+#~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/genSomatciMutationForAllPatients_v2.py -d gtvcf/ -t gt -o All_patients_AlleleFreq_gt.txt
+
+~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/genSomatciMutationForAllPatients_v2.py -d gtvcf/ -t maf -o All_patients_AlleleFreq_dp4.txt

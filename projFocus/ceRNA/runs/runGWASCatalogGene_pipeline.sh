@@ -50,8 +50,12 @@
 
 ##step 6
 ##run Ftest on each gene
-cd /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/fTest/test
-awk 'NR>1{print $1}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno |sort |uniq> gene.list
+# cd /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/fTest/test
+# awk 'NR>1{print $1}' /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno |sort |uniq> gene.list
+
+#--step 7
+##run grp lasso model
+# cd /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grplasso/test
 
 
 

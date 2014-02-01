@@ -49,5 +49,28 @@ outDir=$(pwd)
 #qsubRun input.bam.list.0 
 #qsubRun input.bam.list.1 
 
-qsubRun input.bam.list.2 
+#qsubRun input.bam.list.2 
 
+##------g
+
+delBam() {
+  bamlist=$1
+  cnt=0
+  for line in `ls *VCF.filtered.VCF`
+  do
+    bam=`echo $line|awk 'BEGIN{FS="_"}{print $1}'`
+    pathBam=`grep $bam $bamlist`
+    if [[ ! -z $pathBam ]]; then
+      echo "deleting $pathBam"
+      rm $pathBam 
+      rm $pathBam.bai
+      let cnt=$cnt+1
+    fi
+  done 
+
+  echo -e "$cnt bam file deleted"
+  echo "#----DONE----"
+}
+
+#delBam input.bam.list.0
+#delBam input.bam.list.1

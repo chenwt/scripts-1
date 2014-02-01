@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Explaining the ceRNA effects from genomic variants</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+
+
+
+
+</head>
+
+<body>
+<h1>Explaining the ceRNA effects from genomic variants</h1>
+
+<h2>1. Data</h2>
+
+<p>All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key.
+<img src="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/data_1.png?raw=true" alt="TCGA data"/> <imd src="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/data_1.png"></p>
+
+<ul>
+<li><p>rnaSeq2:  tested; not used in model because the current methods for DEG is basically  using raw countslevel 3; rsem score for RNA seq, de nove assembly. 
+<a href="http://www.broadinstitute.org/science/programs/medical-and-population-genetics/birdsuite/birdsuite-analysis#birdsuite_snps">birdsuite algorithm description</a>; Affymetrix SNP 6.0  </p></li>
+<li><p>rnaSeq:  tested and used in edgeR for DEG
+level 3; rowcounts and rpkm value for each gene 839 - 91(duplicated)  - </p></li>
+<li><p>snpArray:  level 2 birdseed data in hg18 annotation; for snp data usage</p></li>
+<li><p>somaticMutation:  level 3 called somatic variants data; used in modelling</p></li>
+<li><p>CNV_snparray:  level 3:  used in later modelling</p></li>
+<li><p>wxs:  bam file list of whole exome sequencing breast cancer in TCGA for the samples involved in the analysis(731) </p></li>
+<li><p>WGS:  whole genome bams of TCGA breast cancer, only 86 samples. not used</p></li>
+<li><p>miRNA:  project stage 2 data; for future use.</p></li>
+</ul>
+
+<h2>2. data preprocessing </h2>
+
+<ul>
+<li><p>differential expressed genes</p>
+
+<ul>
+<li>voom transformation of raw count</li>
+<li>EdgeR: using rowcounts as expression
+
+<ul>
+<li>TMM normalization</li>
+<li>figures here to show the whole process</li>
+</ul></li>
+</ul></li>
+<li><p>snp: confidence filtering: necessary to make sure all the SNPs are real SNP &lt; 0.01 sample size &gt; 0.1  total(731) 78043 out</p>
+
+<ul>
+<li>MAF fréquence filtration: </li>
+<li>MAF top small would make no sense to do the calculation  &gt; 0.05 98 out</li>
+<li><a href="http://en.wikipedia.org/wiki/HWE">Hardy–Weinberg principle</a>: to make sure the sample comes from a normal population, no need to use in cancer population.</li>
+<li>Annotation use platform information(life over from hg18 to hg19), lost 5808; retain 822651</li>
+<li><a href="http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance">Kruskal–Wallis test</a>: threshold is an important thing
+#plot showing how many pairs of testing we are doing, and how many we are selecting using different threhold.
+<code>
+</code></li>
+</ul></li>
+<li><p>cnv : useing the region position </p></li>
+<li><p>somatic mutations: </p></li>
+<li><p>indel matrix: ongoing</p></li>
+</ul>
+
+<h2>3. hirarchical Modeling of genomic variants</h2>
+
+<ul>
+<li><p>ftest:(-SNP/indel) contribution</p>
+
+<ul>
+<li>simple linear model and lose threshold 
+
+<ul>
+<li>sig</li>
+<li>no sig</li>
+</ul></li>
+</ul></li>
+<li><p>group lasso regression &ndash;<still testing other model...></p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Cohen&#x27;s_kappa">cohen&#39;s kappa</a> similarity distance </li>
+<li>svd: dimension that catch 80% variation </li>
+<li>group:
+
+<ul>
+<li>kmeans:</li>
+<li>DBSCAN</li>
+</ul></li>
+</ul></li>
+<li><p>regression</p>
+
+<ul>
+<li>logit transform</li>
+<li>fitting </li>
+<li>random sampling residual </li>
+<li>permutation </li>
+<li>p value as well as coeff</li>
+</ul></li>
+<li><p>filtering:</p>
+
+<ul>
+<li>p value &lt; 0.05</li>
+<li>.rda file created for all sig genes</li>
+</ul></li>
+</ul>
+
+<h2>4. bridging gene-variants association with gene-ceRNA effects</h2>
+
+<h2>5. population genomic variants</h2>
+
+<ul>
+<li>1000 Genome SNP</li>
+<li>1000 Genome Indel</li>
+<li>UK10K </li>
+</ul>
+
+</body>
+
+</html>
+
