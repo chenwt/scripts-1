@@ -38,20 +38,6 @@ qsubRun (){
     tail -1 qsub.log
   done <$1
 }
-###-------function----end--------
-
-#----data folder:
-dataDir=/ifs/scratch/c2b2/TCGA/data/BRCA/WXS
-outDir=$(pwd)
-
-###---------run-----using--input---file---list
-#qsubRun input.bam.list.7 
-#qsubRun input.bam.list.0 
-#qsubRun input.bam.list.1 
-
-#qsubRun input.bam.list.2 
-
-##------g
 
 delBam() {
   bamlist=$1
@@ -72,5 +58,37 @@ delBam() {
   echo "#----DONE----"
 }
 
+###-------function----end--------
+
+#----data folder:
+dataDir=/ifs/scratch/c2b2/TCGA/data/BRCA/WXS
+outDir=$(pwd)
+
+###---------run-----using--input---file---list
+#qsubRun input.bam.list.7 
+#qsubRun input.bam.list.0 
+#qsubRun input.bam.list.1 
+#qsubRun input.bam.list.2 
+#qsubRun input.bam.list.3 
+qsubRun input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part1_10
+##------g
+
 #delBam input.bam.list.0
 #delBam input.bam.list.1
+#delBam input.bam.list.2
+#delBam input.bam.list.3
+
+# touch input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt
+# for inputlist in input.bam.list.4 input.bam.list.5 input.bam.list.6
+# do
+#   grep -f ../../data/sampleInfo/brca_wgs_bam_summary_02042014.tsv_TumorSample $inputlist >> input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt
+# done 
+
+# qsubRun input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt
+# echo "/ifs/scratch/c2b2/TCGA/data/BRCA/WXS/TCGA-A7-A26G-01A-21D-A167-09.bam" > input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt_rescue1
+# qsubRun input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt_rescue1
+
+
+###------whole genome sequence
+# cd ../../data/wgs
+#grep -f brca_wgs_bam_summary_02042014.tsv_TumorSampleOverlapRNAseq /ifs/scratch/c2b2/TCGA/data/BRCA/WXS/input_gtdownload_v2.txt_part2|cut -f1 >> ../../result/indelCall/input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt

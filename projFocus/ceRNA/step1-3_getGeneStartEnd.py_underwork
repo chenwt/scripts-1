@@ -1,0 +1,67 @@
+#!/usr/bin/env python
+#J.HE
+#Desp: used to get single start and end for each gene instead of transcripts for entrez_annotation_hg19.txt file
+#input: entrez_annotation_hg19.txt
+#output: entrez_annotation_hg19_unique.txt
+##COMMENT: inputfile well sorted by genenames
+
+import sys
+inpFile = "entrez_annotation_hg19.txt"
+outFile = "entrez_annotation_hg19_unique.txt"
+
+argv = sys.argv[1:]
+try:
+  opts,args = getopt.getopt(argv,"hi:d:o:",["ifile=","dbfile'","ofile="])
+except getopt.GetoptError:
+  print 'python annot_SNP.py -i <inputfile> -d <snp annotation file> -o <output file name>' 
+  sys.exit(2)
+for opt, arg in opts:
+  if opt == '-h':
+    print 'python annot_SNP.py -i <inputfile> -d <snp annotation file> -o <output file name>' 
+    sys.exit()
+  elif opt in ("-i","--ifile"):
+    inpFile = arg
+  elif opt in ("-o","--ofile"):
+    outFile = arg
+    outlog = outFile + ".log"
+
+print('Input file:' + inp1)
+print('Database file:' + inp2)
+print('Output file:'+ outp)
+print('Log file:'+ outlog)
+outlogf = open(outlog,"w")
+
+outFileHandler = open(outFile,'w')
+cntLine = 0 
+geneDict = {}
+with open(inpFile) as f:
+  for line in f.readlines():
+    if cntLine == 0:
+      geneInfoOld = ["gene", "chrom", "start","end","strand"]
+    else:
+      [geneId, chrom,  strand, start, end] = line.strip().split("\t")
+      val_prev = geneDict.get(geneId, 'False')
+      # if geneDict.has_key(geneId):
+      if val_prev and chrom == val_prev[0] and strand == val_prev[1]:
+	if strand = "+" and (int(start) < val_prev[2] or int(end) > val_prev[3]):
+	  geneDict[geneId] = [ chrom,  strand, int(start), int(end)]
+	elif strand = "-" and (int(start) > val_prev[2] or int(end) < val_prev[3]):
+	  geneDict[geneId] = [ chrom,  strand, int(start), int(end)]
+      else:
+	geneDict[geneId] = [ chrom,  strand, int(start), int(end)]
+      # chrom = chrom.replace("chr","") 
+          if int(geneInfoCrt[2]) < int(geneInfoOld[2]) :
+            geneInfoOld[2]  = start
+          elif int(geneInfoCrt[3]) > int(geneInfoOld[3]) :
+            geneInfoOld[3]  = end
+	  continue
+      elif geneInfoOld and not geneInfoOld[0] == geneId : 
+        # compare to update or not 
+        outFileHandler.write( "\t".join(geneInfoOld) + "\n" )
+	geneInfoOld = geneInfoCrt 
+    cntLine = cntLine + 1
+
+print "line processed:\t" + str(cntLine)
+print "#----END---"
+outFileHandler.close()
+

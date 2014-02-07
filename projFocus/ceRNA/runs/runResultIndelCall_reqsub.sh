@@ -73,8 +73,8 @@ check() {
 }
 
 #check input.bam.list.0
-check input.bam.list.1
-check input.bam.list.7
+check input.bam.list.2
+check input.bam.list.3
 
 
 ##submit job for final vcf file

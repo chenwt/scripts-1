@@ -13,7 +13,7 @@ do
 	old=$(echo ${LINE} | awk '{print $1}')
 	if [ ! -f $new ]
 	then
-	  cmd="mv $old $new"
+	  cmd="ln -s $old $new"
 	  $cmd
 	  echo $new >>$log
 	  let count++

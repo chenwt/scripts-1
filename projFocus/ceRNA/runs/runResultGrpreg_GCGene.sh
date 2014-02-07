@@ -127,20 +127,30 @@ wd=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/grpreg/test
 # ln -s /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/snp/brca_gene_snp_KWtest.mat.anno.adjPass_1e-06.mat_GWASgene.mat brca_gene_snp_KWtest.mat.anno.adjPass_1e-06.mat_GWASgene.mat 
 snpFile=brca_gene_snp_KWtest.mat.anno.adjPass_1e-06.mat_GWASgene.mat
 
-getGenelist 
+# getGenelist 
+# while read gene
+# do
+#   extractAllData4Gene_GCgene ${gene}
+# done < gene.list
+
+# genelist=$wd/gene.list
+ outputFile="grplasso_coeff_" 
+# echo  "FOXQ1" > FOXQ1.list
+ # genelist=$wd/FOXQ1.list
+ # runGrplasso $genelist 
+ # runFilterGrpLasso 0.05
+echo "cleaning files..."
 while read gene
 do
-  extractAllData4Gene_GCgene ${gene}
+  rm ${gene}*
 done < gene.list
 
-genelist=$wd/gene.list
-outputFile="grplasso_coeff" 
-runGrplasso $genelist 
-runFilterGrpLasso 0.05
 
-rm ${gene}*
 ##---get significant genes(snp significantly contribute)
  #/ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/grpLassoSNP.r --exp ESR1_brca_exp_l3_731_DEG.mat.singleTSS.anno --snp input_test_reg_snp.mat --cnv ESR1_brca_gene_DEG_cnv_731.mat --som ESR1_brca_somForDeg.mat --type 1 --plot 0 --out grplasso_
 
 # mkdir run001
 # mv grplasso* run001 
+
+
+###---

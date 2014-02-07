@@ -1,0 +1,1421 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Background and Questions	ceRNA/doc/projFocusCeRNA_GCgene.tex	/^\\section{Background and Questions}$/;"	s
+Background and Questions	ceRNA/doc/projFocusCeRNAproposal.tex	/^\\section{Background and Questions}$/;"	s
+Gene	ceRNA/filterSNP_utest_KWtest_v3.py	/^class Gene:$/;"	c
+Gene	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^class Gene:$/;"	c
+Methods	ceRNA/doc/projFocusCeRNA_GCgene.tex	/^\\section{Methods}$/;"	s
+Methods	ceRNA/doc/projFocusCeRNAproposal.tex	/^\\section{Methods}$/;"	s
+Node	ceRNA/test/bst/binary_tree.py	/^class Node:$/;"	c
+Num2	ceRNA/doc/projFocusWorkFlow_main.html	/^<a name=Num2>&nbsp<\/a>$/;"	a
+Num3	ceRNA/doc/projFocusWorkFlow_main.html	/^<a name=Num3>&nbsp<\/a>$/;"	a
+Num4	ceRNA/doc/projFocusWorkFlow_main.html	/^<a name=Num4>&nbsp<\/a>$/;"	a
+Set	ceRNA/getSomMutMatrix.py	/^from sets import Set$/;"	i
+Set	ceRNA/getSomMutMatrix_v2.py	/^from sets import Set$/;"	i
+__init__	ceRNA/filterSNP_utest_KWtest_v3.py	/^  def __init__(self, name, chrom, pos, strand, val):$/;"	m	class:Gene
+__init__	ceRNA/test/bst/binary_tree.py	/^    def __init__(self, data):$/;"	m	class:Node
+__init__	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  def __init__(self, name, chrom, pos, strand, val):$/;"	m	class:Gene
+__lt__	ceRNA/filterSNP_utest_KWtest_v3.py	/^  def __lt__(self, other):$/;"	m	class:Gene	file:
+__lt__	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  def __lt__(self, other):$/;"	m	class:Gene	file:
+a	ceRNA/filterSNP.py	/^a=[open(i,'r',81920) for i in farray]$/;"	v
+a	ceRNA/filterSNP_noHWE.py	/^			a = [j for j in range(len(allsamples)) if allsamples[j] not in samples]$/;"	v
+a	ceRNA/filterSNP_noHWE.py	/^	a = [j for j in range(len(conf)) if(conf[j] < conf_cut)]$/;"	v
+a	ceRNA/makeMatRnaseql3.py	/^a=[open(i,'r',81920) for i in farray]$/;"	v
+a	ceRNA/makeMatRnaseql3.py.bak	/^a=[open(i,'r',81920) for i in farray]$/;"	v
+a	ceRNA/makeMat_General.py	/^a=[open(i,'r',163840) for i in farray]$/;"	v
+a	ceRNA/makeMat_SNP.py	/^a=[open(i,'r',81920) for i in farray]$/;"	v
+a	ceRNA/makeMat_SNP_v1.py	/^a=[open(i,'r',81920) for i in farray]$/;"	v
+allChroms	ceRNA/filterSNP_utest_KWtest_v2.py	/^allChroms = map(str,range(22)) + ['X','Y','x','y']$/;"	v
+allChroms	ceRNA/filterSNP_utest_KWtest_v3.py	/^allChroms = map(str,range(24)) + ['X','Y','x','y']$/;"	v
+allChroms	ceRNA/mergeExpCNV.py	/^allChroms = map(str,range(22)) + ['X','Y']$/;"	v
+allChroms	ceRNA/mergeExpSomMutation.py	/^allChroms = map(str,range(22)) + ['X','Y']$/;"	v
+allChroms	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^allChroms = map(str,range(22)) + ['X','Y']$/;"	v
+allChroms	ceRNA/test/filterSNP_test.py	/^allChroms = map(str,range(22)) + ['X','Y','x','y']$/;"	v
+allChroms	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^allChroms = map(str,range(24)) + ['X','Y','x','y']$/;"	v
+allGene	ceRNA/getSomMutMatrix.py	/^allGene = Set()$/;"	v
+allGene	ceRNA/getSomMutMatrix_v2.py	/^allGene = Set()$/;"	v
+allNewId	ceRNA/getSomMutMatrix_v2.py	/^allNewId = []$/;"	v
+allgt	ceRNA/filterSNP.py	/^		allgt = gt		$/;"	v
+allgt	ceRNA/filterSNP_noHWE.py	/^	allgt = gt		$/;"	v
+allgt	ceRNA/makeMat_SNP.py	/^		allgt = gt		$/;"	v
+allgt	ceRNA/makeMat_SNP_v1.py	/^		allgt = gt		$/;"	v
+allsamples	ceRNA/filterSNP.py	/^  allsamples = [" "] * nsample$/;"	v
+allsamples	ceRNA/filterSNP_noHWE.py	/^  allsamples = [" "] * nsample$/;"	v
+allsamples	ceRNA/makeMatRnaseql3.py	/^  allsamples = [" "] * (cntCol + 1)$/;"	v
+allsamples	ceRNA/makeMatRnaseql3.py.bak	/^  allsamples = [" "] * (cntCol + 1)$/;"	v
+allsamples	ceRNA/makeMat_General.py	/^  allsamples = [" "] * (cntCol + 1)$/;"	v
+allsamples	ceRNA/makeMat_SNP.py	/^  allsamples = [" "] * nsample$/;"	v
+allsamples	ceRNA/makeMat_SNP_v1.py	/^  allsamples = [" "] * nsample$/;"	v
+amp_cut	ceRNA/mergeExpCNV.py	/^amp_cut	   = float(0.3)$/;"	v
+amp_cut	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^amp_cut = float(0.3)$/;"	v
+amp_cut	ceRNA/test/do_grpLassoSNP.py	/^amp_cut = 0.3$/;"	v
+amp_cut	ceRNA/test/make_Mat_cnvByGene_level3.py	/^amp_cut = float(0.3)$/;"	v
+args	ceRNA/test/logitReg.py	/^                                  args = (mX, vY), gtol = 1e-3)$/;"	v
+argv	ceRNA/annotSNP_v1.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/annotSNP_v2.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/annotSomMutation.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/annot_SNP.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/annot_SNP.py.bak	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/compareFileCols.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/compareFileRows.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/convertEntrezAnno2GeneAnno.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/extractSNPmat.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/filterIndel.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/filterSNP_utest_KWtest.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/filterSNP_utest_KWtest.py.bak	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/filterSNP_utest_KWtest_v1.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/filterSNP_utest_KWtest_v2.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/filterSNP_utest_KWtest_v3.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/getCols.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/getSingleTSS_exp.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/getSomMutMatrix.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/getSomMutMatrix_v2.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/get_tss_anno_byGene.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/makeMatRnaseql3.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/makeMatRnaseql3.py.bak	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/makeMat_General.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/makeMat_SNP.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/makeMat_SNP_v1.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/make_Mat_cnv_level3.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/mergeExpCNV.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/mergeExpSomMutation.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/compareFileCols.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/filterIndel.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/filterSNP_test.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/indelCallFillter.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/linkSNP_EXP.py	/^argv = sys.argv[1:]$/;"	v
+argv	ceRNA/test/make_Mat_cnvByGene_level3.py	/^argv = sys.argv[1:]$/;"	v
+beta2M	ceRNA/do_Beta2M_meth.py	/^def beta2M(x):$/;"	f
+binarySearch	ceRNA/filterSNP_utest_KWtest_v3.py	/^def binarySearch(chromPosArray, pos):$/;"	f
+binarySearch	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def binarySearch(chromPosArray, pos):$/;"	f
+check	ceRNA/runs/runResultIndelCall_reqsub.sh	/^check() {$/;"	f
+children_count	ceRNA/test/bst/binary_tree.py	/^    def children_count(self):$/;"	m	class:Node
+chrArrayExp	ceRNA/filterSNP_utest_KWtest.py	/^chrArrayExp = [{} for _ in range(24)]$/;"	v
+chrArrayExp	ceRNA/filterSNP_utest_KWtest.py.bak	/^chrArrayExp = [{} for _ in range(24)]$/;"	v
+chrArrayExp	ceRNA/filterSNP_utest_KWtest_v1.py	/^chrArrayExp = [{} for _ in range(24)]$/;"	v
+chrArrayExp	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^chrArrayExp = [{} for _ in range(24)]$/;"	v
+chrArrayExp	ceRNA/test/linkSNP_EXP.py	/^chrArrayExp = [{}] * 24$/;"	v
+chrFilterSNP	ceRNA/runs/runResultSNP.sh	/^function chrFilterSNP(){$/;"	f
+chrFilterSNP_v2	ceRNA/runs/runResultSNP.sh	/^function chrFilterSNP_v2(){$/;"	f
+chrPosArray	ceRNA/test/mergeMeth27_45.py	/^chrPosArray = []$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest.py	/^					chrom = 23$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest.py	/^					chrom = 24$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest.py	/^				chrom = int(chrom)$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest.py.bak	/^					chrom = 23$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest.py.bak	/^					chrom = 24$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest.py.bak	/^				chrom = int(chrom)$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest_v1.py	/^					chrom = 23$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest_v1.py	/^					chrom = 24$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest_v1.py	/^				chrom = int(chrom)$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest_v2.py	/^        chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/filterSNP_utest_KWtest_v3.py	/^      chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/getSingleStartEnd.py	/^      chrom = chrom.replace("chr","") $/;"	v
+chrom	ceRNA/mergeExpCNV.py	/^	     chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/mergeExpCNV.py	/^	chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/mergeExpSomMutation.py	/^	chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/mergeExpSomMutation.py	/^          chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^	     chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^	chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^        chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/test/filterSNP_test.py	/^        chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^					chrom = 23$/;"	v
+chrom	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^					chrom = 24$/;"	v
+chrom	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^				chrom = int(chrom)$/;"	v
+chrom	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^      chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/test/linkSNP_EXP.py	/^					chrom = 23$/;"	v
+chrom	ceRNA/test/linkSNP_EXP.py	/^					chrom = 24$/;"	v
+chrom	ceRNA/test/linkSNP_EXP.py	/^				chrom = int(chrom)$/;"	v
+chrom	ceRNA/test/make_Mat_cnvByGene_level3.py	/^          chrom = chrom2Num(chrom)$/;"	v
+chrom	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      chrom = chrom2Num(chrom)$/;"	v
+chrom2Num	ceRNA/filterSNP_utest_KWtest_v2.py	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/filterSNP_utest_KWtest_v3.py	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/mergeExpCNV.py	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/mergeExpSomMutation.py	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/test/filterSNP_test.py	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def chrom2Num(chrom):$/;"	f
+chrom2Num	ceRNA/test/make_Mat_cnvByGene_level3.py	/^def chrom2Num(chrom):$/;"	f
+chromArray	ceRNA/filterSNP_utest_KWtest_v2.py	/^chromArray = [[] for _ in range(24)] ##sort chrom pos information$/;"	v
+chromArray	ceRNA/filterSNP_utest_KWtest_v3.py	/^chromArray = [[] for _ in range(24)] ##sort chrom pos information$/;"	v
+chromArray	ceRNA/mergeExpCNV.py	/^chromArray = [[] for _ in range(24)]$/;"	v
+chromArray	ceRNA/mergeExpSomMutation.py	/^chromArray = [[] for _ in range(24)] #keep all position for each chrom$/;"	v
+chromArray	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^chromArray = [[] for _ in range(24)]$/;"	v
+chromArray	ceRNA/test/filterSNP_test.py	/^chromArray = [[] for _ in range(24)] ##sort chrom pos information$/;"	v
+chromArray	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^chromArray = [[] for _ in range(24)] ##sort chrom pos information$/;"	v
+chromArray	ceRNA/test/make_Mat_cnvByGene_level3.py	/^chromArray = [[] for _ in range(24)]$/;"	v
+chromDict	ceRNA/filterSNP_utest_KWtest_v2.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/filterSNP_utest_KWtest_v3.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/mergeExpCNV.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/mergeExpSomMutation.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/test/filterSNP_test.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromDict	ceRNA/test/make_Mat_cnvByGene_level3.py	/^chromDict = [{} for _ in range(24)]$/;"	v
+chromID	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^  chromID = num2Chrom(idx) $/;"	v
+chromID	ceRNA/test/make_Mat_cnvByGene_level3.py	/^  chromID = num2Chrom(idx) $/;"	v
+chroms	ceRNA/filterSNP_utest_KWtest.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/filterSNP_utest_KWtest.py.bak	/^chroms = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/filterSNP_utest_KWtest_v1.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/filterSNP_utest_KWtest_v2.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/filterSNP_utest_KWtest_v3.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/test/filterSNP_test.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^chroms	  = range(1,23) + ['X','Y','x','y'] + map(str,range(1,23))$/;"	v
+chroms	ceRNA/test/linkSNP_EXP.py	/^chroms = range(1,23) + ['X','Y']$/;"	v
+clr_cut	ceRNA/test/indelCallFillter.py	/^clr_cut = 1$/;"	v
+cnt	ceRNA/getSingleTSS_exp.py	/^	  cnt = cnt + 1$/;"	v
+cnt	ceRNA/getSingleTSS_exp.py	/^cnt = 0$/;"	v
+cntCol	ceRNA/makeMatRnaseql3.py	/^cntCol = file_len(inp)$/;"	v
+cntCol	ceRNA/makeMatRnaseql3.py.bak	/^cntCol = file_len(inp)$/;"	v
+cntCol	ceRNA/makeMat_General.py	/^cntCol = file_len(inp)$/;"	v
+cntGene	ceRNA/getSomMutMatrix.py	/^    cntGene = cntGene + 1$/;"	v
+cntGene	ceRNA/getSomMutMatrix.py	/^cntGene = 0$/;"	v
+cntGene	ceRNA/getSomMutMatrix_v2.py	/^    cntGene = cntGene + 1$/;"	v
+cntGene	ceRNA/getSomMutMatrix_v2.py	/^cntGene = 0$/;"	v
+cntGene	ceRNA/mergeExpSomMutation.py	/^    cntGene = cntGene + 1$/;"	v
+cntGene	ceRNA/mergeExpSomMutation.py	/^cntGene = 1$/;"	v
+cntLine	ceRNA/getSingleStartEnd.py	/^    cntLine = cntLine + 1$/;"	v
+cntLine	ceRNA/getSingleStartEnd.py	/^cntLine = 0 $/;"	v
+cntLine	ceRNA/getSomMutMatrix.py	/^cntLine = 0 $/;"	v
+cntLine	ceRNA/getSomMutMatrix_v2.py	/^cntLine = 0 $/;"	v
+cntOut	ceRNA/extractSNPmat.py	/^	    cntOut = cntOut + 1$/;"	v
+cntOut	ceRNA/extractSNPmat.py	/^cntOut = 0 $/;"	v
+cntUnmapped	ceRNA/convertEntrezAnno2GeneAnno.py	/^	cntUnmapped = cntUnmapped + 1$/;"	v
+cntUnmapped	ceRNA/convertEntrezAnno2GeneAnno.py	/^cntUnmapped = 0$/;"	v
+cnt_f1	ceRNA/filterSNP.py	/^			cnt_f1 = cnt_f1 + 1$/;"	v
+cnt_f1	ceRNA/filterSNP.py	/^cnt_f1 = 0$/;"	v
+cnt_f1	ceRNA/filterSNP_noHWE.py	/^		cnt_f1 = cnt_f1 + 1$/;"	v
+cnt_f1	ceRNA/filterSNP_noHWE.py	/^cnt_f1 = 0$/;"	v
+cnt_f1	ceRNA/makeMat_SNP.py	/^			cnt_f1 = cnt_f1 + 1$/;"	v
+cnt_f1	ceRNA/makeMat_SNP.py	/^cnt_f1 = 0$/;"	v
+cnt_f1	ceRNA/makeMat_SNP_v1.py	/^			cnt_f1 = cnt_f1 + 1$/;"	v
+cnt_f1	ceRNA/makeMat_SNP_v1.py	/^cnt_f1 = 0$/;"	v
+cnt_f2	ceRNA/filterSNP.py	/^				cnt_f2 = cnt_f2 + 1$/;"	v
+cnt_f2	ceRNA/filterSNP.py	/^cnt_f2 = 0$/;"	v
+cnt_f2	ceRNA/filterSNP_noHWE.py	/^			cnt_f2 = cnt_f2 + 1$/;"	v
+cnt_f2	ceRNA/filterSNP_noHWE.py	/^cnt_f2 = 0$/;"	v
+cnt_f2	ceRNA/makeMat_SNP.py	/^				cnt_f2 = cnt_f2 + 1$/;"	v
+cnt_f2	ceRNA/makeMat_SNP.py	/^cnt_f2 = 0$/;"	v
+cnt_f2	ceRNA/makeMat_SNP_v1.py	/^				cnt_f2 = cnt_f2 + 1$/;"	v
+cnt_f2	ceRNA/makeMat_SNP_v1.py	/^cnt_f2 = 0$/;"	v
+cnt_f3	ceRNA/filterSNP.py	/^					cnt_f3 = cnt_f3 + 1$/;"	v
+cnt_f3	ceRNA/filterSNP.py	/^cnt_f3 = 0$/;"	v
+cnt_f3	ceRNA/filterSNP_noHWE.py	/^cnt_f3 = 0$/;"	v
+cnt_f3	ceRNA/makeMat_SNP_v1.py	/^					cnt_f3 = cnt_f3 + 1$/;"	v
+cnt_f3	ceRNA/makeMat_SNP_v1.py	/^cnt_f3 = 0$/;"	v
+cnt_line	ceRNA/filterIndel.py	/^                  cnt_line = cnt_line + 1$/;"	v
+cnt_line	ceRNA/filterIndel.py	/^cnt_line = 0 $/;"	v
+cnt_line	ceRNA/test/filterIndel.py	/^                  cnt_line = cnt_line + 1$/;"	v
+cnt_line	ceRNA/test/filterIndel.py	/^cnt_line = 0 $/;"	v
+cnt_line	ceRNA/test/indelCallFillter.py	/^                  cnt_line = cnt_line + 1$/;"	v
+cnt_line	ceRNA/test/indelCallFillter.py	/^cnt_line = 0 $/;"	v
+cnt_out	ceRNA/annotSNP_v1.py	/^	cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/annotSNP_v1.py	/^cnt_out = 0$/;"	v
+cnt_out	ceRNA/annotSNP_v2.py	/^	cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/annotSNP_v2.py	/^cnt_out = 0$/;"	v
+cnt_out	ceRNA/annotSomMutation.py	/^	cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/annotSomMutation.py	/^cnt_out = 0$/;"	v
+cnt_out	ceRNA/annot_SNP.py	/^	cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/annot_SNP.py	/^cnt_out = 0$/;"	v
+cnt_out	ceRNA/do_Beta2M_meth.py	/^cnt_out = 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest.py	/^							cnt_out  = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest.py	/^cnt_out	    = 0 $/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v1.py	/^							cnt_out  = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v1.py	/^    cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v1.py	/^cnt_out	    = 0 $/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v1.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v2.py	/^                cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v2.py	/^        cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v2.py	/^cnt_out          = 0$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v2.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v3.py	/^          cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v3.py	/^        cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v3.py	/^cnt_out          = 0$/;"	v
+cnt_out	ceRNA/filterSNP_utest_KWtest_v3.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/make_Mat_cnv_level3.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/mergeExpCNV.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      cnt_out = cnt_out + 1 $/;"	v
+cnt_out	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/test/filterSNP_test.py	/^                cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/filterSNP_test.py	/^        cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/filterSNP_test.py	/^cnt_out          = 0$/;"	v
+cnt_out	ceRNA/test/filterSNP_test.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^							cnt_out  = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^    cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^cnt_out	    = 0 $/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^          cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^        cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^cnt_out          = 0$/;"	v
+cnt_out	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^cnt_out = 0 $/;"	v
+cnt_out	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      cnt_out = cnt_out + 1$/;"	v
+cnt_out	ceRNA/test/make_Mat_cnvByGene_level3.py	/^cnt_out = 0 $/;"	v
+cnt_p	ceRNA/filterSNP_utest_KWtest_v3.py	/^          cnt_p = cnt_p + 1$/;"	v
+cnt_p	ceRNA/filterSNP_utest_KWtest_v3.py	/^cnt_p = 0$/;"	v
+cnt_p	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^          cnt_p = cnt_p + 1$/;"	v
+cnt_p	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^cnt_p = 0$/;"	v
+cnt_res	ceRNA/filterIndel.py	/^                              cnt_res = cnt_res + 1$/;"	v
+cnt_res	ceRNA/filterIndel.py	/^cnt_res = 0$/;"	v
+cnt_res	ceRNA/test/filterIndel.py	/^                              cnt_res = cnt_res + 1$/;"	v
+cnt_res	ceRNA/test/filterIndel.py	/^cnt_res = 0$/;"	v
+cnt_res	ceRNA/test/indelCallFillter.py	/^                              cnt_res = cnt_res + 1$/;"	v
+cnt_res	ceRNA/test/indelCallFillter.py	/^cnt_res = 0$/;"	v
+cnt_snp	ceRNA/filterSNP_utest_KWtest_v3.py	/^    cnt_snp = cnt_snp + 1 $/;"	v
+cnt_snp	ceRNA/filterSNP_utest_KWtest_v3.py	/^cnt_snp = 0 $/;"	v
+cnt_snp	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^    cnt_snp = cnt_snp + 1 $/;"	v
+cnt_snp	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^cnt_snp = 0 $/;"	v
+colN1	ceRNA/compareFileCols.py	/^colN1 = map(mySubstr,colNames1)$/;"	v
+colN1	ceRNA/test/compareFileCols.py	/^colN1 = map(mySubstr,colNames1)$/;"	v
+colN2	ceRNA/compareFileCols.py	/^colN2 = map(mySubstr,colNames2)$/;"	v
+colN2	ceRNA/test/compareFileCols.py	/^colN2 = map(mySubstr,colNames2)$/;"	v
+colNames1	ceRNA/compareFileCols.py	/^      colNames1 = line.strip().split("\\t")[4:]$/;"	v
+colNames1	ceRNA/test/compareFileCols.py	/^      colNames1 = line.strip().split("\\t")[4:]$/;"	v
+colNames2	ceRNA/compareFileCols.py	/^      colNames2 = line.strip().split("\\t")[4:]$/;"	v
+colNames2	ceRNA/test/compareFileCols.py	/^      colNames2 = line.strip().split("\\t")[4:]$/;"	v
+col_new	ceRNA/getCols.py	/^      col_new = [col_old[i] for i in index_col2keep]  $/;"	v
+col_old	ceRNA/getCols.py	/^      col_old = line.strip().split("\\t")$/;"	v
+collections	ceRNA/filterIndel.py	/^import collections$/;"	i
+collections	ceRNA/test/filterIndel.py	/^import collections$/;"	i
+collections	ceRNA/test/indelCallFillter.py	/^import collections$/;"	i
+colnames_new	ceRNA/getCols.py	/^colnames_new = []$/;"	v
+colnames_old	ceRNA/getCols.py	/^      colnames_old = line.strip().split("\\t")$/;"	v
+colnames_old	ceRNA/getCols.py	/^      colnames_old = line.strip().split("\\t")[4:]$/;"	v
+combineLog	ceRNA/runs/runResultSNP.sh	/^combineLog(){$/;"	f
+combineSnpMatrix4Genes	ceRNA/runs/runResultSNP.sh	/^combineSnpMatrix4Genes() {$/;"	f
+comm	ceRNA/compareFileCols.py	/^comm = list(set(colN1)&set(colN2))$/;"	v
+comm	ceRNA/test/compareFileCols.py	/^comm = list(set(colN1)&set(colN2))$/;"	v
+compare_trees	ceRNA/test/bst/binary_tree.py	/^    def compare_trees(self, node):$/;"	m	class:Node
+conf	ceRNA/filterSNP.py	/^	conf = [0] * nsample$/;"	v
+conf	ceRNA/filterSNP_noHWE.py	/^	conf = [0] * nsample$/;"	v
+conf	ceRNA/makeMat_SNP.py	/^	conf = [0] * nsample$/;"	v
+conf	ceRNA/makeMat_SNP_v1.py	/^	conf = [0] * nsample$/;"	v
+conf_cut	ceRNA/filterSNP.py	/^conf_cut = 0.01$/;"	v
+conf_cut	ceRNA/filterSNP_noHWE.py	/^conf_cut = 0.01$/;"	v
+conf_cut	ceRNA/makeMat_SNP.py	/^conf_cut = 0.1 #confidence > 0.1$/;"	v
+conf_cut	ceRNA/makeMat_SNP_v1.py	/^conf_cut = 0.1$/;"	v
+count	ceRNA/compareFileRows.py	/^      count = count + 1$/;"	v
+count	ceRNA/compareFileRows.py	/^count = 0 $/;"	v
+cutoff	ceRNA/filterSNP_utest_KWtest.py	/^cutoff	  = 1,000,000$/;"	v
+cutoff	ceRNA/filterSNP_utest_KWtest.py.bak	/^cutoff = 100000000$/;"	v
+cutoff	ceRNA/filterSNP_utest_KWtest_v1.py	/^cutoff	  = 1000000$/;"	v
+cutoff	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^cutoff	  = 1000000$/;"	v
+cutoff	ceRNA/test/linkSNP_EXP.py	/^cutoff = 1000000$/;"	v
+d	ceRNA/get_tss_anno_byGene.py	/^d = {}$/;"	v
+data	ceRNA/test/logitReg.py	/^data = np.loadtxt('data.csv', delimiter=',', skiprows=1)$/;"	v
+delBam	ceRNA/runs/runResultIndelCall.sh	/^delBam() {$/;"	f
+del_cut	ceRNA/mergeExpCNV.py	/^del_cut	   = float(-0.3)$/;"	v
+del_cut	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^del_cut = float(-0.3)$/;"	v
+del_cut	ceRNA/test/do_grpLassoSNP.py	/^del_cut = -0.3$/;"	v
+del_cut	ceRNA/test/make_Mat_cnvByGene_level3.py	/^del_cut = float(-0.3)$/;"	v
+delete	ceRNA/test/bst/binary_tree.py	/^    def delete(self, data):$/;"	m	class:Node
+dp34_cut	ceRNA/filterIndel.py	/^dp34_cut = 3$/;"	v
+dp34_cut	ceRNA/test/filterIndel.py	/^dp34_cut = 3$/;"	v
+dp34_cut	ceRNA/test/indelCallFillter.py	/^dp34_cut = 3$/;"	v
+dp3_cut	ceRNA/filterIndel.py	/^dp3_cut = 1$/;"	v
+dp3_cut	ceRNA/test/filterIndel.py	/^dp3_cut = 1$/;"	v
+dp3_cut	ceRNA/test/indelCallFillter.py	/^dp3_cut = 1$/;"	v
+dp4_cut	ceRNA/filterIndel.py	/^dp4_cut = 1$/;"	v
+dp4_cut	ceRNA/test/filterIndel.py	/^dp4_cut = 1$/;"	v
+dp4_cut	ceRNA/test/indelCallFillter.py	/^dp4_cut = 1$/;"	v
+dp_cut	ceRNA/filterIndel.py	/^dp_cut = 10$/;"	v
+dp_cut	ceRNA/test/filterIndel.py	/^dp_cut = 10$/;"	v
+dp_cut	ceRNA/test/indelCallFillter.py	/^dp_cut = 10$/;"	v
+dpnorm_cut	ceRNA/test/indelCallFillter.py	/^dpnorm_cut = 1$/;"	v
+e	ceRNA/filterSNP_utest_KWtest.py.bak	/^							e = chrArrayExp[chrom - 1][key][2]$/;"	v
+es	ceRNA/test/linkSNP_EXP.py	/^							es = len(tempLen)$/;"	v
+example	ceRNA/annotSNP_v2.py	/^example = '~\/tools\/python\/Python_current\/python annot_SNP.py -i ~\/SCRATCH\/projFocus\/ceRNA\/data\/snpArray\/brca_snp_brca_snp_level3_839.mat -d ~\/SCRATCH\/database\/projFocusRef\/ann    ot_GenomeWideSNP_6_5cols_clean.txt -o ~\/SCRATCH\/projFocus\/ceRNA\/data\/snpArray\/brca_snp_839.mat.annot'$/;"	v
+example	ceRNA/extractSNPmat.py	/^example = 'python \/ifs\/home\/c2b2\/ac_lab\/jh3283\/scripts\/projFocus\/ceRNA\/extractSNPmat.py -i <input snpid> -m <input snp annoataed matrix> -o <output>'$/;"	v
+example	ceRNA/makeMat_SNP.py	/^example = '~\/tools\/python\/Python_current\/python makMat_SNP.py -i \/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/projFocus\/ceRNA\/data\/snpArray\/input_makMat_SNP_tumorComm.txt -o \/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/projFocus\/ceRNA\/data\/snpArray\/brca_snp_tumor_731.mat' $/;"	v
+example	ceRNA/mergeExpSomMutation.py	/^example = "python mergeExpSomMutation.py -s \/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/projFocus\/ceRNA\/data\/somaticMutation\/brca_som_selectedSample_level2.mat.5colanno -e \/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/projFocus\/ceRNA\/result\/exp\/brca_exp_l3_731_DEG.mat.singleTSS.anno -o brca_somForDeg.mat  "$/;"	v
+example	ceRNA/test/indelCallFillter.py	/^example="Example:" $/;"	v
+exp	ceRNA/filterSNP_utest_KWtest.py	/^							exp	      = map(float,re.compile("\\s+").split(exp_data.strip()))$/;"	v
+exp	ceRNA/filterSNP_utest_KWtest.py.bak	/^							exp = map(float,re.compile("\\s+").split(e.strip()))$/;"	v
+exp	ceRNA/filterSNP_utest_KWtest_v1.py	/^							exp	      = map(float,re.compile("\\s+").split(exp_data.strip()))$/;"	v
+exp	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^							exp	      = map(float,re.compile("\\s+").split(exp_data.strip()))$/;"	v
+expGene	ceRNA/mergeExpSomMutation.py	/^	      expGene = genePosDict[(chrom,str(p))]$/;"	v
+expSomLink	ceRNA/mergeExpSomMutation.py	/^expSomLink = []$/;"	v
+exp_data	ceRNA/filterSNP_utest_KWtest.py	/^							exp_data      = chrArrayExp[chrom - 1][key][2]$/;"	v
+exp_data	ceRNA/filterSNP_utest_KWtest.py.bak	/^							exp_data = chrArrayExp[chrom - 1][key][2]$/;"	v
+exp_data	ceRNA/filterSNP_utest_KWtest_v1.py	/^							exp_data      = chrArrayExp[chrom - 1][key][2]$/;"	v
+exp_data	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^							exp_data      = chrArrayExp[chrom - 1][key][2]$/;"	v
+exp_data	ceRNA/test/linkSNP_EXP.py	/^							exp_data = chrArrayExp[chrom - 1][key][2]$/;"	v
+expgene	ceRNA/filterSNP_utest_KWtest_v3.py	/^            expgene = chromArray[chrom][index]$/;"	v
+expgene	ceRNA/filterSNP_utest_KWtest_v3.py	/^        expgene = chromArray[chrom][index]$/;"	v
+expgene	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^            expgene = chromArray[chrom][index]$/;"	v
+expgene	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^        expgene = chromArray[chrom][index]$/;"	v
+expt	ceRNA/makeMatRnaseql3.py	/^	expt=[0] * cntCol$/;"	v
+expt	ceRNA/makeMatRnaseql3.py.bak	/^	expt=[0] * cntCol$/;"	v
+expt	ceRNA/makeMat_General.py	/^	expt=[0] * cntCol$/;"	v
+expval	ceRNA/filterSNP_utest_KWtest_v2.py	/^                expval = map(float,genePosDict[(chrom,genePos)][1].split("\\t"))$/;"	v
+expval	ceRNA/filterSNP_utest_KWtest_v3.py	/^          expval = map(float,expgene.val.split("\\t"))$/;"	v
+expval	ceRNA/test/filterSNP_test.py	/^                expval = map(float,genePosDict[(chrom,genePos)][1].split("\\t"))$/;"	v
+expval	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^          expval = map(float,expgene.val.split("\\t"))$/;"	v
+extractAllData4Gene	ceRNA/runs/runResultFtest.sh	/^function extractAllData4Gene()$/;"	f
+extractAllData4Gene_GCgene	ceRNA/runs/runResultFtest.sh	/^function extractAllData4Gene_GCgene()$/;"	f
+extractAllData4Gene_GCgene	ceRNA/runs/runResultFtest_GCGene.sh	/^function extractAllData4Gene_GCgene()$/;"	f
+extractAllData4Gene_GCgene	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function extractAllData4Gene_GCgene()$/;"	f
+extractOneData4Gene	ceRNA/runs/runResultFtest.sh	/^function extractOneData4Gene()$/;"	f
+extractOneData4Gene	ceRNA/runs/runResultFtest_GCGene.sh	/^function extractOneData4Gene()$/;"	f
+extractOneData4Gene	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function extractOneData4Gene()$/;"	f
+extractsnp	ceRNA/runs/runValidation1k.sh	/^extractsnp(){$/;"	f
+farray	ceRNA/filterSNP.py	/^farray=[]$/;"	v
+farray	ceRNA/makeMatRnaseql3.py	/^farray=[]$/;"	v
+farray	ceRNA/makeMatRnaseql3.py.bak	/^farray=[]$/;"	v
+farray	ceRNA/makeMat_General.py	/^farray=[]$/;"	v
+farray	ceRNA/makeMat_SNP.py	/^farray=[]$/;"	v
+farray	ceRNA/makeMat_SNP_v1.py	/^farray=[]$/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest.py	/^fdr_cut	  = 1e-8  $/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest.py.bak	/^fdr_cut = 1e-8  $/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v1.py	/^    fdr_cut = arg$/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v1.py	/^fdr_cut	  = 1e-8  $/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v1.py	/^fdr_cut = float(fdr_cut)$/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v2.py	/^     fdr_cut = arg$/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v2.py	/^fdr_cut	  = 0.5  $/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v2.py	/^fdr_cut = float(fdr_cut)$/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v3.py	/^fdr_cut	  = 1e-6 $/;"	v
+fdr_cut	ceRNA/filterSNP_utest_KWtest_v3.py	/^fdr_cut = float(fdr_cut)$/;"	v
+fdr_cut	ceRNA/test/filterSNP_test.py	/^     fdr_cut = arg$/;"	v
+fdr_cut	ceRNA/test/filterSNP_test.py	/^fdr_cut	  = 0.5  $/;"	v
+fdr_cut	ceRNA/test/filterSNP_test.py	/^fdr_cut = float(fdr_cut)$/;"	v
+fdr_cut	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^    fdr_cut = arg$/;"	v
+fdr_cut	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^fdr_cut	  = 1e-8  $/;"	v
+fdr_cut	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^fdr_cut = float(fdr_cut)$/;"	v
+fdr_cut	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^fdr_cut	  = 1e-6 $/;"	v
+fdr_cut	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^fdr_cut = float(fdr_cut)$/;"	v
+fhout	ceRNA/extractSNPmat.py	/^fhout  = open(output,'w') $/;"	v
+file_len	ceRNA/filterSNP.py	/^def file_len(fname):$/;"	f
+file_len	ceRNA/filterSNP_noHWE.py	/^def file_len(fname):$/;"	f
+file_len	ceRNA/makeMatRnaseql3.py	/^def file_len(fname):$/;"	f
+file_len	ceRNA/makeMatRnaseql3.py.bak	/^def file_len(fname):$/;"	f
+file_len	ceRNA/makeMat_General.py	/^def file_len(fname):$/;"	f
+file_len	ceRNA/makeMat_SNP.py	/^def file_len(fname):$/;"	f
+file_len	ceRNA/makeMat_SNP_v1.py	/^def file_len(fname):$/;"	f
+filter_val	ceRNA/filterIndel.py	/^filter_val ='PASS'$/;"	v
+fisherTest	ceRNA/filterSNP.py	/^def fisherTest(gtlist):$/;"	f
+fisherTest	ceRNA/filterSNP_noHWE.py	/^def fisherTest(gtlist):$/;"	f
+fisherTest	ceRNA/makeMat_SNP_v1.py	/^def fisherTest(gtlist):$/;"	f
+fisher_cut	ceRNA/filterSNP.py	/^fisher_cut =  0.001$/;"	v
+fisher_cut	ceRNA/makeMat_SNP_v1.py	/^fisher_cut =  10**(-8)$/;"	v
+flag	ceRNA/do_Beta2M_meth.py	/^def flag(x):$/;"	f
+flag	ceRNA/filterIndel.py	/^			     flag = 0$/;"	v
+flag	ceRNA/filterIndel.py	/^                             flag = 0  $/;"	v
+flag	ceRNA/filterIndel.py	/^                             flag = 0$/;"	v
+flag	ceRNA/filterIndel.py	/^                        flag=1$/;"	v
+flag	ceRNA/test/filterIndel.py	/^                                    flag = 0 $/;"	v
+flag	ceRNA/test/filterIndel.py	/^                             flag = 0 $/;"	v
+flag	ceRNA/test/filterIndel.py	/^                             flag = 0$/;"	v
+flag	ceRNA/test/filterIndel.py	/^                        flag=1$/;"	v
+flag	ceRNA/test/indelCallFillter.py	/^                                    flag = 0 $/;"	v
+flag	ceRNA/test/indelCallFillter.py	/^                             flag = 0 $/;"	v
+flag	ceRNA/test/indelCallFillter.py	/^                             flag = 0$/;"	v
+flag	ceRNA/test/indelCallFillter.py	/^                        flag=1$/;"	v
+flag_header	ceRNA/filterIndel.py	/^flag_header = 1 $/;"	v
+flag_header	ceRNA/test/filterIndel.py	/^                             flag_header = 0$/;"	v
+flag_header	ceRNA/test/filterIndel.py	/^flag_header = 1 $/;"	v
+flag_header	ceRNA/test/indelCallFillter.py	/^                             flag_header = 0$/;"	v
+flag_header	ceRNA/test/indelCallFillter.py	/^flag_header = 1 $/;"	v
+fnArray	ceRNA/make_Mat_cnv_level3.py	/^fnArray = []$/;"	v
+fnArray	ceRNA/mergeExpCNV.py	/^fnArray = []$/;"	v
+fnArray	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^fnArray = []$/;"	v
+fnArray	ceRNA/test/make_Mat_cnvByGene_level3.py	/^fnArray = []$/;"	v
+fntempf	ceRNA/make_Mat_cnv_level3.py	/^   fntempf = open(fn)$/;"	v
+fntempf	ceRNA/mergeExpCNV.py	/^    fntempf = open(fn)$/;"	v
+fntempf	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    fntempf = open(fn)$/;"	v
+fntempf	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    fntempf = open(fn)$/;"	v
+formatArray	ceRNA/test/filterIndel.py	/^                        formatArray = format.split(":")$/;"	v
+formatArray	ceRNA/test/indelCallFillter.py	/^                        formatArray = format.split(":")$/;"	v
+fout	ceRNA/filterSNP.py	/^fout = open(outp,'w')$/;"	v
+fout	ceRNA/filterSNP_noHWE.py	/^fout = open(outp,'w')$/;"	v
+fout	ceRNA/makeMatRnaseql3.py	/^fout = open(outp,'w')$/;"	v
+fout	ceRNA/makeMatRnaseql3.py.bak	/^fout = open(outp,'w')$/;"	v
+fout	ceRNA/makeMat_General.py	/^fout = open(outp,'w')$/;"	v
+fout	ceRNA/makeMat_SNP.py	/^fout = open(outp,'w')$/;"	v
+fout	ceRNA/makeMat_SNP_v1.py	/^fout = open(outp,'w')$/;"	v
+fout2	ceRNA/filterSNP.py	/^fout2 = open(outpstat,'w')$/;"	v
+fout2	ceRNA/filterSNP_noHWE.py	/^fout2 = open(outpstat,'w')$/;"	v
+fout2	ceRNA/makeMatRnaseql3.py	/^fout2 = open(outlog,'w')$/;"	v
+fout2	ceRNA/makeMatRnaseql3.py.bak	/^fout2 = open(outlog,'w')$/;"	v
+fout2	ceRNA/makeMat_General.py	/^fout2 = open(outlog,'w')$/;"	v
+fout2	ceRNA/makeMat_SNP.py	/^fout2 = open(outpstat,'w')$/;"	v
+fout2	ceRNA/makeMat_SNP_v1.py	/^fout2 = open(outpstat,'w')$/;"	v
+fpgeneArray	ceRNA/test/filterIndel.py	/^fpgeneArray = []$/;"	v
+fpgeneArray	ceRNA/test/indelCallFillter.py	/^fpgeneArray = []$/;"	v
+ftest	ceRNA/filterSNP.py	/^				ftest = fisherTest(gt)$/;"	v
+ftest	ceRNA/makeMat_SNP_v1.py	/^				ftest = fisherTest(gt)$/;"	v
+funcClass_type	ceRNA/test/filterIndel.py	/^funcClass_type = 'synonymousSNV'$/;"	v
+funcClass_type	ceRNA/test/indelCallFillter.py	/^funcClass_type = 'synonymousSNV'$/;"	v
+g	ceRNA/test/linkSNP_EXP.py	/^							g = chrArrayExp[chrom - 1][key][2]$/;"	v
+gene	ceRNA/filterSNP_utest_KWtest_v3.py	/^      gene = Gene(identifier, chrom, pos, strand, val)$/;"	v
+gene	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^      gene = Gene(identifier, chrom, pos, strand, val)$/;"	v
+gene	ceRNA/test/linkSNP_EXP.py	/^							gene = map(int,re.compile("\\s+").split(g.strip()))$/;"	v
+geneDict	ceRNA/getSingleTSS_exp.py	/^geneDict = {}$/;"	v
+geneInfoCrt	ceRNA/getSingleStartEnd.py	/^      geneInfoCrt = [geneId, chrom, start, end, strand]$/;"	v
+geneInfoOld	ceRNA/getSingleStartEnd.py	/^	geneInfoOld = geneInfoCrt $/;"	v
+geneInfoOld	ceRNA/getSingleStartEnd.py	/^        geneInfoOld = geneInfoCrt $/;"	v
+geneInfoOld	ceRNA/getSingleStartEnd.py	/^      geneInfoOld = ["gene","chrom","start","end","strand"]$/;"	v
+geneMutTemp	ceRNA/getSomMutMatrix.py	/^    geneMutTemp = [] * len(sampleName)$/;"	v
+geneMutTemp	ceRNA/getSomMutMatrix_v2.py	/^    geneMutTemp = [] * len(sampleName)$/;"	v
+genePosDict	ceRNA/filterSNP_utest_KWtest_v2.py	/^genePosDict  = {} ## stor chrom_pos genename, values mapping information$/;"	v
+genePosDict	ceRNA/filterSNP_utest_KWtest_v3.py	/^genePosDict  = {} ## stor chrom_pos genename, values mapping information$/;"	v
+genePosDict	ceRNA/mergeExpCNV.py	/^genePosDict  = {}$/;"	v
+genePosDict	ceRNA/mergeExpSomMutation.py	/^genePosDict  = {} #keep all chr, pos identifier information$/;"	v
+genePosDict	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^genePosDict  = {}$/;"	v
+genePosDict	ceRNA/test/filterSNP_test.py	/^genePosDict  = {} ## stor chrom_pos genename, values mapping information$/;"	v
+genePosDict	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^genePosDict  = {} ## stor chrom_pos genename, values mapping information$/;"	v
+gene_es	ceRNA/test/linkSNP_EXP.py	/^							gene_es = [gene[i] for i in tempLen]$/;"	v
+genename	ceRNA/filterSNP_utest_KWtest.py	/^							genename      = chrArrayExp[chrom - 1][key][0]$/;"	v
+genename	ceRNA/filterSNP_utest_KWtest_v1.py	/^							genename      = chrArrayExp[chrom - 1][key][0]$/;"	v
+genename	ceRNA/filterSNP_utest_KWtest_v2.py	/^                genename = genePosDict[(chrom,genePos)][0]		#[zscore,pval] = rUTest(exp,snpval)$/;"	v
+genename	ceRNA/filterSNP_utest_KWtest_v3.py	/^          genename = expgene.name$/;"	v
+genename	ceRNA/test/filterSNP_test.py	/^                genename = genePosDict[(chrom,genePos)][0]		#[zscore,pval] = rUTest(exp,snpval)$/;"	v
+genename	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^							genename      = chrArrayExp[chrom - 1][key][0]$/;"	v
+genename	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^          genename = expgene.name$/;"	v
+getCerna	ceRNA/runs/runResultBridge_GCGene.sh	/^function getCerna(){$/;"	f
+getGeneCerna	ceRNA/runs/runResultBridge_GCGene.sh	/^function getGeneCerna(){$/;"	f
+getGenelist	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function getGenelist(){$/;"	f
+getNcol2Test	ceRNA/test/README.sh	/^getNcol2Test() {$/;"	f
+get_MAF	ceRNA/filterSNP.py	/^def get_MAF(gtlist):$/;"	f
+get_MAF	ceRNA/filterSNP_noHWE.py	/^def get_MAF(gtlist):$/;"	f
+get_MAF	ceRNA/makeMat_SNP.py	/^def get_MAF(gtlist):$/;"	f
+get_MAF	ceRNA/makeMat_SNP_v1.py	/^def get_MAF(gtlist):$/;"	f
+get_nth_line	ceRNA/filterSNP.py	/^def get_nth_line(f,n):$/;"	f
+get_nth_line	ceRNA/filterSNP_noHWE.py	/^def get_nth_line(f,n):$/;"	f
+get_nth_line	ceRNA/makeMat_SNP.py	/^def get_nth_line(f,n):$/;"	f
+get_nth_line	ceRNA/makeMat_SNP_v1.py	/^def get_nth_line(f,n):$/;"	f
+getopt	ceRNA/annotSNP_v1.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/annotSNP_v2.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/annotSomMutation.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/annot_SNP.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/annot_SNP.py.bak	/^import sys, getopt$/;"	i
+getopt	ceRNA/compareFileCols.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/compareFileRows.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/convertEntrezAnno2GeneAnno.py	/^import getopt$/;"	i
+getopt	ceRNA/do_Beta2M_meth.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/extractSNPmat.py	/^import os,sys,getopt$/;"	i
+getopt	ceRNA/filterIndel.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/filterSNP_utest_KWtest.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/filterSNP_utest_KWtest.py.bak	/^import sys, getopt$/;"	i
+getopt	ceRNA/filterSNP_utest_KWtest_v1.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/filterSNP_utest_KWtest_v2.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/filterSNP_utest_KWtest_v3.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/getCols.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/getSingleTSS_exp.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/getSomMutMatrix.py	/^import getopt$/;"	i
+getopt	ceRNA/getSomMutMatrix_v2.py	/^import getopt$/;"	i
+getopt	ceRNA/makeMatRnaseql3.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/makeMatRnaseql3.py.bak	/^import sys, getopt$/;"	i
+getopt	ceRNA/makeMat_General.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/makeMat_SNP.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/makeMat_SNP_v1.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/make_Mat_cnv_level3.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/mergeExpCNV.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/mergeExpSomMutation.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^import sys, getopt$/;"	i
+getopt	ceRNA/test/compareFileCols.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/test/do_grpLassoSNP.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/test/filterIndel.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/test/filterSNP_test.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/test/indelCallFillter.py	/^import sys,getopt$/;"	i
+getopt	ceRNA/test/linkSNP_EXP.py	/^import sys, getopt$/;"	i
+getopt	ceRNA/test/make_Mat_cnvByGene_level3.py	/^import sys, getopt$/;"	i
+grpCNV	ceRNA/runs/runResultFtest.sh	/^function grpCNV (){$/;"	f
+grpCNV	ceRNA/runs/runResultFtest_GCGene.sh	/^function grpCNV (){$/;"	f
+grpCNV	ceRNA/runs/runResultGrpreg.sh	/^function grpCNV (){$/;"	f
+grpLasso	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function grpLasso (){$/;"	f
+gsCont	ceRNA/getSomMutMatrix.py	/^def gsCont(gene,sample):$/;"	f
+gsCont	ceRNA/getSomMutMatrix_v2.py	/^def gsCont(gene,sample):$/;"	f
+gt	ceRNA/filterSNP.py	/^			gt = [ gt[i] for i in temp ]$/;"	v
+gt	ceRNA/filterSNP.py	/^	gt = [0] * nsample$/;"	v
+gt	ceRNA/filterSNP_noHWE.py	/^		gt = [ gt[i] for i in a ]$/;"	v
+gt	ceRNA/filterSNP_noHWE.py	/^	gt = [0] * nsample$/;"	v
+gt	ceRNA/makeMat_SNP.py	/^	gt = [0] * nsample$/;"	v
+gt	ceRNA/makeMat_SNP_v1.py	/^	gt = [0] * nsample$/;"	v
+gtnorm_cut	ceRNA/test/indelCallFillter.py	/^gtnorm_cut = '0\/0'$/;"	v
+header	ceRNA/test/mergeMeth27_45.py	/^      header = tempKey + "\\t" + val$/;"	v
+headerExp	ceRNA/filterSNP_utest_KWtest_v2.py	/^      headerExp = line.strip().split("\\t",4)[4]$/;"	v
+headerExp	ceRNA/filterSNP_utest_KWtest_v3.py	/^  headerExp = line.strip().split("\\t",4)[4]$/;"	v
+headerExp	ceRNA/mergeExpCNV.py	/^      headerExp = line.strip()$/;"	v
+headerExp	ceRNA/mergeExpSomMutation.py	/^      headerExp = line.strip()$/;"	v
+headerExp	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      headerExp = line.strip()$/;"	v
+headerExp	ceRNA/test/filterSNP_test.py	/^      headerExp = line.strip().split("\\t",4)[4]$/;"	v
+headerExp	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  headerExp = line.strip().split("\\t",4)[4]$/;"	v
+headerExp	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      headerExp = line.strip()$/;"	v
+headerMeth	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      headerMeth = line.strip()$/;"	v
+headerMeth	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      headerMeth = line.strip()$/;"	v
+headerSnp	ceRNA/filterSNP_utest_KWtest_v2.py	/^      headerSnp = line.strip().split("\\t",4)[4]$/;"	v
+headerSnp	ceRNA/filterSNP_utest_KWtest_v3.py	/^  headerSnp = line.strip().split("\\t",4)[4]$/;"	v
+headerSnp	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      headerSnp = line.strip()$/;"	v
+headerSnp	ceRNA/test/filterSNP_test.py	/^      headerSnp = line.strip().split("\\t",4)[4]$/;"	v
+headerSnp	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  headerSnp = line.strip().split("\\t",4)[4]$/;"	v
+headerSnp	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      headerSnp = line.strip()$/;"	v
+header_snpSample	ceRNA/filterSNP_utest_KWtest.py	/^			header_snpSample = line.strip().split("\\t",4)[3]$/;"	v
+header_snpSample	ceRNA/filterSNP_utest_KWtest_v1.py	/^			header_snpSample = line.strip().split("\\t",4)[4]$/;"	v
+header_snpSample	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^			header_snpSample = line.strip().split("\\t",4)[4]$/;"	v
+i	ceRNA/filterSNP_utest_KWtest_v3.py	/^    i = i + 1$/;"	v
+i	ceRNA/filterSNP_utest_KWtest_v3.py	/^i = 0$/;"	v
+i	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^    i = i + 1$/;"	v
+i	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^i = 0$/;"	v
+iK	ceRNA/test/logitReg.py	/^iK = mX.shape[1]$/;"	v
+iN	ceRNA/test/logitReg.py	/^iN = mX.shape[0]$/;"	v
+idfile	ceRNA/make_Mat_cnv_level3.py	/^   idfile = idfile + 1$/;"	v
+idfile	ceRNA/make_Mat_cnv_level3.py	/^idfile = -1$/;"	v
+idfile	ceRNA/mergeExpCNV.py	/^    idfile = idfile + 1$/;"	v
+idfile	ceRNA/mergeExpCNV.py	/^idfile = -1$/;"	v
+idfile	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    idfile = idfile + 1$/;"	v
+idfile	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^idfile = -1$/;"	v
+idfile	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    idfile = idfile + 1$/;"	v
+idfile	ceRNA/test/make_Mat_cnvByGene_level3.py	/^idfile = -1$/;"	v
+idx	ceRNA/test/mergeMeth27_45.py	/^        idx = chrPosArray.index(tempKey)$/;"	v
+idxAD	ceRNA/test/filterIndel.py	/^                             idxAD = formatArray.index('AD')$/;"	v
+idxAD	ceRNA/test/indelCallFillter.py	/^                             idxAD = formatArray.index('AD')$/;"	v
+idx_colN1	ceRNA/compareFileCols.py	/^idx_colN1 = [0,1,2,3]$/;"	v
+idx_colN1	ceRNA/test/compareFileCols.py	/^idx_colN1 = [0,1,2,3]$/;"	v
+idx_colN2	ceRNA/compareFileCols.py	/^idx_colN2 = [0,1,2,3]$/;"	v
+idx_colN2	ceRNA/test/compareFileCols.py	/^idx_colN2 = [0,1,2,3]$/;"	v
+inRegion	ceRNA/test/bst/binary_tree.py	/^    def inRegion(seg1,seg2):$/;"	m	class:Node
+in_file	ceRNA/get_tss_anno_byGene.py	/^in_file = argv[0]$/;"	v
+index	ceRNA/filterSNP_utest_KWtest_v3.py	/^          index = index + 1$/;"	v
+index	ceRNA/filterSNP_utest_KWtest_v3.py	/^      index = binarySearch(chromArray[chrom], tempStart)$/;"	v
+index	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^          index = index + 1$/;"	v
+index	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^      index = binarySearch(chromArray[chrom], tempStart)$/;"	v
+index_col2keep	ceRNA/getCols.py	/^      index_col2keep = [0,1,2,3] + map(lambda x:x+4,[a for a in range(len(colnames_old)) if colnames_old[a] in colnames_new])$/;"	v
+infoArray	ceRNA/filterIndel.py	/^                        infoArray = info.split(";")$/;"	v
+infoArray	ceRNA/test/filterIndel.py	/^                        infoArray = info.split(";")$/;"	v
+infoArray	ceRNA/test/indelCallFillter.py	/^                        infoArray = info.split(";")$/;"	v
+infoDict	ceRNA/filterIndel.py	/^                        infoDict = {}$/;"	v
+infoDict	ceRNA/test/filterIndel.py	/^                        infoDict = {}$/;"	v
+infoDict	ceRNA/test/indelCallFillter.py	/^                        infoDict = {}$/;"	v
+inp	ceRNA/filterIndel.py	/^            inp = arg$/;"	v
+inp	ceRNA/filterSNP.py	/^inp = "input_filter_GT_bottom436.txt"$/;"	v
+inp	ceRNA/filterSNP_noHWE.py	/^inp = "input_filter_GT_top400.txt"$/;"	v
+inp	ceRNA/makeMatRnaseql3.py	/^     inp = arg$/;"	v
+inp	ceRNA/makeMatRnaseql3.py	/^inp = ''$/;"	v
+inp	ceRNA/makeMatRnaseql3.py.bak	/^     inp = arg$/;"	v
+inp	ceRNA/makeMatRnaseql3.py.bak	/^inp = ''$/;"	v
+inp	ceRNA/makeMat_General.py	/^     inp = arg$/;"	v
+inp	ceRNA/makeMat_General.py	/^inp = ''$/;"	v
+inp	ceRNA/makeMat_SNP.py	/^    inp = arg$/;"	v
+inp	ceRNA/makeMat_SNP.py	/^inp = ''$/;"	v
+inp	ceRNA/makeMat_SNP_v1.py	/^    inp = arg$/;"	v
+inp	ceRNA/makeMat_SNP_v1.py	/^inp = ''$/;"	v
+inp	ceRNA/make_Mat_cnv_level3.py	/^    inp = arg$/;"	v
+inp	ceRNA/test/filterIndel.py	/^            inp = arg$/;"	v
+inp	ceRNA/test/indelCallFillter.py	/^            inp = arg$/;"	v
+inp1	ceRNA/annotSNP_v1.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/annotSNP_v1.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/annotSNP_v2.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/annotSNP_v2.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/annotSomMutation.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/annotSomMutation.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/annot_SNP.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/annot_SNP.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/annot_SNP.py.bak	/^    inp1 = arg$/;"	v
+inp1	ceRNA/annot_SNP.py.bak	/^inp1 = ''$/;"	v
+inp1	ceRNA/compareFileCols.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/compareFileCols.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/compareFileRows.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/compareFileRows.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/do_Beta2M_meth.py	/^inp1 = sys.argv[1]$/;"	v
+inp1	ceRNA/filterSNP_utest_KWtest.py.bak	/^    inp1 = arg$/;"	v
+inp1	ceRNA/filterSNP_utest_KWtest.py.bak	/^inp1 = ''$/;"	v
+inp1	ceRNA/getCols.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/getCols.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/test/compareFileCols.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/test/compareFileCols.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/test/linkSNP_EXP.py	/^    inp1 = arg$/;"	v
+inp1	ceRNA/test/linkSNP_EXP.py	/^inp1 = ''$/;"	v
+inp1	ceRNA/test/mergeMeth27_45.py	/^inp1=sys.argv[1]$/;"	v
+inp1Dict	ceRNA/annotSNP_v1.py	/^inp1Dict = {}$/;"	v
+inp1Dict	ceRNA/annotSNP_v2.py	/^inp1Dict = {}$/;"	v
+inp1Dict	ceRNA/annotSomMutation.py	/^inp1Dict = {}$/;"	v
+inp1Dict	ceRNA/annot_SNP.py	/^inp1Dict = {}$/;"	v
+inp1Dict	ceRNA/annot_SNP.py.bak	/^inp1Dict = {}$/;"	v
+inp1Dict	ceRNA/compareFileRows.py	/^inp1Dict = {}$/;"	v
+inp2	ceRNA/annotSNP_v1.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/annotSNP_v1.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/annotSNP_v2.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/annotSNP_v2.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/annotSomMutation.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/annotSomMutation.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/annot_SNP.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/annot_SNP.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/annot_SNP.py.bak	/^    inp2 = arg$/;"	v
+inp2	ceRNA/annot_SNP.py.bak	/^inp2 = ''$/;"	v
+inp2	ceRNA/compareFileCols.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/compareFileCols.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/compareFileRows.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/compareFileRows.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/filterSNP_utest_KWtest.py.bak	/^    inp2 = arg$/;"	v
+inp2	ceRNA/filterSNP_utest_KWtest.py.bak	/^inp2 = ''$/;"	v
+inp2	ceRNA/test/compareFileCols.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/test/compareFileCols.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/test/linkSNP_EXP.py	/^    inp2 = arg$/;"	v
+inp2	ceRNA/test/linkSNP_EXP.py	/^inp2 = ''$/;"	v
+inp2	ceRNA/test/mergeMeth27_45.py	/^inp2=sys.argv[2]$/;"	v
+inpAnno	ceRNA/annotGeneByStartEndPos.py	/^inpAnno="\/ifs\/scratch\/c2b2\/ac_lab\/rs3412\/no1\/net\/entrez_annotation_hg19.txt"$/;"	v
+inpExpFile	ceRNA/mergeExpSomMutation.py	/^    inpExpFile = arg$/;"	v
+inpFile	ceRNA/convertEntrezAnno2GeneAnno.py	/^    inpFile = arg$/;"	v
+inpFile	ceRNA/getSingleStartEnd.py	/^inpFile = "entrez_annotation_hg19.txt"$/;"	v
+inpR	ceRNA/test/mergeMeth27_45.py	/^  inpR = pid + "-Re.somatic.FINAL"$/;"	v
+inpSomFile	ceRNA/mergeExpSomMutation.py	/^    inpSomFile = arg$/;"	v
+inpT	ceRNA/test/mergeMeth27_45.py	/^  inpT = pid + "-Tu.somatic.FINAL"$/;"	v
+inpc	ceRNA/getCols.py	/^    inpc = arg $/;"	v
+inpc	ceRNA/getCols.py	/^inpc = ''$/;"	v
+inpc	ceRNA/mergeExpCNV.py	/^    inpc = arg$/;"	v
+inpc	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    inpc = arg$/;"	v
+inpc	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    inpc = arg$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest.py	/^    inpe = arg$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest.py	/^inpe = ''$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest_v1.py	/^    inpe = arg$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest_v1.py	/^inpe = ''$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest_v2.py	/^     inpe = arg$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest_v2.py	/^inpe      = ''$/;"	v
+inpe	ceRNA/filterSNP_utest_KWtest_v3.py	/^inpe      = ''$/;"	v
+inpe	ceRNA/getSingleTSS_exp.py	/^inpe = argv[0]$/;"	v
+inpe	ceRNA/test/do_grpLassoSNP.py	/^inpe = 'test_exp_chr22.mat'$/;"	v
+inpe	ceRNA/test/filterSNP_test.py	/^     inpe = arg$/;"	v
+inpe	ceRNA/test/filterSNP_test.py	/^inpe      = ''$/;"	v
+inpe	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^    inpe = arg$/;"	v
+inpe	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^inpe = ''$/;"	v
+inpe	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^inpe      = ''$/;"	v
+inpg	ceRNA/mergeExpCNV.py	/^    inpg = arg$/;"	v
+inpg	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    inpg = arg$/;"	v
+inpg	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    inpg = arg$/;"	v
+inpm	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    inpm = arg$/;"	v
+inpm	ceRNA/test/do_grpLassoSNP.py	/^inpm = 'test_meth_chr22.mat'$/;"	v
+inpm	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    inpm = arg$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest.py	/^    inps = arg$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest.py	/^inps = ''$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest_v1.py	/^    inps = arg$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest_v1.py	/^inps = ''$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest_v2.py	/^     inps = arg$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest_v2.py	/^inps      = ''$/;"	v
+inps	ceRNA/filterSNP_utest_KWtest_v3.py	/^inps      = ''$/;"	v
+inps	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    inps = arg$/;"	v
+inps	ceRNA/test/do_grpLassoSNP.py	/^inps = 'test_snp_chr22.mat'$/;"	v
+inps	ceRNA/test/filterSNP_test.py	/^     inps = arg$/;"	v
+inps	ceRNA/test/filterSNP_test.py	/^inps      = ''$/;"	v
+inps	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^    inps = arg$/;"	v
+inps	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^inps = ''$/;"	v
+inps	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^inps      = ''$/;"	v
+inps	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    inps = arg$/;"	v
+inputID	ceRNA/extractSNPmat.py	/^	  inputID = arg$/;"	v
+inputID	ceRNA/extractSNPmat.py	/^inputID  = ''$/;"	v
+inputMat	ceRNA/extractSNPmat.py	/^          inputMat = arg$/;"	v
+inputMat	ceRNA/extractSNPmat.py	/^inputMat = ''$/;"	v
+insert	ceRNA/test/bst/binary_tree.py	/^    def insert(self, data):$/;"	m	class:Node
+intercept	ceRNA/test/logitReg.py	/^intercept = np.ones(mX.shape[0]).reshape(mX.shape[0], 1)$/;"	v
+isCNV	ceRNA/test/make_Mat_cnvByGene_level3.py	/^def isCNV(x):$/;"	f
+isInRange	ceRNA/filterSNP_utest_KWtest.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/filterSNP_utest_KWtest.py.bak	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/filterSNP_utest_KWtest_v1.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/filterSNP_utest_KWtest_v2.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/filterSNP_utest_KWtest_v3.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/test/filterSNP_test.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def isInRange(x,y,cut):$/;"	f
+isInRange	ceRNA/test/linkSNP_EXP.py	/^def isInRange(x,y,cut):$/;"	f
+key	ceRNA/make_Mat_cnv_level3.py	/^       key = str(chr) + "_" + str(pstart) + "_" + str(pend) $/;"	v
+key	ceRNA/test/do_grpLassoSNP.py	/^      key = chr + ":" + pos  $/;"	v
+keynew	ceRNA/makeMatRnaseql3.py	/^			keynew = key.split("|")[0]$/;"	v
+keynew	ceRNA/makeMatRnaseql3.py.bak	/^			keynew = key.split("|")[1]$/;"	v
+keynew	ceRNA/makeMat_General.py	/^			keynew = line.split("\\t")[0]$/;"	v
+kwTest	ceRNA/filterSNP_utest_KWtest.py	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/filterSNP_utest_KWtest.py.bak	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/filterSNP_utest_KWtest_v1.py	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/filterSNP_utest_KWtest_v2.py	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/filterSNP_utest_KWtest_v3.py	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/test/filterSNP_test.py	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^def kwTest(xlist,ylist):$/;"	f
+kwTest	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def kwTest(xlist,ylist):$/;"	f
+likelihoodScore	ceRNA/test/logitReg.py	/^def likelihoodScore(vBeta, mX, vY):$/;"	f
+line	ceRNA/filterSNP.py	/^			line = f.next()$/;"	v
+line	ceRNA/filterSNP_utest_KWtest_v3.py	/^    line = inpef.readline()$/;"	v
+line	ceRNA/filterSNP_utest_KWtest_v3.py	/^    line = inpsf.readline()$/;"	v
+line	ceRNA/filterSNP_utest_KWtest_v3.py	/^  line = inpef.readline()  $/;"	v
+line	ceRNA/filterSNP_utest_KWtest_v3.py	/^  line = inpef.readline()$/;"	v
+line	ceRNA/filterSNP_utest_KWtest_v3.py	/^  line = inpsf.readline()$/;"	v
+line	ceRNA/makeMatRnaseql3.py	/^			line = f.next()$/;"	v
+line	ceRNA/makeMatRnaseql3.py.bak	/^			line = f.next()$/;"	v
+line	ceRNA/makeMat_General.py	/^			line = f.next()$/;"	v
+line	ceRNA/makeMat_SNP.py	/^			line = f.next()$/;"	v
+line	ceRNA/makeMat_SNP_v1.py	/^			line = f.next()$/;"	v
+line	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^    line = inpef.readline()$/;"	v
+line	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^    line = inpsf.readline()$/;"	v
+line	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  line = inpef.readline()  $/;"	v
+line	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  line = inpef.readline()$/;"	v
+line	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^  line = inpsf.readline()$/;"	v
+line_crt	ceRNA/filterSNP.py	/^				line_crt = line.strip()$/;"	v
+line_crt	ceRNA/filterSNP.py	/^		line_crt = line.strip()$/;"	v
+line_crt	ceRNA/filterSNP.py	/^  	line_crt = line.strip()$/;"	v
+line_crt	ceRNA/filterSNP_noHWE.py	/^				line_crt = line.strip()$/;"	v
+line_crt	ceRNA/filterSNP_noHWE.py	/^			line_crt = line.strip()$/;"	v
+line_crt	ceRNA/filterSNP_noHWE.py	/^	line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMatRnaseql3.py	/^		line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMatRnaseql3.py	/^  	line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMatRnaseql3.py.bak	/^		line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMatRnaseql3.py.bak	/^  	line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_General.py	/^		line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_General.py	/^  	line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_SNP.py	/^		line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_SNP.py	/^  	line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_SNP_v1.py	/^				line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_SNP_v1.py	/^		line_crt = line.strip()$/;"	v
+line_crt	ceRNA/makeMat_SNP_v1.py	/^  	line_crt = line.strip()$/;"	v
+linecache	ceRNA/filterSNP.py	/^import linecache$/;"	i
+linecache	ceRNA/makeMatRnaseql3.py	/^import linecache$/;"	i
+linecache	ceRNA/makeMatRnaseql3.py.bak	/^import linecache$/;"	i
+linecache	ceRNA/makeMat_General.py	/^import linecache$/;"	i
+linecache	ceRNA/makeMat_SNP.py	/^import linecache$/;"	i
+linecache	ceRNA/makeMat_SNP_v1.py	/^import linecache$/;"	i
+logLikelihoodLogit	ceRNA/test/logitReg.py	/^def logLikelihoodLogit(vBeta, mX, vY):$/;"	f
+logLikelihoodLogitVerbose	ceRNA/test/logitReg.py	/^def logLikelihoodLogitVerbose(vBeta, mX, vY):$/;"	f
+logfac	ceRNA/filterSNP.py	/^def logfac(n):$/;"	f
+logfac	ceRNA/filterSNP_noHWE.py	/^def logfac(n):$/;"	f
+logfac	ceRNA/makeMat_SNP.py	/^def logfac(n):$/;"	f
+logfac	ceRNA/makeMat_SNP_v1.py	/^def logfac(n):$/;"	f
+logit	ceRNA/test/logitReg.py	/^def logit(mX, vBeta):$/;"	f
+lookup	ceRNA/test/bst/binary_tree.py	/^    def lookup(self, data, parent=None):$/;"	m	class:Node
+mX	ceRNA/test/logitReg.py	/^mX = data[:, 1:]$/;"	v
+mX	ceRNA/test/logitReg.py	/^mX = np.concatenate((intercept, mX), axis = 1)$/;"	v
+maf	ceRNA/filterSNP.py	/^		   	maf = get_MAF(gt)$/;"	v
+maf	ceRNA/filterSNP_noHWE.py	/^	   	maf = get_MAF(gt)$/;"	v
+maf	ceRNA/makeMat_SNP.py	/^		   	maf = get_MAF(gt)$/;"	v
+maf	ceRNA/makeMat_SNP_v1.py	/^		   	maf = get_MAF(gt)$/;"	v
+mafFile	ceRNA/getSomMutMatrix.py	/^        mafFile = arg$/;"	v
+mafFile	ceRNA/getSomMutMatrix_v2.py	/^        mafFile = arg$/;"	v
+maf_cut	ceRNA/filterSNP.py	/^maf_cut = 0.05$/;"	v
+maf_cut	ceRNA/filterSNP_noHWE.py	/^maf_cut = 0.05$/;"	v
+maf_cut	ceRNA/makeMat_SNP.py	/^maf_cut = 0.05 #minor allele frequence maf > 5%$/;"	v
+maf_cut	ceRNA/makeMat_SNP_v1.py	/^maf_cut = 0.05$/;"	v
+mafnorm	ceRNA/test/filterIndel.py	/^                             mafnorm = int(sample2Alt) \/ int(sample2Ref) $/;"	v
+mafnorm	ceRNA/test/indelCallFillter.py	/^                             mafnorm = int(sample2Alt) \/ int(sample2Ref) $/;"	v
+mafnorm_cut	ceRNA/test/indelCallFillter.py	/^mafnorm_cut = 0.05$/;"	v
+maftum_cut	ceRNA/test/indelCallFillter.py	/^maftum_cut = 0$/;"	v
+mainDict	ceRNA/test/do_grpLassoSNP.py	/^mainDict = {} $/;"	v
+makeNewIdentifier	ceRNA/getSomMutMatrix_v2.py	/^def makeNewIdentifier(gene,chrom,startPos,endPos,strand):$/;"	f
+mapDict	ceRNA/convertEntrezAnno2GeneAnno.py	/^mapDict = {}$/;"	v
+mapFile	ceRNA/convertEntrezAnno2GeneAnno.py	/^    mapFile = arg$/;"	v
+mapFile	ceRNA/convertEntrezAnno2GeneAnno.py	/^  mapFile ="\/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/database\/geneIDconverter\/entrez2gene.txt"$/;"	v
+mapFile	ceRNA/convertEntrezAnno2GeneAnno.py	/^mapFile = ""$/;"	v
+math	ceRNA/do_Beta2M_meth.py	/^import math$/;"	i
+math	ceRNA/filterSNP.py	/^import math$/;"	i
+math	ceRNA/filterSNP_noHWE.py	/^import math$/;"	i
+math	ceRNA/filterSNP_utest_KWtest.py	/^import math$/;"	i
+math	ceRNA/filterSNP_utest_KWtest.py.bak	/^import math$/;"	i
+math	ceRNA/filterSNP_utest_KWtest_v1.py	/^import math$/;"	i
+math	ceRNA/filterSNP_utest_KWtest_v2.py	/^import math$/;"	i
+math	ceRNA/filterSNP_utest_KWtest_v3.py	/^import math$/;"	i
+math	ceRNA/makeMat_SNP.py	/^import math$/;"	i
+math	ceRNA/makeMat_SNP_v1.py	/^import math$/;"	i
+math	ceRNA/test/filterSNP_test.py	/^import math$/;"	i
+math	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^import math$/;"	i
+math	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^import math$/;"	i
+math	ceRNA/test/linkSNP_EXP.py	/^import math$/;"	i
+mpl	ceRNA/test/logitReg.py	/^import matplotlib as mpl$/;"	i
+mq0_cut	ceRNA/test/indelCallFillter.py	/^mq0_cut =  0.1$/;"	v
+mutInfo	ceRNA/getSomMutMatrix.py	/^mutInfo = Set()$/;"	v
+mutInfo	ceRNA/getSomMutMatrix_v2.py	/^mutInfo = Set()$/;"	v
+myCol	ceRNA/mergeExpCNV.py	/^def myCol(matrix,i):$/;"	f
+myCol	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^def myCol(matrix,i):$/;"	f
+myCol	ceRNA/test/make_Mat_cnvByGene_level3.py	/^def myCol(matrix,i):$/;"	f
+mySplit_1	ceRNA/make_Mat_cnv_level3.py	/^def mySplit_1(x):$/;"	f
+mySplit_2	ceRNA/make_Mat_cnv_level3.py	/^def mySplit_2(x):$/;"	f
+mySubstr	ceRNA/compareFileCols.py	/^def mySubstr(x):$/;"	f
+mySubstr	ceRNA/test/compareFileCols.py	/^def mySubstr(x):$/;"	f
+nCNVSamples	ceRNA/mergeExpCNV.py	/^nCNVSamples = len(fnArray)$/;"	v
+nCNVSamples	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^nCNVSamples = len(fnArray)$/;"	v
+nCNVSamples	ceRNA/test/make_Mat_cnvByGene_level3.py	/^nCNVSamples = len(fnArray)$/;"	v
+ncol	ceRNA/filterSNP.py	/^			ncol = ncol + 1$/;"	v
+ncol	ceRNA/filterSNP.py	/^		ncol = 0$/;"	v
+ncol	ceRNA/makeMatRnaseql3.py	/^			ncol = ncol + 1$/;"	v
+ncol	ceRNA/makeMatRnaseql3.py	/^		ncol = 0$/;"	v
+ncol	ceRNA/makeMatRnaseql3.py.bak	/^			ncol = ncol + 1$/;"	v
+ncol	ceRNA/makeMatRnaseql3.py.bak	/^		ncol = 0$/;"	v
+ncol	ceRNA/makeMat_General.py	/^			ncol = ncol + 1$/;"	v
+ncol	ceRNA/makeMat_General.py	/^		ncol = 0$/;"	v
+ncol	ceRNA/makeMat_SNP.py	/^			ncol = ncol + 1$/;"	v
+ncol	ceRNA/makeMat_SNP.py	/^		ncol = 0$/;"	v
+ncol	ceRNA/makeMat_SNP_v1.py	/^			ncol = ncol + 1$/;"	v
+ncol	ceRNA/makeMat_SNP_v1.py	/^		ncol = 0$/;"	v
+nesp	ceRNA/makeMat_General.py	/^     nesp = int(arg)$/;"	v
+nesp	ceRNA/make_Mat_cnv_level3.py	/^nesp = 1$/;"	v
+nesp	ceRNA/mergeExpCNV.py	/^nesp	   = 1$/;"	v
+nesp	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^nesp = 1$/;"	v
+nesp	ceRNA/test/make_Mat_cnvByGene_level3.py	/^nesp = 1$/;"	v
+normalIndex	ceRNA/runs/runResultGrpreg_old.sh	/^normalIndex (){$/;"	f
+np	ceRNA/filterSNP_utest_KWtest.py	/^import numpy as np$/;"	i
+np	ceRNA/filterSNP_utest_KWtest.py.bak	/^import numpy as np$/;"	i
+np	ceRNA/filterSNP_utest_KWtest_v1.py	/^import numpy as np$/;"	i
+np	ceRNA/filterSNP_utest_KWtest_v2.py	/^import numpy as np$/;"	i
+np	ceRNA/filterSNP_utest_KWtest_v3.py	/^import numpy as np$/;"	i
+np	ceRNA/mergeExpSomMutation.py	/^import numpy as np$/;"	i
+np	ceRNA/test/filterSNP_test.py	/^import numpy as np$/;"	i
+np	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^import numpy as np$/;"	i
+np	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^import numpy as np$/;"	i
+np	ceRNA/test/logitReg.py	/^import numpy as np$/;"	i
+nsample	ceRNA/filterSNP.py	/^nsample = file_len(inp)$/;"	v
+nsample	ceRNA/filterSNP_noHWE.py	/^nsample = file_len(inp)$/;"	v
+nsample	ceRNA/makeMat_SNP.py	/^nsample = file_len(inp)$/;"	v
+nsample	ceRNA/makeMat_SNP_v1.py	/^nsample = file_len(inp)$/;"	v
+nsnp	ceRNA/filterSNP.py	/^				nsnp = file_len(line_crt)$/;"	v
+nsnp	ceRNA/filterSNP_noHWE.py	/^				nsnp = file_len(line_crt)$/;"	v
+nsnp	ceRNA/makeMat_SNP_v1.py	/^				nsnp = file_len(line_crt)$/;"	v
+num2Chrom	ceRNA/filterSNP_utest_KWtest_v2.py	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/filterSNP_utest_KWtest_v3.py	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/mergeExpCNV.py	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/mergeExpSomMutation.py	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/test/filterSNP_test.py	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def num2Chrom(num):$/;"	f
+num2Chrom	ceRNA/test/make_Mat_cnvByGene_level3.py	/^def num2Chrom(num):$/;"	f
+nval	ceRNA/makeMat_General.py	/^     nval = int(arg)$/;"	v
+nval	ceRNA/makeMat_General.py	/^nval = 2$/;"	v
+nval	ceRNA/make_Mat_cnv_level3.py	/^nval = 5 - 1$/;"	v
+nval	ceRNA/mergeExpCNV.py	/^nval	   = 5 - 1$/;"	v
+nval	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^nval = 5 - 1$/;"	v
+nval	ceRNA/test/make_Mat_cnvByGene_level3.py	/^nval = 5 - 1$/;"	v
+optimLogit	ceRNA/test/logitReg.py	/^optimLogit = scipy.optimize.fmin_bfgs(logLikelihoodLogitVerbose, $/;"	v
+optimize	ceRNA/test/logitReg.py	/^import scipy.optimize$/;"	i
+os	ceRNA/annotSNP_v1.py	/^import os$/;"	i
+os	ceRNA/annotSNP_v2.py	/^import os$/;"	i
+os	ceRNA/annotSomMutation.py	/^import os$/;"	i
+os	ceRNA/annot_SNP.py	/^import os$/;"	i
+os	ceRNA/annot_SNP.py.bak	/^import os$/;"	i
+os	ceRNA/compareFileCols.py	/^import os$/;"	i
+os	ceRNA/compareFileRows.py	/^import os$/;"	i
+os	ceRNA/convertEntrezAnno2GeneAnno.py	/^import os,sys$/;"	i
+os	ceRNA/do_Beta2M_meth.py	/^import os$/;"	i
+os	ceRNA/extractSNPmat.py	/^import os,sys,getopt$/;"	i
+os	ceRNA/filterIndel.py	/^import os$/;"	i
+os	ceRNA/filterSNP.py	/^import os$/;"	i
+os	ceRNA/filterSNP_noHWE.py	/^import os$/;"	i
+os	ceRNA/filterSNP_utest_KWtest.py	/^import os$/;"	i
+os	ceRNA/filterSNP_utest_KWtest.py.bak	/^import os$/;"	i
+os	ceRNA/filterSNP_utest_KWtest_v1.py	/^import os$/;"	i
+os	ceRNA/filterSNP_utest_KWtest_v2.py	/^import os$/;"	i
+os	ceRNA/filterSNP_utest_KWtest_v3.py	/^import os$/;"	i
+os	ceRNA/getCols.py	/^import os$/;"	i
+os	ceRNA/getSingleTSS_exp.py	/^import os$/;"	i
+os	ceRNA/getSomMutMatrix.py	/^import os,sys$/;"	i
+os	ceRNA/getSomMutMatrix_v2.py	/^import os,sys$/;"	i
+os	ceRNA/get_tss_anno_byGene.py	/^import os$/;"	i
+os	ceRNA/makeMatRnaseql3.py	/^import os$/;"	i
+os	ceRNA/makeMatRnaseql3.py.bak	/^import os$/;"	i
+os	ceRNA/makeMat_General.py	/^import os$/;"	i
+os	ceRNA/makeMat_SNP.py	/^import os$/;"	i
+os	ceRNA/makeMat_SNP_v1.py	/^import os$/;"	i
+os	ceRNA/make_Mat_cnv_level3.py	/^import os$/;"	i
+os	ceRNA/mergeExpCNV.py	/^import os$/;"	i
+os	ceRNA/mergeExpSomMutation.py	/^import os$/;"	i
+os	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^import os$/;"	i
+os	ceRNA/test/compareFileCols.py	/^import os$/;"	i
+os	ceRNA/test/do_grpLassoSNP.py	/^import os$/;"	i
+os	ceRNA/test/filterIndel.py	/^import os$/;"	i
+os	ceRNA/test/filterSNP_test.py	/^import os$/;"	i
+os	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^import os$/;"	i
+os	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^import os$/;"	i
+os	ceRNA/test/indelCallFillter.py	/^import os$/;"	i
+os	ceRNA/test/linkSNP_EXP.py	/^import os$/;"	i
+os	ceRNA/test/logitReg.py	/^import os$/;"	i
+os	ceRNA/test/make_Mat_cnvByGene_level3.py	/^import os$/;"	i
+out	ceRNA/filterIndel.py	/^            out = arg$/;"	v
+out	ceRNA/getCols.py	/^    out = arg$/;"	v
+out	ceRNA/getCols.py	/^out = ''$/;"	v
+out	ceRNA/getSingleTSS_exp.py	/^out = argv[1]$/;"	v
+out	ceRNA/make_Mat_cnv_level3.py	/^    out = arg$/;"	v
+out	ceRNA/mergeExpCNV.py	/^    out = arg$/;"	v
+out	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    out = arg$/;"	v
+out	ceRNA/test/filterIndel.py	/^            out = arg$/;"	v
+out	ceRNA/test/indelCallFillter.py	/^            out = arg$/;"	v
+out	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    out = arg$/;"	v
+out3	ceRNA/test/mergeMeth27_45.py	/^  out3 = pid + "_CommTuRe.txt"$/;"	v
+outFile	ceRNA/convertEntrezAnno2GeneAnno.py	/^    outFile = arg$/;"	v
+outFile	ceRNA/getSingleStartEnd.py	/^outFile = "entrez_annotation_hg19_unique.txt"$/;"	v
+outFile	ceRNA/getSomMutMatrix.py	/^        outFile = arg$/;"	v
+outFile	ceRNA/getSomMutMatrix_v2.py	/^        outFile = arg$/;"	v
+outFile	ceRNA/mergeExpSomMutation.py	/^    outFile = arg$/;"	v
+outFileHander	ceRNA/getSomMutMatrix.py	/^outFileHander = open(outFile,'w')$/;"	v
+outFileHander	ceRNA/getSomMutMatrix_v2.py	/^outFileHander = open(outFile,'w')$/;"	v
+outFileHandler	ceRNA/convertEntrezAnno2GeneAnno.py	/^outFileHandler = open(outFile,'w')$/;"	v
+outFileHandler	ceRNA/getSingleStartEnd.py	/^outFileHandler = open(outFile,'w')$/;"	v
+outFileHandler	ceRNA/mergeExpSomMutation.py	/^outFileHandler = open(outFile,'w')$/;"	v
+outHeader1	ceRNA/annotSNP_v1.py	/^      outHeader1 = line.split("\\t",1)[1]$/;"	v
+outHeader1	ceRNA/annotSNP_v2.py	/^      outHeader1 = line.split("\\t",1)[1]$/;"	v
+outHeader1	ceRNA/annotSomMutation.py	/^      outHeader1 = line.split("\\t",1)[1]$/;"	v
+outHeader1	ceRNA/annot_SNP.py	/^      outHeader1 = line.split("\\t",1)[1]$/;"	v
+outHeader1	ceRNA/annot_SNP.py.bak	/^      outHeader1 = line.split("\\t",1)[1]$/;"	v
+outHeader2	ceRNA/annotSNP_v1.py	/^      outHeader2 = line.strip()$/;"	v
+outHeader2	ceRNA/annotSNP_v2.py	/^      outHeader2 = "\\t".join(map(str,line.strip().split("\\t")[:4]))$/;"	v
+outHeader2	ceRNA/annotSomMutation.py	/^      outHeader2 = line.strip()$/;"	v
+outHeader2	ceRNA/annot_SNP.py	/^      outHeader2 = line.strip()$/;"	v
+outHeader2	ceRNA/annot_SNP.py.bak	/^      outHeader2 = line.strip()$/;"	v
+outKey	ceRNA/annotSNP_v1.py	/^outKey = []$/;"	v
+outKey	ceRNA/annotSNP_v2.py	/^outKey = []$/;"	v
+outKey	ceRNA/annotSomMutation.py	/^outKey = []$/;"	v
+outKey	ceRNA/annot_SNP.py	/^outKey = []$/;"	v
+outMyIdx	ceRNA/compareFileCols.py	/^def outMyIdx(valArray,idxArray):$/;"	f
+outMyIdx	ceRNA/test/compareFileCols.py	/^def outMyIdx(valArray,idxArray):$/;"	f
+outMyIdxFile	ceRNA/compareFileCols.py	/^def outMyIdxFile(filename,out,idx):$/;"	f
+outMyIdxFile	ceRNA/test/compareFileCols.py	/^def outMyIdxFile(filename,out,idx):$/;"	f
+outR	ceRNA/test/mergeMeth27_45.py	/^  outR = pid + "_ReOnly.txt"$/;"	v
+outT	ceRNA/test/mergeMeth27_45.py	/^  outT = pid + "_TuOnly.txt"$/;"	v
+out_file	ceRNA/get_tss_anno_byGene.py	/^out_file = in_file + ".signleTSS"$/;"	v
+outf	ceRNA/filterIndel.py	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/getCols.py	/^outf = open(out,'w')  $/;"	v
+outf	ceRNA/getSingleTSS_exp.py	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/get_tss_anno_byGene.py	/^outf = open(out_file,"w")$/;"	v
+outf	ceRNA/make_Mat_cnv_level3.py	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/mergeExpCNV.py	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/test/filterIndel.py	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/test/indelCallFillter.py	/^outf = open(out,'w')$/;"	v
+outf	ceRNA/test/make_Mat_cnvByGene_level3.py	/^outf = open(out,'w')$/;"	v
+outf3	ceRNA/test/mergeMeth27_45.py	/^outf3 = open(out3, 'w')$/;"	v
+outfR	ceRNA/test/mergeMeth27_45.py	/^outfR = open(outR, 'w')$/;"	v
+outfT	ceRNA/test/mergeMeth27_45.py	/^outfT = open(outT, 'w')$/;"	v
+outlog	ceRNA/annotSNP_v1.py	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/annotSNP_v2.py	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/annotSomMutation.py	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/annot_SNP.py	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/annot_SNP.py.bak	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/compareFileRows.py	/^    outlog = arg + ".log"$/;"	v
+outlog	ceRNA/do_Beta2M_meth.py	/^outlog = inp1 + ".Mval.log"$/;"	v
+outlog	ceRNA/filterIndel.py	/^            outlog = out + ".log"$/;"	v
+outlog	ceRNA/filterSNP_utest_KWtest.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/filterSNP_utest_KWtest.py.bak	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/filterSNP_utest_KWtest_v1.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/filterSNP_utest_KWtest_v2.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/filterSNP_utest_KWtest_v3.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/makeMatRnaseql3.py	/^     outlog = outp + ".log"$/;"	v
+outlog	ceRNA/makeMatRnaseql3.py.bak	/^     outlog = outp + ".log"$/;"	v
+outlog	ceRNA/makeMat_General.py	/^     outlog = outp + ".log"$/;"	v
+outlog	ceRNA/make_Mat_cnv_level3.py	/^    outlog = out + ".log"$/;"	v
+outlog	ceRNA/mergeExpCNV.py	/^    outlog = out + ".log"$/;"	v
+outlog	ceRNA/mergeExpSomMutation.py	/^    outlog = outFile + ".log"$/;"	v
+outlog	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^    outlog = out + ".log"$/;"	v
+outlog	ceRNA/test/filterIndel.py	/^            outlog = out + ".log"$/;"	v
+outlog	ceRNA/test/filterSNP_test.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^outlog = outp + ".log"$/;"	v
+outlog	ceRNA/test/linkSNP_EXP.py	/^    outlog = outp + ".log"$/;"	v
+outlog	ceRNA/test/make_Mat_cnvByGene_level3.py	/^    outlog = out + ".log"$/;"	v
+outlogf	ceRNA/annotSNP_v1.py	/^outlogf = open(outlog,"w")$/;"	v
+outlogf	ceRNA/annotSNP_v2.py	/^outlogf = open(outlog,"w")$/;"	v
+outlogf	ceRNA/annotSomMutation.py	/^outlogf = open(outlog,"w")$/;"	v
+outlogf	ceRNA/annot_SNP.py	/^outlogf = open(outlog,"w")$/;"	v
+outlogf	ceRNA/annot_SNP.py.bak	/^outlogf = open(outlog,"w")$/;"	v
+outlogf	ceRNA/compareFileRows.py	/^outlogf = open(outlog, 'w')$/;"	v
+outlogf	ceRNA/do_Beta2M_meth.py	/^outlogf = open(outlog,'w')$/;"	v
+outlogf	ceRNA/filterIndel.py	/^outlogf = open(outlog,'w')$/;"	v
+outlogf	ceRNA/filterSNP_utest_KWtest.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/filterSNP_utest_KWtest_v1.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/filterSNP_utest_KWtest_v2.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/filterSNP_utest_KWtest_v3.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/make_Mat_cnv_level3.py	/^outlogf = open(outlog,'w')$/;"	v
+outlogf	ceRNA/mergeExpCNV.py	/^outlogf = open(outlog,'w')$/;"	v
+outlogf	ceRNA/mergeExpSomMutation.py	/^outlogf = open(outlog,'w')$/;"	v
+outlogf	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^outlogf = open(outlog,'w')$/;"	v
+outlogf	ceRNA/test/filterSNP_test.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^outlogf	  = open(outlog,'w')$/;"	v
+outlogf	ceRNA/test/make_Mat_cnvByGene_level3.py	/^outlogf = open(outlog,'w')$/;"	v
+outp	ceRNA/annotSNP_v1.py	/^    outp = arg$/;"	v
+outp	ceRNA/annotSNP_v1.py	/^outp = ''$/;"	v
+outp	ceRNA/annotSNP_v2.py	/^    outp = arg$/;"	v
+outp	ceRNA/annotSNP_v2.py	/^outp = ''$/;"	v
+outp	ceRNA/annotSomMutation.py	/^    outp = arg$/;"	v
+outp	ceRNA/annotSomMutation.py	/^outp = ''$/;"	v
+outp	ceRNA/annot_SNP.py	/^    outp = arg$/;"	v
+outp	ceRNA/annot_SNP.py	/^outp = ''$/;"	v
+outp	ceRNA/annot_SNP.py.bak	/^    outp = arg$/;"	v
+outp	ceRNA/annot_SNP.py.bak	/^outp = ''$/;"	v
+outp	ceRNA/compareFileRows.py	/^    outp = arg$/;"	v
+outp	ceRNA/do_Beta2M_meth.py	/^outp = inp1 + ".Mval"$/;"	v
+outp	ceRNA/filterSNP.py	/^outp = "out_filter_GT"$/;"	v
+outp	ceRNA/filterSNP.py	/^outp = outp + str(nsample) + ".txt"$/;"	v
+outp	ceRNA/filterSNP_noHWE.py	/^outp = "out_filter_GT"$/;"	v
+outp	ceRNA/filterSNP_noHWE.py	/^outp = outp + str(nsample) + ".txt"$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest.py	/^    outp = arg$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest.py	/^outp = ''$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest.py	/^outp = outp + "_" + str(fdr_cut)$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest.py.bak	/^    outp = arg$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest.py.bak	/^outp = ''$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest_v1.py	/^    outp = arg$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest_v1.py	/^outp = ''$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest_v2.py	/^     outp = arg$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest_v2.py	/^outp      = ''$/;"	v
+outp	ceRNA/filterSNP_utest_KWtest_v3.py	/^outp      = ''$/;"	v
+outp	ceRNA/makeMatRnaseql3.py	/^     outp = arg$/;"	v
+outp	ceRNA/makeMatRnaseql3.py	/^outp = ''$/;"	v
+outp	ceRNA/makeMatRnaseql3.py.bak	/^     outp = arg$/;"	v
+outp	ceRNA/makeMatRnaseql3.py.bak	/^outp = ''$/;"	v
+outp	ceRNA/makeMat_General.py	/^     outp = arg$/;"	v
+outp	ceRNA/makeMat_General.py	/^outp = ''$/;"	v
+outp	ceRNA/makeMat_SNP.py	/^    outp = arg$/;"	v
+outp	ceRNA/makeMat_SNP.py	/^outp = ''$/;"	v
+outp	ceRNA/makeMat_SNP.py	/^outp = outp +"_" + str(nsample) + ".mat"$/;"	v
+outp	ceRNA/makeMat_SNP_v1.py	/^    outp = arg$/;"	v
+outp	ceRNA/makeMat_SNP_v1.py	/^outp = ''$/;"	v
+outp	ceRNA/makeMat_SNP_v1.py	/^outp = outp +"_" + str(nsample) + ".mat"$/;"	v
+outp	ceRNA/test/filterSNP_test.py	/^     outp = arg$/;"	v
+outp	ceRNA/test/filterSNP_test.py	/^outp      = ''$/;"	v
+outp	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^    outp = arg$/;"	v
+outp	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^outp = ''$/;"	v
+outp	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^outp      = ''$/;"	v
+outp	ceRNA/test/linkSNP_EXP.py	/^    outp = arg$/;"	v
+outp	ceRNA/test/linkSNP_EXP.py	/^outp = ''$/;"	v
+outp1	ceRNA/compareFileCols.py	/^    outp1 = inp1 + ".comm"$/;"	v
+outp1	ceRNA/test/compareFileCols.py	/^    outp1 = inp1 + ".comm"$/;"	v
+outp2	ceRNA/compareFileCols.py	/^    outp2 = inp2 + ".comm"$/;"	v
+outp2	ceRNA/test/compareFileCols.py	/^    outp2 = inp2 + ".comm"$/;"	v
+outpf	ceRNA/annotSNP_v1.py	/^outpf = open(outp,"w")$/;"	v
+outpf	ceRNA/annotSNP_v2.py	/^outpf = open(outp,"w")$/;"	v
+outpf	ceRNA/annotSomMutation.py	/^outpf = open(outp,"w")$/;"	v
+outpf	ceRNA/annot_SNP.py	/^outpf = open(outp,"w")$/;"	v
+outpf	ceRNA/annot_SNP.py.bak	/^outpf = open(outp,"w")$/;"	v
+outpf	ceRNA/compareFileRows.py	/^outpf = open(outp,'w')$/;"	v
+outpf	ceRNA/do_Beta2M_meth.py	/^outpf = open(outp,'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest.py	/^outpf = open(outp".adjPass_" + str(fdr_cutt),'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest.py	/^outpf = open(outp,'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest.py.bak	/^outpf = open(outp,'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest_v1.py	/^outpf	= open(outp + ".adjPass_" + str(fdr_cut),'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest_v1.py	/^outpf = open(outp,'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest_v2.py	/^outpf	= open(outp + ".adjPass_" + str(fdr_cut) + ".mat",'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest_v2.py	/^outpf            = open(outp,'w')$/;"	v
+outpf	ceRNA/filterSNP_utest_KWtest_v3.py	/^outpf	= open(outp + ".adjPass_" + str(fdr_cut) + ".mat",'w')$/;"	v
+outpf	ceRNA/test/filterSNP_test.py	/^outpf	= open(outp + ".adjPass_" + str(fdr_cut) + ".mat",'w')$/;"	v
+outpf	ceRNA/test/filterSNP_test.py	/^outpf            = open(outp,'w')$/;"	v
+outpf	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^outpf	= open(outp + ".adjPass_" + str(fdr_cut),'w')$/;"	v
+outpf	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^outpf = open(outp,'w')$/;"	v
+outpf	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^outpf	= open(outp + ".adjPass_" + str(fdr_cut) + ".mat",'w')$/;"	v
+outpf	ceRNA/test/linkSNP_EXP.py	/^outpf = open(outp,'w')$/;"	v
+outpsnpf	ceRNA/filterSNP_utest_KWtest_v2.py	/^outpsnpf= open(outp + ".adj.snp",'w')$/;"	v
+outpsnpf	ceRNA/filterSNP_utest_KWtest_v3.py	/^outpsnpf= open(outp + ".adj.snp",'w')$/;"	v
+outpsnpf	ceRNA/test/filterSNP_test.py	/^outpsnpf= open(outp + ".adj.snp",'w')$/;"	v
+outpsnpf	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^outpsnpf= open(outp + ".adj.snp",'w')$/;"	v
+outpstat	ceRNA/filterSNP.py	/^outpstat = "out_filter_GT_stat"$/;"	v
+outpstat	ceRNA/filterSNP.py	/^outpstat = outpstat + str(nsample) + ".txt"$/;"	v
+outpstat	ceRNA/filterSNP_noHWE.py	/^outpstat = "out_filter_GT_stat"$/;"	v
+outpstat	ceRNA/filterSNP_noHWE.py	/^outpstat = outpstat + str(nsample) + ".txt"$/;"	v
+outpstat	ceRNA/makeMat_SNP.py	/^    outpstat = outp + "_stat"$/;"	v
+outpstat	ceRNA/makeMat_SNP.py	/^outpstat = outpstat +"_" +  str(nsample) + ".txt"$/;"	v
+outpstat	ceRNA/makeMat_SNP_v1.py	/^    outpstat = outp + "_stat"$/;"	v
+outpstat	ceRNA/makeMat_SNP_v1.py	/^outpstat = outpstat +"_" +  str(nsample) + ".txt"$/;"	v
+output	ceRNA/extractSNPmat.py	/^          output = arg$/;"	v
+output	ceRNA/extractSNPmat.py	/^output   = ''$/;"	v
+pAdj	ceRNA/filterSNP_utest_KWtest.py	/^def pAdj(plist,type):$/;"	f
+pAdj	ceRNA/filterSNP_utest_KWtest_v1.py	/^def pAdj(plist,type):$/;"	f
+pAdj	ceRNA/filterSNP_utest_KWtest_v2.py	/^def pAdj(plist,type):$/;"	f
+pAdj	ceRNA/filterSNP_utest_KWtest_v3.py	/^def pAdj(plist,type):$/;"	f
+pAdj	ceRNA/test/filterSNP_test.py	/^def pAdj(plist,type):$/;"	f
+pAdj	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^def pAdj(plist,type):$/;"	f
+pAdj	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def pAdj(plist,type):$/;"	f
+pSystime	ceRNA/runs/runResultFtest.sh	/^function pSystime()$/;"	f
+pSystime	ceRNA/runs/runResultFtest_GCGene.sh	/^function pSystime()$/;"	f
+pSystime	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function pSystime()$/;"	f
+p_new	ceRNA/filterSNP_utest_KWtest.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_new	ceRNA/filterSNP_utest_KWtest_v1.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_new	ceRNA/filterSNP_utest_KWtest_v2.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_new	ceRNA/filterSNP_utest_KWtest_v3.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_new	ceRNA/test/filterSNP_test.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_new	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_new	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^p_new	= pAdj(p_old,'b')$/;"	v
+p_old	ceRNA/filterSNP_utest_KWtest.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+p_old	ceRNA/filterSNP_utest_KWtest_v1.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+p_old	ceRNA/filterSNP_utest_KWtest_v2.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+p_old	ceRNA/filterSNP_utest_KWtest_v3.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+p_old	ceRNA/test/filterSNP_test.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+p_old	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+p_old	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^p_old	= [row[3] for row in pvalArray]$/;"	v
+pickle	ceRNA/mergeExpSomMutation.py	/^import pickle$/;"	i
+plnorm_cut	ceRNA/test/indelCallFillter.py	/^plnorm_cut = 30$/;"	v
+pltum_cut	ceRNA/test/filterIndel.py	/^pltum_cut = 40$/;"	v
+pltum_cut	ceRNA/test/indelCallFillter.py	/^pltum_cut = 40$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py	/^						pos = max(tempP)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py	/^						pos = min(tempP)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py	/^					pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py	/^				pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py.bak	/^						pos = max(tempP)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py.bak	/^						pos = min(tempP)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py.bak	/^					pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest.py.bak	/^				pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest_v1.py	/^						pos = max(tempP)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest_v1.py	/^						pos = min(tempP)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest_v1.py	/^					pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest_v1.py	/^				pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest_v2.py	/^        pos = int(pos)$/;"	v
+pos	ceRNA/filterSNP_utest_KWtest_v3.py	/^      pos = int(pos)$/;"	v
+pos	ceRNA/test/filterSNP_test.py	/^        pos = int(pos)$/;"	v
+pos	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^						pos = max(tempP)$/;"	v
+pos	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^						pos = min(tempP)$/;"	v
+pos	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^					pos = int(pos)$/;"	v
+pos	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^				pos = int(pos)$/;"	v
+pos	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^      pos = int(pos)$/;"	v
+pos	ceRNA/test/linkSNP_EXP.py	/^						pos = max(tempP)$/;"	v
+pos	ceRNA/test/linkSNP_EXP.py	/^						pos = min(tempP)$/;"	v
+pos	ceRNA/test/linkSNP_EXP.py	/^					pos = int(pos)$/;"	v
+pos	ceRNA/test/linkSNP_EXP.py	/^				pos = int(pos)$/;"	v
+printSysTime	ceRNA/indelCall.sh	/^printSysTime() {$/;"	f
+printSysTime	ceRNA/indelCall_v2.sh	/^printSysTime() {$/;"	f
+printSysTime	ceRNA/indelCall_v3.sh	/^printSysTime() {$/;"	f
+printSysTime	ceRNA/indelCall_v3reqsub.sh	/^printSysTime() {$/;"	f
+printSysTime	ceRNA/indelCall_v4.sh	/^printSysTime() {$/;"	f
+printSysTime	ceRNA/test/indelCall-v1.sh	/^printSysTime() {$/;"	f
+print_tree	ceRNA/test/bst/binary_tree.py	/^    def print_tree(self):$/;"	m	class:Node
+pvalArray	ceRNA/filterSNP_utest_KWtest.py	/^pvalArray = []$/;"	v
+pvalArray	ceRNA/filterSNP_utest_KWtest_v1.py	/^pvalArray = []$/;"	v
+pvalArray	ceRNA/filterSNP_utest_KWtest_v2.py	/^pvalArray = []$/;"	v
+pvalArray	ceRNA/filterSNP_utest_KWtest_v3.py	/^pvalArray = []$/;"	v
+pvalArray	ceRNA/test/filterSNP_test.py	/^pvalArray = []$/;"	v
+pvalArray	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^pvalArray = []$/;"	v
+pvalArray	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^pvalArray = []$/;"	v
+qsubRun	ceRNA/runs/runResultIndelCall.sh	/^qsubRun (){$/;"	f
+qsubRun	ceRNA/runs/runResultIndelCall_reqsub.sh	/^qsubRun (){$/;"	f
+qsub_Grplasso	ceRNA/runs/runResultGrpreg.sh	/^function qsub_Grplasso()$/;"	f
+qsub_Grplasso	ceRNA/runs/runResultGrpregTest.sh	/^function qsub_Grplasso()$/;"	f
+qsub_GrplassoCnv	ceRNA/runs/runResultGrpreg.sh	/^function qsub_GrplassoCnv()$/;"	f
+rUTest	ceRNA/filterSNP_utest_KWtest.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/filterSNP_utest_KWtest.py.bak	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/filterSNP_utest_KWtest_v1.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/filterSNP_utest_KWtest_v2.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/filterSNP_utest_KWtest_v3.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/test/filterSNP_test.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^def rUTest(x,y):$/;"	f
+rUTest	ceRNA/test/linkSNP_EXP.py	/^def rUTest(x,y):$/;"	f
+re	ceRNA/filterIndel.py	/^import re$/;"	i
+re	ceRNA/filterSNP_utest_KWtest.py	/^import re$/;"	i
+re	ceRNA/filterSNP_utest_KWtest.py.bak	/^import re$/;"	i
+re	ceRNA/filterSNP_utest_KWtest_v1.py	/^import re$/;"	i
+re	ceRNA/filterSNP_utest_KWtest_v2.py	/^import re$/;"	i
+re	ceRNA/filterSNP_utest_KWtest_v3.py	/^import re$/;"	i
+re	ceRNA/makeMat_General.py	/^import re $/;"	i
+re	ceRNA/test/filterIndel.py	/^import re$/;"	i
+re	ceRNA/test/filterSNP_test.py	/^import re$/;"	i
+re	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^import re$/;"	i
+re	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^import re$/;"	i
+re	ceRNA/test/indelCallFillter.py	/^import re$/;"	i
+re	ceRNA/test/linkSNP_EXP.py	/^import re$/;"	i
+re	ceRNA/test/mergeMeth27_45.py	/^import re$/;"	i
+region_cut	ceRNA/filterSNP_utest_KWtest_v2.py	/^region_cut	  = 100000000$/;"	v
+region_cut	ceRNA/filterSNP_utest_KWtest_v3.py	/^region_cut	  = 1000000$/;"	v
+region_cut	ceRNA/mergeExpCNV.py	/^region_cut = 1000000 # 1M$/;"	v
+region_cut	ceRNA/mergeExpSomMutation.py	/^region_cut = 1000000 # 1M$/;"	v
+region_cut	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^region_cut = 1000000 # 1M$/;"	v
+region_cut	ceRNA/test/filterSNP_test.py	/^region_cut	  = 100000000$/;"	v
+region_cut	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^region_cut	  = 1000000$/;"	v
+region_cut	ceRNA/test/make_Mat_cnvByGene_level3.py	/^region_cut = 1000000 # 1M$/;"	v
+resDict	ceRNA/make_Mat_cnv_level3.py	/^resDict = {}$/;"	v
+resultArray	ceRNA/filterSNP_utest_KWtest.py.bak	/^resultArray = []$/;"	v
+runFilterGrpLasso	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function runFilterGrpLasso(){$/;"	f
+runFtest	ceRNA/runs/runResultFtest.sh	/^function runFtest() {$/;"	f
+runFtest	ceRNA/runs/runResultFtest_GCGene.sh	/^function runFtest() {$/;"	f
+runGrplasso	ceRNA/runs/runResultGrpreg_GCGene.sh	/^function runGrplasso() {$/;"	f
+s1temp	ceRNA/test/filterIndel.py	/^                             s1temp = sample1Array[idxAD].split(",")$/;"	v
+s1temp	ceRNA/test/indelCallFillter.py	/^                             s1temp = sample1Array[idxAD].split(",")$/;"	v
+s2temp	ceRNA/test/filterIndel.py	/^                             s2temp = sample2Array[idxAD].split(",")$/;"	v
+s2temp	ceRNA/test/indelCallFillter.py	/^                             s2temp = sample2Array[idxAD].split(",")$/;"	v
+sample1Alt	ceRNA/test/filterIndel.py	/^                               sample1Alt = '-'$/;"	v
+sample1Alt	ceRNA/test/indelCallFillter.py	/^                               sample1Alt = '-'$/;"	v
+sample1Array	ceRNA/test/filterIndel.py	/^                        sample1Array = sample1.split(":")$/;"	v
+sample1Array	ceRNA/test/indelCallFillter.py	/^                        sample1Array = sample1.split(":")$/;"	v
+sample1Name	ceRNA/test/filterIndel.py	/^                  sample1Name = tempHeader[-2]$/;"	v
+sample1Name	ceRNA/test/indelCallFillter.py	/^                  sample1Name = tempHeader[-2]$/;"	v
+sample1PL_homoRef	ceRNA/test/filterIndel.py	/^                        sample1PL_homoRef = sample1Array[formatArray.index('PL')].split(",")[0]  $/;"	v
+sample1PL_homoRef	ceRNA/test/indelCallFillter.py	/^                        sample1PL_homoRef = sample1Array[formatArray.index('PL')].split(",")[0]  $/;"	v
+sample1Ref	ceRNA/test/filterIndel.py	/^                               sample1Ref = '-'$/;"	v
+sample1Ref	ceRNA/test/filterIndel.py	/^                               sample1Ref = sample1Array[idxAD].split(",")[0]$/;"	v
+sample1Ref	ceRNA/test/indelCallFillter.py	/^                               sample1Ref = '-'$/;"	v
+sample1Ref	ceRNA/test/indelCallFillter.py	/^                               sample1Ref = sample1Array[idxAD].split(",")[0]$/;"	v
+sample2Alt	ceRNA/test/filterIndel.py	/^                               sample2Alt = '-'$/;"	v
+sample2Alt	ceRNA/test/indelCallFillter.py	/^                               sample2Alt = '-'$/;"	v
+sample2Array	ceRNA/test/filterIndel.py	/^                        sample2Array = sample2.split(":")$/;"	v
+sample2Array	ceRNA/test/indelCallFillter.py	/^                        sample2Array = sample2.split(":")$/;"	v
+sample2Name	ceRNA/test/filterIndel.py	/^                  sample2Name = tempHeader[-1]$/;"	v
+sample2Name	ceRNA/test/indelCallFillter.py	/^                  sample2Name = tempHeader[-1]$/;"	v
+sample2PL_hete	ceRNA/test/filterIndel.py	/^                        sample2PL_hete = sample2Array[formatArray.index('PL')].split(",")[1]  $/;"	v
+sample2PL_hete	ceRNA/test/indelCallFillter.py	/^                        sample2PL_hete = sample2Array[formatArray.index('PL')].split(",")[1]  $/;"	v
+sample2Ref	ceRNA/test/filterIndel.py	/^                               sample2Ref = '-'$/;"	v
+sample2Ref	ceRNA/test/filterIndel.py	/^                               sample2Ref = sample2Array[idxAD].split(",")[0]$/;"	v
+sample2Ref	ceRNA/test/indelCallFillter.py	/^                               sample2Ref = '-'$/;"	v
+sample2Ref	ceRNA/test/indelCallFillter.py	/^                               sample2Ref = sample2Array[idxAD].split(",")[0]$/;"	v
+sampleFile	ceRNA/getSomMutMatrix.py	/^        sampleFile = arg$/;"	v
+sampleFile	ceRNA/getSomMutMatrix_v2.py	/^        sampleFile = arg$/;"	v
+sampleName	ceRNA/getSomMutMatrix.py	/^sampleName = []$/;"	v
+sampleName	ceRNA/getSomMutMatrix_v2.py	/^sampleName = []$/;"	v
+sampleSize_cut	ceRNA/filterSNP.py	/^sampleSize_cut = 30 # in real$/;"	v
+sampleSize_cut	ceRNA/filterSNP_noHWE.py	/^sampleSize_cut = 30 # in real$/;"	v
+sampleSize_cut	ceRNA/makeMat_SNP.py	/^sampleSize_cut = int(0.1 * nsample) $/;"	v
+sampleSize_cut	ceRNA/makeMat_SNP_v1.py	/^sampleSize_cut = int(0.1 * nsample) $/;"	v
+samples	ceRNA/filterSNP.py	/^			samples = [ samples[i] for i in temp ]$/;"	v
+samples	ceRNA/filterSNP.py	/^		samples=allsamples $/;"	v
+samples	ceRNA/filterSNP_noHWE.py	/^		samples = [ samples[i] for i in a ]$/;"	v
+samples	ceRNA/filterSNP_noHWE.py	/^	samples=allsamples $/;"	v
+samples	ceRNA/makeMat_SNP.py	/^		samples=allsamples $/;"	v
+samples	ceRNA/makeMat_SNP_v1.py	/^		samples=allsamples $/;"	v
+scipy	ceRNA/test/logitReg.py	/^import scipy.optimize$/;"	i
+skipHeader	ceRNA/convertEntrezAnno2GeneAnno.py	/^      skipHeader = "FALSE"$/;"	v
+skipHeader	ceRNA/convertEntrezAnno2GeneAnno.py	/^skipHeader = "TRUE"$/;"	v
+snpNameSet	ceRNA/filterSNP_utest_KWtest_v3.py	/^snpNameSet = set()$/;"	v
+snpNameSet	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^snpNameSet = set()$/;"	v
+snp_data	ceRNA/filterSNP_utest_KWtest.py.bak	/^							snp_data = val$/;"	v
+snp_data	ceRNA/test/linkSNP_EXP.py	/^							snp_data = val$/;"	v
+snpdata	ceRNA/filterSNP_utest_KWtest_v3.py	/^    snpdata = Gene(snpname, chrom, pos, strand, val)$/;"	v
+snpdata	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^    snpdata = Gene(snpname, chrom, pos, strand, val)$/;"	v
+snpdataDict	ceRNA/filterSNP_utest_KWtest.py	/^snpdataDict = {}$/;"	v
+snpdataDict	ceRNA/filterSNP_utest_KWtest.py.bak	/^snpdataDict ={}$/;"	v
+snpdataDict	ceRNA/filterSNP_utest_KWtest_v1.py	/^snpdataDict = {}$/;"	v
+snpdataDict	ceRNA/filterSNP_utest_KWtest_v2.py	/^snpdataDict      = {}$/;"	v
+snpdataDict	ceRNA/filterSNP_utest_KWtest_v3.py	/^snpdataDict      = {}$/;"	v
+snpdataDict	ceRNA/filterSNP_utest_KWtest_v3.py	/^snpdataDict = dict()$/;"	v
+snpdataDict	ceRNA/test/filterSNP_test.py	/^snpdataDict      = {}$/;"	v
+snpdataDict	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^snpdataDict = {}$/;"	v
+snpdataDict	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^snpdataDict      = {}$/;"	v
+snpdataDict	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^snpdataDict = dict()$/;"	v
+snpid	ceRNA/extractSNPmat.py	/^snpid = []$/;"	v
+snpval	ceRNA/filterSNP_utest_KWtest.py	/^							snpval	      = map(int,val.strip().split("\\t"))$/;"	v
+snpval	ceRNA/filterSNP_utest_KWtest.py.bak	/^							snpval = map(int,snp_data.strip().split("\\t"))$/;"	v
+snpval	ceRNA/filterSNP_utest_KWtest_v1.py	/^							snpval	      = map(int,val.strip().split("\\t"))$/;"	v
+snpval	ceRNA/filterSNP_utest_KWtest_v2.py	/^                snpval = map(int, val.split("\\t"))$/;"	v
+snpval	ceRNA/filterSNP_utest_KWtest_v3.py	/^          snpval = map(int, val.split("\\t"))$/;"	v
+snpval	ceRNA/test/filterSNP_test.py	/^                snpval = map(int, val.split("\\t"))$/;"	v
+snpval	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^							snpval	      = map(int,val.strip().split("\\t"))$/;"	v
+snpval	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^          snpval = map(int, val.split("\\t"))$/;"	v
+snv_type	ceRNA/test/filterIndel.py	/^snv_type = 'GERMLINE'$/;"	v
+snv_type	ceRNA/test/indelCallFillter.py	/^snv_type = 'GERMLINE'$/;"	v
+sp	ceRNA/test/logitReg.py	/^import scipy as sp$/;"	i
+stats	ceRNA/filterSNP_utest_KWtest.py	/^from scipy import stats$/;"	i
+stats	ceRNA/filterSNP_utest_KWtest.py.bak	/^from scipy import stats$/;"	i
+stats	ceRNA/filterSNP_utest_KWtest_v1.py	/^from scipy import stats$/;"	i
+stats	ceRNA/filterSNP_utest_KWtest_v2.py	/^from scipy import stats$/;"	i
+stats	ceRNA/filterSNP_utest_KWtest_v3.py	/^from scipy import stats$/;"	i
+stats	ceRNA/test/filterSNP_test.py	/^from scipy import stats$/;"	i
+stats	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^from scipy import stats$/;"	i
+stats	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^from scipy import stats$/;"	i
+sumTempNP	ceRNA/mergeExpSomMutation.py	/^    sumTempNP = np.sum(tempNP,0)$/;"	v
+sys	ceRNA/annotSNP_v1.py	/^import sys, getopt$/;"	i
+sys	ceRNA/annotSNP_v2.py	/^import sys, getopt$/;"	i
+sys	ceRNA/annotSomMutation.py	/^import sys, getopt$/;"	i
+sys	ceRNA/annot_SNP.py	/^import sys, getopt$/;"	i
+sys	ceRNA/annot_SNP.py.bak	/^import sys, getopt$/;"	i
+sys	ceRNA/compareFileCols.py	/^import sys,getopt$/;"	i
+sys	ceRNA/compareFileRows.py	/^import sys,getopt$/;"	i
+sys	ceRNA/convertEntrezAnno2GeneAnno.py	/^import os,sys$/;"	i
+sys	ceRNA/do_Beta2M_meth.py	/^import sys,getopt$/;"	i
+sys	ceRNA/extractSNPmat.py	/^import os,sys,getopt$/;"	i
+sys	ceRNA/filterIndel.py	/^import sys,getopt$/;"	i
+sys	ceRNA/filterSNP_utest_KWtest.py	/^import sys, getopt$/;"	i
+sys	ceRNA/filterSNP_utest_KWtest.py.bak	/^import sys, getopt$/;"	i
+sys	ceRNA/filterSNP_utest_KWtest_v1.py	/^import sys, getopt$/;"	i
+sys	ceRNA/filterSNP_utest_KWtest_v2.py	/^import sys, getopt$/;"	i
+sys	ceRNA/filterSNP_utest_KWtest_v3.py	/^import sys, getopt$/;"	i
+sys	ceRNA/getCols.py	/^import sys,getopt$/;"	i
+sys	ceRNA/getSingleStartEnd.py	/^import sys$/;"	i
+sys	ceRNA/getSingleTSS_exp.py	/^import sys, getopt$/;"	i
+sys	ceRNA/getSomMutMatrix.py	/^import os,sys$/;"	i
+sys	ceRNA/getSomMutMatrix_v2.py	/^import os,sys$/;"	i
+sys	ceRNA/get_tss_anno_byGene.py	/^import sys$/;"	i
+sys	ceRNA/makeMatRnaseql3.py	/^import sys, getopt$/;"	i
+sys	ceRNA/makeMatRnaseql3.py.bak	/^import sys, getopt$/;"	i
+sys	ceRNA/makeMat_General.py	/^import sys, getopt$/;"	i
+sys	ceRNA/makeMat_SNP.py	/^import sys, getopt$/;"	i
+sys	ceRNA/makeMat_SNP_v1.py	/^import sys, getopt$/;"	i
+sys	ceRNA/make_Mat_cnv_level3.py	/^import sys, getopt$/;"	i
+sys	ceRNA/mergeExpCNV.py	/^import sys, getopt$/;"	i
+sys	ceRNA/mergeExpSomMutation.py	/^import sys, getopt$/;"	i
+sys	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^import sys, getopt$/;"	i
+sys	ceRNA/test/compareFileCols.py	/^import sys,getopt$/;"	i
+sys	ceRNA/test/do_grpLassoSNP.py	/^import sys,getopt$/;"	i
+sys	ceRNA/test/filterIndel.py	/^import sys,getopt$/;"	i
+sys	ceRNA/test/filterSNP_test.py	/^import sys, getopt$/;"	i
+sys	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^import sys, getopt$/;"	i
+sys	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^import sys, getopt$/;"	i
+sys	ceRNA/test/indelCallFillter.py	/^import sys,getopt$/;"	i
+sys	ceRNA/test/linkSNP_EXP.py	/^import sys, getopt$/;"	i
+sys	ceRNA/test/make_Mat_cnvByGene_level3.py	/^import sys, getopt$/;"	i
+sys	ceRNA/test/mergeMeth27_45.py	/^import sys$/;"	i
+sysTime	ceRNA/filterSNP.py	/^def sysTime():$/;"	f
+sysTime	ceRNA/makeMatRnaseql3.py	/^def sysTime(fdlog):$/;"	f
+sysTime	ceRNA/makeMatRnaseql3.py.bak	/^def sysTime(fdlog):$/;"	f
+sysTime	ceRNA/makeMat_SNP.py	/^def sysTime():$/;"	f
+sysTime	ceRNA/makeMat_SNP_v1.py	/^def sysTime():$/;"	f
+temp	ceRNA/filterIndel.py	/^                             temp = infosub.split("=")$/;"	v
+temp	ceRNA/filterSNP.py	/^		temp = [j for j in range(len(conf)) if(conf[j] < conf_cut)]$/;"	v
+temp	ceRNA/makeMat_SNP.py	/^		temp = [j for j in range(len(conf)) if(conf[j] < conf_cut)]$/;"	v
+temp	ceRNA/makeMat_SNP_v1.py	/^		temp = [j for j in range(len(conf)) if(conf[j] < conf_cut)]$/;"	v
+temp	ceRNA/mergeExpSomMutation.py	/^  temp = [map(int,row[2].split("\\t")) for row in expSomLink if row[0] == expGene] $/;"	v
+temp	ceRNA/test/filterIndel.py	/^                             temp = infosub.split("=")$/;"	v
+temp	ceRNA/test/indelCallFillter.py	/^                             temp = infosub.split("=")$/;"	v
+temp2	ceRNA/filterSNP.py	/^					temp2 = [j for j in range(len(allsamples)) if allsamples[j] not in samples]$/;"	v
+tempEnd	ceRNA/filterSNP_utest_KWtest_v2.py	/^        tempEnd = int(pos) + region_cut$/;"	v
+tempEnd	ceRNA/filterSNP_utest_KWtest_v3.py	/^      tempEnd = int(pos) + region_cut$/;"	v
+tempEnd	ceRNA/mergeExpCNV.py	/^             tempEnd = int(pEnd) + region_cut$/;"	v
+tempEnd	ceRNA/mergeExpSomMutation.py	/^          tempEnd = int(end) + region_cut$/;"	v
+tempEnd	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^             tempEnd = int(pEnd) + region_cut$/;"	v
+tempEnd	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^        tempEnd = int(pos) + region_cut$/;"	v
+tempEnd	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      tempEnd = int(pos) + region_cut$/;"	v
+tempEnd	ceRNA/test/filterSNP_test.py	/^        tempEnd = int(pos) + region_cut$/;"	v
+tempEnd	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^      tempEnd = int(pos) + region_cut$/;"	v
+tempEnd	ceRNA/test/make_Mat_cnvByGene_level3.py	/^          tempEnd = int(pEnd) + region_cut$/;"	v
+tempEnd	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      tempEnd = int(pos) + region_cut$/;"	v
+tempHeader	ceRNA/test/filterIndel.py	/^                  tempHeader = line.strip().split("\\t")$/;"	v
+tempHeader	ceRNA/test/indelCallFillter.py	/^                  tempHeader = line.strip().split("\\t")$/;"	v
+tempKey	ceRNA/test/mergeMeth27_45.py	/^      tempKey = chrom + "_" + pos$/;"	v
+tempLen	ceRNA/test/linkSNP_EXP.py	/^							tempLen = [ i for i in range(len(tempval)) if(tempval[i] >=0)]$/;"	v
+tempNP	ceRNA/mergeExpSomMutation.py	/^    tempNP = np.array(temp)$/;"	v
+tempP	ceRNA/filterSNP_utest_KWtest.py	/^					tempP = map(int,tempP)$/;"	v
+tempP	ceRNA/filterSNP_utest_KWtest.py	/^				tempP = pos.split(":")$/;"	v
+tempP	ceRNA/filterSNP_utest_KWtest.py.bak	/^					tempP = map(int,tempP)$/;"	v
+tempP	ceRNA/filterSNP_utest_KWtest.py.bak	/^				tempP = pos.split(":")$/;"	v
+tempP	ceRNA/filterSNP_utest_KWtest_v1.py	/^					tempP = map(int,tempP)$/;"	v
+tempP	ceRNA/filterSNP_utest_KWtest_v1.py	/^				tempP = pos.split(":")$/;"	v
+tempP	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^					tempP = map(int,tempP)$/;"	v
+tempP	ceRNA/test/filterSNP_utest_KWtest_v2.1.py	/^				tempP = pos.split(":")$/;"	v
+tempP	ceRNA/test/linkSNP_EXP.py	/^					tempP = map(int,tempP)$/;"	v
+tempP	ceRNA/test/linkSNP_EXP.py	/^				tempP = pos.split(":")$/;"	v
+tempStart	ceRNA/filterSNP_utest_KWtest_v2.py	/^        tempStart = int(pos) - region_cut$/;"	v
+tempStart	ceRNA/filterSNP_utest_KWtest_v3.py	/^      tempStart = int(pos) - region_cut$/;"	v
+tempStart	ceRNA/mergeExpCNV.py	/^             tempStart = int(pStart) - region_cut$/;"	v
+tempStart	ceRNA/mergeExpSomMutation.py	/^          tempStart = int(start) - region_cut$/;"	v
+tempStart	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^             tempStart = int(pStart) - region_cut$/;"	v
+tempStart	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^        tempStart = int(pos) - region_cut$/;"	v
+tempStart	ceRNA/merge_snp_meth_cnvl3_v1.py.bak	/^      tempStart = int(pos) - region_cut$/;"	v
+tempStart	ceRNA/test/filterSNP_test.py	/^        tempStart = int(pos) - region_cut$/;"	v
+tempStart	ceRNA/test/filterSNP_utest_KWtest_v3.py	/^      tempStart = int(pos) - region_cut$/;"	v
+tempStart	ceRNA/test/make_Mat_cnvByGene_level3.py	/^          tempStart = int(pStart) - region_cut$/;"	v
+tempStart	ceRNA/test/make_Mat_cnvByGene_level3.py	/^      tempStart = int(pos) - region_cut$/;"	v
+tempval	ceRNA/test/linkSNP_EXP.py	/^							tempval = map(int,snp_data.strip().split("\\t"))$/;"	v
+time1	ceRNA/filterSNP_noHWE.py	/^time1=os.system("date|awk '{print $4}'")$/;"	v
+time2	ceRNA/filterSNP_noHWE.py	/^time2=os.system("date|awk '{print $4}'")$/;"	v
+time3	ceRNA/filterSNP_noHWE.py	/^	time3=os.system("date|awk '{print $4}'")$/;"	v
+tree_data	ceRNA/test/bst/binary_tree.py	/^    def tree_data(self):$/;"	m	class:Node
+usage	ceRNA/annotSNP_v2.py	/^usage = 'python annotSNP_v2.py -i <inputfile> -d <snp annotation file> -o <output file name> ' $/;"	v
+usage	ceRNA/annotSomMutation.py	/^usage = 'python annot_SNP.py -i <inputfile> -d <snp annotation file> -o <output file name>' $/;"	v
+usage	ceRNA/annot_SNP.py	/^usage = 'python annotSNP_v2.py -i <inputfile> -d <snp annotation file> -o <output file name>' $/;"	v
+usage	ceRNA/convertEntrezAnno2GeneAnno.py	/^usage = "python convertEntrezAnno2GeneAnnot.py -i <> -o <out.mat> -m <selected_sample_TCGA_barcode.txt> -o <?>"$/;"	v
+usage	ceRNA/extractSNPmat.py	/^usage = '~\/tools\/python\/Python_current\/python \/ifs\/home\/c2b2\/ac_lab\/jh3283\/scripts\/projFocus\/ceRNA\/extractSNPmat.py -i ~\/SCRATCH\/projFocus\/ceRNA\/knowledgeBase\/GWAS_catalog_brca_SNPid.txt -m ..\/brca_snp_tumor_731.mat.anno -o brca_snp_tumor_731_GWASCatalogSNP.mat.anno'$/;"	v
+usage	ceRNA/filterIndel.py	/^usage = "Usage: filterIndel.py -i <input.vcf> -o <out.vcf> \\nExample: filterIndel.py -i \/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/projFocus\/ceRNA\/result\/indelCall\/test\/TCGA-A1-A0SD-01A-11D-A10Y-09.bam_dindel_ouput.variantCalls.VCF -o \/ifs\/scratch\/c2b2\/ac_lab\/jh3283\/projFocus\/ceRNA\/result\/indelCall\/test\/TCGA-A1-A0SD-01A-11D-A10Y-09.bam_dindel_ouput.variantCalls.VCF.filtered.VCF"$/;"	v
+usage	ceRNA/getSomMutMatrix_v2.py	/^usage = "python getSomMutMatrix_v2.py -m <in_tcga_level2_somaticMut.maf> -o <out.mat> -s <selected_sample_TCGA_barcode.txt>"$/;"	v
+usage	ceRNA/makeMat_SNP.py	/^usage = 'Usage:makeMat_SNP.py -i <input file:list of level2 snp file name.> -o <outputfile: output snp matrix file name>'$/;"	v
+usage	ceRNA/mergeExpSomMutation.py	/^usage = "usage: python mergeExpSomMutation.py  -s <file:full path of cnv level3 files,one each line> -e <file: gene_exp.mat> -o <filename: output file name>"$/;"	v
+usage	ceRNA/test/filterIndel.py	/^usage = "Usage: filterIndel.py -i <input.vcf> -o <out.vcf>$/;"	v
+usage	ceRNA/test/indelCallFillter.py	/^usage="Usage: indelFilter.py -i <input.VCF> -o <output.VCF>"$/;"	v
+vBeta0	ceRNA/test/logitReg.py	/^vBeta0 = np.array([-.10296645, -.0332327, -.01209484, .44626211, .92554137, .53973828, $/;"	v
+vY	ceRNA/test/logitReg.py	/^vY = data[:, 0]$/;"	v
+val	ceRNA/makeMat_General.py	/^			val = line.split("\\t")[(nval - 1)]$/;"	v
+val	ceRNA/make_Mat_cnv_level3.py	/^       val = val + "_" + str(idfile)$/;"	v
+valArray	ceRNA/test/mergeMeth27_45.py	/^valArray = []$/;"	v
+val_es	ceRNA/test/linkSNP_EXP.py	/^							val_es = [tempval[i] for i in tempLen]$/;"	v
+x0	ceRNA/test/logitReg.py	/^                                  x0 = np.array([-.1, -.03, -.01, .44, .92, .53,$/;"	v

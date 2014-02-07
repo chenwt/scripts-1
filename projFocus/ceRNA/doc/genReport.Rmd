@@ -1,56 +1,69 @@
 ```{r,echo=FALSE,message=FALSE,error=FALSE,warning=FALSE,prompt=FALSE}
 library(knitr)
 library(markdown)
+setwd("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/doc/")
+setwd("/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/")
 ```
 Explaining the ceRNA effects from genomic variants
 =============================================
 **Jing; Hua-sheng; Pavel**
-1. Data
-------------------------------
-All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key. [data table](data_1.png) 
 
-- rnaSeq2:  tested; not used in model because the current methods for DEG is basically  using raw countslevel 3; rsem score for RNA seq, de nove assembly. 
- 
-- rnaSeq:  tested and used in edgeR for DEG
-  level 3; rowcounts and rpkm value for each gene 839 - 91(duplicated)  - 
+
+1. Introduction
+-------------------------------
+There is a need to leverage all genomic aberrants information and map them to regulatory/post-regulatory analysis. Computational method is feasible for such hight-throughtput and large-scale task.
+
+This is a data-driven algorithm that takes matched copy number, somatic mutation, snp, indel and gene expression data from tumors as input and combines these to identify driving aberrations and associate these with the genes/ceRNA effect they modulate. 
+
+This appoach is also based on hierarchical regression model that evaluates candidate group/aberrants, or ‘modulators’. The association coefficient measures how well a modulator (or combination of modulators) contribute to the behavior of ceRNA effection through gene expression across tumor samples.
+
+
+2. Data
+------------------------------
+
+TCGA data is publicly avaible, relatively has high quality, and most importly, have reasonable sufficient data of different level. All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key. [data table](figure/data_v1.png) 
+
+- rnaSeq: level 3 raw counts was used in edgeR to get differential expressed genes(DEG) , 839 samples in total, 71 normal sample. Differential expressed gene(FDR < 0.01) [code](/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/getDEG_Mat_edgeR.r)
   
 - snpArray:  level 2 birdseed data in hg18 annotation; for snp data usage
-   [birdsuite algorithm description][bs]; Affymetrix SNP 6.0  
+   [birdsuite algorithm description][bs]; Affymetrix SNP 6.0
+   The SNP locations were translated from HG18 to HG19 using the UCSC liftOver application([kent et al., 2002](liftOver))
   
-- somaticMutation:  level 3 called somatic variants data; used in modelling
+- somaticMutation:  level 3 called somatic variants data for 731 tumor samples was collected; mapped to genes as binary[0/1] using TSS site.
 
-- CNV_snparray:  level 3:  used in later modelling
+- CNV_snparray:  level 3 copy number variation was collected for 731 tumor samples, CNVs with log2 value between [-0.3,0.3] were removed
 
-- wxs:  bam file list of whole exome sequencing breast cancer in TCGA for the samples involved in the analysis(731) 
+- wxs:  bam files of whole exome sequencing breast cancer in TCGA for 663 tumor samples were downloaded.
 
 
-2. Methods
+3. Methods
 ---------------------------------
 
-- [current work flow](workflow.png)
+- [current work flow](figure/workflow.png)
 - Differential expressed genes
    - EdgeR: using rowcounts as expression
       - TMM normalization
-      - figures here to show the whole process  
+      - FDR[0.01]
+      - [plots](/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/edgeR_brca_l3_distribution.pdf)
       
-- snp: confidence filtering: necessary to make sure all the SNPs are real SNP < 0.01 sample size > 0.1  total(731)
+- snp :  from Affymetrix SNParray 6.0,since its avaiable, even thought its' limitation on the number of snps(n=906,600). To noted, we didn't use [Hardy–Weinberg principle][hwe] filtering, which was mostly used in GWAS study since this population is general cancer population, the HWE assumption is basically not hold since HWE is to make sure the sample comes from a normal population. for preprocessing, 2 filtering process used as following. 
+  - confidence filtering: necessary to make sure all the SNPs are real SNP < 0.01 sample size > 0.1  total(731)
   - MAF fréquence filtration: 
   - MAF top small would make no sense to do the calculation  > 0.05 
-  - [Hardy–Weinberg principle][hwe]: to make sure the sample comes from a normal population, no need to use in cancer population.
   
-- cnv : useing the region position 
+- cnv : useing the segment mean copy number, exclude segments whose log2 value were in interval [-0.3, 0.3]. and then intersect segments with TSS to get DEG's CNV, log2 values were used
 
-- somatic mutations: 
+- somatic mutations: mapped to genes as binary[0/1] using it's relative position to DEG TSS site.
 
-- indel matrix: ongoing
+- indel matrix: wating for indel calling. [calling status](doc/brca_wxs_processing_plan.xlsx)
 
 - **[genomic variants count](data_summary.txt)**
 
-3. hierachical Model of genomic variants's effect on gene expression 
+4. Hierarchical Model of genomic aberrant's effect on gene expression 
 -------------------------------------------------------
-- [current model](model.png)
+- [current model](figure/model.png)
 
-- [Kruskal–Wallis test][kw]:  table: [kw filtration snp count: All genes](kwtestSummary.xlsx)
+- [Kruskal–Wallis test][kw]: an extension of the Mann–Whitney U test to 3 or more groups was used as the second filtering for SNPs. SNPs whose didn't show a significant correlation with any DEGS(cis effect) table: [kw filtration snp count: All genes](reportData_1.xlsx) [example plots]()
 ```{r,background="white",results='hide', message=FALSE, warning=FALSE,echo=FALSE}
 # rootd="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA"
 # jxy = function(x,y){paste(x,y,sep="")}
@@ -71,27 +84,29 @@ All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can 
            
 - ftest:(-SNP/indel) contribution
 - group lasso regression --<still testing other model...>
-  - [cohen's kappa][ck] similarity distance 
+  - [cohen's kappa][ck]:Cohen's kappa measures the agreement between two raters who each classify N items into C mutually exclusive categories. similarity distance 
   - svd: dimension that catch 80% variation 
   - grouping of SNPs: kmeans
-- regression
+- regression: models for different cases [cases]()
   - logit transform of expression 
-  - fitting 
-  - random sampling residual 
-  - permutation 
-  - p value as well as coeff
+  
+  - fitting using group lasso
+  
+  - random sampling residual and 1000 permutation 
+  
+
 - filtering:  p value < 0.005 for 1000 permutation
 
-4. bridging gene-variants association with gene-ceRNA effects
+5. bridging gene-variants association with gene-ceRNA effects
 ---------------------------------------------
 - Thoughts
 
-5. population genomic variants
+6. validation use population genomic variants
 ------------------------------------------------
 - 1000 Genome SNP / Indel
 - UK10K 
 
-6. Test Run using GWAScatalog related genes
+7. Test Run using GWAScatalog related genes
 ----------------------------------------
 - [GWAS catalog genes](GWAS_catalog_brca_allGeneName.txt): 70 in total, 27 was found in the having the filtered snp around +/- 1M of the gene TSS
 
@@ -103,11 +118,21 @@ All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can 
   - [CCND1](grplasso_coeff_grplasso_CCND1.txt)
   - [GDI2](grplasso_coeff_grplasso_GDI2.txt)
   - [NT5C1B](grplasso_coeff_grplasso_NT5C1B.txt)
-- ceRNA effect for thos genes
+- ceRNA effect for those genes
 
 - some interesting SNPs
-
+  - [RANBP9 genetic variants network](figure/RANBP9_geneticVars_net.pdf) 
+      - rs16874698 [[ref 1 mooney lab]](http://mutdb.org/cgi-bin/mutdb.pl?id=CD83&geneid=9308)       [[ref 2 umbc]](http://bioinf.umbc.edu/dmdm/mut_on_prot.php?id=232223&range=174.25_184.5)
+  - [RANBP9 ceRNA network] (figure/RANBP9_ceRNA_net.pdf)
+  
+  
+  
+8. Acknowledgement 
+- 
+- 
+    
 [ck]: http://en.wikipedia.org/wiki/Cohen's_kappa
 [kw]: http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance
 [hwe]:http://en.wikipedia.org/wiki/HWE
 [bs]: http://www.broadinstitute.org/science/programs/medical-and-population-genetics/birdsuite/birdsuite-analysis#birdsuite_snps
+[lifeOver]: http://genome.cshlp.org/cgi/pmidlookup?view=long&pmid=12045153

@@ -5,8 +5,6 @@
 #PURPOSE: 
 
 count=0
-log=${0##*/}.log
-echo -n "" >$log
 while read LINE
 do	
 	new=$(echo ${LINE} | awk '{print $2}')
@@ -15,8 +13,9 @@ do
 	then
 	  cmd="mv $old $new"
 	  $cmd
-	  echo $new >>$log
 	  let count++
+	else
+	  echo "file $new exist!"
 	fi	  
 
 done < $1

@@ -143,105 +143,112 @@ hr {
 <body>
 <h1>Explaining the ceRNA effects from genomic variants</h1>
 
+<p><strong>Jing; Hua-sheng; Pavel</strong></p>
+
 <h2>1. Data</h2>
 
-<p>All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key.
-<img src="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/data_1.png?raw=true" alt="TCGA data"/> <imd src="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/data_1.png"></p>
+<p>All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key. <a href="data_1.png">data table</a> </p>
 
 <ul>
-<li><p>rnaSeq2:  tested; not used in model because the current methods for DEG is basically  using raw countslevel 3; rsem score for RNA seq, de nove assembly. 
-<a href="http://www.broadinstitute.org/science/programs/medical-and-population-genetics/birdsuite/birdsuite-analysis#birdsuite_snps">birdsuite algorithm description</a>; Affymetrix SNP 6.0  </p></li>
+<li><p>rnaSeq2:  tested; not used in model because the current methods for DEG is basically  using raw countslevel 3; rsem score for RNA seq, de nove assembly. </p></li>
 <li><p>rnaSeq:  tested and used in edgeR for DEG
 level 3; rowcounts and rpkm value for each gene 839 - 91(duplicated)  - </p></li>
-<li><p>snpArray:  level 2 birdseed data in hg18 annotation; for snp data usage</p></li>
+<li><p>snpArray:  level 2 birdseed data in hg18 annotation; for snp data usage
+<a href="http://www.broadinstitute.org/science/programs/medical-and-population-genetics/birdsuite/birdsuite-analysis#birdsuite_snps">birdsuite algorithm description</a>; Affymetrix SNP 6.0  </p></li>
 <li><p>somaticMutation:  level 3 called somatic variants data; used in modelling</p></li>
 <li><p>CNV_snparray:  level 3:  used in later modelling</p></li>
 <li><p>wxs:  bam file list of whole exome sequencing breast cancer in TCGA for the samples involved in the analysis(731) </p></li>
-<li><p>WGS:  whole genome bams of TCGA breast cancer, only 86 samples. not used</p></li>
-<li><p>miRNA:  project stage 2 data; for future use.</p></li>
 </ul>
 
-<h2>2. data preprocessing </h2>
+<h2>2. Methods</h2>
 
 <ul>
-<li><p>differential expressed genes</p>
+<li><a href="workflow.png">current work flow</a></li>
+<li><p>Differential expressed genes</p>
 
 <ul>
-<li>voom transformation of raw count</li>
 <li>EdgeR: using rowcounts as expression
 
 <ul>
 <li>TMM normalization</li>
-<li>figures here to show the whole process</li>
+<li>figures here to show the whole process<br/></li>
 </ul></li>
 </ul></li>
-<li><p>snp: confidence filtering: necessary to make sure all the SNPs are real SNP &lt; 0.01 sample size &gt; 0.1  total(731) 78043 out</p>
+<li><p>snp: confidence filtering: necessary to make sure all the SNPs are real SNP &lt; 0.01 sample size &gt; 0.1  total(731)</p>
 
 <ul>
 <li>MAF fréquence filtration: </li>
-<li>MAF top small would make no sense to do the calculation  &gt; 0.05 98 out</li>
+<li>MAF top small would make no sense to do the calculation  &gt; 0.05 </li>
 <li><a href="http://en.wikipedia.org/wiki/HWE">Hardy–Weinberg principle</a>: to make sure the sample comes from a normal population, no need to use in cancer population.</li>
-<li>Annotation use platform information(life over from hg18 to hg19), lost 5808; retain 822651</li>
-<li><a href="http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance">Kruskal–Wallis test</a>: threshold is an important thing
-#plot showing how many pairs of testing we are doing, and how many we are selecting using different threhold.
-<code>
-</code></li>
 </ul></li>
 <li><p>cnv : useing the region position </p></li>
 <li><p>somatic mutations: </p></li>
 <li><p>indel matrix: ongoing</p></li>
+<li><p><strong><a href="data_summary.txt">genomic variants count</a></strong></p></li>
 </ul>
 
-<h2>3. hirarchical Modeling of genomic variants</h2>
+<h2>3. hierachical Model of genomic variants&#39;s effect on gene expression </h2>
 
 <ul>
-<li><p>ftest:(-SNP/indel) contribution</p>
-
-<ul>
-<li>simple linear model and lose threshold 
-
-<ul>
-<li>sig</li>
-<li>no sig</li>
-</ul></li>
-</ul></li>
+<li><p><a href="model.png">current model</a></p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance">Kruskal–Wallis test</a>:  table: <a href="kwtestSummary.xlsx">kw filtration snp count: All genes</a></p></li>
+<li><p>ftest:(-SNP/indel) contribution</p></li>
 <li><p>group lasso regression &ndash;<still testing other model...></p>
 
 <ul>
 <li><a href="http://en.wikipedia.org/wiki/Cohen&#x27;s_kappa">cohen&#39;s kappa</a> similarity distance </li>
 <li>svd: dimension that catch 80% variation </li>
-<li>group:
-
-<ul>
-<li>kmeans:</li>
-<li>DBSCAN</li>
-</ul></li>
+<li>grouping of SNPs: kmeans</li>
 </ul></li>
 <li><p>regression</p>
 
 <ul>
-<li>logit transform</li>
+<li>logit transform of expression </li>
 <li>fitting </li>
 <li>random sampling residual </li>
 <li>permutation </li>
 <li>p value as well as coeff</li>
 </ul></li>
-<li><p>filtering:</p>
-
-<ul>
-<li>p value &lt; 0.05</li>
-<li>.rda file created for all sig genes</li>
-</ul></li>
+<li><p>filtering:  p value &lt; 0.005 for 1000 permutation</p></li>
 </ul>
 
 <h2>4. bridging gene-variants association with gene-ceRNA effects</h2>
 
+<ul>
+<li>Thoughts</li>
+</ul>
+
 <h2>5. population genomic variants</h2>
 
 <ul>
-<li>1000 Genome SNP</li>
-<li>1000 Genome Indel</li>
+<li>1000 Genome SNP / Indel</li>
 <li>UK10K </li>
+</ul>
+
+<h2>6. Test Run using GWAScatalog related genes</h2>
+
+<ul>
+<li><p><a href="GWAS_catalog_brca_allGeneName.txt">GWAS catalog genes</a>: 70 in total, 27 was found in the having the filtered snp around +/- 1M of the gene TSS</p></li>
+<li><p>[Gene-SNP pairs] : 3767 for KW test cutoff 0.01, 1555 for KW test cutoff 1e-6</p></li>
+<li><p>snp significantly contribution <a href="fTest_pval_all__snp_cnv_som.txt.sig">genes</a>: relatively lose currently pvalue 0.05</p></li>
+<li><p>Find [snps] significantly associate with gene: 3 genes</p>
+
+<ul>
+<li><a href="grplasso_coeff_grplasso_CCND1.txt">CCND1</a></li>
+<li><a href="grplasso_coeff_grplasso_GDI2.txt">GDI2</a></li>
+<li><a href="grplasso_coeff_grplasso_NT5C1B.txt">NT5C1B</a></li>
+</ul></li>
+<li><p>ceRNA effect for those genes</p></li>
+<li><p>some interesting SNPs</p>
+
+<ul>
+<li><a href="figure/RANBP9_geneticVars_net.pdf">RANBP9 genetic variants network</a> 
+
+<ul>
+<li>rs16874698 <a href="http://mutdb.org/cgi-bin/mutdb.pl?id=CD83&amp;geneid=9308">[ref 1 mooney lab]</a>       <a href="http://bioinf.umbc.edu/dmdm/mut_on_prot.php?id=232223&amp;range=174.25_184.5">[ref 2 umbc]</a></li>
+</ul></li>
+<li><a href="figure/RANBP9_ceRNA_net.pdf">RANBP9 ceRNA network</a></li>
+</ul></li>
 </ul>
 
 </body>

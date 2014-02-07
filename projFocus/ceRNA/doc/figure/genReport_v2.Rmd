@@ -1,11 +1,14 @@
-
-
+```{r,echo=FALSE,message=FALSE,error=FALSE,warning=FALSE,prompt=FALSE}
+library(knitr)
+library(markdown)
+setwd("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/doc/")
+```
 Explaining the ceRNA effects from genomic variants
 =============================================
 **Jing; Hua-sheng; Pavel**
 1. Data
 ------------------------------
-All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key. [data table](data_1.png) 
+All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key. [data table](figure/data_v1.png) 
 
 - rnaSeq2:  tested; not used in model because the current methods for DEG is basically  using raw countslevel 3; rsem score for RNA seq, de nove assembly. 
  
@@ -13,7 +16,8 @@ All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can 
   level 3; rowcounts and rpkm value for each gene 839 - 91(duplicated)  - 
   
 - snpArray:  level 2 birdseed data in hg18 annotation; for snp data usage
-   [birdsuite algorithm description][bs]; Affymetrix SNP 6.0  
+   [birdsuite algorithm description][bs]; Affymetrix SNP 6.0
+   The SNP locations were translated from HG18 to HG19 using the UCSC liftOver application([kent et al., 2002](liftOver))
   
 - somaticMutation:  level 3 called somatic variants data; used in modelling
 
@@ -25,7 +29,7 @@ All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can 
 2. Methods
 ---------------------------------
 
-- [current work flow](workflow.png)
+- [current work flow](figure/workflow.png)
 - Differential expressed genes
    - EdgeR: using rowcounts as expression
       - TMM normalization
@@ -46,11 +50,26 @@ All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can 
 
 3. hierachical Model of genomic variants's effect on gene expression 
 -------------------------------------------------------
-- [current model](model.png)
+- [current model](figure/model.png)
 
-- [Kruskal–Wallis test][kw]:  table: [kw filtration snp count: All genes](kwtestSummary.xlsx)
-
-
+- [Kruskal–Wallis test][kw]:  table: [kw filtration snp count: All genes](reportData_1.xlsx)
+```{r,background="white",results='hide', message=FALSE, warning=FALSE,echo=FALSE}
+# rootd="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA"
+# jxy = function(x,y){paste(x,y,sep="")}
+# data = read.table(jxy(rootd,"/result/snp/kwtestSummary.txt"),header=T,sep="\t",stringsAsFactors=F)
+# require(ggplot2)
+# require(gplots)
+# layout(matrix(1:4,2,byrow=T),)
+# data = data[-nrow(data),]
+# indes = vapply(c("X","Y"),FUN=function(x){grep(x,data$chr)},1)
+# data  = data[c(order(as.integer(data$chr[-indes])),indes),]
+# rownames(data)=data$chr
+# data = as.matrix(apply(data[,-1],2,as.numeric))
+# ggplot(data,aes(x=factor(chr),y=numTest)) + geom_bar() + scale_x_discrete(limits=c(1:22,'X','Y')) + xlab(label="Chrom")+ylab(label="number of gene-snp pairs")
+# plot(x=1:24,ylim=c(0,1),type='n')
+# (x=factor(data$chr),y=data$numTest/max(data$numTest),col='blue')
+# barplot(t(data[,-1]),beside=T)
+```
            
 - ftest:(-SNP/indel) contribution
 - group lasso regression --<still testing other model...>
@@ -97,3 +116,4 @@ All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can 
 [kw]: http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance
 [hwe]:http://en.wikipedia.org/wiki/HWE
 [bs]: http://www.broadinstitute.org/science/programs/medical-and-population-genetics/birdsuite/birdsuite-analysis#birdsuite_snps
+[lifeOver]: http://genome.cshlp.org/cgi/pmidlookup?view=long&pmid=12045153

@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 #J.HE
-#Desp: for projFocus ceRNA, given grplasso result, cross validation it using reference (1k genome, uk10k)
+#Desp: for projFocus ceRNA, given caner target genes, extract ceRNET regulator genes from giving ceRNET network
 #Input: -i -d -o
 
 
 ##----------------------------
 #functions
-
 def getElement(a,l):
 	[res for ele in l if ele==a]
 	return res
 ##----------------------------
+
 import os,sys,getopt
 import re
 
@@ -42,45 +42,30 @@ for opt, arg in opts:
 print inputfile
 print inputDB
 print output
-pcut = 0.05
 
-rsidPass = []
-cnt = 0 
+target = []
 with open(inputfile) as f:
-	for line in f.readlines():
-		# if re.match("^rs",line):
-		if cnt > 0: 
-			[col1, col2] = line.strip().split("\t")
-			if re.match("^rs",col1) and float(col2) > 0:
-				rsidPass.append(col1)
-		if cnt ==0 :
-			[col1, col2] = line.strip().split("\t")
-			if float(col2.split(":")[-1]) > pcut:
-				print (col2.split(":")[-1])
-				print("no significant \t" + inputfile )
-				sys.exit()
-			else:
-				pass
-		cnt = cnt + 1 	
-		continue
+    for line in f.readlines():
+	tempGene = line.strip()
+	target.append(tempGene)
+print "Input targets:\t " + str(len(target))
 
-cntRsid = 0
-cntPass = len(rsidPass)
-rsidPassInDB = []
+targetInDB = []
+cnt = 0 
 with open(inputDB) as f:
 	for line in f.readlines():
-		line = line.strip()
-		if line in rsidPass:
-			rsidPassInDB.append(line)
-			cntRsid = cntRsid + 1
-			if cntRsid == cntPass:
-				break
+	        [rna1, rna2] = line.strip().split("\t")[:2]
+		if (rna1 in target) or (rna2 in target):
+			targetInDB.extend([rna1, rna2])
+			cnt = cnt + 1
 		else:
 			continue
-rsidPassNew = list(set(rsidPass)-set(rsidPassInDB))
+targetInDB = list(set(targetInDB))
+print "Input ceRNET interaction:\t" + str(cnt)
+print "target ceRNET regulators:\t" + str(len(targetInDB))
 
 outputH = open(output,'w')
-outputH.write("\n".join(rsidPassNew))
+outputH.write("\n".join(targetInDB)+ "\n")
 outputH.close()
 print "#---END---"
 
