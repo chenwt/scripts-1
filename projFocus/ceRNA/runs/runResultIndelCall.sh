@@ -34,7 +34,7 @@ qsubRun (){
   do
     let cnt=$cnt+1
     jobid=`echo $line|awk 'BEGIN{FS="/"}{print substr($NF,9,4)}'`"_$cnt"
-    echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/indelCall_v3.sh $outDir $line"|qsub -l mem=8g,time=140:: -N $jobid -cwd -o ./log -e ./log >>qsub.log
+    echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/indelCall_v3.sh $outDir $line"|qsub -l mem=8g,time=160:: -N $jobid -cwd -o ./log -e ./log >>qsub.log
     tail -1 qsub.log
   done <$1
 }
@@ -70,13 +70,15 @@ outDir=$(pwd)
 #qsubRun input.bam.list.1 
 #qsubRun input.bam.list.2 
 #qsubRun input.bam.list.3 
-qsubRun input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part1_10
+# qsubRun input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part1_10
+# qsubRun input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part2_10
 ##------g
 
 #delBam input.bam.list.0
 #delBam input.bam.list.1
 #delBam input.bam.list.2
-#delBam input.bam.list.3
+delBam input.bam.list.3
+delBam input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part1_10 
 
 # touch input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt
 # for inputlist in input.bam.list.4 input.bam.list.5 input.bam.list.6

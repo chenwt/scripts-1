@@ -73,9 +73,10 @@ check() {
 }
 
 #check input.bam.list.0
-check input.bam.list.2
+# check input.bam.list.2
 check input.bam.list.3
-
+check input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part1_10
+check input.bam.list.brca_wxsInwgsDownloadlist2AND3.bam.tumor_02052014.txt_part2_10
 
 ##submit job for final vcf file
 #/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/indelCall_v3reqsub.sh /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/indelCall /ifs/scratch/c2b2/TCGA/data/BRCA/WXS/TCGA-A1-A0SD-01A-11D-A10Y-09.bam

@@ -28,13 +28,13 @@ for opt,arg in opts:
     out = arg
     outlog = out + ".log"
 
- #-----------test----
-#inpg = 'cancer.gene_UCceRNET.geneSingleStartEnd'
-#inpc = 'input.files'
-#out  = 'test.out' 
-#outlog = out + ".log"
-#outlogf = open(outlog,'w')
- ##-------test--end----
+# #-----------test----
+# inpg = 'cancer.genelist.startend_022014.tsv'
+# inpc = 'input.files'
+# out  = 'test.out' 
+# outlog = out + ".log"
+# outlogf = open(outlog,'w')
+# ##-------test--end----
 
 ##-----setting parameters
 nesp	   = 2  ##number of lines to escape at the begining of each meth file
@@ -46,7 +46,35 @@ def isfloat(value):
   except ValueError:
     return False
     
- 
+class Gene:
+  def __init__ (self, chr, start, end, strand):
+    self.chr   = chr
+    self.start = int(start)
+    self.end   = int(end)
+    self.strand = strand
+    self.meth = 0
+  def printAll(self):
+      attrs = vars(self)
+      print ', '.join("%s: %s" % item for item in attrs.items())
+  def matchMath(self, meth):
+      if self.name == meth.name:
+          self.meth = meth.val
+      else:
+          self.meth = "NaN"
+
+class Meth:
+    def __init__ (self, id, name, val, chr, pos):
+        self.id = id
+        self.name = name
+        self.chr   = chr
+        self.pos = int(pos)
+        if isfloat(val) and float(val) >= 0 and float(val) <=1:
+            self.val = val
+        else:
+            self.val = 'NaN'
+    def printAll(self):
+        attrs = vars(self)
+        print ', '.join("%s: %s" % item for item in attrs.items())
 
 ###------------end function--------
 ##--------load all meth filenames 
@@ -73,7 +101,6 @@ print "number of genes:\t" +str(nGene)
 #####--------------------------------loading meth data. 
 idfile = -1
 outputH = open(out,'w')
-idList = []
 for fn in fnArray:
   try:
     fntempf = open(fn)
@@ -90,18 +117,15 @@ for fn in fnArray:
             if name in geneList:
                try: 
                    float(value)
-                   temp = methValue[geneList.index(name)] 
-                   if temp > 0: 
-                       methValue[geneList.index(name)]  = (temp + value) / 2 
-                   else:
-                       methValue[geneList.index(name)] = value         
-                   
+                   methValue[geneList.index(name)] = value
                except ValueError:
                    pass 
             else:
                 continue
         else:
-            continue
+            names = name.split(";")
+            for idx in [geneList.index(g) for g in names if g in geneList] :
+                methValue[idx] = value
 
     fntempf.close()  
     outputH.write(fn+"\t" + '\t'.join(map(str,methValue) )+ "\n")

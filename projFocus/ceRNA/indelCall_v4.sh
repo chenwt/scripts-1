@@ -10,8 +10,7 @@
 #input: <working directory full path> <BAM file full path> 
 #ouput:
 #COMMENT: require dindel installed
-#updates: add scripts to remove bam file in after calling sucess.
-
+#updates: add filtering to dindel VCF, and output final filtered VCF compared to v2 which only output VCF
 
 usage='usage: $0 <output dir> <full path to bam> 
       example: $0 /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/indelCall/test /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/indelCall/test/test.bam'
@@ -158,7 +157,6 @@ cp $outFile.variantCalls.VCF.filtered.VCF $wdFinal/
 echo -e "removing temp file..."
 cd $wdFinal
 rm -R $wd
-rm $bam 
 echo -e "output file:\t"$outFile.variantCalls.VCF.filtered.VCF
 echo -e "#----END-----"
 
