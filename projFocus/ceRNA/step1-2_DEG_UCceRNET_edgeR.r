@@ -23,17 +23,17 @@ if(sysInfo['sysname']=="Darwin" ){
   rootd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
   figd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig/"
 }
-args = getArgs()
-usage = "Usage: Rscript bridegCeRAN.r --  file <gene.list>  "
-example = "Example: /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/filterGrplasso.r --file grplasso_coeff --cut 0.05 --out gcGenes_GeneVarNet"
-if(length(args) < 3 || is.null(args)){
-  print(usage)
-  print(example)
-  print(args)
-  stop("Input parameter error!")
-}else{
-  print(args)
-}
+# args = getArgs()
+# usage = "Usage: Rscript bridegCeRAN.r --  file <gene.list>  "
+# example = "Example: /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/filterGrplasso.r --file grplasso_coeff --cut 0.05 --out gcGenes_GeneVarNet"
+# if(length(args) < 3 || is.null(args)){
+#   print(usage)
+#   print(example)
+#   print(args)
+#   stop("Input parameter error!")
+# }else{
+#   print(args)
+# }
 
 setwd(system("pwd",intern=T))
 # cwd         = getwd()
@@ -48,10 +48,6 @@ tumor  =  "brca_exp_level3_02042014.mat"
 normal =  "brca_expNormal_level3_02042014.mat"
 output =  "brca_ucCeRNETCancerGeneDEG_edgeR_02042014"
 genelist = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list"
-# genelist = "/Volumes/ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.gene.freqBg1.brcaCeRNETRegulator"
-#  genelist = "/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.gene.freqBg1"
-# genelist = "/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.genename"
-
 reportDir = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig"
 outputPDF = paste(reportDir,"/",output,".pdf",sep="")
 ##----------------------------
@@ -69,8 +65,7 @@ getData = function(file,type="T",glist){
   return(list(data=data,design=design,gene=gene))
 }
 
-##--------
-#load data
+##--------#load data
 setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression")
 
 dataT = getData(tumor,type='tumor',genelist)
@@ -85,43 +80,33 @@ row.names(dataMat) = gene
 design = c(dataT$design,dataN$design)
 condition <- factor( design )
 
-##----------------------------
-#fitting model
-library(edgeR)
-y <- DGEList(counts=dataMat,group=condition)
-y <- calcNormFactors(y, method="TMM") 
-y <- estimateCommonDisp(y)
-y <- estimateTagwiseDisp(y)
-et <- exactTest(y)
-# save(et,file=paste(output_file,".rda",sep=""))
-
-###----------------------------
-de <- decideTestsDGE(et, p=0.05, adjust.method="BH")
-detags <- rownames(topTags(et, n=50))
-
+##-------------voom transformation
 require(limma)
 designMat = model.matrix(~design)
 dataMatVoom = voom(as.matrix(dataMat),designMat,plot=TRUE)
-outputIndex = which(abs(et$table$logFC) >1 & et$table$PValue < 0.05,arr.ind=T) ##2 FC
-dataMatVoomDegTumor = dataMatVoom$E[outputIndex,which(as.character(design)=="tumor")]
-dataMatVoomDeg  = dataMatVoom$E[outputIndex,]
+dataMatVoomTumor = dataMatVoom$E[,which(as.character(design)=="tumor")]
+dataMatVoomNormal = dataMatVoom$E[,which(as.character(design)=="normal")]
 
+##gene-sample infor
+samplePerGenefile = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/brca_geneSamplelist_UCceRNET_cancerGene_CNVMethFree_02072014.txt"
+samplePerGene = read.table(samplePerGenefile,header=T,stringsAsFactors=F)
+tarGene = unlist(samplePerGene$gene)
+failGene = ""
+for (ng in 1:nrow(samplePerGene)){
+  samples= vapply(unlist(strsplit(samplePerGene$samples_noCNV_noMeth[ng],";")),
+                  FUN=function(x){substr(x,9,16)},'a')
+  temp.index = colnames(dataMatVoomTumor) %in% samples
+  ttest = t.test(dataMatVoom$E[tarGene[ng],temp.index],dataMatVoomNormal[tarGene[ng],])
+  ifelse (ttest$p.value > 0.05, (failGene <- c(failGene, tarGene[ng])),"PASS")
+}
 
-#output
-pdf(outputPDF)
-plotMDS(y, cex=0.5)
-plotBCV(y, cex=0.4)
-plotSmear(et, de.tags=detags)
-abline(h = c(-1, 1), col = "blue")
-require(gplots)
-mycol = bluered(256)
-heatmap.2(dataMatVoom$E,col=mycol,trace="none",cexRow=0.3,cexCol=0.3,main="All ucCeRNET cancer Genes")
-heatmap.2(dataMatVoomDeg,col=mycol,trace="none",cexRow=0.3,cexCol=0.3, main = "FC>2 ucCeRNET Cancer Genes")
-dev.off()
-
-# outTag <- topTags(et,n=Inf,adjust.method="bonferroni",sort.by="p.value")
-# write.table(outTag,file=paste(output,".DEG.txt",sep=""),sep="\t",quote=F)
-
-outTagMat_header <- as.matrix(t(c("Gene",colnames(dataMatVoom))))
-write.table(outTagMat_header,file=paste(output,"DEG.mat",sep=""),sep="\t",quote=F,col.names=F,row.names=F)
-write.table(outTagMat,file=paste(output,"DEG.mat",sep=""),sep="\t",quote=F,append = TRUE,col.names=F)
+##---------output
+idxOutGene = samplePerGene$gene %in% setdiff(tarGene,failGene)
+outGeneSample = paste(samplePerGenefile,".deg_02102014.txt",sep="")
+out  =samplePerGene[idxOutGene,]
+write.table(samplePerGene[idxOutGene,],outGeneSample ,sep="\t",col.names=T,row.names=F,quote=F)
+expTumor = dataMatVoomTumor[rownames(dataMatVoomTumor) %in% out$gene,]
+expNormal =dataMatVoomNormal[rownames(dataMatVoomNormal) %in% out$gene,]
+outGeneSample = paste(samplePerGenefile,".degExp_02102014.rda",sep="")
+save(expTumor,expNormal,out,file=paste(cwd,"/brca_ucCeRNACancerDEG_edgeR_degExp_02102014.rda",sep=""))
+#--------------------------------------------

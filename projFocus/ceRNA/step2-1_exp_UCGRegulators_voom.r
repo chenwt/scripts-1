@@ -1,10 +1,10 @@
 #!/usr/bin/Rscript
-#Author: Jing He
-#Date:24 Oct,2013 
+#Author: J. He
+#Date:10 Feb,2014
 #Last Updated:
-#COMMENTS: need edgeR installed; 
+#COMMENTS: 
 #input: <string:path you wnat your results to be> 
-# 		  <string:name of your design file(4 cols, tab delimite:example)
+#   	  <string:name of your design file(4 cols, tab delimite:example)
 #		    <string:name of count matrix file>
 # 		  <string:name of your output files>
 #output: <file:pdf of 2 plots> <file: txt of differetial expresssed genes>
@@ -46,14 +46,12 @@ setwd(system("pwd",intern=T))
 ##-----test
 tumor  =  "brca_exp_level3_02042014.mat"
 normal =  "brca_expNormal_level3_02042014.mat"
-output =  "brca_ucCeRNETCancerGeneDEG_edgeR_02042014"
-genelist = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list"
-# genelist = "/Volumes/ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.gene.freqBg1.brcaCeRNETRegulator"
-#  genelist = "/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.gene.freqBg1"
-# genelist = "/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.genename"
+output =  "brca_UCGRegulator_voom_02042014"
+genelist = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/UCGCNVMethFreeDEG_brca_ceRNET_regulator.txt"
 
 reportDir = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig"
 outputPDF = paste(reportDir,"/",output,".pdf",sep="")
+
 ##----------------------------
 getData = function(file,type="T",glist){
   gene = unlist(read.table(glist))
@@ -72,7 +70,8 @@ getData = function(file,type="T",glist){
 ##--------
 #load data
 setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression")
-
+cernet = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_ceRNA_network.txt"
+load("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/brca_ucCeRNACancerDEG_edgeR_degExp_02102014.rda")
 dataT = getData(tumor,type='tumor',genelist)
 dataN = getData(normal,type='normal',genelist)
 cntSampleT = ncol(dataT$data)
@@ -85,6 +84,35 @@ row.names(dataMat) = gene
 design = c(dataT$design,dataN$design)
 condition <- factor( design )
 
+##-------------voom transformation
+require(limma)
+designMat = model.matrix(~design)
+dataMatVoom = voom(as.matrix(dataMat),designMat,plot=TRUE)
+dataMatVoomTumor = dataMatVoom$E[,which(as.character(design)=="tumor")]
+dataMatVoomNormal = dataMatVoom$E[,which(as.character(design)=="normal")]
+
+##gene-sample infor
+samplePerGenefile = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/brca_geneSamplelist_UCceRNET_cancerGene_CNVMethFree_02072014.txt"
+samplePerGene = read.table(samplePerGenefile,header=T,stringsAsFactors=F)
+tarGene = unlist(samplePerGene$gene)
+failGene = ""
+for (ng in 1:nrow(samplePerGene)){
+  samples= vapply(unlist(strsplit(samplePerGene$samples_noCNV_noMeth[ng],";")),
+                  FUN=function(x){substr(x,9,16)},'a')
+  temp.index = colnames(dataMatVoomTumor) %in% samples
+  ttest = t.test(dataMatVoom$E[tarGene[ng],temp.index],dataMatVoomNormal[tarGene[ng],])
+  ifelse (ttest$p.value > 0.05, (failGene <- c(failGene, tarGene[ng])),"PASS")
+}
+
+idxOutGene = samplePerGene$gene %in% setdiff(tarGene,failGene)
+outGeneSample = paste(samplePerGenefile,".deg_02102014.txt",sep="")
+out  =samplePerGene[idxOutGene,]
+write.table(samplePerGene[idxOutGene,],outGeneSample ,sep="\t",col.names=T,row.names=F,quote=F)
+expTumor = dataMatVoomTumor[rownames(dataMatVoomTumor) %in% out$gene,]
+expNormal =dataMatVoomNormal[rownames(dataMatVoomNormal) %in% out$gene,]
+outGeneSample = paste(samplePerGenefile,".degExp_02102014.rda",sep="")
+save(expTumor,expNormal,out,file=paste(cwd,"/brca_ucCeRNACancerDEG_edgeR_degExp_02102014.rda",sep=""))
+#--------------------------------------------
 ##----------------------------
 #fitting model
 library(edgeR)
