@@ -1,0 +1,160 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+_AA	vcf2maf_local.py	/^_AA = 4$/;"	v
+_AA_LEN	vcf2maf_local.py	/^_AA_LEN = 5$/;"	v
+_BIOTYPE	vcf2maf_local.py	/^_BIOTYPE = 7$/;"	v
+_CODING	vcf2maf_local.py	/^_CODING = 8$/;"	v
+_CODON	vcf2maf_local.py	/^_CODON = 3$/;"	v
+_EFFECT	vcf2maf_local.py	/^_EFFECT = 0$/;"	v
+_EXID	vcf2maf_local.py	/^_EXID = 10$/;"	v
+_FUNCLASS	vcf2maf_local.py	/^_FUNCLASS = 2$/;"	v
+_GENE	vcf2maf_local.py	/^_GENE = 6$/;"	v
+_IMPACT	vcf2maf_local.py	/^_IMPACT = 1$/;"	v
+_TRID	vcf2maf_local.py	/^_TRID = 9$/;"	v
+_barcode_pattern	vcf2maf_local.py	/^_barcode_pattern = re.compile(r'(TCGA-\\w{2}-\\w{4}-\\w{3}-\\w{3}-\\w{4}-\\w{2})')$/;"	v
+_extract_tcga_barcode	vcf2maf_local.py	/^def _extract_tcga_barcode(sample):$/;"	f
+_log	vcf2maf_local.py	/^_log = sys.stderr$/;"	v
+_rsid_pattern	vcf2maf_local.py	/^_rsid_pattern = re.compile(r'(rs[0-9]+)(_[0-9]+_[0-9]+)?')$/;"	v
+_sequencer_allowed_values	vcf2maf_local.py	/^_sequencer_allowed_values = maf_spec.columns_by_name['Sequencer']['enumerated']$/;"	v
+argparse	vcf2maf_local.py	/^import argparse$/;"	i
+argv	filterGatkAnnovar_v1.py	/^argv = sys.argv[1:]$/;"	v
+argv	filterMutation_local.py	/^argv = sys.argv[1:]$/;"	v
+argv	genRegionFile.py	/^argv = sys.argv[1:]$/;"	v
+argv	vcfConcat_local.py	/^argv = sys.argv[1:]$/;"	v
+clr_cut	filterGatkAnnovar_v1.py	/^clr_cut = 1$/;"	v
+clr_cut	filterMutation_local.py	/^clr_cut = 1$/;"	v
+cnt_line	filterGatkAnnovar_v1.py	/^                  cnt_line = cnt_line + 1$/;"	v
+cnt_line	filterGatkAnnovar_v1.py	/^cnt_line = 0 $/;"	v
+cnt_line	filterMutation_local.py	/^                  cnt_line = cnt_line + 1$/;"	v
+cnt_line	filterMutation_local.py	/^cnt_line = 0 $/;"	v
+cnt_res	filterGatkAnnovar_v1.py	/^                              cnt_res = cnt_res + 1$/;"	v
+cnt_res	filterGatkAnnovar_v1.py	/^cnt_res = 0$/;"	v
+cnt_res	filterMutation_local.py	/^                        cnt_res = cnt_res + 1$/;"	v
+cnt_res	filterMutation_local.py	/^cnt_res = 0$/;"	v
+cntf	vcfConcat_local.py	/^  cntf = cntf + 1$/;"	v
+cntf	vcfConcat_local.py	/^cntf  = 0$/;"	v
+collections	filterGatkAnnovar_v1.py	/^import collections$/;"	i
+collections	filterMutation_local.py	/^import collections$/;"	i
+dbsnp	filterGatkAnnovar_v1.py	/^dbsnp = 'DB'$/;"	v
+dbsnp	filterMutation_local.py	/^dbsnp = 'DB'$/;"	v
+dir	vcfConcat_local.py	/^dir ='.'$/;"	v
+dp34_cut	filterGatkAnnovar_v1.py	/^dp34_cut = 3$/;"	v
+dp34_cut	filterMutation_local.py	/^dp34_cut = 3$/;"	v
+dp3_cut	filterGatkAnnovar_v1.py	/^dp3_cut = 1$/;"	v
+dp3_cut	filterMutation_local.py	/^dp3_cut = 1$/;"	v
+dp4_cut	filterGatkAnnovar_v1.py	/^dp4_cut = 1$/;"	v
+dp4_cut	filterMutation_local.py	/^dp4_cut = 1$/;"	v
+dp_cut	filterGatkAnnovar_v1.py	/^dp_cut = 10$/;"	v
+dp_cut	filterMutation_local.py	/^dp_cut = 10$/;"	v
+err	filterGatkAnnovar_v1.py	/^err="[ERR:]"$/;"	v
+err	filterMutation_local.py	/^err="[ERR:]"$/;"	v
+example	filterGatkAnnovar_v1.py	/^example="[EXAMPLE:]" + sys.argv[0] + " -i -f -o "$/;"	v
+example	filterMutation_local.py	/^example="[EXAMPLE:]" + sys.argv[0] + " -i -f -o "$/;"	v
+example	genRegionFile.py	/^example = 'python " + sys.argv[0] + " -i <input>  -o <output>'$/;"	v
+example	vcfConcat_local.py	/^example = 'python " + sys.argv[0] + " -i <pattern of file>  -o <output>'$/;"	v
+files	vcfConcat_local.py	/^files = [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir,f)) and re.findall(pattern,f) ] $/;"	v
+flag	filterGatkAnnovar_v1.py	/^			     flag = 0$/;"	v
+flag	filterGatkAnnovar_v1.py	/^                             flag = 0$/;"	v
+flag	filterGatkAnnovar_v1.py	/^                        flag=1$/;"	v
+flag	filterMutation_local.py	/^		       flag = 0$/;"	v
+flag	filterMutation_local.py	/^                       flag = 0$/;"	v
+flag	filterMutation_local.py	/^                  flag=1$/;"	v
+flag_header	filterGatkAnnovar_v1.py	/^flag_header = 1 $/;"	v
+flag_header	filterMutation_local.py	/^flag_header = 1 $/;"	v
+formatArray	filterGatkAnnovar_v1.py	/^                        formatArray = format.split(":")$/;"	v
+formatArray	filterMutation_local.py	/^                  formatArray = format.split(":")$/;"	v
+fpgeneArray	filterGatkAnnovar_v1.py	/^fpgeneArray = []$/;"	v
+fpgeneArray	filterMutation_local.py	/^fpgeneArray = []$/;"	v
+fpgenefile	filterGatkAnnovar_v1.py	/^fpgenefile = "\/ifs\/data\/c2b2\/ac_lab\/jh3283\/projFocus\/other\/positiveControlGene.txt" $/;"	v
+fpgenefile	filterMutation_local.py	/^fpgenefile = "\/ifs\/data\/c2b2\/ac_lab\/jh3283\/projFocus\/other\/positiveControlGene.txt" $/;"	v
+funcClass_type	filterGatkAnnovar_v1.py	/^funcClass_type = 'synonymousSNV'$/;"	v
+funcClass_type	filterMutation_local.py	/^funcClass_type = 'synonymousSNV'$/;"	v
+getopt	filterGatkAnnovar_v1.py	/^import sys,getopt$/;"	i
+getopt	filterMutation_local.py	/^import sys,getopt$/;"	i
+getopt	genRegionFile.py	/^import os,getopt$/;"	i
+getopt	vcfConcat_local.py	/^import sys,getopt$/;"	i
+idxAD	filterGatkAnnovar_v1.py	/^                             idxAD = formatArray.index('AD')$/;"	v
+idxAD	filterMutation_local.py	/^                       idxAD = formatArray.index('AD')$/;"	v
+infoArray	filterGatkAnnovar_v1.py	/^                  infoArray = info.split(";")$/;"	v
+infoArray	filterMutation_local.py	/^                  infoArray = info.split(";")$/;"	v
+infoArray_value	filterGatkAnnovar_v1.py	/^			infoArray_value = [a for a in infoArray if re.findall(r'=',a)]$/;"	v
+infoArray_value	filterMutation_local.py	/^	          infoArray_value = [a for a in infoArray if re.findall(r'=',a)]$/;"	v
+infoDict	filterGatkAnnovar_v1.py	/^                        infoDict = {}$/;"	v
+infoDict	filterMutation_local.py	/^                  infoDict = {}$/;"	v
+inp	filterGatkAnnovar_v1.py	/^            inp = arg$/;"	v
+inp	filterMutation_local.py	/^            inp = arg$/;"	v
+input	genRegionFile.py	/^    input = arg$/;"	v
+input	genRegionFile.py	/^input = ''$/;"	v
+input	vcfConcat_local.py	/^    input = arg$/;"	v
+input	vcfConcat_local.py	/^input = ''$/;"	v
+list_samples	vcf2maf_local.py	/^def list_samples(vcf_file, out_file):$/;"	f
+maf_spec	vcf2maf_local.py	/^import maf_spec$/;"	i
+maftum_cut	filterGatkAnnovar_v1.py	/^maftum_cut = 0$/;"	v
+maftum_cut	filterMutation_local.py	/^maftum_cut = 0$/;"	v
+main	vcf2maf_local.py	/^def main():$/;"	f
+mq0_cut	filterGatkAnnovar_v1.py	/^mq0_cut =  0.1$/;"	v
+mq0_cut	filterMutation_local.py	/^mq0_cut =  0.1$/;"	v
+os	filterGatkAnnovar_v1.py	/^import os$/;"	i
+os	filterMutation_local.py	/^import os$/;"	i
+os	genRegionFile.py	/^import os,getopt$/;"	i
+os	vcfConcat_local.py	/^import os$/;"	i
+out	filterGatkAnnovar_v1.py	/^            out = arg$/;"	v
+out	filterMutation_local.py	/^            out = arg$/;"	v
+outf	filterGatkAnnovar_v1.py	/^outf = open(out,'w')$/;"	v
+outf	filterMutation_local.py	/^outf = open(out,'w')$/;"	v
+outlog	genRegionFile.py	/^    outlog = output + ".log"$/;"	v
+output	genRegionFile.py	/^    output = arg$/;"	v
+output	genRegionFile.py	/^output = ''$/;"	v
+output	vcfConcat_local.py	/^    output = arg$/;"	v
+output	vcfConcat_local.py	/^output = ''$/;"	v
+outputH	vcfConcat_local.py	/^outputH = open(output,'w')$/;"	v
+pattern	vcfConcat_local.py	/^pattern = input$/;"	v
+pltum_cut	filterGatkAnnovar_v1.py	/^pltum_cut = 40$/;"	v
+pltum_cut	filterMutation_local.py	/^pltum_cut = 40$/;"	v
+re	filterGatkAnnovar_v1.py	/^import re$/;"	i
+re	filterMutation_local.py	/^import re$/;"	i
+re	vcf2maf_local.py	/^import re$/;"	i
+re	vcfConcat_local.py	/^import re$/;"	i
+remove_quotes	vcf2maf_local.py	/^def remove_quotes(string):$/;"	f
+s1temp	filterGatkAnnovar_v1.py	/^                             s1temp = sample1Array[idxAD].split(",")$/;"	v
+s1temp	filterMutation_local.py	/^                       s1temp = sample1Array[idxAD].split(",")$/;"	v
+sample1Alt	filterGatkAnnovar_v1.py	/^                               sample1Alt = '-'$/;"	v
+sample1Alt	filterMutation_local.py	/^                         sample1Alt = '-'$/;"	v
+sample1Array	filterGatkAnnovar_v1.py	/^                        sample1Array = sample1.split(":")$/;"	v
+sample1Array	filterMutation_local.py	/^                  sample1Array = sample1.split(":")$/;"	v
+sample1Name	filterGatkAnnovar_v1.py	/^                  sample1Name = tempHeader[-1]$/;"	v
+sample1Name	filterMutation_local.py	/^                  sample1Name = tempHeader[-1]$/;"	v
+sample1PL_homoRef	filterGatkAnnovar_v1.py	/^                        sample1PL_homoRef = sample1Array[formatArray.index('PL')].split(",")[0]  $/;"	v
+sample1PL_homoRef	filterMutation_local.py	/^                  sample1PL_homoRef = sample1Array[formatArray.index('PL')].split(",")[0]  $/;"	v
+sample1Ref	filterGatkAnnovar_v1.py	/^                               sample1Ref = '-'$/;"	v
+sample1Ref	filterGatkAnnovar_v1.py	/^                               sample1Ref = sample1Array[idxAD].split(",")[0]$/;"	v
+sample1Ref	filterMutation_local.py	/^                         sample1Ref = '-'$/;"	v
+sample1Ref	filterMutation_local.py	/^                         sample1Ref = sample1Array[idxAD].split(",")[0]$/;"	v
+snpeff_to_variant_classification	vcf2maf_local.py	/^def snpeff_to_variant_classification(snpeff, record):$/;"	f
+snpeff_variant_classification	vcf2maf_local.py	/^snpeff_variant_classification = {$/;"	v
+snv_type	filterGatkAnnovar_v1.py	/^snv_type = ''$/;"	v
+snv_type	filterMutation_local.py	/^snv_type = ''$/;"	v
+split_on_slash_or_bar	vcf2maf_local.py	/^split_on_slash_or_bar = re.compile(r"[\\|\\\/\\\\]")$/;"	v
+sys	filterGatkAnnovar_v1.py	/^import sys,getopt$/;"	i
+sys	filterMutation_local.py	/^import sys,getopt$/;"	i
+sys	genRegionFile.py	/^import sys$/;"	i
+sys	vcf2maf_local.py	/^import sys$/;"	i
+sys	vcfConcat_local.py	/^import sys,getopt$/;"	i
+temp	filterGatkAnnovar_v1.py	/^                             temp = infosub.split("=")$/;"	v
+temp	filterMutation_local.py	/^                       temp = infosub.split("=")$/;"	v
+tempHeader	filterGatkAnnovar_v1.py	/^                  tempHeader = line.strip().split("\\t")$/;"	v
+tempHeader	filterMutation_local.py	/^                  tempHeader = line.strip().split("\\t")$/;"	v
+time	vcf2maf_local.py	/^from time import time$/;"	i
+usage	filterGatkAnnovar_v1.py	/^usage="[UASGE:]" +sys.argv[0] + " -i <input.vcf> -f <falsePostivegene.txt> -o <out.maf>"$/;"	v
+usage	filterMutation_local.py	/^usage="[UASGE:]" +sys.argv[0] + " -i <input.vcf> -f <falsePostivegene.txt> -o <out.maf>"$/;"	v
+usage	genRegionFile.py	/^usage = 'python " + sys.argv[0] + " -i <input>  -o <output>'$/;"	v
+usage	vcfConcat_local.py	/^usage = 'python " + sys.argv[0] + " -i <pattern of file>  -o <output>'$/;"	v
+uuid	vcf2maf_local.py	/^import uuid$/;"	i
+variantType	filterGatkAnnovar_v1.py	/^variantType = 'SNP'$/;"	v
+variantType	filterMutation_local.py	/^variantType = 'SNP'$/;"	v
+vcf	vcf2maf_local.py	/^import vcf$/;"	i
+vcf2maf	vcf2maf_local.py	/^def vcf2maf(vcf_file, maf_file, decrement_end_coordinate=False, verbose=False):$/;"	f

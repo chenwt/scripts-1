@@ -31,11 +31,17 @@ if(sysInfo['sysname']=="Darwin" ){
    print(args)
  }
 
+setwd(system("pwd",intern=T))
+cwd         = getwd()
+cnv  = args['cnv'] 
+meth = args['meth']
+outfile = args['out'] 
+print(paste("current working directory:",cwd))
 
 
-file = "brca_geneSamplelist_UCceRNET_cancerGene_CNVMethFree_02072014.txt"
-cnv = "cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat"
-meth = "meth/brca_methTumor_level3_02072014.mat_diffMeth.mat"
+# outfile = "brca_geneSamplelist_UCceRNET_cancerGene_CNVMethFree_02072014.txt"
+# cnv = "cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat"
+# meth = "meth/brca_methTumor_level3_02072014.mat_diffMeth.mat"
 dcnv = read.delim2(cnv)
 dcnv = dcnv[,-ncol(dcnv)]
 rownames(dcnv) = dcnv$barcode
@@ -52,18 +58,15 @@ sampleComm = colnames(dcnv)[colnames(dcnv) %in% colnames(dmeth)]
 geneComm = rownames(dcnv)[rownames(dcnv) %in% rownames(dmeth)]
 comm = dcnv[geneComm,sampleComm] + dmeth[geneComm,sampleComm]
 sampleNumber = 115 - rowSums(comm)
-plot(density(sampleNumber),col="blue")
-plot(sampleNumber, col="blue")
 sampleUnion = unique(c(colnames(dcnv),colnames(dmeth)))
 geneUnion = unique(c(rownames(dcnv),rownames(dmeth)))
 result = matrix(0,ncol=length(sampleUnion),nrow=length(geneUnion))
 
 as.matrix(sampleComm)
 header = paste("gene","samples_noCNV_noMeth",sep="\t")
-write(header,file)
-# for (i in 1:5){
+write(header,outfile)
 for (i in 1:nrow(comm)){
     line = paste(geneComm[i],paste(sampleComm[which(comm[i,]==0)], collapse = ';'),sep="\t")
-    write(line,file,append=T)
+    write(line,outfile,append=T)
 }
 

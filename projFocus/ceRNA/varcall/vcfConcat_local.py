@@ -8,8 +8,8 @@ import re
 argv = sys.argv[1:]
 input = ''
 output = ''
-usage = 'python " + sys.argv[0] + " -i <input>  -o <output>'
-example = 'python " + sys.argv[0] + " -i <input>  -o <output>'
+usage = 'python " + sys.argv[0] + " -i <pattern of file>  -o <output>'
+example = 'python " + sys.argv[0] + " -i <pattern of file>  -o <output>'
 try:
   opts,args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
 except getopt.GetoptError:
@@ -24,7 +24,7 @@ for opt, arg in opts:
   elif opt in ("-o","--ofile"):
     output = arg
 print ('Script path'+ sys.argv[0])
-print('Input file:' + input)
+print('Input pattern of file:' + input)
 print('Output file:'+ output)
 
 ##input is a pattern of files in the current dir

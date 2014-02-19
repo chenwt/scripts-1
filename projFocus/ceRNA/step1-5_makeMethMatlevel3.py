@@ -28,13 +28,6 @@ for opt,arg in opts:
     out = arg
     outlog = out + ".log"
 
- #-----------test----
-#inpg = 'cancer.gene_UCceRNET.geneSingleStartEnd'
-#inpc = 'input.files'
-#out  = 'test.out' 
-#outlog = out + ".log"
-#outlogf = open(outlog,'w')
- ##-------test--end----
 
 ##-----setting parameters
 nesp	   = 2  ##number of lines to escape at the begining of each meth file
@@ -89,10 +82,10 @@ for fn in fnArray:
         if not ";" in name:
             if name in geneList:
                try: 
-                   float(value)
+                   value=float(value)
                    temp = methValue[geneList.index(name)] 
                    if temp > 0: 
-                       methValue[geneList.index(name)]  = (temp + value) / 2 
+                       methValue[geneList.index(name)]  = (temp+ value) / 2 
                    else:
                        methValue[geneList.index(name)] = value         
                    

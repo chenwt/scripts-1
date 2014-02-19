@@ -1,0 +1,36 @@
+Cancer heterogeneity
+========================================================
+
+
+cBioportal 
+-----
+```{r}
+pt.local = unlist(read.table("/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/school/compGenomic/pid.txt",stringsAsFactors=F))
+
+install.packages('cgdsr')
+require('cgdsr')
+mycgds = CGDS("http://www.cbioportal.org/public-portal/")
+test(mycgds)
+
+# Get list of cancer studies at server
+getCancerStudies(mycgds)
+
+# Get available case lists (collection of samples) for a given cancer study
+mycancerstudy = getCancerStudies(mycgds)[1,1]
+mycaselist = getCaseLists(mycgds,mycancerstudy)[1,5]
+pt.cbio = vapply(unlist(strsplit(mycaselist," ")),FUN=function(x){unlist(strsplit(x,"-"))[3]},'a')
+pt.overlap = pt.local[pt.local %in% pt.cbio]
+# Get available genetic profiles
+mygeneticprofile = getGeneticProfiles(mycgds,mycancerstudy)[5,]
+mygeneticprofile
+# Get data slices for a specified list of genes, genetic profile and case list
+getProfileData(mycgds,c('BRCA1','BRCA2'),mygeneticprofile,mycaselist)
+
+# Get clinical data for the case list
+myclinicaldata = getClinicalData(mycgds,mycaselist)
+
+# documentation
+help('cgdsr')
+help('CGDS')
+```
+

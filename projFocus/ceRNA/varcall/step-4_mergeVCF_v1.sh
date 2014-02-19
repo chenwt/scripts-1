@@ -1,6 +1,5 @@
 #!/bin/bash
 #$ -m e
-#$ -cwd 
 #By: J.He
 ### input: working directory  
 ### output: <var.vcf.gatk.vcf> 
@@ -9,16 +8,6 @@
 
 tempDir=$1
 outputDir=$2
-REGIONFILE=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs/humanGenome_hg19_regions104.bed
-##-------check if finished---
-# # cntVCF=`ls $tempDir/*var.vcf.gatk.vcf 2>/dev/null |wc -l`
-# cntTotal=`wc -l $REGIONFILE 2>/dev/null|wc -l `
-
-# if [[ $cntVCF != $cntTotal ]]; then
-#   echo "$cntVCF out of $cntTotal...."
-#   echo "step merge"
-#   exit
-# fi
 
 ##---setting parameters-
 sh /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/global_setting_projFocueCeRNA.sh 

@@ -5,7 +5,9 @@
 BAM=$1
 
 ##startcopy
+
 ##--------------------
+
 uname -a
 msg="<MESSAGE>: "
 cmd="<COMMAND>: "
@@ -14,14 +16,23 @@ err="<ERROR>: "
 echo "$msg calling Start $0: `date`"
 USAGE="--USAGE : $0 <INPUT.bam> "
 
+
+if [[ ! -f $BAM.list ]]
+then
+  echo "$err splitting error!"
+  exit
+fi
+
 outputDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/rawVars/
 cwd=`pwd`
 
-sh /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/global_setting_projFocueCeRNA.sh
+. /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/global_setting_projFocueCeRNA.sh
 srcDIR=/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall
 SAMTOOLS=/ifs/data/c2b2/ngs_lab/ngs/usr/bin/samtools
 BCFTOOLS=/ifs/data/c2b2/ngs_lab/ngs/usr/bin/bcftools
 VCFUTILS=/ifs/data/c2b2/ngs_lab/ngs/usr/bin/vcfutils.pl
+GATKJAR=/ifs/home/c2b2/ac_lab/jh3283/tools/GATK/GenomeAnalysisTK_current/GenomeAnalysisTK.jar
+REF=/ifs/scratch/c2b2/ac_lab/jh3283/ref/GRCh37-lite.fa
 
 ##------------call
 ##-D output per-sample read depth -S per-sample Phre-scaled strand bias p-value -u for piping -f faidx index reference file 
@@ -29,6 +40,11 @@ $SAMTOOLS mpileup -DSuf $REF $BAM |$BCFTOOLS view -bvcg -p 0.9 - > $BAM.var.bcf
 $BCFTOOLS view $BAM.var.bcf | $VCFUTILS varFilter -D 400 > $BAM.var.vcf
 rm $BAM.var.bcf
 echo $BAM.var.vcf > $BAM.var.vcf.list
+if [[ $? != 0 ]]; then
+  echo "$err Calling error"
+  exit
+fi
+echo "Calling sucess"
 
 ###-----------anno
 bamName=$(echo $BAM|awk 'BEGIN{FS="/"}{print $NF}')
@@ -74,31 +90,14 @@ if [[ $? == 0 ]]
 then
 	rm -R $TEMP
 	rm $BAM
-	echo "$msg End $0: `date`"
-	exit 0
+	rm $BAM.var.bcf
+	echo "annotating sucess"
 else
-	echo "$msg End $0: `date`"
+	echo "$err End $0: `date`: gatk annoation"
 	exit 1
 fi
 
 echo "GATKannotationDONE" > $VCF.gatk.vcf.list
-
-###-----check dir setting-----
-if [ ! -d $cwd/log ]; then 
-  echo -e $ERR"log dir not there!" 
-  exit
-fi
-logDir=$cwd/log
-
-##-----invoke merge VCFs
-cnt=`ls -1 $cwd/split*gatk.vcf 2>/dev/null |wc -l`
-if [[ -f $cwd/Moniter.txt ]] && [[ $cnt -gt 0 ]] ; then
-  echo "Moniter file exisit!" 
-else
-  echo "Moniter var.vcf.gatk.vcf"  > $cwd/Moniter.txt
-  echo "$srcDir/step-4_mergeVCF.sh $cwd $outputDir" | qsub -l mem=4g,time=140:: -e $logDir/ -o $logDir/ -cwd -N mergeVCF > $cwd/qsubMerge.log
-  cat $tempDir/qsubMerge.log
-fi 
 
 
 echo "#--END---$(date)"

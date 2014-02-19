@@ -1,0 +1,15 @@
+README
+===============
+pipeline files to do whole genome sequencing single calling
+scripts include:
+  - split bam
+  - do call, gatk annotation to each bam chuank
+  - temp file cleaning
+  - combine gatk annotatked vcf
+  - do annovar annotation, local filtration to each sample
+  - transform vcf to maf format (underwork)
+  - run mutSig for final somatic mutations
+
+Beside;
+script for executing those scripts on TCGA BRCA WGS, 
+### DO NOT DELETE ANY OF THEM

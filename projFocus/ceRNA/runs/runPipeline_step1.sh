@@ -60,14 +60,15 @@ getExpMatNormal(){
 # getExpMatNormal 
 
 ###---filter samples with cnv for each gene
-cd /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2/test
+# cd /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2/test
 
 getGeneAnno(){
-     annoGeneStartEnd=/ifs/scratch/c2b2/ac_lab/jh3283/database/projFocusRef/refset_gene_start_end.tsv.sorted.uniq_resortedCol_geneSingleStartEnd
-    echo -n "" >  genelist.geneSingleStartEnd
+    annoGeneStartEnd=/ifs/scratch/c2b2/ac_lab/jh3283/database/projFocusRef/refset_gene_start_end.tsv.sorted.uniq_resortedCol_geneSingleStartEnd
+   fname=`echo $1|awk -F"/" '{print $NF}'`
+    echo -n "" >  $fname.geneSingleStartEnd
     while read gene
     do 
-      awk -v g=$gene '$1==g{print $0}' $annoGeneStartEnd >> genelist.geneSingleStartEnd
+      awk -v g=$gene '$1==g{print $0}' $annoGeneStartEnd >> $fname.geneSingleStartEnd
     done < $1
 } 
 
@@ -81,7 +82,7 @@ getCNVMat(){
     temp1="input_renameFiles.txt.temp"
     grep "\.hg19.seg.txt" FILE_SAMPLE_MAP.txt |awk '{print $1"\t"$2}' > $temp1
      ~/scripts/projFocus/ceRNA/step1-2.1_softlinkFiles.sh $temp1  
-    $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/step1-3_getGeneCNVMatLevel2.py -f step1-2.1_softlinkFiles.sh.log -g genelist.geneSingleStartEnd -o $output.temp 
+    $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/step1-3_getGeneCNVMatLevel2.py -f step1-2.1_softlinkFiles.sh.log -g $genelist.geneSingleStartEnd -o $output.temp 
     echo "transposing file..."
     if [ -f $output.temp ] ;then
       ~/bin/trfile $output.temp $output
@@ -98,8 +99,8 @@ awk 'NR>1{cnt=0;for(i=1;i<=NF;i++){
 	}
 
 # genelist='/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.genename' #the candidate cancer genes
-genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list' #the candidate cancer genes
-output=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat
+# genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list' #the candidate cancer genes
+# output=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat
 # getCNVMat $genelist $output
 # countSample $output
 
@@ -118,16 +119,25 @@ getCNVmatOld(){
 ###-----------------filter samples with meth for each gene
 preInputMatfile(){
     ls *BRCA* >> brca_meth_level3_file.temp
-    # awk -F'\t' 'NR>1{print $28"\t"$27}' *BRCA.HumanMethylation27*sdrf.txt > input_temp
-    awk -F'\t' 'NR>1{print $28"\t"$27}' *BRCA.HumanMethylation450*sdrf.txt >> input_temp
+    cnt27=`ls *BRCA.HumanMethylation27*sdrf.txt 2>/dev/null |wc -l`
+    cnt450=`ls *BRCA.HumanMethylation450*sdrf.txt 2>/dev/null |wc -l`
+    echo -n "" > input_temp
+    if [ $cnt27 -gt 0 ]; then
+      awk -F'\t' 'NR>1{print $28"\t"$27}' *BRCA.HumanMethylation27*sdrf.txt >> input_temp
+    fi
+    if [ $cnt450 -gt 0 ]; then
+      awk -F'\t' 'NR>1{print $28"\t"$27}' *BRCA.HumanMethylation450*sdrf.txt >> input_temp
+    fi
     grep -f brca_meth_level3_file.temp input_temp > input_softlink.temp 
 }
 
 genMethMat(){
    # methDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/methlevel3/
-   methDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/methlevel3Normal/
-   genelist=$1
-   output=$2
+   # methDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/methlevel3Normal/
+   ##changes at 02172014
+   methDir=$1
+   genelist=$2
+   output=$3
    cd $methDir
    preInputMatfile
    wc -l input_softlink.temp
@@ -138,17 +148,17 @@ genMethMat(){
    rm $output.temp
    rmlns $methDir
 }
-genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.geneSingleStartEnd'
+# genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.geneSingleStartEnd'
 # outputTumor=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methTumor_level3_02072014.mat
-outputNormal=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methNormal_level3_02072014.mat
+# outputNormal=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methNormal_level3_02072014.mat
 # mv $outputTumor ${outputTumor}_old
 # genMethMat $genelist $outputTumor
-mv $outputNormal ${outputNormal}_old
-genMethMat $genelist $outputNormal
+# mv $outputNormal ${outputNormal}_old
+# genMethMat $genelist $outputNormal
 
 ##run DEG analysis
 # cd /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/
 
 ###---TODO
 
-echo "##---END----"
+# echo "##---END----"
