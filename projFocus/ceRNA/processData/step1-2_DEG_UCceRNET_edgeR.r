@@ -10,14 +10,11 @@
 #output: <file:pdf of 2 plots> <file: txt of differetial expresssed genes>
 ####TODO: need more development
 
-usage = "Usage: Rscript step1-7_getDEG.r --gene <gene.list> --genesample <sample per gene file> --normal <exp.normmal.mat> --tumor <exp.tumor.mat> --out < outputfile>  "
-example = "Rscript step1-7_getDEG.r --tumor /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/brca_exp_level3_02042014.mat --normal /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/brca_expNormal_level3_02042014.mat --gene /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/cancerGenes_nature12912_novel.list.geneSingleStartEnd --genesample /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_geneSamplelist_nature12912NovelGene_CNVMethFree_02182014.txt --out /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_geneSamplelist_nature12912NovelGene_CNVMethFree_02182014.txt.deg_02102014.txt " 
-
 sysInfo = Sys.info()
 if(sysInfo['sysname']=="Darwin" ){
   source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
   setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/")
-  rootd = "/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/"
+  rootd = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
   figd = "/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/figure/"
 }else if(sysInfo['sysname']=="Linux" ){
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
@@ -26,39 +23,43 @@ if(sysInfo['sysname']=="Darwin" ){
   rootd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
   figd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig/"
 }
-args = getArgs()
-if(length(args) < 3 || is.null(args)){
-  print(usage)
-  print(example)
-  print(args)
-  stop("Input parameter error!")
-}else{
-  print(args)
-}
+
+# args = getArgs()
+# usage = "Usage: Rscript step1-2_DEG_UCceRNET_edgeR.r --tumor <tumor.mat file> --normal <normal.mat file>  --genelist <geneSample.list>  "
+# example = "Example: /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/filterGrplasso.r --file grplasso_coeff --cut 0.05 --out gcGenes_GeneVarNet"
+# if(length(args) < 3 || is.null(args)){
+#   print(usage)
+#   print(example)
+#   print(args)
+#   stop("Input parameter error!")
+# }else{
+#   print(args)
+# }
 
 setwd(system("pwd",intern=T))
-cwd         = getwd()
-tumor       = args['tumor'] 
-normal      = args['normal']
-genelist    = args['gene']
-output      =  args['out'] 
-samplePerGenefile = args['genesample']
-
-print(paste("current working directory:",cwd))
+# cwd         = getwd()
+# tumor  = args['tumor'] 
+# normal = args['normal']
+# output = args['out'] 
+# print(paste("current working directory:",cwd))
 
 
 ##-----test
-# tumor  =  "brca_exp_level3_02042014.mat"
-# normal =  "brca_expNormal_level3_02042014.mat"
+cwd = getwd()
+tumor  =  "brca_exp_level3_02042014.mat"
+normal =  "brca_expNormal_level3_02042014.mat"
 # output =  "brca_ucCeRNETCancerGeneDEG_edgeR_02042014"
-# genelist = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list"
-# samplePerGenefile = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/brca_geneSamplelist_UCceRNET_cancerGene_CNVMethFree_02072014.txt"
-
-reportDir = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig"
-outputPDF = paste(output,".pdf",sep="")
+output =  paste("brca_ucCeRNETCancerGeneDEG_edgeR_",substr(Sys.time(),1,10),sep="")
+genelist = paste(rootd,"/result/02022014/geneSamples/cancerGenes_UCceRNETPlusNature12929.list.geneSingleStartEnd",sep="")
+samplePerGenefile = paste(rootd, "/result/02022014/geneSamples/brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt",sep="")
+crtDate = substr(Sys.time(),1,10)
+outGeneSample = paste(samplePerGenefile,".deg_",crtDate,".txt",sep="")
+outExp = paste(tumor,"_Voomed_DEGexp_",crtDate,".rda",sep="")
+reportDir = paste(rootd, "/report/topDown_02042014/fig",sep="")
+outputPDF = paste(reportDir,"/",output,".pdf",sep="")
 ##----------------------------
 getData = function(file,type="T",glist){
-  gene = unlist(read.table(glist))
+  gene = unlist(read.table(glist)[,1])
   data = read.delim(file,header=T)
   gene = gene[ gene %in% data[,1] ]
   data = data[data[,1] %in% gene,-1]
@@ -72,7 +73,6 @@ getData = function(file,type="T",glist){
 }
 
 ##--------#load data
-# setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression")
 
 dataT = getData(tumor,type='tumor',genelist)
 dataN = getData(normal,type='normal',genelist)
@@ -107,11 +107,12 @@ for (ng in 1:nrow(samplePerGene)){
 
 ##---------output
 idxOutGene = samplePerGene$gene %in% setdiff(tarGene,failGene)
-outGeneSample = paste(samplePerGenefile,".deg_02102014.txt",sep="")
 out  =samplePerGene[idxOutGene,]
+rownames(out) = samplePerGene$gene[idxOutGene]
 write.table(samplePerGene[idxOutGene,],outGeneSample ,sep="\t",col.names=T,row.names=F,quote=F)
+
 expTumor = dataMatVoomTumor[rownames(dataMatVoomTumor) %in% out$gene,]
 expNormal =dataMatVoomNormal[rownames(dataMatVoomNormal) %in% out$gene,]
-outGeneSample = paste(samplePerGenefile,".degExp_02102014.rda",sep="")
-save(expTumor,expNormal,out,file=paste(output,".rda",sep=""))
+write.table(expTumor,paste(outExp,".mat",sep=""),sep="\t",col.names=T,row.names=T,quote=F)
+save(expTumor,expNormal,out,file=outExp)
 #--------------------------------------------

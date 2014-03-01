@@ -1,5 +1,5 @@
-#!/bin/sh
-#$ -S /bin/sh
+#!/bin/bash
+#$ -S /bin/bash
 #$ -cwd
 #$ -l h_vmem=8G,time=2::
 uname -a
@@ -10,7 +10,7 @@ err="<ERROR>: "
 echo "$msg Start $0: `date`"
 	
 DIR="/ifs/scratch/c2b2/ngs_lab/sz2317/softwares/annovar/"
-
+. /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/global_setting_projFocueCeRNA.sh
 ##This script converts a  vcf file with one or more samples into a format required by annovar and then fires annovar's tool to get the variants.
 #INPUT - $1 - a VCF file containing
 #OUTPUT - $1.annovar (the input require for annovar)
@@ -41,6 +41,8 @@ then
 	rm -rf $1.annovar.summary.variant_function
 	rm -rf $1.annovar
 	rm -rf $1.annovar.summary.invalid_input
+	rm -rf $1.annovar.summary.exome_summary.csv
+	rm -rf $1.annovar.summary.genome_summary.csv
 	rm -rf $1.annovar.summary.log 
 #	/ifs/scratch/c2b2/ngs_lab/sz2317/bin/src/tabix-0.2.5/bgzip -c $1.annovar.summary.genome_summary.csv.vcf > $1.annovar.summary.genome_summary.csv.vcf.gz
 #	/ifs/scratch/c2b2/ngs_lab/sz2317/bin/src/tabix-0.2.5/tabix $1.annovar.summary.genome_summary.csv.vcf.gz

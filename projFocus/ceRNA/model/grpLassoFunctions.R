@@ -18,45 +18,73 @@ getArgs = function(){
   return(optionsArgs)
 }
 
-formatColname = function(d){
-  vapply(colnames(d),FUN=subStr1To19,'a')
+
+kappaDist = function(dataSnp){
+      library(irr)
+      cntsnp = ncol(dataSnp)
+      cntsample = nrow(dataSnp)
+      kcval = matrix(NA, nrow=cntsnp, ncol= cntsnp)
+      for ( i in 1:cntsnp){
+	    temp = as.data.frame(matrix(1,cntsample, 2))
+            temp[,1] = dataSnp[,i]
+	    for ( j in i:cntsnp)
+	          {temp[,2] = dataSnp[,j]
+	     kp2 = kappa2(ratings= temp)
+	          kcval[i,j]  = kcval[j,i] = kp2$value
+	         }
+	  }
+      colnames(kcval) = colnames(dataSnp)
+      rownames(kcval) = colnames(dataSnp)
+      return(kcval)
 }
 
-formatData = function(inputFile,t='exp'){
-  switch(t,'exp'={
-    data = read.table(inputFile,header=T,stringsAsFactors=F)
-    colnames(data) = formatColname(data)
-    data = t(data[,order(data[1,])])
+imageDist = function(dst){
+    dim <- ncol(dst)
+    image(1:dim, 1:dim, dst, axes = FALSE)
+    axis(1, 1:dim, nba[1:20,1], cex.axis = 0.5)
+    axis(2, 1:dim, nba[1:20,1], cex.axis = 0.5)
+      for (i in 1:dim){
+	    for (j in 1:dim){
+	            txt <- sprintf("%0.1f", dst[i,j])
+		    text(i, j, txt, cex=0.5)
+	    }
+      }
+}
 
-  },'snp'={
-    data = read.table(inputFile,header=T)
-    row.names(data) = as.character(data$snpname)
-    colnames(data) = formatColname(data)
-    data = data[,-c(1,2)]   
-  },'cnv'={
-    data = read.table(inputFile,header=T)[,-1]
-    row.names(data) = rep('cnv',nrow(data))
-    colnames(data) = formatColname(data)
-  },'som'={
-    data = read.table(inputFile,header=T)[,-c(1,2)]
-    row.names(data) = rep('som', nrow(data))
-    colnames(data) = formatColname(data)
-  },'indel'={
-    ##under development
-  })
-  return(t(data))
-} 
+getData = function(inputexp,inputsnp,inputcnv){
+  ##load exp data
+  dataExp             = read.table(inputexp,header =T)
+  rownames(dataExp)   = dataExp[,1]
+  genename            = dataExp[,1] 
+  dataExp             = sapply(dataExp[,-c(1:4)],
+                              function(x){as.numeric(as.character(x))})
+  dataExpNorm           = normalize(dataExp)
+  #---------loading snp data
+  dataSnp             = read.table(inputsnp,header =T)
+  rownames(dataSnp)   = dataSnp[,2]
+  dataSnp             = dataSnp[,-c(1:2)]
+  #snp data QC:1. delete all 0 snp
+  dataSnp             = dataSnp[rowSums(dataSnp)>0,]
 
+  if (nrow(dataSnp) > 0 ){
+      ##load cnv data
+      dataCnv             = read.table(inputcnv,header =T)
+      rownames(dataCnv)   = dataCnv[,2]
+      dataCnv             = dataCnv[,-c(1:2)]
 
-subStr1To19 = function(x){ substr(x,6,12)}
-
+      ##------
+      data_merge  = t(rbind(dataExpNorm,dataCnv,dataSnp))
+    }
+  return(list(dataSnp=dataSnp,
+              dataExp=dataExp,
+              dataCnv=dataCnv,
+              data_merge=data_merge,
+              genename = genename))
+}
 
 normalize = function(x){
-  xx = vapply(x,FUN=as.numeric,1.1)
-  xx = as.matrix((xx - mean(xx)) / sd(xx))
-  colnames(xx) = colnames(x)
-  rownames(xx) = rownames(x)
-  return(xx)
+  x = sapply(x,as.numeric)
+  return((x - mean(x)) / sd(x))
 }
 
 toRange01 = function(x){
@@ -64,26 +92,6 @@ toRange01 = function(x){
   y = (x - min(x) + 0.01 * min(x))/(max(x) + 0.01 * max(x) - min(x))
   z = sapply(y,function(xx) min(xx,1))
   return(z)
-}
-
-kappaDist = function(dataSnp){
-  library(irr)
-  cntsnp = ncol(dataSnp)
-  cntsample = nrow(dataSnp)
-  kcval = matrix(NA, nrow=cntsnp, ncol= cntsnp)
-  ###--TODO make it a parallel computing
-  for ( i in 1:cntsnp){
-    temp = as.data.frame(matrix(1,cntsample, 2))
-    temp[,1] = dataSnp[,i]
-    for ( j in i:cntsnp)    
-    {temp[,2] = dataSnp[,j]
-     kp2 = kappa2(ratings= temp)
-     kcval[i,j]  = kcval[j,i] = kp2$value
-    }
-  }
-  colnames(kcval) = colnames(dataSnp)
-  rownames(kcval) = colnames(dataSnp)
-  return(kcval)
 }
 
 sigmoid  = function(x){
@@ -131,6 +139,26 @@ getGroup = function(kcval_svd,kcval){
   return(unlist(group))
 }
 
+##----------------------------
+#
+fitCnv = function(X,y,plotflag){
+  linFit = lm(y ~ 1 + X)
+  beta     = coef(linFit,s=min(ridgefit$lambda))
+  # residual = y - beta[1]- X * beta[2]
+  residual = linFit$residuals 
+  RSS      = sum((residual)^2)       
+
+  if(plotflag == 1){
+    plot(y=y,x=X,xlab="cnv",ylab="normalized expression")
+    curve (beta[1] + beta[2]*x, add=TRUE,col="blue")
+    curve (cbind(1,x) %*% beta, add=TRUE,col="red")
+  }
+  
+  return(list(beta   =beta[-1],
+              RSS    =RSS,
+              residuals = residual))
+}
+
 ##cohen's kappe- svd - k-means grouping of variable
 groupVars = function(dataSnp,dataCnv,plotflag){
   library(irr)
@@ -163,28 +191,6 @@ groupVars = function(dataSnp,dataCnv,plotflag){
   }
   return(group)
 }
-
-##----------------------------
-#
-fitCnv = function(X,y,plotflag){
-  linFit = lm(y ~ 1 + X)
-  beta     = coef(linFit,s=min(ridgefit$lambda))
-  # residual = y - beta[1]- X * beta[2]
-  residual = linFit$residuals 
-  RSS      = sum((residual)^2)       
-
-  if(plotflag == 1){
-    plot(y=y,x=X,xlab="cnv",ylab="normalized expression")
-    curve (beta[1] + beta[2]*x, add=TRUE,col="blue")
-    curve (cbind(1,x) %*% beta, add=TRUE,col="red")
-  }
-  
-  return(list(beta   =beta[-1],
-              RSS    =RSS,
-              residuals = residual))
-}
-
-
 
 
 regfit      = function(X, y, group, plotflag=0){

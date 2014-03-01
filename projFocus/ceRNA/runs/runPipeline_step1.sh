@@ -3,6 +3,8 @@
 #By: J.He
 #TODO: 
 
+PYTHON=~/tools/python/Python_current/python
+scrDir=/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/
 ##--------get cancer gene from TCGA publication
 getGeneListFromPaper(){
   cd ~/SCRATCH/projFocus/ceRNA/data/tcgaPaper/
@@ -29,7 +31,6 @@ getCeRNETRegulator(){
 # tar -xvzf brca_CNVDNAmethRNAseqSom_level3_02042014.tar.gz
 ##move data to /ifs/data/c2b2/ac_lab/jh3283/projFocus/02042014/
 
-PYTHON=~/tools/python/Python_current/python
 ###--------preprocesing data
 getExpMatfromRnaseqLevel3(){
     expDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/rnaseqlevel3
@@ -63,16 +64,19 @@ getExpMatNormal(){
 # cd /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2/test
 
 getGeneAnno(){
+    ##annotate gene with gene transcription starting site and last exon end position
     annoGeneStartEnd=/ifs/scratch/c2b2/ac_lab/jh3283/database/projFocusRef/refset_gene_start_end.tsv.sorted.uniq_resortedCol_geneSingleStartEnd
-   fname=`echo $1|awk -F"/" '{print $NF}'`
+   # fname=`echo $1|awk -F"/" '{print $NF}'`
+   fname=$1
     echo -n "" >  $fname.geneSingleStartEnd
     while read gene
     do 
       awk -v g=$gene '$1==g{print $0}' $annoGeneStartEnd >> $fname.geneSingleStartEnd
-    done < $1
+    done < $fname
 } 
 
 getCNVMat(){
+    ##---generate CNV matrix for each gene inputed, output CNV value for each gene
     # cnvDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2
     cnvDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2
     cd $cnvDir
@@ -92,8 +96,34 @@ getCNVMat(){
     ~/bin/rmlns $cnvDir
 }
 
+getRegulatorCNVMat(){
+    ##---generate CNV matrix for each gene inputed, output CNV value for each gene
+    # cnvDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2
+    cnvDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2
+    cd $cnvDir
+    genelist=$1
+    output=$2
+    getGeneAnno $genelist
+    awk 'BEGIN{FS=OFS="\t"}{
+	if($5=="+")
+	  print $1,$2,$3-1000000, $4+1000000,$5
+	else($5=="-")
+	  print $1,$2,$3+1000000, $4-1000000,$5 
+        }' $genelist.geneSingleStartEnd > $genelist.geneSingleStartEnd_1MAround
+    temp1="input_renameFiles.txt.temp"
+    grep "\.hg19.seg.txt" FILE_SAMPLE_MAP.txt |awk '{print $1"\t"$2}' > $temp1
+     ~/scripts/projFocus/ceRNA/step1-2.1_softlinkFiles.sh $temp1  
+    $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/step1-3_getGeneCNVMatLevel2.py -f step1-2.1_softlinkFiles.sh.log -g $genelist.geneSingleStartEnd_1MAround -o $output.temp 
+    echo "transposing file..."
+    if [ -f $output.temp ] ;then
+      ~/bin/trfile $output.temp $output
+    fi
+    echo "cleaning temp files..."
+    rm step1-2.1_softlinkfiles.sh.log genelist.genesinglestartend input_renamefiles.txt.temp
+    ~/bin/rmlns $cnvDir
+}
 countSample(){
-awk 'NR>1{cnt=0;for(i=1;i<=NF;i++){
+      awk 'NR>1{cnt=0;for(i=1;i<=NF;i++){
 	  if($i==0) cnt = cnt+1};
 	  print $1,cnt}' $output > $output.geneSampleCount
 	}
@@ -155,6 +185,15 @@ genMethMat(){
 # genMethMat $genelist $outputTumor
 # mv $outputNormal ${outputNormal}_old
 # genMethMat $genelist $outputNormal
+
+##-----------get Target Gene somatic mutation matrix for filtering sample
+getCGSomMat(){
+  vcfDir='/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered'
+  somDir='/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som'
+  cd $somDir
+  $PYTHON  $srcDir/varcall/step-6_getMAF.py -d $vcfDir -r gene -k snp -g $genelist -o $somDir/brca_somAll_targetGeneMut_2014-03-01.mat 
+}
+
 
 ##run DEG analysis
 # cd /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/

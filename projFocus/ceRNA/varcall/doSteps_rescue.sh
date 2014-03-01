@@ -54,6 +54,106 @@ runAllGatkAnno(){
 }
 
 ##------------executing------
+checkSubBAM(){
+   tempDir=$1
+   echo $tempDir
+   BAM=`echo $tempDir|awk -F"/" '{gsub("temp-","",$NF);print $NF}'`
+   ls $tempDir/split_*.$BAM 2>/dev/null |wc -l
+   ls $tempDir/split_*.$BAM.var.vcf.list 2>/dev/null |wc -l
+   ls $tempDir/split_*.$BAM.var.vcf.gatk.vcf.list 2>/dev/null |wc -l
+ }
+
+function doRunGATKAnnoAll(){
+  ###-----------do annotation ------
+  tempDir_array=( `ls -r |grep "temp" ` )
+  # echo ${tempDir_array[@]}
+  for tempDir in "${tempDir_array[@]}"
+  do
+      # echo $tempDir
+      cntVCF=`ls $tempDir/*var.vcf 2>/dev/null |wc -l`
+      cntBAM=`ls $tempDir/split*.bam  2>/dev/null |wc -l`
+      # cntTotal=`wc -l $REGIONFILE 2>/dev/null|wc -l `
+      cntTotal=103
+      echo "vcf $cntVCF bam $cntBAM total $cntTotal" 
+      if [ $cntBAM != $cntTotal ] || [ $cntVCF != $cntTotal ]
+      then
+          echo -e "skip Annotation $tempDir "
+	  continue 
+      fi
+      echo "Annotation $tempDir" 
+      pid=`echo $tempDir|awk -F"-" '{print $4}' `
+      dir=`readlink -m $tempDir`
+      runAllGatkAnno $dir  
+  done 
+}
+runReQsub(){
+  tempDir=$1
+  for tempBAM in `ls $tempDir/split*bam`
+  do
+    cnt=`echo $tempBAM|awk -F"/" '{split($NF,a,".");gsub("split_","",a[1]);print a[1]}'`
+    pid=`echo $tempDir|awk -F"/" '{split($NF,a,"-");print a[4]}'`
+    echo $cnt" " $pid 
+    qsub -l mem=4g,time=48:: -N ${pid}_${cnt} -cwd -e $tempDir/log -o $tempDir/log $tempDir/temp-region_$cnt.sh 
+  done
+}
+rootDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs
+# rootDir=/ifs/scratch/c2b2/TCGA/data/BRCA/WGS/CALL
+ for temp in `ls -r |grep temp`
+ do 
+  checkSubBAM $temp
+ done
+ runReQsub temp-TCGA-BH-A0B3-11B-21D-A128-09.bam
+# runReQsub temp-TCGA-EW-A1P8-01A-11D-A142-09.bam
+# runReQsub temp-TCGA-D8-A27F-01A-11D-A16D-09.bam
+# runReQsub temp-TCGA-BH-A0WA-01A-11D-A128-09.bam 
+# runReQsub temp-TCGA-BH-A0DG-01A-21D-A12Q-09.bam 
+# runReQsub temp-TCGA-AO-A0JJ-01A-11D-A060-02.bam
+ # runReQsub temp-TCGA-BH-A0B3-11B-21D-A128-09.bam
+# runReQsub temp-TCGA-E2-A15K-01A-11D-A314-09.bam
+# runReQsub temp-TCGA-BH-A0B3-11B-21D-A128-09.bam
+# runReQsub temp-TCGA-A8-A094-01A-11D-A19H-09.bam 
+
+# runReQsub temp-TCGA-BH-A0B3-11B-21D-A128-09.bam
+# runReQsub temp-TCGA-GM-A2DF-01A-11D-A17W-09.bam 
+# sleep 120m
+# runReQsub temp-TCGA-EW-A1J5-01A-11D-A13L-09.bam 
+# sleep 120m
+# runReQsub temp-TCGA-E2-A14X-01A-11D-A10Y-09.bam 
+# sleep 120m
+# runReQsub temp-TCGA-E2-A14P-01A-31D-A19H-09.bam
+# sleep 120m
+# runReQsub temp-TCGA-AN-A0G0-01A-11D-A045-09.bam
+
+# runReQsub temp-TCGA-AO-A124-01A-11D-A10M-09.bam
+ # runReQsub temp-TCGA-AR-A2LK-01A-11D-A17W-09.bam  
+ # runReQsub temp-TCGA-B6-A0RT-01A-21D-A128-09.bam
+ # sleep 120m 
+ # runReQsub temp-TCGA-AO-A124-01A-11D-A10M-09.bam  
+ # sleep 120m 
+ # runReQsub temp-TCGA-A8-A09I-01A-22D-A19H-09.bam
+ # sleep 120m 
+ # runReQsub temp-TCGA-A8-A092-01A-11D-A19H-09.bam 
+
+# runReQsub temp-TCGA-B6-A0RI-01A-11D-A060-02.bam
+# runReQsub temp-TCGA-AR-A2LK-01A-11D-A17W-09.bam
+# runReQsub $rootDir/temp-TCGA-BH-A0B3-11B-21D-A128-09.bam
+# runReQsub $rootDir/temp-TCGA-BH-A0AV-01A-31D-A10Y-09.bam
+# runReQsub $rootDir/temp-TCGA-AO-A0JM-01A-21D-A19H-09.bam
+
+#runReQsub $rootDir/temp-TCGA-E2-A1LG-01A-21D-A14K-09.bam
+#runReQsub $rootDir/temp-TCGA-E2-A15H-01A-11D-A19H-09.bam
+#runReQsub $rootDir/temp-TCGA-E2-A109-01A-11D-A10M-09.bam
+#runReQsub $rootDir/temp-TCGA-BH-A0H0-01A-11D-A314-09.bam
+#runReQsub $rootDir/temp-TCGA-BH-A0DT-01A-21D-A12B-09.bam
+#runReQsub $rootDir/temp-TCGA-B6-A0RT-01A-21D-A128-09.bam
+#runReQsub $rootDir/temp-TCGA-AO-A0J2-01A-11D-A19H-09.bam
+#runReQsub $rootDir/temp-TCGA-A8-A09X-01A-11D-A19H-09.bam
+#runReQsub $rootDir/temp-TCGA-A2-A25B-01A-11D-A167-09.bam
+
+# runReQsub $rootDir/temp-TCGA-A1-A0SM-01A-11D-A19H-09.bam 
+# runReQsub $rootDir/temp-TCGA-A2-A0D4-01A-11D-A314-09.bam 
+# runReQsub $rootDir/temp-TCGA-A8-A07B-01A-11D-A19H-09.bam
+
 ## resubSplitCall 
 # runAllGatkAnno /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs/temp-TCGA-A8-A08B-01A-11D-A19H-09.bam/
 # /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/step-4_mergeVCF.sh /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs/temp-TCGA-A8-A08B-01A-11D-A19H-09.bam /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/rawVars/  
@@ -92,50 +192,6 @@ runAllGatkAnno(){
 
 # runAllCall /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs/temp-TCGA-A8-A08L-01A-11D-A19H-09.bam 
 
- checkSubBAM(){
-   tempDir=$1
-   echo $tempDir
-   BAM=`echo $tempDir|awk -F"/" '{gsub("temp-","",$NF);print $NF}'`
-   ls $tempDir/split_*.$BAM.list 2>/dev/null |wc -l
-   ls $tempDir/split_*.$BAM.var.vcf.list 2>/dev/null |wc -l
-   ls $tempDir/split_*.$BAM.var.vcf.gatk.vcf.list 2>/dev/null |wc -l
- }
-
- function doRunGATKAnnoAll(){
-  ###-----------do annotation ------
-  
-  tempDir_array=( `ls -r |grep "temp" ` )
-  # echo ${tempDir_array[@]}
-  for tempDir in "${tempDir_array[@]}"
-  do
-      # echo $tempDir
-      cntVCF=`ls $tempDir/*var.vcf 2>/dev/null |wc -l`
-      cntBAM=`ls $tempDir/split*.bam  2>/dev/null |wc -l`
-      # cntTotal=`wc -l $REGIONFILE 2>/dev/null|wc -l `
-      cntTotal=103
-      echo "vcf $cntVCF bam $cntBAM total $cntTotal" 
-      if [ $cntBAM != $cntTotal ] || [ $cntVCF != $cntTotal ]
-      then
-          echo -e "skip Annotation $tempDir "
-	  continue 
-      fi
-      echo "Annotation $tempDir" 
-      pid=`echo $tempDir|awk -F"-" '{print $4}' `
-      dir=`readlink -m $tempDir`
-      runAllGatkAnno $dir  
-  done 
-}
-runReQsub(){
-  tempDir=$1
-  for tempBAM in `ls $tempDir/split*bam`
-  do
-    cnt=`echo $tempBAM|awk -F"/" '{split($NF,a,".");gsub("split_","",a[1]);print a[1]}'`
-    pid=`echo $tempDir|awk -F"/" '{split($NF,a,"-");print a[4]}'`
-    echo $cnt" " $pid 
-    qsub -l mem=4g,time=48:: -N ${pid}_${cnt} -cwd -e $tempDir/log -o $tempDir/log $tempDir/temp-region_$cnt.sh 
-  done
-}
-rootDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs
 
 # runReQsub $rootDir/temp-TCGA-C8-A130-01A-31D-A19H-09.bam
 # runReQsub $rootDir/temp-TCGA-A2-A04Q-01A-21D-A128-09.bam
@@ -177,7 +233,3 @@ rootDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/wgs
  # /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/step-4_mergeVCF.sh $tempDir /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/rawVars/  
 # doRunGATKAnnoAll
 
- for temp in `ls -r |grep temp`
- do 
-  checkSubBAM $temp
- done

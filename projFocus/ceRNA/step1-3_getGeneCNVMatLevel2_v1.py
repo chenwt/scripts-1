@@ -1,13 +1,12 @@
 #!/usr/bin/env python
-##### -*- coding: utf-8 -*-
-####input: 1. <file:file names of the level 3 cnv file> 
-####       2. <file: genes,and location of interest:format: identifier: chr. pos. strand>
-####output: 1. <file: .mat.anno file including all cnv info for the input files>
-####Desp.: given genename, output CNV value in each gene; will get multiple CNV for
-####       # same gene 
-#####Sample  Chromosome      Start   End     Num_Probes      Segment_Mean
-#####BITES_p_TCGAb61_SNP_S_GenomeWideSNP_6_C01_697154        1       61735   82650   11      0.5307
+# -*- coding: utf-8 -*-
+#input: 1. <file:file names of the level 3 cnv file> 2. <file: genes,and location of interest:format: identifier: chr. pos. strand>
+#output: 1. <file: .mat.anno file including all cnv info for the input files>
+#Desp.: given genename, output CNV value in each gene
+#Sample  Chromosome      Start   End     Num_Probes      Segment_Mean
+#BITES_p_TCGAb61_SNP_S_GenomeWideSNP_6_C01_697154        1       61735   82650   11      0.5307
       
+
 usage = "python step1-3_getGeneCNVMatLevel2.py \
         -f <file:full path of cnv level3 files,one each line> \
         -g <file: gene file with position inform; gene,chr,start,end,strand> \
@@ -17,6 +16,8 @@ import os
 import sys, getopt
 
 argv = sys.argv[1:]
+
+
 try:
   opts,args = getopt.getopt(argv, "h:f:g:o:")
 except:
@@ -105,7 +106,6 @@ with open(inpg) as inpgf:
 nGene = len(geneList)
 outlogf.write("number_of_genes\t" + str(nGene) + "\n")
 print "number of genes:\t" +str(nGene)
-
 #####--------------------------------loading CNV data. 
 idfile = -1
 outputH = open(out,'w')

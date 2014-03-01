@@ -2,7 +2,8 @@
 #J.HE
 #Desp: replacement of shell script < grep -wf snpid.txt snp.mat.anno > since it is TOO SLOW!!
 #	python only need several SECONDS!!!
-#input: 1. <snpID file: one each raw> 2 < annotated snp mat file: first column is snpid> 
+#input: 1. <ID file: one each raw> 
+#       2. < annotated ID mat file: first column is ID> 
 #output: 2. < snp mat file of te given snp> 
 
 
@@ -33,15 +34,15 @@ for opt, arg in opts:
     elif opt in ("-o"):
           output = arg
 
-print inputID
-print inputMat
-print output
+# print inputID
+# print inputMat
+# print output
 snpid = []
 
 with open(inputID) as fhID:
   for line in fhID.readlines():
     snpid.append(line.strip())
-print "snpid number: \t" + str(len(snpid)) 
+# print "snpid number: \t" + str(len(snpid)) 
 	
 fhout  = open(output,'w') 
 cntOut = 0 
@@ -53,7 +54,7 @@ with open(inputMat) as fhMat:
 	[key, val] = line.split("\t",1)
 	for eleSnpid in snpid:
 	  if eleSnpid == key:
-	    print eleSnpid
+	    # print eleSnpid
 	    fhout.write(line)
 	    cntOut = cntOut + 1
 	  else :

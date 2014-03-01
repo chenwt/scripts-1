@@ -2,16 +2,9 @@
 #J.HE
 #Desp: for projFocus ceRNA, given caner target genes, extract ceRNET regulator genes from giving ceRNET network
 #Input: -i -d -o
-usage = "~/tools/python/Python_current/python \
-/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/step1-1_extractCenetRegulator.py \
--i <cancergeneSample list> \
--d <ceRNET network> \
--o <output>" 
-example = 'python \
-/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/step1-1_extractCenetRegulator.py \
- -i /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt.deg_2014-02-24.txt \
- -d /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_ceRNA_network.txt \
- -o /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_ceRNA_network.txt_regulatorSamples'
+
+usage = '~/tools/python/Python_current/python step1-8_extractCeRNETRegulator.py  -i <input target gene>  -d <cancer specific CeRNET_from Hua-sheng> -o <output file name> '
+example = 'python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/validSNP.py -i -d  -o '
 
 ##----------------------------
 #functions
@@ -27,6 +20,7 @@ argv = sys.argv[1:]
 inputfile  = ''
 inputDB = ''
 output   = ''
+
 
 try:
   opts,args = getopt.getopt(argv,"hi:d:o:")
@@ -50,10 +44,9 @@ print inputDB
 print output
 
 target = []
-gslist = {}
 with open(inputfile) as f:
     for line in f.readlines():
-	tempGene = line.strip("\t")[1]
+	tempGene = line.strip().split()[0] if re.findall(r'\s+',line) else line.strip()
 	target.append(tempGene)
 print "Input targets:\t " + str(len(target))
 

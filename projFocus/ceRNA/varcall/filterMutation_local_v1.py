@@ -41,10 +41,7 @@ dp_cut = 10
 mq0_cut =  0.1
 maftum_cut = 0
 ##-----variant level
-dbsnp = "dbSNP"
-onekgCut = 0.1 
-esp5kCut = 0.1 
-avsiftScoreCut = 0.05 
+# dbsnp = 'DB'
 # variantType = 'SNP'
 # funcClass_type = 'synonymousSNV'
 # snv_type = ''
@@ -76,7 +73,7 @@ with open(inp) as inpf:
                   [chrom, pos, identifier, ref, alt, qual, filters, info, format,sample1] = \
                              line.strip().split("\t")
                   infoArray = info.split(";")
-                  infoArray_value = [a for a in infoArray if re.findall(r'=',a)]
+	          infoArray_value = [a for a in infoArray if re.findall(r'=',a)]
 
                   infoDict = {}
                   flag=1
@@ -109,23 +106,18 @@ with open(inp) as inpf:
                        flag = 0
                        # print "fail CLR"
 
-                  #-----------------variant filtering
+                  #-----------------variant
 		  # if infoDict.get('VariantType','-') == variantType :
 		       # flag = 0
                        
-                  if float(infoDict.get('1KG.score',0))  > onekgCut :
-                       flag = 0
-                      # print "fail 1KG"
-                  if float(infoDict.get('ESP5400.score',0)) > esp5kCut:
-                       flag = 0
-                      # print "fail esp4500"
-                  if "dbSNP" in infoArray:
-                       flag = 0
-                  if float(infoDict.get("avsift.score",0)) > avsiftScoreCut:
-                       flag = 0
-                  # if infoDict.get('geneName','-') in fpgeneArray :
+                  # if infoDict.get('SomaticCategory','-') == snv_type :
                        # flag = 0
-                  #-----------------knowledge filtering
+                      # print "fail SomaticCategory"
+                  # if infoDict.get('functionalClass','-') == funcClass_type :
+                       # flag = 0
+                      # print "fail SomaticCategory"
+                  if infoDict.get('geneName','-') in fpgeneArray :
+                       flag = 0
                        
                   formatArray = format.split(":")
                   #assume first one cancer, second one normal

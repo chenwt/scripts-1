@@ -15,7 +15,7 @@ qsubRun (){
     let cnt=$cnt+1
     jobid=`echo $line|awk 'BEGIN{FS="/"}{split($13,a,"-");print a[3]"-"a[4]}'`"_$cnt"
     # echo $jobid
-    echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/indelCall_v3.sh $outDir $line"|qsub -l mem=8g,time=160:: -N $jobid -cwd -o ./log -e ./log >>qsub.log
+    echo "/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/indelCall_v5.sh $outDir $line"|qsub -l mem=8g,time=160:: -N $jobid -cwd -o ./log -e ./log >>qsub.log
      tail -1 qsub.log
   done <$1
 }
@@ -46,7 +46,7 @@ dataDir=/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/
 outDir=$(pwd)
 
 ###---------run-----using--input---file---list
-qsubRun input_indelCall_run1.txt
+qsubRun input_indelCall_run1.txt_part1
 ##------g
 
 # touch input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt
