@@ -14,7 +14,6 @@ genInputCall(){
   echo -e "$input" > $input.done
 }
 
-
 function doCallVars(){
   cwd=`pwd`
   if [ ! -d $cwd/log ]; then mkdir $cwd/log ; fi
@@ -70,7 +69,12 @@ delBAMCalled(){
 #----------------executions-------------
 ###-------DATA
  # delBAMCalled 
- mergeAll
+ # mergeAll
+
+##---after changing the reference 
+genInputCall /ifs/scratch/c2b2/TCGA/data/BRCA/WGS/input_gtBatch_v2_broadReference.txt_0 input_wgsCall_broadReference.txt_0
+doCallVars input_wgsCall_broadReference.txt_0 &
+
 
 # genInputCall /ifs/scratch/c2b2/TCGA/data/BRCA/WGS/input_gtBatch_v2.txt_part10 input_wgsCall_part10.txt
 # doCallVars input_wgsCall_part10.txt &

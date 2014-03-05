@@ -18,5 +18,5 @@ if [[ ! -d $cwd/temp-$pid/log ]]; then mkdir $cwd/temp-$pid/log ; fi
 tempDir=$cwd/temp-$pid
 cd $tempDir
 $bdDir/perl/bam2cfg.pl -g -h $bamDir/$tumorBam $bamDir/$normalBam > $tempDir/${pid}_tn.cfg
-/ifs/home/c2b2/ac_lab/jh3283/tools/breakdancer/breakdancer-1.1_2011_02_21/cpp/breakdancer_max  -t -q 10 -d ${pid}_tn.ctx ${pid}_tn.cfg > ${pid}_tn.ctx
+perl /ifs/home/c2b2/ac_lab/jh3283/tools/breakdancer/breakdancer/branches/release-r76/BreakDancerMax.pl -g ${pid}_tn.bed -t -q 10 -d ${pid}_tn.ctx ${pid}_tn.cfg > ${pid}_tn.ctx
 

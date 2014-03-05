@@ -12,3 +12,4 @@ out=${gslist}_regulatorSamples
 # head -1 $gslit > $out
 $PYTHON $srcDir/processData/getRegulatorSamplelist.py -i $gslist  -d $cernet  -o $out 
 
+$PYTHON $srcDir/

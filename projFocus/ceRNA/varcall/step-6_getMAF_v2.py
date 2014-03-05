@@ -10,7 +10,6 @@ import sys
 import operator
 from optparse import OptionParser
 from subprocess import Popen,PIPE
-from itertools import islice
 
 usage = "python " + sys.argv[0] + " \
         -d <VCF file directory>  \
@@ -119,17 +118,17 @@ print "number of input genes: \t " + str(len(geneDict))
 
 vcfs = [file for file in os.listdir(vcfdir) if re.findall(r"vcf$", file)]
 cntFile = 1
+outputH = open(output,'w')
 keyType = keyType.lower()
 locType = locType.lower()
 
 os.chdir(vcfdir)
 
 if keyType == 'mut' and locType == 'gene':  
-    outputH = open(output,'w')
     for vcf in vcfs:
       print vcf
       geneDict = dict((k,0) for (k, v) in geneDict.items())
-      with open(vcf, buffering = 10870) as f:
+      with open(vcf) as f:
         for line in f.readlines():
 	     if re.findall(r"^##", line):
 		  continue
@@ -151,13 +150,11 @@ if keyType == 'mut' and locType == 'gene':
           for key in geneList:
                valOut = valOut + "\t" + str(geneDict[key])
           outputH.write(valOut + "\n" )
-          outputH.flush()
       else :
           valOut = tempBarcode
           for key in geneList:
                valOut = valOut + "\t" + str(geneDict[key])
           outputH.write(valOut + "\n" )
-          outputH.flush()
       cntFile = cntFile + 1   
     outputH.close() 	              
     print "num of vcf files:\t" + str(cntFile-1)  
@@ -175,59 +172,67 @@ if keyType == 'mut' and locType == 'gene':
         print ERR + "in Getting Matrix file.... "
 	sys.exit()
 elif keyType == 'maf' and locType == 'tss':
-    outputH = open(output,'w')
     cntTemp = 0
     cntVCF = 0
     geneDictOld = geneDict
     for vcf in vcfs:
       print vcf
       cntVCF = cntVCF + 1
-      with open(vcf, buffering = 10087000 ) as f:
+      with open(vcf) as f:
         for line in f.readlines():
-            geneDict = dict((k,[]) for (k, v) in geneDictOld.items())
-            if re.findall(r"^##", line):
-	            continue
-            elif re.findall(r"^#", line):
-	            tempBarcode = line.strip().split("\t")[-1]
-            else:
-                tempMut = newMutation(line)
-                for gene in geneDict.keys():
-                    if gene.nearMut(tempMut):
-                        cntTemp = cntTemp + 1
-                        if cntTemp % 10000 == 0 :
-                            print str(cntTemp) +" pairs tested.."
-                        geneDict[gene].append(tempMut)
-                    else:
-   	                    continue
-      if cntFile == 1:
-            outputH.write("\t".join(["geneName","mutCode","MAF","barcode" ]) + "\n")
-            cntFile = cntFile + 1   
-            for g in geneDict.keys():
-                 m = geneDict[g]
-                 if len(m) > 0:
-                      for mm in m :
-                          temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
-                      valOut = "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode])) 
-                      outputH.write(valOut + "\n" )
-                      outputH.flush()
-                 else:
-                     continue
-      else :
-          for g in geneDict.keys():
-              m = geneDict[g]
-              if len(m) > 0:
-                  for mm in m :
-                      temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
-                  valOut =  "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode]))
-                  outputH.write(valOut + "\n" )
-                  outputH.flush()
-              else :
-                  continue
-          continue 
+	  geneDict = dict((k,[]) for (k, v) in geneDictOld.items())
+          if re.findall(r"^##", line):
+	      continue
+          elif re.findall(r"^#", line):
+	      tempBarcode = line.strip().split("\t")[-1]
+          else:
+              tempMut = newMutation(line)
+   	      for gene in geneDict.keys():
+   	          if gene.nearMut(tempMut):
+		      cntTemp = cntTemp + 1
+   	              geneDict[gene].append(tempMut)
+   	          else:
+   	              continue
+	  if cntFile == 1:
+      	      outputH.write("\t".join(["geneName","mutCode","MAF","barcode" ]) + "\n")
+	      cntFile = cntFile + 1   
+      	      for g in geneDict.keys():
+      	           m = geneDict[g]
+      	           if len(m) > 0:
+      	             for mm in m :
+			temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
+		       	valOut =  "\t".join([g.name,temp_mutCode,mm.getMAF(),tempBarcode]) 
+		       	outputH.write(valOut + "\n" )
+      	           else :
+			continue
+      	  else :
+      	      for g in geneDict.keys():
+      	           m = geneDict[g]
+      	           if len(m) > 0:
+      	              for mm in m :
+			temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
+			valOut =  "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode]))
+			outputH.write(valOut + "\n" )
+      	           else :
+			continue
+      continue 
     print "num of pairs:\t" + str(cntTemp)
     print "num of vcf files:\t" + str(cntVCF)  
     outputH.close() 	              
-    sys.exit()
+    ##---get Mat file
+    PYTHON = "~/tools/python/Python_current/python"
+    SRCgetMutMat = "/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/varcall/getMutMat.py"
+    # args = ["-m",output,"-o",output+".mat"]
+    # print [PYTHON,SRCgetMutMat,"-m",output, "-o", output+".mat"]
+    pGenMat = Popen( PYTHON + " " + SRCgetMutMat + " -m " + output + " -o " + output+".mat", stdout=PIPE, shell=True)
+    err = pGenMat.communicate()[1]
+    if not err:  
+        pRm = Popen( "rm " + output, shell=True)
+	pRm.communicate()
+	print SUC 
+    else:
+        print ERR + "in Getting Matrix file.... "
+	sys.exit()
 else:
     print MSG + locType + ":" + keyType +" combinations are Underdevelopment!"
     sys.exit()

@@ -31,11 +31,10 @@ for opt,arg in opts:
   elif opt == '-o':
     outFile = arg
     outlog = outFile + ".log"
-
 outlogf = open(outlog,'w')
 
 ##-----setting parameters
-region_cut = 0 ##in gene  
+region_cut = 1000000 # 1M
 #-------end-
 
 def chrom2Num(chrom):
@@ -67,14 +66,14 @@ with open(inpExpFile) as f:
     else:
       [identifer,chrom,pos,strand] = line.strip().split("\t")[:4]
       if chrom in allChroms: 
-	    chrom = chrom2Num(chrom)
-	    if genePosDict.get((chrom,pos),0): 
-	        genePosDict[(chrom,pos)].append([identifer])
-	    else:
-	        genePosDict[(chrom,pos)] = [identifer]
-	    chromArray[chrom].append(int(pos))
+	chrom = chrom2Num(chrom)
+	if genePosDict.get((chrom,pos),0): 
+	  genePosDict[(chrom,pos)].append([identifer])
+	else:
+	  genePosDict[(chrom,pos)] = [identifer]
+	chromArray[chrom].append(int(pos))
       else:
-	    continue
+	continue
 outlogf.write("number_of_genes\t" + str(i) + "\n")
 
 print "total number of chr_pos \t" + str(len(genePosDict.keys()))
@@ -86,7 +85,9 @@ outFileHandler = open(outFile,'w')
 with open(inpSomFile) as f:
   for i, line in enumerate(f):
      if i == 0 :
-       outFileHandler.write("Gene\t"+ line.strip().split("\t",5)[5] + "\n") 
+       pass
+       print "skip header line: \t" + line[:50] + "\t..."
+       outFileHandler.write("Gene\tsomMutation\t"+ line.strip().split("\t",5)[5] + "\n") 
      else:
        [somGene,chrom,start,end,strand,val] = line.strip().split("\t",5)
        if chrom in allChroms:
@@ -94,15 +95,15 @@ with open(inpSomFile) as f:
           tempStart = int(start) - region_cut
           tempEnd = int(end) + region_cut
           #---find all TSS site for one somaticMutation gene 
-          for p in chromArray[chrom]:
-            if p > tempStart and p < tempEnd :
-                expGene = genePosDict[(chrom,str(p))]
-                if len(expGene) > 1:
-                    expSomLink.extend(map(list,zip(expGene,somGene * len(expGene),val * len(expGene))) )
-                else:
-                    expSomLink.append([expGene,somGene,val])
-            else:
-                continue
+	  for p in chromArray[chrom]:
+	    if p > tempStart and p < tempEnd :
+	      expGene = genePosDict[(chrom,str(p))]
+	      if len(expGene) > 1:
+		expSomLink.extend(map(list,zip(expGene,somGene * len(expGene),val * len(expGene))) )
+	      else:
+		expSomLink.append([expGene,somGene,val])
+       else:
+	  continue
 
 print "somatic mutation processed:\t" + str(i)
 print "output binary linkfile..."
@@ -118,7 +119,7 @@ for expGene in genePosDict.values():
     tempNP = np.array(temp)
     sumTempNP = np.sum(tempNP,0)
     cntGene = cntGene + 1
-    outFileHandler.write(str(expGene[0]) +"\t"+ "\t".join(map(str,sumTempNP.tolist())) + "\n")
+    outFileHandler.write(str(expGene[0]) +"\tsomMutation\t"+ "\t".join(map(str,sumTempNP.tolist())) + "\n")
   else:
     continue
 

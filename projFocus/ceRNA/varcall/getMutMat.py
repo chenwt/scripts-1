@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #J.HE
 #Desp: to convert somatic mutation Level2 .maf file into a matrix of mutation * sample maf
+#    need large memory to do
 #input: <1. file: somatic mutation .maf file generated using step-6_get_MutMaf.py > 
 #       <2. file: sample name want to include in final output file>
 #output: <1: file: somatic mutation map file of gene by sample>

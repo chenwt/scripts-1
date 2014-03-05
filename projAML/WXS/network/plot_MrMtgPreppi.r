@@ -4,7 +4,7 @@
 #Last Updated:
 #Usage:
 #Description:plot script for labmeeting presentation
-# source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/plot_MrMtgPreppi.r")
+#source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/plot_MrMtgPreppi.r")
 
 setwd("/Volumes/ac_lab/jh3283/SCRATCH/projAML/WXS/reports/result_labmetgSep24") 
 

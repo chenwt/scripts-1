@@ -2,7 +2,7 @@
 #By: J.He
 #TODO: 
 
-
+CWD=/ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projAML/WXS/indel
 ##--making bamlist files--------------------------------------------
 ###----------------make--input-list-file--end--------------------------
 
@@ -39,14 +39,41 @@ delBam() {
   echo "#----DONE----"
 }
 
+getInput(){
+  pidlist=$1
+  echo -n "" >$pidlist.inputBamlist
+  while read pid
+  do
+    tempBamArray=( `ls ${dataDir}/${pid}*.bam ` )
+    for i in ${tempBamArray[@]}
+    do
+      readlink -f $i >> $pidlist.inputBamlist
+    done
+  done < $pidlist
+}
+
+batchQsubRun(){
+  for i in `seq 1 8`
+  do
+    qsubRun pid.txt.inputBamlist_$i 
+    sleep 48hs 
+  done
+}
+
+
 ###-------function----end--------
 
 #----data folder:
 dataDir=/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/
 outDir=$(pwd)
+# getInput $CWD/pid.txt
+# ~/bin/splitByN $CWD/pid.txt.inputBamlist 6
+qsubRun pid.txt.inputBamlist_2
 
 ###---------run-----using--input---file---list
-qsubRun input_indelCall_run1.txt_part1
+
+# qsubRun input_indelCall_run1.txt_part1
+# qsubRun input_indelCall_run1.txt_part2 
 ##------g
 
 # touch input.bam.list.brca_wxsInwgsNotDone.bam.tumor_02022014.txt

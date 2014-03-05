@@ -12,43 +12,40 @@ example = "Example: /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript
     --gene SMAD4 
     --type 1 
     --wd /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/model/temp-ESR1 "
-usage = "Usage: Rscript grpLassoSNP.r --gene <gene name> --type <1/2/3>"
-error = "ERROR here: "
+usage = "Usage: Rscript step2-3_regulatorGrpLasso.R --gene <gene name> --type <1/2/3>"
+ERR = "ERROR here: "
 
 sysInfo = Sys.info()
 if(sysInfo['sysname']=="Darwin" ){
-  source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
-  source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/grpLassoFunctions.R")
-  setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/model/")
   rootd= "/Volumes/ifs/home/c2b2/ac_lab/jh3283/"
-}else if(sysInfo['sysname']=="Linux" ){
-  source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
-  source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/grpLassoFunctions.R")
-  print("working from Linux")
+ }else if(sysInfo['sysname']=="Linux" ){
   rootd= "/ifs/home/c2b2/ac_lab/jh3283/"
-  setwd("/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/model/")
 }
+source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/myR/general.r")
+source(jxy(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R"))
+source(jxy(rootd, "/scripts/projFocus/ceRNA/model/grpLassoFunctions.R"))
+setwd(jxy(rootd,"/DATA/projFocus/result/02022014/model/"))
 
 #----getting command line parameters
-args = getArgs()
-plotflag = 0
-nperm    = 1000
-if(length(args) < 7 || is.null(args)){
-  print(paste(usage,example,sep="\n"))
-  print(args)
-  stop(paste(error,"wrong input parameter!"))
-}
-
-setwd(system("pwd",intern=T))
-cwd         = getwd()
-gene        = args['gene']
-type        = args['type']
-wd          = args['wd']
-
-plotflag    = as.integer(args['plot']) #optional 
-nperm       = as.integer(args['nperm'])
-output      = paste(cwd,"/",args['out'], sep="")
-print(paste("current working directory:",cwd))
+# args = getArgs()
+# plotflag = 0
+# nperm    = 1000
+# if(length(args) < 7 || is.null(args)){
+#   print(paste(usage,example,sep="\n"))
+#   print(args)
+#   stop(paste(error,"wrong input parameter!"))
+# }
+# 
+# setwd(system("pwd",intern=T))
+# cwd         = getwd()
+# gene        = args['gene']
+# type        = args['type']
+# wd          = args['wd']
+# 
+# plotflag    = as.integer(args['plot']) #optional 
+# nperm       = as.integer(args['nperm'])
+# output      = paste(cwd,"/",args['out'], sep="")
+# print(paste("current working directory:",cwd))
 
 #--test
 cwd         = getwd()
@@ -62,9 +59,10 @@ setwd(wd)
 inputsnp    = paste(wd,"/",gene, ".snp",sep="")
 inputexp    = paste(wd,"/",gene, ".exp",sep="")
 inputcnv    = paste(wd,"/",gene, ".cnv",sep="")
-# inputsom    = paste(cwdTemp,"/", ".som",sep="")
+inputsom    = paste(wd,"/", ".som",sep="")
 inputSample = paste(wd,"/", gene, ".sample",sep="") ##<<====HERE
 inputRegulator = paste(wd,"/regulator",sep="")
+
 ##---testleve---
 smps = unlist(strsplit(unlist(read.table(inputSample,header=T,stringsAsFactors=F)[1,2]),";"))
 dataSom = t(as.data.frame(runif(length(smps),0,1)))

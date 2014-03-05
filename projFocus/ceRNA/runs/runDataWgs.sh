@@ -19,4 +19,12 @@
 
 # ls /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/rawVars/TCGA-??-????-11*genome*csv.vcf > brca_wgs_normalbam_downloaded.txt
  # ls -1 ~/TCGA/BRCA/WGS/TCGA-??-????-11*bam >> brca_wgs_normalbam_downloaded.txt
-grep -f brca_wgs_normalbam_part2.txt brca_wgs_bam_summary_02042014.tsv| awk -F"\t" '{print $2"\t"$17}' > input_gtBatch_normalBam_part2.txt
+# grep -f brca_wgs_normalbam_part2.txt brca_wgs_bam_summary_02042014.tsv| awk -F"\t" '{print $2"\t"$17}' > input_gtBatch_normalBam_part2.txt
+
+# grep -w  HMS-RK ~/SCRATCH/projFocus/ceRNA/data/wgs/brca_wgs_bam_summary_02042014.tsv |cut -f2 > temp
+# grep -f temp input_gtBatch_v2.txt >> input_gtBatch_v2_broadReference.txt
+
+grep -v -w  HMS-RK ~/SCRATCH/projFocus/ceRNA/data/wgs/brca_wgs_bam_summary_02042014.tsv |cut -f2 > temp
+grep -f temp input_gtBatch_v2.txt >> input_gtBatch_v2_WU.txt
+
+rm temp

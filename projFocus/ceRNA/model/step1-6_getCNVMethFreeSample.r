@@ -1,9 +1,16 @@
 #!/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript
 #Author: Jing He
-#input: <file1: tumor methlation matrix> <file2: normal methylation matrix> 
-#output: <file: tumor sample with methylation relative to population mean>
+#input: CG_cnv.mat CG_methdiff.mat CG_som.mat 
+#output: <file: gene Sample list, sample size > 10, all gemonic intact cancer genes>
 #Description: this file was created for projFocus, ceRNA, used in step1 to eliminate tumor samples
-#TODO: 
+#     this version includes somatic mutation matrix, next step is to do DEG for each gene on final sample
+
+# ###-----local test
+# cnv         = jxy(rootd, "result/02022014/cnv/brca_cnvTumor_level2_combinedCG_02242014.mat") 
+# meth        = jxy(rootd, "result/02022014/meth/brca_methTumor_combinedCG_03032014.mat_diffMeth.mat")
+# som	        = jxy(rootd, "/result/02022014/som/brca_somTumor_combinedCG_20140301.mat.mat")
+# outfile	    = jxy(rootd, "/result/02022014/geneSamples/brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt")
+# ###------local test data
 
 sysInfo = Sys.info()
 if(sysInfo['sysname']=="Darwin" ){
@@ -15,58 +22,96 @@ if(sysInfo['sysname']=="Darwin" ){
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
   print("working from Linux")
   setwd("/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth")
-  rootd = "/ifs/scratch/c2b2/ac_lab/jh3283/"
+  rootd = "/ifs/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
   figd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig/"
 }
- 
- args = getArgs()
- usage = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --out <outGeneSampleCNVMethFree.txt >"
- example = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --out <outGeneSampleCNVMethFree.txt >"
- if(length(args) < 3 || is.null(args)){
-   print(usage)
-   print(example)
-   print(args)
-   stop("Input parameter error!")
- }else{
-   print(args)
- }
 
+
+#-----funcsStart
+barcode2pid = function(x){ return(substr(x,6,15)) }
+jxy = function(...){
+  ss = unlist(list(...))
+  temp = ""
+  res = paste(ss, collapse="")
+  return(res)
+}
+#----funcEnd
+ 
+# args = getArgs()
+# usage = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --som  <somCGtarget.mat> --out <outGeneSampleCNVMethFree.txt >"
+# example = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --som <somCGtarget.mat> --out <outGeneSampleCNVMethFree.txt >"
+# if(length(args) < 4 || is.null(args)){
+#    print(usage)
+#    print(example)
+#    print(args)
+#    stop("Input parameter error!")
+# }else{
+#    print(args)
+# }
+# 
+sampleCnt_cut = 10
 setwd(system("pwd",intern=T))
 cwd         = getwd()
-cnv  = args['cnv'] 
-meth = args['meth']
-outfile = args['out'] 
+cnv	        = args['cnv'] 
+meth	      = args['meth']
+som	        = args['som']
+outfile	    = args['out'] 
 print(paste("current working directory:",cwd))
 
 
-# outfile = "brca_geneSamplelist_UCceRNET_cancerGene_CNVMethFree_02072014.txt"
-# cnv = "cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat"
-# meth = "meth/brca_methTumor_level3_02072014.mat_diffMeth.mat"
+##--load data
 dcnv = read.delim2(cnv)
 dcnv = dcnv[,-ncol(dcnv)]
 rownames(dcnv) = dcnv$barcode
 dcnv = apply(dcnv[,-1],c(1,2),function(x){ifelse(as.numeric(x)>0,1,0)})
-temp = vapply(colnames(dcnv),FUN=function(x){substr(x,0,19)},'a')
-colnames(dcnv) = temp
+colnames(dcnv) = vapply(colnames(dcnv),barcode2pid,'a')
 
 dmeth = read.delim2(meth,header=T)
 dmeth = apply(dmeth[, -ncol(dmeth)],c(1,2),as.numeric)
-temp = vapply(colnames(dmeth),FUN=function(x){substr(x,0,19)},'a') 
-colnames(dmeth) = temp
-  
-sampleComm = colnames(dcnv)[colnames(dcnv) %in% colnames(dmeth)]
-geneComm = rownames(dcnv)[rownames(dcnv) %in% rownames(dmeth)]
-comm = dcnv[geneComm,sampleComm] + dmeth[geneComm,sampleComm]
-sampleNumber = 115 - rowSums(comm)
-sampleUnion = unique(c(colnames(dcnv),colnames(dmeth)))
-geneUnion = unique(c(rownames(dcnv),rownames(dmeth)))
-result = matrix(0,ncol=length(sampleUnion),nrow=length(geneUnion))
+colnames(dmeth) = vapply(colnames(dmeth),barcode2pid,'a')
 
-as.matrix(sampleComm)
-header = paste("gene","samples_noCNV_noMeth",sep="\t")
+dsom = read.delim(som, header=T)
+dupSmp = c("TCGA.B6.A0RE.01A.11D.A060","TCGA.BH.A0H6.01A.21D.A060")
+dsom = dsom[,-vapply(dupSmp, FUN=function(x){grep(x,colnames(dsom))},1)]
+rownames(dsom)= dsom[,1]
+dsom = apply(dsom[, -c(1,ncol(dsom))],c(1,2), as.numeric)
+smpsom = vapply(colnames(dsom),barcode2pid,'a')
+colnames(dsom) = smpsom
+# hist(colSums(dsom),freq=T)
+
+smpmeth = colnames(dmeth)
+smpcnv = colnames(dcnv)
+smpsom = colnames(dsom)
+commSmps = intersect( smpmeth, intersect( smpcnv, smpsom) )
+dmeth = subset(dmeth,select=commSmps)
+dcnv  = subset(dcnv,select=commSmps)
+dsom = subset(dsom,select=commSmps)
+
+gmeth = rownames(dmeth)
+gcnv = rownames(dcnv)
+gsom = rownames(dsom)
+commg = intersect( gmeth, intersect( gcnv, gsom) )
+dmeth = dmeth[ gmeth %in% commg, ] 
+dcnv  = dcnv[ gcnv %in% commg, ] 
+dsom  = dsom[ gsom %in% commg, ] 
+# ##compare.list(list(rownames(dcnvtemp)), list(rownames(dmethtemp)))
+comm = dcnv + dmeth + dsom
+
+pdf(jxy(rootd,"/report/topDown_02042014/fig/combinedCancerGeneCnvMethSom",Sys.Date(),".pdf"),height=10)
+require(gplots)
+heatmap.2(dcnv,dendrogram='none',col=c("white","blue"),trace='none',labRow="")
+heatmap.2(dmeth,dendrogram='none',col=c("white","green"),trace='none',labRow="")
+heatmap.2(dsom,dendrogram='none',col=c("white","red"),trace='none',labRow="")
+heatmap.2(ifelse(comm==0,0,1),dendrogram='none',col=c("white","black"),trace='none',cexRow=0.5)
+dev.off()
+
+result = matrix(0,ncol=length(commSmps),nrow=length(commg))
+header = paste("gene","samples_CnvMethSomFree",sep="\t")
 write(header,outfile)
 for (i in 1:nrow(comm)){
-    line = paste(geneComm[i],paste(sampleComm[which(comm[i,]==0)], collapse = ';'),sep="\t")
-    write(line,outfile,append=T)
+    if ( length(commSmps[which(comm[i,]==0)]) >= sampleCnt_cut ) {
+        line = paste(commg[i],paste(commSmps[which(comm[i,]==0)], collapse = ';'),sep="\t")
+        write(line,outfile,append=T)
+    }
 }
 

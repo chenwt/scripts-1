@@ -46,7 +46,7 @@ function filterAll(){
 	# echo " deleting $temp" 
 	# rm $temp 
       # fi
-      cntFiltVCF=`ls $filtDir/$temp.annovar.summary.genome_summary.csv.vcf.filtered 2>/dev/null |wc -l`
+      cntFiltVCF=`ls $filtDir/$temp.annovar.summary.genome_summary.csv.vcf.filtered.vcf 2>/dev/null |wc -l`
       if [ $cntFiltVCF  == 0 ]
       then
     	  pid=`echo $tempVCF|awk -F"-" '{print $3}' `
@@ -58,8 +58,24 @@ function filterAll(){
   echo "filter job $cnt VCF"
 }
 
+checkVcf2Download(){
+ vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered
+ downloadFile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/wgs/input_gtBatch_v2.txt
+ output=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/wgs/input_gtBatch_v2.txt_failedMar01.txt
+ awk -F"\t" '{print $1}' $downloadFile > $downloadedFile.temp 
+ ls $vcfDir/TCGA*vcf |awk -F"/" '{print $NF}'|sed s/.bam.var.vcf.gatk.vcf.annovar.summary.genome_summary.csv.vcf.filtered.vcf//g >  $downloadFile.sucess.temp
+ grep -v -f $downloadFile.sucess.temp $downloadFile.temp > $output.temp
+ echo -n "" >$output
+ for line in `cat $output.temp`
+ do
+      grep $line $downloadFile >> $output
+      grep $line $downloadFile
+ done
+ rm $output.temp
+ rm $downloadFile.sucess*temp
+}
 #------------exe
 # annovarAll 
 # annovarVCF TCGA-BH-A0HX-01A-21D-A060-02.bam.var.vcf.gatk.vcf 
-
-filterAll 
+# filterAll 
+checkVcf2Download
