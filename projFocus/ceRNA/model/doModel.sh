@@ -53,16 +53,17 @@ outgsdeg=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca
 # $RSCRIPT $srcDir/model/step1-7_getDEG.r --tumor $tumorExp --normal $normalExp --gene $genelist --genesample $genesample --out outgsdeg 
 
 ##--filter somatic mutation
-vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered
+# vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered
+vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered/wu
 genelist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/cancerGenes_UCceRNETPlusNature12929.list.geneSingleStartEnd
 somDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som
-output=$somDir/brca_somTumor_combinedCG_20140301.mat
+output=$somDir/brca_somTumor_combinedCG_20140304.mat
 
-# if [ ! -f $output ]; then
-#     $PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $somDir/brca_somTumor_combinedCG_20140301.mat &
-#     # echo "$PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $somDir/brca_somTumor_combinedCG_20140301.mat" |qsub -l mem=10g,time=12:: -N getGeneMut -o $somDir/log/ -e $somDir/log/ -cwd >> $somDir/qsub.log
+if [ ! -f $output ]; then
+    $PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $output &
+    # echo "$PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $somDir/brca_somTumor_combinedCG_20140301.mat" |qsub -l mem=10g,time=12:: -N getGeneMut -o $somDir/log/ -e $somDir/log/ -cwd >> $somDir/qsub.log
 #     # tail -1 qsub.log
-# fi
+fi
 
 # ##---
 sommat=$somDir/brca_somTumor_combinedCG_20140301.mat

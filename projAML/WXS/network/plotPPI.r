@@ -5,19 +5,21 @@
 #Usage: plot Preppi network
 #Description:given gene list and presnet preppi network
 # help(igraph.plotting)
-rootd = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/"
+source("~/scripts/myR/general.r")
+
+args = getArgs()
+cwd = system("pwd",intern=T)
 require(igraph)
-file = "publicGene.list"
-file = "yLanGene.list"
-file = "combineGene.list"
+file =  args[1]
+
 filenet = paste(file,".preppi",sep="")
-data1 = read.table(paste(rootd, "/projMisc/yLan/Feb28/", filenet,sep=""))
+data1 = read.table(filenet)
 data2 = graph.data.frame(data1,directed=FALSE)
 g = simplify(data2)
 orderedVertex = get.data.frame(g,what = "vertices")
 g = simplify(data2)
-seedGene = unlist(read.table(paste(rootd, "/projMisc/yLan/Feb28/",file,sep=""),
-                             stringsAsFactors=F))
+seedGene = unlist(read.table(file, stringsAsFactors=F))
+
 V(g)$color <- ifelse(vapply(orderedVertex$name,FUN=function(x){length(grep(x,seedGene))},1) > 0,
                      "red", "lightblue")
 V(g)$size <- ifelse(vapply(orderedVertex$name,FUN=function(x){length(grep(x,seedGene))},1) > 0,
@@ -26,7 +28,8 @@ V(g)$label.cex <- ifelse(vapply(orderedVertex$name,FUN=function(x){length(grep(x
                     0.5, 0.2)
 V(g)$label =  NA
 V(g)$label = vapply(orderedVertex$name,FUN=function(x){seedGene[match(x,seedGene)]},"a") 
-pdf(paste(rootd,"/projMisc/yLan/Feb28/plotNetwork_",filenet,"_label.pdf",sep=""))
+
+pdf(paste(cwd,"/plotNetwork_",tail(unlist(strsplit(filenet,"/")),1),"_label.pdf",sep=""))
 par(mar=c(0,0,0,0))
 plot(g,vertex.size = V(g)$size,
      vertex.label=V(g)$label,
