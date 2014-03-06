@@ -182,7 +182,7 @@ elif keyType == 'maf' and locType == 'tss':
     for vcf in vcfs:
       print vcf
       cntVCF = cntVCF + 1
-      with open(vcf, buffering = 10087000 ) as f:
+      with open(vcf, buffering = 100087000 ) as f:
         for line in f.readlines():
             geneDict = dict((k,[]) for (k, v) in geneDictOld.items())
             if re.findall(r"^##", line):
@@ -198,32 +198,27 @@ elif keyType == 'maf' and locType == 'tss':
                             print str(cntTemp) +" pairs tested.."
                         geneDict[gene].append(tempMut)
                     else:
-   	                    continue
-      if cntFile == 1:
-            outputH.write("\t".join(["geneName","mutCode","MAF","barcode" ]) + "\n")
-            cntFile = cntFile + 1   
-            for g in geneDict.keys():
-                 m = geneDict[g]
-                 if len(m) > 0:
-                      for mm in m :
-                          temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
-                      valOut = "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode])) 
-                      outputH.write(valOut + "\n" )
-                      outputH.flush()
-                 else:
-                     continue
-      else :
-          for g in geneDict.keys():
-              m = geneDict[g]
-              if len(m) > 0:
-                  for mm in m :
-                      temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
-                  valOut =  "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode]))
-                  outputH.write(valOut + "\n" )
-                  outputH.flush()
-              else :
-                  continue
-          continue 
+                        pass
+            if cntFile == 1:
+                  outputH.write("\t".join(["geneName","mutCode","MAF","barcode" ]) + "\n")
+                  cntFile = cntFile + 1   
+                  for g in geneDict.keys():
+                       m = geneDict[g]
+                       if len(m) > 0:
+                            for mm in m :
+                                temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
+                            valOut = "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode])) 
+                            outputH.write(valOut + "\n" )
+                            outputH.flush()
+            else :
+                for g in geneDict.keys():
+                    m = geneDict[g]
+                    if len(m) > 0:
+                        for mm in m :
+                            temp_mutCode = ":".join(map(str,[mm.chrom,mm.posStart,mm.posEnd]))
+                        valOut =  "\t".join(map(str,[g.name,temp_mutCode,mm.getMAF(),tempBarcode]))
+                        outputH.write(valOut + "\n" )
+                        outputH.flush()
     print "num of pairs:\t" + str(cntTemp)
     print "num of vcf files:\t" + str(cntVCF)  
     outputH.close() 	              

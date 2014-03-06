@@ -57,12 +57,13 @@ outgsdeg=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca
 vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered/wu
 genelist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/cancerGenes_UCceRNETPlusNature12929.list.geneSingleStartEnd
 somDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som
-output=$somDir/brca_somTumor_combinedCG_20140304.mat
+cdt=`~/bin/dt`
+output=$somDir/brca_somTumorWU_combinedCG_$cdt.mat
 
 if [ ! -f $output ]; then
-    $PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $output &
-    # echo "$PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $somDir/brca_somTumor_combinedCG_20140301.mat" |qsub -l mem=10g,time=12:: -N getGeneMut -o $somDir/log/ -e $somDir/log/ -cwd >> $somDir/qsub.log
-#     # tail -1 qsub.log
+    # $PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $output &
+    echo "$PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l gene -k mut -o $output" |qsub -l mem=10g,time=12:: -N getGeneMut -o $somDir/log/ -e $somDir/log/ -cwd >> $somDir/qsub.log
+    tail -1 qsub.log
 fi
 
 # ##---
@@ -93,13 +94,20 @@ out=${outgsdeg}_regulator.txt
 
 
 ##--regulator somatic maf 
+#------test------
+# vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som/test
+# if [ -f $somDir/test.out.mat ]; then  rm $somDir/test.out.mat ; fi
+# output=$somDir/test.out.mat
+#-----testend-----
 vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered/wu
 genelist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.deg_20140303.txt_regulator.txt.singleStartEnd
-output=$somDir/brca_somTumor_combinedCG_Regulator_20140304.mat
+cdt=`~/bin/dt`
+output=$somDir/brca_somTumorWU_combinedCG_Regulator_$cdt.mat
 if [ ! -f $output ]; then
-    $PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l tss -k maf -o $output  &
-    # echo "$PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l tss -k maf -o $output " |qsub -l mem=10g,time=12:: -N getGeneMut -o $somDir/log/ -e $somDir/log/ -cwd >> $somDir/qsub.log
-    # tail -1 qsub.log
+    #local use more then 8 hrs
+    # $PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l tss -k maf -o $output  &
+    echo "$PYTHON $srcDir/varcall/step-6_getMAF.py -d $vcfDir -g $genelist -l tss -k maf -o $output " |qsub -l mem=16g,time=14:: -N getRegMaf -o $somDir/log/ -e $somDir/log/ -cwd >> $somDir/qsub.log
+    tail -1 qsub.log
 fi
 
 ##---normal sample somatic mat
