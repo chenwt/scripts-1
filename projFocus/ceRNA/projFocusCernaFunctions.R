@@ -22,6 +22,13 @@ formatColname = function(d){
   vapply(colnames(d),FUN=subStr1To19,'a')
 }
 
+jxy = function(...){
+  ss = unlist(list(...))
+  temp = ""
+  res = paste(ss, collapse="")
+  return(res)
+}
+
 formatData = function(inputFile,t='exp'){
   switch(t,'exp'={
     data = read.table(inputFile,header=T,stringsAsFactors=F)

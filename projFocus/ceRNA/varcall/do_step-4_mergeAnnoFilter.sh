@@ -59,23 +59,29 @@ function filterAll(){
 }
 
 checkVcf2Download(){
- vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered
- downloadFile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/wgs/input_gtBatch_v2.txt
- output=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/wgs/input_gtBatch_v2.txt_failedMar01.txt
- awk -F"\t" '{print $1}' $downloadFile > $downloadedFile.temp 
- ls $vcfDir/TCGA*vcf |awk -F"/" '{print $NF}'|sed s/.bam.var.vcf.gatk.vcf.annovar.summary.genome_summary.csv.vcf.filtered.vcf//g >  $downloadFile.sucess.temp
- grep -v -f $downloadFile.sucess.temp $downloadFile.temp > $output.temp
- echo -n "" >$output
- for line in `cat $output.temp`
- do
-      grep $line $downloadFile >> $output
-      grep $line $downloadFile
- done
- rm $output.temp
- rm $downloadFile.sucess*temp
+   vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered
+   downloadFile=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/wgs/input_gtBatch_v2.txt
+   output=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/wgs/input_gtBatch_v2.txt_failedMar01.txt
+   awk -F"\t" '{print $1}' $downloadFile > $downloadedFile.temp 
+   ls $vcfDir/TCGA*vcf |awk -F"/" '{print $NF}'|sed s/.bam.var.vcf.gatk.vcf.annovar.summary.genome_summary.csv.vcf.filtered.vcf//g >  $downloadFile.sucess.temp
+   grep -v -f $downloadFile.sucess.temp $downloadFile.temp > $output.temp
+   echo -n "" >$output
+   for line in `cat $output.temp`
+   do
+        grep $line $downloadFile >> $output
+        grep $line $downloadFile
+   done
+   rm $output.temp
+   rm $downloadFile.sucess*temp
 }
 #------------exe
 # annovarAll 
 # annovarVCF TCGA-BH-A0HX-01A-21D-A060-02.bam.var.vcf.gatk.vcf 
 # filterAll 
-checkVcf2Download
+# checkVcf2Download
+# tempVCF="TCGA-E2-A14P-01A-31D-A19H-09.bam.var.vcf.gatk.vcf.annovar.summary.genome_summary.csv.vcf"
+filtDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered/wu_rescue
+tempVCF="TCGA-A7-A0CE-01A-11D-A12L-09.bam.var.vcf.gatk.vcf.annovar.summary.genome_summary.csv.vcf"
+/ifs/home/c2b2/ac_lab/jh3283/tools/python/Python-2.7.5/python $srcDir/filterMutation_local.py -i $tempVCF -o $filtDir/$tempVCF.filtered.vcf &  
+# tempVCF="TCGA-A2-A04T-01A-21D-A128-09.bam.var.vcf.gatk.vcf.annovar.summary.genome_summary.csv.vcf"
+# /ifs/home/c2b2/ac_lab/jh3283/tools/python/Python-2.7.5/python $srcDir/filterMutation_local.py -i $tempVCF -o $filtDir/$tempVCF.filtered.vcf 

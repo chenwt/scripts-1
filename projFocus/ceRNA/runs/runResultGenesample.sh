@@ -10,7 +10,7 @@
 # awk -F"\t" '{print $1}'  brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt.deg_2014-02-24.txt |sort |uniq > brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt.deg_2014-02-24.txt.genelist 
 # ~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/annotGeneByStartEndPos.py -i brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt.deg_2014-02-24.txt.genelist -o brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt.deg_2014-02-24.txt.genelist.singleStartEnd 
 
-~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/annotGeneByStartEndPos.py -i brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.deg_20140303.txt_regulator.txt -o brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.deg_20140303.txt_regulator.txt.singleStartEnd 
+# ~/tools/python/Python_current/python /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/annotGeneByStartEndPos.py -i brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.deg_20140303.txt_regulator.txt -o brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.deg_20140303.txt_regulator.txt.singleStartEnd 
 # awk -F"\t" '{n=split($2,a,";")
 #     if (n>10)
 #       print $0

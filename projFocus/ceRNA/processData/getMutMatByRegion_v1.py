@@ -83,9 +83,9 @@ print('Input file:' + input)
 print('Output file:'+ output)
 
 ##split file by input genelistfile
-tempDir =  output+ "-temp"
-# cmd = "python " + "~/bin/splitByKey.py" +\
-cmd = "~/tools/python/Python_current/python " + "~/bin/splitByKey.py" +\
+tempDir =  output+ "-tempDir"
+# cmd = "~/tools/python/Python_current/python " + "~/bin/splitByKey.py" +\
+cmd = "python " + "~/bin/splitByKey.py" +\
         " -i " + input + " -s 1000000 " + " -k " + genelistFile \
         + " -o " + tempDir
 print cmd

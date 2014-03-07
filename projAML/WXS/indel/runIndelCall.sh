@@ -68,7 +68,9 @@ dataDir=/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/callVars/
 outDir=$(pwd)
 # getInput $CWD/pid.txt
 # ~/bin/splitByN $CWD/pid.txt.inputBamlist 6
-qsubRun pid.txt.inputBamlist_2
+# qsubRun pid.txt.inputBamlist_2
+qsubRun pid.txt.inputBamlist_3
+qsubRun pid.txt.inputBamlist_4
 
 ###---------run-----using--input---file---list
 

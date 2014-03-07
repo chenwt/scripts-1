@@ -22,33 +22,28 @@ if(sysInfo['sysname']=="Darwin" ){
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
   print("working from Linux")
   setwd("/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth")
-  rootd = "/ifs/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
+  rootd = "//ifs/data/c2b2/ac_lab/jh3283/projFocus/"
   figd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/report/topDown_02042014/fig/"
 }
 
 
 #-----funcsStart
 barcode2pid = function(x){ return(substr(x,6,15)) }
-jxy = function(...){
-  ss = unlist(list(...))
-  temp = ""
-  res = paste(ss, collapse="")
-  return(res)
-}
+
 #----funcEnd
  
-# args = getArgs()
-# usage = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --som  <somCGtarget.mat> --out <outGeneSampleCNVMethFree.txt >"
-# example = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --som <somCGtarget.mat> --out <outGeneSampleCNVMethFree.txt >"
-# if(length(args) < 4 || is.null(args)){
-#    print(usage)
-#    print(example)
-#    print(args)
-#    stop("Input parameter error!")
-# }else{
-#    print(args)
-# }
-# 
+args = getArgs()
+usage = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --som  <somCGtarget.mat> --out <outGeneSampleCNVMethFree.txt >"
+example = "Usage: step1-6_getCNVMethFreeSample.r --cnv <cnv.mat> --meth  <methDiff.mat> --som <somCGtarget.mat> --out <outGeneSampleCNVMethFree.txt >"
+if(length(args) < 4 || is.null(args)){
+   print(usage)
+   print(example)
+   print(args)
+   stop("Input parameter error!")
+}else{
+   print(args)
+}
+
 sampleCnt_cut = 10
 setwd(system("pwd",intern=T))
 cwd         = getwd()
@@ -57,7 +52,6 @@ meth	      = args['meth']
 som	        = args['som']
 outfile	    = args['out'] 
 print(paste("current working directory:",cwd))
-
 
 ##--load data
 dcnv = read.delim2(cnv)
@@ -71,8 +65,8 @@ dmeth = apply(dmeth[, -ncol(dmeth)],c(1,2),as.numeric)
 colnames(dmeth) = vapply(colnames(dmeth),barcode2pid,'a')
 
 dsom = read.delim(som, header=T)
-dupSmp = c("TCGA.B6.A0RE.01A.11D.A060","TCGA.BH.A0H6.01A.21D.A060")
-dsom = dsom[,-vapply(dupSmp, FUN=function(x){grep(x,colnames(dsom))},1)]
+# dupSmp = c("TCGA.B6.A0RE.01A.11D.A060","TCGA.BH.A0H6.01A.21D.A060")
+# dsom = dsom[,-sapply(dupSmp, FUN=function(x){grep(x,colnames(dsom))})]
 rownames(dsom)= dsom[,1]
 dsom = apply(dsom[, -c(1,ncol(dsom))],c(1,2), as.numeric)
 smpsom = vapply(colnames(dsom),barcode2pid,'a')
@@ -97,7 +91,7 @@ dsom  = dsom[ gsom %in% commg, ]
 # ##compare.list(list(rownames(dcnvtemp)), list(rownames(dmethtemp)))
 comm = dcnv + dmeth + dsom
 
-pdf(jxy(rootd,"/report/topDown_02042014/fig/combinedCancerGeneCnvMethSom",Sys.Date(),".pdf"),height=10)
+pdf(paste(rootd,"/report/topDown_02042014/fig/combinedCancerGeneCnvMethSom",Sys.Date(),".pdf",sep=""),height=10)
 require(gplots)
 heatmap.2(dcnv,dendrogram='none',col=c("white","blue"),trace='none',labRow="")
 heatmap.2(dmeth,dendrogram='none',col=c("white","green"),trace='none',labRow="")

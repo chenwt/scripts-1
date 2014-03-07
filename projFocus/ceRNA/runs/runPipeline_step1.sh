@@ -76,7 +76,7 @@ getGeneAnno(){
 } 
 
 getCNVMat(){
-    ##---generate CNV matrix for each gene inputed, output CNV value for each gene
+    ##---generate CNV mat;rix for each gene inputed, output CNV value for each gene
     # cnvDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2
     cnvDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/cnvlevel2
     cd $cnvDir
@@ -128,12 +128,6 @@ countSample(){
 	  print $1,cnt}' $output > $output.geneSampleCount
 	}
 
-# genelist='/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.genename' #the candidate cancer genes
-# genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list' #the candidate cancer genes
-# output=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat
-# getCNVMat $genelist $output
-# countSample $output
-
 getCNVmatOld(){
     cnvDir=/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/CNV_snparray/level3
     cd $cnvDir
@@ -142,9 +136,6 @@ getCNVmatOld(){
     $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/step1-3_getGeneCNVMatLevel2.py -f /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/CNV_snparray/level3/input_getMat_tu.txt  -g ${genelist}  -o $output.temp
      ~/bin/trfile $output.temp $output
  }
-
-# getCNVmatOld $output
-# countSample $output
 
 ###-----------------filter samples with meth for each gene
 preInputMatfile(){
@@ -178,13 +169,6 @@ genMethMat(){
    rm $output.temp
    rmlns $methDir
 }
-# genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.geneSingleStartEnd'
-# outputTumor=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methTumor_level3_02072014.mat
-# outputNormal=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methNormal_level3_02072014.mat
-# mv $outputTumor ${outputTumor}_old
-# genMethMat $genelist $outputTumor
-# mv $outputNormal ${outputNormal}_old
-# genMethMat $genelist $outputNormal
 
 ##-----------get Target Gene somatic mutation matrix for filtering sample
 getCGSomMat(){
@@ -195,9 +179,24 @@ getCGSomMat(){
 }
 
 
+# genelist='/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/data/tcgaPaper/tcga.16papers.genename' #the candidate cancer genes
+# genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.list' #the candidate cancer genes
+# output=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/cnv/brca_cnvTumor_level2_ucCeRNETCancerGene_02062014.mat
+# getCNVMat $genelist $output
+# countSample $output
+
+# getCNVmatOld $output
+# countSample $output
+
+# genelist='/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cancer.gene_UCceRNET.geneSingleStartEnd'
+# outputTumor=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methTumor_level3_02072014.mat
+# outputNormal=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/meth/brca_methNormal_level3_02072014.mat
+# mv $outputTumor ${outputTumor}_old
+# genMethMat $genelist $outputTumor
+# mv $outputNormal ${outputNormal}_old
+# genMethMat $genelist $outputNormal
+
 ##run DEG analysis
 # cd /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/
 
-###---TODO
 
-# echo "##---END----"
