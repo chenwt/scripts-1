@@ -6,15 +6,15 @@
 #output:<file: genelist.startend> 
 #TODO:
 
-dbfile = "/ifs/scratch/c2b2/ac_lab/jh3283/database/projFocusRef/refset_gene_start_end.tsv.sorted.uniq_resortedCol_geneSingleStartEnd"
+# dbfile = "/ifs/scratch/c2b2/ac_lab/jh3283/database/projFocusRef/refset_gene_start_end.tsv.sorted.uniq_resortedCol_geneSingleStartEnd"
 import os,getopt,sys
 argv = sys.argv[1:]
 input = ''
 output = ''
-usage = 'python " + sys.argv[0] + " -i <input>  -o <output>'
-example = 'python " + sys.argv[0] + " -i <input>  -o <output>'
+usage = 'python " + sys.argv[0] + " -i <input> -d <database file>  -o <output>'
+example = 'python " + sys.argv[0] + " -i <input> -d <database file>  -o <output>'
 try:
-    opts,args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+    opts,args = getopt.getopt(argv,"hi:d:o:",["ifile=", "dbfile=", "ofile="])
 except getopt.GetoptError:
     print usage + "\n" + example 
     sys.exit(2)
@@ -24,6 +24,8 @@ for opt, arg in opts:
         sys.exit()
     elif opt in ("-i","--ifile"):
         input = arg
+    elif opt in ("-d","--dbfile"):
+        dbfile = arg
     elif opt in ("-o","--ofile"):
         output = arg
         outlog = output + ".log"

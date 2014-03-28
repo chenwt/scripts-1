@@ -1,0 +1,70 @@
+#!/bin/bash
+#! -cwd
+#By: J.He
+#Desp: generate test data for regression model to identify contributing regulators, this scripted is called by next step regression model 
+#input: <Cancer Target gene Name> <output dir>  <optional: ceRNET network file> <optional: expression file>, <optional: geneSample file>
+#output: <cnt of each file> < a temp dir with exp, cnv, snp, som, sample, regulator information data
+
+gene=$1
+outDir=$2
+#-----------funcStart
+getGeneData(){
+  gene=$1
+  file=$2
+  output=$3
+  head -1 $file > $output
+  grep -w $gene $file >> $output
+}
+cntRecord(){
+    awk 'END{print NR-1}' $1  
+}
+checkStat(){
+  if [[ $? != 0 ]]; then 
+    echo "ERROR"
+    exit
+  # else
+    # echo "Next"
+  fi
+}
+#-----------funcEdn
+
+##init
+host=`hostname`
+if [[ $host == "c2b2acml10.c2b2.columbia.edu" ]]; then 
+  rootd="/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus"
+  wd=/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/model
+else
+  rootd="/ifs/data/c2b2/ac_lab/jh3283/projFocus"
+  wd=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/model
+fi
+##setup
+genesample=$rootd"/result/02022014/geneSamples/brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt"
+cernet=$rootd"/other/brca_ceRNA_network.txt"
+expdata=$rootd"/result/02022014/expression/brca_exp_level3_02042014.mat_voomed_2014-02-26.mat"
+
+if [[ ! -d $outDir ]]; then 
+    mkdir $outDir
+fi
+if [[ ! -d $outDir/log ]]; then 
+  mkdir $outDir/log 
+fi
+checkStat
+
+##---get Gint Samples
+awk -F"\t|;" -v g=$gene '$1==g{for (i=2;i<=NF;i++) print $i;}' $genesample > $outDir/samples.txt
+checkStat
+
+##---getRegulator
+grep -w $gene $cernet |awk -F"\t" '{print $1"\n"$2}' |sort|uniq |awk -v g=$gene '$1!=g' > $outDir/regulators.txt
+checkStat
+#-----------get gene expression  
+# awk -F"\t" -v g=$gene '$2==g{print $0}' sample.temp > sample
+head -1 $expdata > $outDir/exp.mat
+awk -F"\t" -v g=$gene 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $expdata >> $outDir/exp.mat 
+for line in `cat $outDir/regulators.txt`
+do
+  awk -F"\t" -v g=$line 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $expdata >> $outDir/exp.mat 
+done
+checkStat
+
+echo "SUCESS"

@@ -27,3 +27,17 @@ jxy = function(...){
   res = paste(ss, collapse="")
   return(res)
 }
+
+
+setRootd = function(){
+  ###used to setup rootDir when working on mapped disk/remote server
+  sysInfo = Sys.info()
+  if(sysInfo['sysname']=="Darwin" ){
+    print("working from MacOS")
+    rootd = "/Volumes/ifs/home/c2b2/ac_lab/jh3283/"
+  }else if(sysInfo['sysnameß']=="Linux" ){
+    print("working from Linux")
+    rootd = "/ifs/home/c2b2/ac_lab/jh3283/projFocus/"
+  }
+  return(rootd)
+}

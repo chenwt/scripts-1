@@ -1,3 +1,14 @@
+
+setRootd = function(){
+  sysInfo = Sys.info()
+  if(sysInfo['sysname']=="Darwin" ){
+    print("working from MacOS")
+    rootd = "/Volumes/ifs/home/c2b2/ac_lab/jh3283/"
+  }else if(sysInfo['sysnameß']=="Linux" ){
+    print("working from Linux")
+    rootd = "/ifs/home/c2b2/ac_lab/jh3283/projFocus/"
+  }
+}
 ##-------useful functions-------------------
 getArgs = function(){
   #base function used to get commandline argument specified by -- or by sequence
@@ -54,7 +65,6 @@ formatData = function(inputFile,t='exp'){
   return(t(data))
 } 
 
-
 subStr1To19 = function(x){ substr(x,6,12)}
 
 
@@ -67,6 +77,7 @@ normalize = function(x){
 }
 
 toRange01 = function(x){
+  ##replaced by rescale function in scales package
   x = sapply(x,as.numeric)
   y = (x - min(x) + 0.01 * min(x))/(max(x) + 0.01 * max(x) - min(x))
   z = sapply(y,function(xx) min(xx,1))
@@ -112,10 +123,11 @@ getSVD    = function(kcval){
 }
 
 bestK = function(kcval_svd){
+  ###kmeans with smallest aic value
   Ks          = 1: floor(nrow(kcval_svd)/3)
   aic         = (nrow(kcval_svd) - 1) * sum(apply(kcval_svd,2,var))
   aicdiff     = (nrow(kcval_svd) - 2) * sum(apply(kcval_svd,2,var))
-  lambda = 0.95
+  lambda      = 0.95
   for (i in Ks) {
     set.seed(12345)
     km      = kmeans(kcval_svd, centers=i)
@@ -135,6 +147,13 @@ getGroup = function(kcval_svd,kcval){
   colnames(kcval_svd)   = colnames(kcval)[1:ncol(kcval_svd)]
   row.names(kcval_svd)  = colnames(kcval)
   group                 = kmeans(x=kcval_svd,centers=k_best)$cluster
+  return(unlist(group))
+}
+getGroupKmeans = function(kcval){
+  k_best                = bestK(kcval)
+  colnames(kcval)   = colnames(kcval)[1:ncol(kcval)]
+  row.names(kcval)  = colnames(kcval)
+  group                 = kmeans(x=kcval,centers=k_best)$cluster
   return(unlist(group))
 }
 
@@ -205,7 +224,7 @@ regfit      = function(X, y, group, plotflag=0){
     a     = seq(0.01,1,0.1)
     for (alpha in a){
       grpfit            = grpreg(X,y,group=group,penalty="grLasso",
-                                 alpha = alpha,eps=0.005,max.iter=10000)
+                                 alpha = alpha,eps=0.05,max.iter=10000)
       grpfit_selected   = select(grpfit,criterion="AIC")
       rss               = c(rss,sum(y - grpfit_selected$beta[1] -
                             X %*% as.matrix(grpfit_selected$beta[-1])))

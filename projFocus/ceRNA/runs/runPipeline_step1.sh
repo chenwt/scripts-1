@@ -137,20 +137,7 @@ getCNVmatOld(){
      ~/bin/trfile $output.temp $output
  }
 
-###-----------------filter samples with meth for each gene
-preInputMatfile(){
-    ls *BRCA* >> brca_meth_level3_file.temp
-    cnt27=`ls *BRCA.HumanMethylation27*sdrf.txt 2>/dev/null |wc -l`
-    cnt450=`ls *BRCA.HumanMethylation450*sdrf.txt 2>/dev/null |wc -l`
-    echo -n "" > input_temp
-    if [ $cnt27 -gt 0 ]; then
-      awk -F'\t' 'NR>1{print $28"\t"$27}' *BRCA.HumanMethylation27*sdrf.txt >> input_temp
-    fi
-    if [ $cnt450 -gt 0 ]; then
-      awk -F'\t' 'NR>1{print $28"\t"$27}' *BRCA.HumanMethylation450*sdrf.txt >> input_temp
-    fi
-    grep -f brca_meth_level3_file.temp input_temp > input_softlink.temp 
-}
+
 
 genMethMat(){
    # methDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/02042014/methlevel3/

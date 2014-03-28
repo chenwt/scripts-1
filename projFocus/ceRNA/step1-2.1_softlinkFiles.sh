@@ -5,8 +5,10 @@
 #PURPOSE: 
 
 count=0
-log=${0##*/}.log
+# log=${0##*/}.log
+log=$1.log
 echo -n "" >$log
+CWD=`pwd`
 while read LINE
 do	
 	new=$(echo ${LINE} | awk '{print $2}')

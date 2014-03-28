@@ -84,52 +84,6 @@ for (i in 1:numReg){
 #      xlab=colnames(regulators)[3],ylab="Number of SNP",
 #      main="")
 
-###-------------plot
-drawVectorHeat = function(z, pos = 0, size = 0.5) {
-  myCol = colorRampPalette(c("blue","white","red"))(256)
-  z = val2col(z,col=myCol)
-  for (i in 1:length(z)){
-    rect(i-1,ybottom=pos ,xright=i,ytop=(pos+ size),col=z[i],border=z[i])  
-  }
-}
-addPIDLabel = function(z){
-  colLabels = colnames(z)
-  axis(1,at=seq(0.5,length(z),1),labels=colLabels,cex.axis=0.4,
-       las=2, lwd=0.3, tck = -0.01, col.ticks="gray")
-}
-addGeneLable = function(label,pos){
-  axis(2,at=pos,cex.axis=0.5, 
-       labels = label,las=2,lwd=0.3, tck = -0.01,  col.ticks="gray")
-}
-
-system("mkdir fig")
-pdf("fig/expression.pdf")
-par(mar=c(4,6,1,0))
-blankPlot(maxX=length(expTarget),maxY=length(regulators))
-drawVectorHeat(expTarget,pos=0,size=2)
-addGeneLable(pos=1,label=gene)
-addPIDLabel(expTarget)
-for (i in 1:numReg){
-  size = 1
-  drawVectorHeat(unlist(expRegulators[i,]),pos=(i * size) + 2,size=size)
-  addGeneLable(pos= i*size - size/2 + 3,label=regulators[i])
-}
-dev.off()
-# 
-# require(gplots)
-# heatmap.2(as.matrix(expRegulators),col=colorRampPalette(c("blue","white","red"))(256),trace = "none")
-# expCol = colorRampPalette(c("blue", "red"))(max(regulators[,1]))
-# cnvCol = colorRampPalette(c("yellow","red"))(max(regulators[,2]) + 1)
-# snpCol = colorRampPalette(c("white","black")[max(regulators[,3]) + 1])
-# somCol = "white"
-# dataColor = as.data.frame(matrix("",nrow=numR,ncol=numC))
-# for (i in 1:numR){
-#   dataColor[i,1] = expCol[data[i,1]]
-#   dataColor[i,2] = cnvCol[exp(data[i,2]) + 1]
-#   dataColor[i,3] = snpCol[data[i,3] + 1]
-#   dataColor[i,4] = somCol
-# }
-# 
 # 
 # ##----group all regulators into different analysis type based on mutational spectrum
 # # 

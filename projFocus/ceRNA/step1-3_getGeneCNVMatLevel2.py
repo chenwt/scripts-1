@@ -14,6 +14,7 @@ usage = "python step1-3_getGeneCNVMatLevel2.py \
         -o <filename: output file name>"
 
 import os
+import re
 import sys, getopt
 
 argv = sys.argv[1:]
@@ -122,7 +123,10 @@ for fn in fnArray:
       else:
         [identifier,chrom,pStart,pEnd,probeNum,val] = line.strip().split("\t")
         cnv = CNV(chrom,pStart,pEnd,val) 
-        cnv.sample = fn
+        if re.findall("/", fn):
+            sampleName = re.split("/", fn.strip())[-1]
+        else:
+            sampleName = fn
         tempcnt = 0 
         for gene in geneList:
             if  gene.notOverlap(cnv) == True :    
@@ -130,7 +134,7 @@ for fn in fnArray:
             else:  
                 gene.updateCNV(cnv.val)
     fntempf.close()  
-    outputH.write(fn+"\t" + '\t'.join(map(str,[gene.cnv for gene in geneList])) + "\n")
+    outputH.write( sampleName + "\t" + '\t'.join(map(str,[gene.cnv for gene in geneList])) + "\n")
     for gene in geneList: gene.initCNV()              
   except IOError as e:
     print "I/O error({0}): {1}".format(e.errno, e.strerror)

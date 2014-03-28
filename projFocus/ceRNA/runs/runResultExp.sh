@@ -23,13 +23,21 @@
 
 
 ####-------------------------run after Jan.2014 for known snp/genes
-head -1 brca_exp_l3_731_DEG.mat.singleTSS.anno > header 
-cp brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc
-cat header brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc > brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno 
-rm brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc
+# head -1 brca_exp_l3_731_DEG.mat.singleTSS.anno > header 
+# cp brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc
+# cat header brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc > brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno 
+# rm brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.annoc
 
-while read line 
-do
-grep -w $line brca_exp_l3_731_DEG.mat.singleTSS.anno >> brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno
+# while read line 
+# do
+# grep -w $line brca_exp_l3_731_DEG.mat.singleTSS.anno >> brca_exp_l3_731_DEG.mat.singleTSS.anno.GWASCataGene.mat.anno
 
-done < /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/knowledgeBase/GWAS_catalog_brca_GeneName.txt 
+# done < /ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/knowledgeBase/GWAS_catalog_brca_GeneName.txt 
+
+## formating header
+
+# head -1 brca_exp_level3_02042014.mat_voomed_2014-02-26.mat | awk 'BEGIN{FS=OFS;ORS="\t"} {for (i=1;i<=NF;i++) {print substr($i,6,10)}}END{print "\n"}' > new.header
+# cp brca_exp_level3_02042014.mat_voomed_2014-02-26.mat brca_exp_level3_02042014.mat_voomed_2014-02-26.matc
+sed -i 1d brca_exp_level3_02042014.mat_voomed_2014-02-26.mat 
+cat new.header brca_exp_level3_02042014.mat_voomed_2014-02-26.mat > brca_exp_level3_02042014.mat_voomed_2014-02-26.mat.new
+mv brca_exp_level3_02042014.mat_voomed_2014-02-26.mat.new brca_exp_level3_02042014.mat_voomed_2014-02-26.mat

@@ -91,7 +91,8 @@ output=$somDir/brca_somTumorWU_combinedCG_$cdt.mat
 #     $RSCRIPT $srcDir/processData/step1-2_getDEgeneSample.r --tumor $tumMat --normal $normMat --gslist $gslist --out $output 
 # fi
 
-# #-----------regulator
+# #--------------------regulator
+# #--------------------regulator
 cernetBrca=/ifs/data/c2b2/ac_lab/jh3283/projFocus/other/brca_ceRNA_network.txt
 # outgsdeg=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.deg_20140303.txt
 outgsdeg=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt
@@ -152,10 +153,45 @@ barcode=brca_somTumorWU_barcode.list
 input=$somDir/brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat
 genelist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt_regulator.txt.tss
 dist=100
-output=${input}_"dist"${dist}_$crt.mat
-cmd="$PYTHON $srcDir/processData/getMutMatByRegion.py -i $input -g $genelist -s $barcode -d 100 -o $output"
-echo $cmd
-$cmd & 
+output=${input}_"dist"${dist}_$cdt.mat
+##two--step
+# cmd="$PYTHON $srcDir/processData/getMutMatByRegion.py -i $input -g $genelist -s $barcode -d $dist -o $output"
+# echo $cmd
+# $cmd & 
+
+###doing it by two step..
+#1 split
+input=$somDir/brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat
+genelist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt_regulator.txt.tss
+output=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som/brca_somTumorWU_Regulator_v3_Mar-6-2014.mat
+
+# echo "$PYTHON ~/bin/splitByKey.py -i $input -s 800  -k $genelist -o $output-temp "|qsub -l mem=10g,time=12:: -N sGene_$cdt -e $somDir/log/ -o $somDir/log/ -cwd
+
+#2 get matrix
+barcode=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som/brca_somTumorWU_barcode.list
+splitDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/som/brca_somTumorWU_Regulator_v3_Mar-6-2014.mat-temp
+getMutMatByRegion=/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/processData/getMutMatByRegion_ing.py
+cdt=`date|awk '{print $2"-"$3"-"$6}'`
+dist=1000
+# head -5 /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/geneSamples/brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt_regulator.txt.tss > toy.glist
+
+output=$somDir/brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist${dist}_${cdt}.matrix
+# ~/tools/python/Python_current/python $getMutMatByRegion -i $splitDir -d $dist -s $barcode -o $output 
+# echo "~/tools/python/Python_current/python $getMutMatByRegion -i $splitDir -d $dist -s $barcode -o $output "|qsub -l mem=10g,time=8:: -N gSomMat1k_${cdt} -cwd -e $somDir/log -o $somDir/log 
+
+# dist=0
+# output=$somDir/brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist${dist}_${cdt}.matrix
+# echo "~/tools/python/Python_current/python $getMutMatByRegion -i $splitDir -d $dist -s $barcode -o $output "|qsub -l mem=10g,time=8:: -N gSomMat1k_${cdt} -cwd -e $somDir/log -o $somDir/log 
+
+####---------
+
+# ~/scripts/projFocus/ceRNA/plot/getMutFreqInSamples.sh brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist0_Mar-7-2014.matrix &
+# ~/scripts/projFocus/ceRNA/plot/getMutFreqInSamples.sh brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist1000_Mar-7-2014.matrix &
+# /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/plot/getMutFreqForGene.sh  brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist0_Mar-7-2014.matrix &
+# /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/plot/getMutFreqForGene.sh  brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist1000_Mar-7-2014.matrix &
+
+
+
 
 # ##---normal sample somatic mat
 # vcfDir=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/wgsVars/filtered/normal

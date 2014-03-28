@@ -1,12 +1,15 @@
 #!/bin/bash
 #! -cwd
 #By: J.He
-#Desp: generate test data for grplasso regression model, this scripted is called by step2-2_grpLassoSNP.r 
-#input: <Cancer Target gene Name>  
+#Desp: generate test data for regression model to identify contributing regulators, this scripted is called by next step regression model 
+##: compared to v2, extracting all CNV, SNP, Meth, and SOM data for all regulators
+#input: <Cancer Target gene Name> <output dir>  <optional: ceRNET network file> <optional: expression file>, <optional: geneSample file>
 #output: <cnt of each file> < a temp dir with exp, cnv, snp, som, sample, regulator information data
 
+gene=$1
+outDir=$2
 #-----------funcStart
-getGeneData(){
+kgetGeneData(){
   gene=$1
   file=$2
   output=$3
@@ -16,8 +19,18 @@ getGeneData(){
 cntRecord(){
     awk 'END{print NR-1}' $1  
 }
+checkStat(){
+  MSG=$1
+  if [[ $? != 0 ]]; then 
+    echo "ERROR " $MSG
+    exit
+  # else
+    # echo "Next"
+  fi
+}
 #-----------funcEdn
-# gene="ESR1"
+
+##init
 host=`hostname`
 if [[ $host == "c2b2acml10.c2b2.columbia.edu" ]]; then 
   rootd="/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus"
@@ -26,55 +39,75 @@ else
   rootd="/ifs/data/c2b2/ac_lab/jh3283/projFocus"
   wd=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/model
 fi
-
-gene=$1
-genesample=$rootd"/result/02022014/geneSamples/brca_geneSamplelist_combined_CG_CNVMethFree_02242014.txt.deg_2014-02-24.txt_regulatorSamples"
+##setup
+genesample=$rootd"/result/02022014/geneSamples/brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt"
 cernet=$rootd"/other/brca_ceRNA_network.txt"
-##data for target
-# expdata=$rootd"/result/02022014/expression/brca_exp_level3_02042014.mat_voomed_2014-02-24.mat" ##voomed transformed after 
-# cnvdata=$rootd"/result/02022014/cnv/brca_cnvTumor_level2_combinedCG_02242014.mat"
-# snpdata=$rootd"/result/02022014/snp/brca_snp_KWtest_combinedCG_DEG.mat.1e-06_2014-02-25.mat"
-
 expdata=$rootd"/result/02022014/expression/brca_exp_level3_02042014.mat_voomed_2014-02-26.mat"
 cnvdata=$rootd"/result/02022014/cnv/brca_cnvTumor_level2_combinedCGDEG_Regulator_02282014_uniq.mat"
 snpdata=$rootd"/result/02022014/snp/brca_snp_KWtest_combinedCGDEG_Regulator.mat.1e-06_2014-02-28.mat"
-# somdata=$rootd""
+somdata=$rootd"/result/02022014/som/brca_somTumorWU_combinedCG_Regulator_v3_Mar-6-2014.mat_dist1000_Mar-7-2014.matrix"
+# methdata=$rootd""
 
-cd $wd
-if [[ ! -d temp-$gene ]]; then mkdir temp-$gene ; fi
-if [[ ! -d temp-$gene/log ]]; then mkdir temp-$gene/log ; fi
+if [[ ! -d $outDir ]]; then 
+    mkdir $outDir
+fi
+if [[ ! -d $outDir/log ]]; then 
+  mkdir $outDir/log 
+fi
+checkStat "mkdir"
 
-cd $wd/temp-$gene
-#-----------getData 
-getGeneData $gene $cernet regulator
-getGeneData $gene $genesample sample.temp 
-awk -F"\t" -v g=$gene '$2==g{print $0}' sample.temp > sample
-rm sample.temp
-getGeneData $gene $expdata ${gene}_exp 
+##---get Gint Samples
+awk -F"\t|;" -v g=$gene '$1==g{for (i=2;i<=NF;i++) print $i;}' $genesample > $outDir/samples.txt
+checkStat "get samples"
 
-#-----------output count info
-out="$wd/temp-$gene/stat.txt"
-echo $out
-cntReg=`cntRecord regulator`
-cntSample=`awk -F"\t" 'NR==2{print split($3,a,";")}' sample `
-echo -e "TagrgedCancerGene\t$gene\tsampleNumber\t$cntSample" > $out
-echo -e "RegulatorGene\tExpression\tCNV\tSNP\tSOM" >> $out
+##---getRegulator
+grep -w $gene $cernet |awk -F"\t" '{print $1"\n"$2}' |sort|uniq |awk -v g=$gene '$1!=g' > $outDir/regulators.txt
+checkStat "getRegulator "
 
-#-----------get data for all regulators
-while read line
+#-----------get gene expression  
+head -1 $expdata > $outDir/exp.mat
+awk -F"\t" -v g=$gene 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $expdata >> $outDir/exp.mat 
+for line in `cat $outDir/regulators.txt`
 do
-  geneTemp=`echo $line |awk '{print $1}'`
-  # echo $geneTemp
-  getGeneData $geneTemp $expdata ${geneTemp}_exp 
-  getGeneData $geneTemp $cnvdata ${geneTemp}_cnv 
-  getGeneData $geneTemp $snpdata ${geneTemp}_snp 
-# getGeneData $geneTemp $somdata ${geneTemp}_som
-  cntExp=` awk 'END{print NR-1}' ${geneTemp}_exp`
-  cntCNV=` awk 'END{print NR-1}' ${geneTemp}_cnv`
-  cntSNP=` awk 'END{print NR-1}' ${geneTemp}_snp`
-# cntSOM=` awk 'END{print NR-1}' ${geneTemp}_som`
-  cntSOM=0
-  echo -e "$geneTemp\t$cntExp\t$cntCNV\t$cntSNP\t$cntSOM" >> "$out"
-done < sample
+  awk -F"\t" -v g=$line 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $expdata >> $outDir/exp.mat 
+done
+checkStat "get expression"
+
+#--------get cnv, snp and meth
+head -1 $cnvdata > $outDir/cnv.mat
+awk -F"\t" -v g=$gene 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $cnvdata >> $outDir/cnv.mat 
+for line in `cat $outDir/regulators.txt`
+do
+  awk -F"\t" -v g=$line 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $cnvdata >> $outDir/cnv.mat 
+done
+checkStat "get cnv"
+
+head -1 $snpdata > $outDir/snp.mat
+awk -F"\t" -v g=$gene 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $snpdata >> $outDir/snp.mat 
+for line in `cat $outDir/regulators.txt`
+do
+  awk -F"\t" -v g=$line 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $snpdata >> $outDir/snp.mat 
+done
+checkStat "get snp"
+
+###---TODO
+# head -1 $methdata > $outDir/meth.mat
+# awk -F"\t" -v g=$gene 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $methdata >> $outDir/meth.mat 
+# for line in `cat $outDir/regulators.txt`
+# do
+#   awk -F"\t" -v g=$line 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $methdata >> $outDir/meth.mat 
+# done
+# checkStat "get meth"
+
+#--------get somatic mutations
+
+head -1 $somdata > $outDir/som.mat
+awk -F"\t" -v g=$gene 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $somdata >> $outDir/som.mat 
+for line in `cat $outDir/regulators.txt`
+do
+  awk -F"\t" -v g=$line 'BEGIN{FS=OFS="\t"} $1==g{print $0}' $somdata >> $outDir/som.mat 
+done
+checkStat "get som"
+
 
 echo "SUCESS"

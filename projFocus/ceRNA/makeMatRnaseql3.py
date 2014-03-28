@@ -7,6 +7,7 @@
 import os
 import linecache
 import sys, getopt
+import re
 
 ######## test use
 ## for one line
@@ -65,8 +66,12 @@ with open(inp) as inf:
   allsamples = [" "] * (cntCol + 1)
   allsamples[0] = "GeneSymbol"
   for i, line in enumerate(inf):
-  	line_crt = line.strip()
-	allsamples[(i+1)] = line_crt
+      if re.findall("/", line): 
+          line_crt = re.split("/",line.strip())[-1]
+          allsamples[(i+1)] = line_crt
+      else:
+          line_crt = line.strip()
+          allsamples[(i+1)] = line_crt
   fout.write("\t".join(allsamples) + "\n")    
 
 #filehandler array 

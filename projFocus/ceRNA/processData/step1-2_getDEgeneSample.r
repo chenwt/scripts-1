@@ -14,16 +14,12 @@
 sysInfo = Sys.info()
 if(sysInfo['sysname']=="Darwin" ){
   source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
-  setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression/")
   rootd = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
-  figd = jxy(rootd,"/report/topDown_02042014/fig/")
   source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/myR/jingGraphic.R")
 }else if(sysInfo['sysname']=="Linux" ){
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")
   print("working from Linux")
-  setwd("/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/02022014/expression")
   rootd = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/"
-  figd = jxy(rootd,"/report/topDown_02042014/fig/")
   source("/ifs/home/c2b2/ac_lab/jh3283/scripts/myR/jingGraphic.R")
 }
 
@@ -44,7 +40,7 @@ cwd         = getwd()
 tumor  = args['tumor'] 
 normal = args['normal']
 output = args['out'] 
-samplePerGenefile = args['gslist']
+gslist = args['gslist']
 print(paste("current working directory:",cwd))
 
 
@@ -53,14 +49,13 @@ print(paste("current working directory:",cwd))
 # tumor  =  "brca_exp_level3_02042014.mat"
 # normal =  "brca_expNormal_level3_02042014.mat"
 # output =  jxy("brca_CG_intactSample_DEG_voom_",substr(Sys.time(),1,10))
-# samplePerGenefile = jxy(rootd, "/result/02022014/geneSamples/brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt")
+# gslist = jxy(rootd, "/result/02022014/geneSamples/brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt")
 ##-----test
 
-crtDate = gsub("-","",substr(Sys.time(),1,10))
-output = paste(samplePerGenefile,".deg_",crtDate,".txt",sep="")
-outExp = paste(tumor,"_Voomed_DEGexp_",crtDate,".rda",sep="")
-reportDir = paste(rootd, "/report/topDown_02042014/fig",sep="")
-outputPDF = paste(reportDir,"/",output,".pdf",sep="")
+CDT = gsub("-","",substr(Sys.time(),1,10))
+output = paste(gslist,".deg_", CDT,".txt",sep="")
+# outExp = paste(tumor,"_Voomed_DEGexp_", CDT,".rda",sep="")
+# outputPDF = paste(reportDir,"/",output,".pdf",sep="")
 ##----------------------------
 getData = function(file,type="T",glist){
   gene = unlist(read.table(glist)[,1])
@@ -68,8 +63,6 @@ getData = function(file,type="T",glist){
   gene = gene[ gene %in% data[,1] ]
   data = data[data[,1] %in% gene,-1]
   rownames(data)=gene
-  colnames(data) = vapply(colnames(data),FUN=function(x){substr(x,start=6,stop=15)},'a')
-  
   sample = colnames(data)
   design = rep(type,ncol(data))
   names(design) = sample
@@ -78,8 +71,8 @@ getData = function(file,type="T",glist){
 
 ##--------#load data
 
-dataT = getData(tumor,type='tumor',samplePerGenefile)
-dataN = getData(normal,type='normal',samplePerGenefile)
+dataT = getData(tumor,type='tumor',gslist)
+dataN = getData(normal,type='normal',gslist)
 cntSampleT = ncol(dataT$data)
 cntSampleN = ncol(dataN$data)
 cntGene = nrow(dataT$data)
@@ -98,26 +91,30 @@ dataMatVoomTumor = dataMatVoom$E[,which(as.character(design)=="tumor")]
 dataMatVoomNormal = dataMatVoom$E[,which(as.character(design)=="normal")]
 
 ##gene-sample infor
-samplePerGene = read.table(samplePerGenefile,header=T,stringsAsFactors=F)
-tarGene = unlist(samplePerGene$gene)
+samplePerGene = read.table(gslist,header=T,stringsAsFactors=F)
+tarGene = unlist(samplePerGene[,1])
 failGene = ""
+expGenelist = rownames(dataMatVoomTumor)
 for (ng in 1:nrow(samplePerGene)){
-  samples= unlist(strsplit(samplePerGene[ng,2],";"))          
+  samples= unlist(strsplit(samplePerGene[ng,2],";"))
   temp.index = colnames(dataMatVoomTumor) %in% samples
-  ttest = t.test(dataMatVoom$E[tarGene[ng],temp.index],dataMatVoomNormal[tarGene[ng],])
-  ifelse (ttest$p.value > 0.05, (failGene <- c(failGene, tarGene[ng])),"PASS")
+  if (! is.na(match(tarGene[ng],expGenelist)) && length(temp.index) > 0 ){
+    ttest = t.test(dataMatVoomTumor[tarGene[ng],temp.index],dataMatVoomNormal[tarGene[ng],])
+    ifelse (ttest$p.value > 0.05, (failGene <- c(failGene, tarGene[ng])),"PASS")
+  }
 }
 
 ##---------output
-idxOutGene = samplePerGene$gene %in% setdiff(tarGene,failGene)
+idxOutGene = tarGene %in% setdiff(tarGene,failGene)
 out  =samplePerGene[idxOutGene,]
-rownames(out) = samplePerGene$gene[idxOutGene]
+rownames(out) = tarGene[idxOutGene]
 write.table(samplePerGene[idxOutGene,],output,sep="\t",col.names=T,row.names=F,quote=F)
+print("#-----END-----")
 
-expTumor = dataMatVoomTumor[rownames(dataMatVoomTumor) %in% out$gene,]
-expNormal =dataMatVoomNormal[rownames(dataMatVoomNormal) %in% out$gene,]
-write.table(expTumor,paste(outExp,".mat",sep=""),sep="\t",col.names=T,row.names=T,quote=F)
-save(expTumor,expNormal,out,file=outExp)
+# expTumor = dataMatVoomTumor[rownames(dataMatVoomTumor) %in% out$gene,]
+# expNormal =dataMatVoomNormal[rownames(dataMatVoomNormal) %in% out$gene,]
+# write.table(expTumor,paste(outExp,".mat",sep=""),sep="\t",col.names=T,row.names=T,quote=F)
+# save(expTumor,expNormal,out,file=outExp)
 
 # #------------------------------------------plot expression spectrum for one gene
 # drawVectorHeat = function(z, pos = 0, size) {

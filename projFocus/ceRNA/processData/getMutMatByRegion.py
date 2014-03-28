@@ -83,10 +83,10 @@ print('Input file:' + input)
 print('Output file:'+ output)
 
 ##split file by input genelistfile
-tempDir =  output+ "-temp"
-# cmd = "python " + "~/bin/splitByKey.py" +\
+tempDir =  output+ "-tempDir"
+# cmd = "python " + "~/bin/splitByKey.py" +\ ##when run locally
 cmd = "~/tools/python/Python_current/python " + "~/bin/splitByKey.py" +\
-        " -i " + input + " -s 1000000 " + " -k " + genelistFile \
+        " -i " + input + " -s 1000 " + " -k " + genelistFile \
         + " -o " + tempDir
 print cmd
 p1 = Popen(cmd, stdout=PIPE,stderr=PIPE, shell=True)

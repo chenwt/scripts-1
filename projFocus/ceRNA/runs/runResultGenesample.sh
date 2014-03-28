@@ -16,4 +16,18 @@
 #       print $0
 #     }' brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt  > brca_gslist_combinedCG_CnvMethSomFree_2014-03-03.txt.10moreSmps
 
+# awk -F"\t" 'NR>1{n=split($2,a,";"); for (i=1;i<=n;i++) print a[i];}' brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt |sort|uniq|less 
 
+# echo -e "Target\tNumOfRegulator" > brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt_regulatorFreq.txt
+
+# while read line  
+# do 
+#   g=`echo $line|awk '{print $1}'`
+#   gCnt=`awk -F"\t" -v g=$g '$1==g||$2==g{print $1"\n"$2}' /ifs/data/c2b2/ac_lab/jh3283/projFocus/other/brca_ceRNA_network.txt |sort|uniq |awk -v g=$g '$1!=g' |wc -l 2>/dev/null` 
+#   echo -e $g"\t"$gCnt >> brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt_regulatorFreq.txt
+# done < brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt 
+
+# awk '$2>0{print $1}' brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt_regulatorFreq.txt > temp
+# grep -w -f temp brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt > brca_gslist_combCG_gintact_Mar-7-2014.txt.deg_20140307.txt.hasRegulator.txt 
+# rm temp
+echo "#---DONE---"
