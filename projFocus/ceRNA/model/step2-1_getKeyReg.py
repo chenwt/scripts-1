@@ -10,6 +10,7 @@ import pickle
 import generalUtils as gu
 from collections import defaultdict
 from subprocess import Popen, PIPE
+import subprocess 
 
 argv = sys.argv[1:]
 input = ''
@@ -98,54 +99,40 @@ def getExpDict(filename, annoDict):
     return geneByChr    
 
 expTumByChr  = getExpDict(exptf, geneAnno)  
-expNormByChr = getExpDict(expnf, geneAnno)  
-
-# expTumByChr = pickle.load(open(exptf + ".pickle"))  
-# expNormByChr = pickle.load(open(expnf + ".pickle")) 
-
 outTumTemp  = output + "_reg_exp_tumor.temp" 
-outNormTemp = output + "_reg_exp_normal.temp" 
+outputTumH = open(outTumTemp, 'w')
 
-outputTumH = open(gene+"_reg_exp_tumor", 'w')
-outputNormH = open(gene+"_reg_exp_normal", 'w')
-
-print smps
-print expTumByChr['samples']['all'] 
 smpIndex = [ idx for (idx, val) in enumerate(expTumByChr['samples']['all']) \
             if val in smps  ]
 
-print len(smpIndex) 
+print "sample number", len(smpIndex) 
 outputTumH.write('gene' + "\t" + \
         "\t".join(map(expTumByChr['samples']['all'].__getitem__, smpIndex)) + "\n")
-outputNormH.write('gene' + "\t" + \
-        "\t".join(expTumByChr['samples']['all'] ) + "\n")
 
-
-# def getExp(regObj, expDict):
-    # reg = regObjlist[0]
+cntReg = 0 
 for regObj in regObjlist:
     try:
-        regNormExp = expNormByChr[regObj.chr][regObj.name]
         regTumExp = map(expTumByChr[regObj.chr][regObj.name].__getitem__, smpIndex)
         outputTumH.write(regObj.name + "\t" + "\t".join(regTumExp) + "\n")
-        outputNormH.write(regObj.name + "\t" + "\t".join(regNormExp ) + "\n")
+        cntReg = cntReg + 1
     except KeyError:
         print regObj
 
 ### call Rscript
 
-cmd = "/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript
-/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r"\
-        + " --input " +  outTumTemp + " --output " + output
-p = Popen(cmd, Shell = True, stderr = PIPE, stdin = PIPE)
-
-err = p.communicate()[1]
-if err:
+outputTumH.close()
+cmd = "/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript \
+    /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r\
+    --vanilla --input "\
+     +  outTumTemp + " --output " + output
+print cmd 
+# p = Popen(cmd, shell = True, stderr = PIPE, stdout = PIPE)
+rtncode  = subprocess.call(cmd, shell = True)
+# stdout, err = p.communicate()
+if rtncode != 0 :
     print "Error in regression!"
     sys.exit()
 
-outputNormH.close()
-outputTumH.close()
-
+print "#---END----"
 
 

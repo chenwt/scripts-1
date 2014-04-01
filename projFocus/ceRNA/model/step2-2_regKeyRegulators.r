@@ -1,268 +1,188 @@
 #!/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript
 #Author: Jing He
 #input: < expression matrix (first row as the target, others as regulator) > 
-#output: <file: candidate regulators' expression > <file: candidate regulators' list with coeff, r_square, p-value>  
-#Usage: Rscript $scriptName --input --output
-#Description: using group lasso regression to identify candidate driver regulators 
-# require package irr, grpreg, gplots
+## including fdr p-valu adjustment 
 
 example = "Example: /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript 
     /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r
-    --input /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/PTENreg_exp_tumor
-    --output /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/PTEN_candidate_Reg.matrix"
+   /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/PTENreg_exp_tumor"
 
-usage = "Usage: Rscript step2-2_regKeyRegulators.r --input <exp.matrix>  --output <candiReg_exp.matrix>"
+usage = "Usage: Rscript step2-2_regKeyRegulators.r  <exp.matrix>"
 ERR = "ERROR here: "
+CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,3,6)],collapse="-")
 
-#---funcs
-#---funce
-
-##---init---
-setRootd = function(){
+setRootd  = function(){
   sysInfo = Sys.info()
   if(sysInfo['sysname']=="Darwin" ){
     print("working from MacOS")
     rootd = "/Volumes/ifs/home/c2b2/ac_lab/jh3283/"
-  }else if(sysInfo['sysnameß']=="Linux" ){
+  }else if(sysInfo['sysname']=="Linux" ){
     print("working from Linux")
-    rootd = "/ifs/home/c2b2/ac_lab/jh3283/projFocus/"
+    rootd = "/ifs/home/c2b2/ac_lab/jh3283/"
   }
   return(rootd)
 }
-rootd = setRootd()
+rootd     = setRootd()
 source(paste(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R",sep=""))
 source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
 
+#---funcs
+regfit      = function(X, y, group){
+   if (setequal(colnames(X), names(group))){
+    rss   = NULL
+    a     = seq(0.01,1,0.1)
+    for (alpha in a){
+      grpfit            = grpreg(X,y,group=group,penalty="grLasso",
+                                 alpha = alpha,eps=0.05,max.iter=10000)
+      grpfit_selected   = select(grpfit,criterion="AIC")
+      rss               = c(rss,sum(y - grpfit_selected$beta[1] -
+                                      X %*% as.matrix(grpfit_selected$beta[-1])))
+    }
+    alpha = a[which.min(rss)[1]]
+    #fit model
+    grpfit              = grpreg(X, y, group=group,penalty="grLasso",
+                                 alpha = alpha,eps=0.005,max.iter=5000)
+    grpfit_selected     = select(grpfit,criterion="AIC")   
+    beta                = grpfit_selected$beta
+    residual            = y - beta[1] - X %*% as.matrix(beta[-1])
+    residual_sum_squre  = sum((residual)^2)
+    reg_sum_square      = sum((X %*% as.matrix(beta[-1]) + beta[1] - mean(y))^2)
+    total_sum_square    = reg_sum_square + residual_sum_squre
+    r_square            = reg_sum_square / total_sum_square  
+    
+    return(list(beta    = beta,
+                residual          = residual, 
+                r_square          = r_square,
+                RSS               = residual_sum_squre))
+  }
+  else { print("ERROR! group not match data!")
+  }
+}
+regfitPermu = function(X, y,group, nperm) {
+  #Desp: function to calculate the significance of one fitting
+  y               =  as.matrix(y)
+  X               =  as.matrix(X)  
+  fit_grpreg      =  regfit(X, y, group)
+  count_perm      = 0 
+  r_square_perm   = seq_len(nperm)
+  beta_permu      = as.data.frame(matrix(0, nrow=nperm, ncol = length(fit_grpreg$beta))) 
+  while (count_perm < as.numeric(nperm) ) {
+    y_permu       =  y + sample(fit_grpreg$residual,size=length(y),replace=TRUE)
+    reg_permu     =  regfit(X, y_permu, group)
+    r_square_perm[count_perm] = reg_permu$r_square
+    beta_permu[count_perm,]   =  reg_permu$beta
+    count_perm    =   count_perm  + 1
+    if(count_perm > 100 && (count_perm %% 100) == 0) {
+      print(paste("Permutation", count_perm))}
+  }
+  r_square_perm   = r_square_perm[-1]
+  pvalue.r2       = max(1/nperm, 
+                          length(r_square_perm[which(r_square_perm > fit_grpreg$r_square)]) / nperm)
+  bpval = function(x, list){
+    xbar = mean(list)
+    z <- (xbar-x)/(sd(list)/sqrt(length(list)))
+    return(2*pnorm(-abs(z)))
+  }
+  pvalue          = vapply(seq_along(fit_grpreg$beta), FUN=function(x){bpval(fit_grpreg$beta[x],beta_permu[,x])},0.2)
+  names(pvalue)   = names(fit_grpreg$beta)
+  
+  return(list(RSS      = fit_grpreg$RSS,
+              fit_residual = fit_grpreg$residual,
+              fit_r2   = c(fit_grpreg$r_square,pvalue = pvalue.r2),
+              beta     = cbind(beta = fit_grpreg$beta,pvalue),
+              permu_r2 = r_square_perm,
+              grpFit   = fit_grpreg ))
+  
+}
+getCandi    = function(fitPermuBeta, pcut){
+  x = fitPermuBeta[which(fitPermuBeta[,2] <= pcut),]
+  if (dim(x)[1] > 0){
+    x = x[x[,1]>0,]
+    x = x[order(x[,1],decreasing=T),]
+    return(x)
+  }else{
+    return(c("", ""))
+  }
+}
+
+#---funce
+nperm     = 1000
+pvalcut   = 0.01
+##---init---
 
 # #----getting command line parameters
-# args = getArgs()
-# plotflag = 0
-# nperm    = 1000
-# if(length(args) < 7 || is.null(args)){
-#   print(paste(usage,example,sep="\n"))
-#   print(args)
-#   stop(paste(error,"wrong input parameter!"))
-# }
+args = getArgs()
+if(length(args) < 1 || is.null(args)){
+  print(paste(usage,example,sep="\n"))
+  print(args)
+  stop(paste(error,"wrong input parameter!"))
+}
 
-# setwd(system("pwd",intern=T))
-# cwd         = getwd()
-# gene        = args['gene']
-# type        = args['type']
-# wd          = args['wd']
-# 
-# plotflag    = as.integer(args['plot']) #optional 
-# nperm       = as.integer(args['nperm'])
-# output      = paste(cwd,"/",args['out'], sep="")
-# print(paste("current working directory:",cwd))
+setwd(system("pwd",intern=T))
+fexp        = args$input
+output      = args$output
+print(fexp)
+print(paste("inputfile",fexp,class(fexp)))
+print(paste("outputfile",output))
 
-#--test
-wd          = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/"
-##---init
-gene = tail(unlist(strsplit(wd,split="/|-",perl=T)),2)[1]
-setwd(wd)
-fexp  = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/PTENreg_exp_tumor"
-fsmps = "samples.txt"
-fsom  = "som.mat"
-fcnv  = "cnv.mat"
+#---init
 
 ##loading data
 rawExp = read.table(fexp,header=T) 
 target = as.character(rawExp$gene[1])
 regulators = vapply(rawExp$gene[-1],as.character,'a')
 samples = colnames(rawExp)[-1]
+numReg = length(regulators)
+numSmps = length(samples)
 regExp = as.data.frame(t(apply(rawExp[,-1],c(1,2),as.numeric)))
 rownames(regExp) = samples
 colnames(regExp) = c(target, regulators)
+regExp = regExp[order(regExp[,1]),]
 
 dataExp = regExp
-  require(car)
-  require(MuMIn)
-  require(MASS)
-  require(glmnet)
+mycolor = colorRampPalette(c("blue","white","red"))(255)
+dataExp = apply(dataExp,2,normalize)
+rownames(dataExp) = samples
+
+if (numReg > 2){
+  require(adegenet)
   require(amap)
-  ## select candidate driver
-  require(nlme)
-  dataMat = dataExp[1:5,1:5]
-  mat2nlmeData = function(dataMat){
-  require(reshape)
-  dataMat$sbj = rownames(dataMat)
-    dout <- reshape(dataMat, 
-                 varying = colnames(dataMat[-c(1,ncol(dataMat))]), 
-                 v.names = "regulator.exp",
-                 new.row.names = paste(rownames(dataMat),1:25,sep="."),
-                 direction = "long")
-    return(dout)    
+  exp = t(dataExp[,-1])
+  expcls = find.clusters(exp,stat='AIC',n.pca=floor(numReg/2),criterion="min",choose.n.clust=FALSE)
+  groups = as.numeric(as.character(expcls$grp))
+  names(groups) = names(expcls$grp)
+  if(length(unique(groups)) == 1){
+    groups = 1:length(groups)
+    names(groups) = regulators
   }
-  
-  fitCoeff = as.data.frame(sfm$coefficients[-grep("Intercept",rownames(sfm$coefficients)),])
-  colnames(fitCoeff) = c(colnames(fitCoeff)[1:3],"p.value")
-  condsCoeff = fitCoeff[which(fitCoeff$p.value < 0.05),]
-  cands = rownames(condsCoeff[order(condsCoeff[,4]),])
-  
-  myFix = as.formula(paste(colnames(dataExp)[1], "~",
-                               paste(cands,collapse="*"),sep=""))
-  myRandom = as.formula(paste("~ ",paste(colnames(dataExp)[-1],collapse="+"),sep=""))
-  myCluster= rownames(dataExp)
-  exp.lme = lme(fixed=myFix,random=myRandom,data=dataExp)
-  for (cand in seq_along(cands)){
-    cand = cands[4]
-  }
-  
-  
-  
-}
-else{
-  #feature selection
-  exp = dataExp[,-1]
-  doGrouping(){
-    ##svd transform, take 80% variance, do kmeans, and then output grouping for each variable
-        vars = colnames(exp)
-        dexp = Dist(exp,method="spearman")
-        group         = getGroup(exp,dexp)
-        names(group)  = vars
-    }
-  
-  cntsample = nrow(dataExp) ; cntReg = ncol(dataExp) -1;
-  require(grpreg)
-  myexp.gl = regfit(as.matrix(dataExp[,-1]),as.matrix(dataExp[,1]),group)
-  
-  print("Doing regression...")
-  nperm     = 1000
-  fitpermut = regfitPermu(dataExp, group, 1000, plotflag=0) 
-  coeff = myexp.gl$beta[order(abs(myexp.gl$beta),decreasing=T)]
-  coeff = coeff[-grep("Intercept",names(coeff))]
-  coeff = sort(coeff[coeff!=0],decreasing=T)
-  cddts = names(coeff)
-  
-}
-
-###-------
-
-
-fixedFactor = names(sFit$coefficients[-1])
-library(nlme)
-
-
-require("ICC")
-require(fpc)
-for (i in seq(min(dexp) * 1.5, max(dexp) * 0.8,by=min(dexp) * 1.5)){
-  fitDB = dbscan(data=dexp,eps=15,showplot=2,method="raw")
-  plot(fitDB,exp)
-  fitDB$cluster
-  cor.test(exp[rownames(exp)[fitDB$cluster==0],] (dataExp[,1]))
-  t.test(exp[rownames(exp)[fitDB$cluster==1],],(dataExp[,1]))
-  icc = ICCbare(x=fitDB$cluster, y = rownames(exp),data = t(exp))  
-  table(fitDB$cluster)
-  cor()
-  print()
-}
-
-##----------------------------##----------------------------
-##load exp data
-dataExp = formatData(inputFile=inputexp,t='exp')
-dataExp = normalize(dataExp)
-outtxt = paste(output,gene,".txt",sep="")
-outplot = paste(output,gene,".pdf",sep="")
-
-if (plotflag == 1){
-     print("plotting...")
-     pdf(outplot)
-     require(gplots)
-     mycol = bluered(256)
-     plot(density(dataExp),main = "Gene Expression Density")
-     blankPlot(100,1)
-     par(mar=c(0,0,0,0))
-     heatmap.2(dataExp,col=mycol,trace='none')
-     axis(2, at=unlist(sapply(seq(0.5,92.5),FUN=function(x){c(x,0))})), labels=rownames(dataExp), lty=, col=, las=2) 
-     
-    }
-dataSnp = formatData(inputFile=inputsnp,t='snp')
-
-if (dataCnt$snp > 1){
-  print("grouping snps...")
-  kcDist          = kappaDist(dataSnp)
-  kcDist_svd      = getSVD(kcDist)
-  group           = getGroup(kcDist_svd,kcDist)
-  if(plotflag == 1){
-    image(z=kcDist,col=mycol,main="image: KC similarity SNP")
-    heatmap.2(kcDist,trace="none",col=mycol,dendrogram="none", main="heatmap kc similarity")
-    image(z=kcDist_svd,col=mycol,main="image: KC similarity SNP after svd")
-    row.names(kcDist_svd) = rownames(kcDist)
-    heatmap.2(kcDist_svd,col=mycol,trace='none',dendrogram="none", main="heatmap: KC similarity SNP after svd",labCol=" ")
-  }
+}else if(numReg == 2){
+  groups = 1:length(regulators)
+  names(groups) = regulators
 }else{
-  print("only one snp...")
-  group   = as.integer(1)
-  names(group) = colnames(dataSnp)
-}  
-switch(type,'1'={
-    ##model 1 exp = snp + som + cnv
-    print("model exp~snp+som+cnv")
-    dataCnv = formatData(inputcnv,t='cnv')
-    dataSom = formatData(inputsom,t='som')
-    cntsample = nrow(dataExp) ; cntsnp = ncol(dataSnp); cntcnv = ncol(dataCnv); cntsom = ncol(dataSom)
-    group     = c(som = rep(1,cntsom), cnv = rep(2,cntcnv), group + 2)
-    
-    data_merge = as.data.frame(matrix(NA,nrow=cntsample,ncol=1+cntsnp+cntcnv+cntsom))
-    colnames(data_merge) = c('exp',colnames(dataSnp),colnames(dataSom),colnames(dataCnv))
-    row.names(data_merge) = row.names(dataExp) ## assume all data matrix with same rownames
-    
-    data_merge[,1] = dataExp
-    data_merge[,2:(1+cntsnp)] = dataSnp
-    data_merge[,(1+cntsnp+1):(1+cntsnp+cntsom)] = dataSom
-    data_merge[,(1+cntsnp+cntsom+1):(1+cntsnp+cntsom+cntcnv)] = dataCnv
+  stop(paste("only one regulator!"))
+}
 
-    },'2'={    
-      ##model 2 exp = snp + soｍ 
-      print("model exp~snp + som")
-      dataSom = formatData(inputsom,t='som')
-      cntsample = nrow(dataExp) ; cntsnp = ncol(dataSnp); cntsom = ncol(dataSom)
-      group     = c(som = rep(1,cntsom), group + 1)
-      
-      data_merge = as.data.frame(matrix(NA,nrow=cntsample,ncol=1+cntsnp+cntsom))
-      colnames(data_merge) = c('exp',colnames(dataSnp),colnames(dataSom))
-      row.names(data_merge) = row.names(dataExp) ## assume all data matrix with same rownames
-      
-      data_merge[,1] = dataExp
-      data_merge[,2:(1+cntsnp)] = dataSnp
-      data_merge[,(1+cntsnp+1):(1+cntsnp+cntsom)] = dataSom
-        
-    },'3'={
-     ## model 3 exp = snp + cnv 
-      print("model exp~snp + cnv")
-      dataCnv = formatData(inputcnv,t='cnv')
-      cntsample = nrow(dataExp) ; cntsnp = ncol(dataSnp); cntcnv = ncol(dataCnv)
-      group     = c( cnv = rep(1,cntcnv), group + 1)
-      
-      data_merge = as.data.frame(matrix(NA,nrow=cntsample,ncol=1+cntsnp+cntcnv))
-      colnames(data_merge) = c('exp',colnames(dataSnp),colnames(dataCnv))
-      row.names(data_merge) = row.names(dataExp) ## assume all data matrix with same rownames
 
-      data_merge[,1] = dataExp
-      data_merge[,2:(1+cntsnp)] = dataSnp
-      data_merge[,(1+cntsnp+1):(1+cntsnp+cntcnv)] = dataCnv      
-    }, '4'={
-      print("model exp ~ snp")
-      cntsample = nrow(dataExp) ; cntsnp = ncol(dataSnp);
-      data_merge = as.data.frame(matrix(NA,nrow=cntsample,ncol=1+cntsnp))
-      colnames(data_merge) = c('exp',colnames(dataSnp))
-      row.names(data_merge) = row.names(dataExp) ## assume all data matrix with same rownames    
-      data_merge[,1] = dataExp
-      data_merge[,2:(1+cntsnp)] = dataSnp
-    })
-  
 require(grpreg)
 print("Doing regression...")
-nperm     = nperm
-fitpermut = regfitPermu(data_merge, group, nperm, plotflag=plotflag) 
+print(table(groups))
+fitpermut = regfitPermu(X=dataExp[,-1],y=dataExp[,1], groups, nperm)
+resBeta = fitpermut$beta
+resBeta[,2] = p.adjust(fitpermut$beta[,2],method="bonferroni")
+candi = getCandi(resBeta,pcut=pvalcut)
+out = rbind(c("#target", target),
+            c("#totalReg",numReg),
+            c("#sigReg", nrow(candi)),
+            cbind(c("#r2","#r2.pval"),fitpermut$fit_r2),
+            c("#regulator\tcoeff","pvalue")
+            )
 
-##output
-print("writing output...")
-write.table(t(as.matrix(c(paste("gene","RSS","npermu","pvalue",sep=":"),paste(genename,fitpermut$RSS, nperm, fitpermut$pvalue,sep=":")))),
-            outtxt,
+write.table(as.matrix(out),
+            output,
             quote=F,col.names=F,sep="\t",row.names = F)
-write.table(as.matrix(sort(fitpermut$beta[-1])),
-            outtxt,
+write.table(candi,
+            output,
             append=T,
             col.names=F, quote=F,sep="\t")
-print(paste("#-----Done",genename))
+print(paste("#-Done--",target))
+

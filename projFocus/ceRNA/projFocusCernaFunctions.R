@@ -70,7 +70,7 @@ subStr1To19 = function(x){ substr(x,6,12)}
 
 normalize = function(x){
   xx = vapply(x,FUN=as.numeric,1.1)
-  xx = as.matrix((xx - mean(xx)) / sd(xx))
+  xx = as.matrix((xx - mean(xx)) /  (2*sd(xx)))
   colnames(xx) = colnames(x)
   rownames(xx) = rownames(x)
   return(xx)
@@ -142,13 +142,13 @@ bestK = function(kcval_svd){
 
 ##----------------------------
 #
-getGroup = function(kcval_svd,kcval){
-  k_best                = bestK(kcval_svd)
-  colnames(kcval_svd)   = colnames(kcval)[1:ncol(kcval_svd)]
-  row.names(kcval_svd)  = colnames(kcval)
-  group                 = kmeans(x=kcval_svd,centers=k_best)$cluster
-  return(unlist(group))
-}
+# getGroup = function(kcval_svd,kcval){
+#   k_best                = bestK(kcval_svd)
+#   colnames(kcval_svd)   = colnames(kcval)[1:ncol(kcval_svd)]
+#   row.names(kcval_svd)  = colnames(kcval)
+#   group                 = kmeans(x=kcval_svd,centers=k_best)$cluster
+#   return(unlist(group))
+# }
 getGroupKmeans = function(kcval){
   k_best                = bestK(kcval)
   colnames(kcval)   = colnames(kcval)[1:ncol(kcval)]
@@ -267,7 +267,7 @@ regfitPermu = function(data_merge,group,nperm, plotflag=0) {
   #input: data_merge, group, and number of permuatation, plotflag 1/0
   #output: p-value, plot of p-value significance depends on plotflag
   y               =  sigmoid(data_merge[,1] )
-  X               =  as.matrix(data_merge[,-1])
+  X               =  as.matrix(data_merge[,-1])  
   fit_grpreg      =  regfit(X, y, group, plotflag)
   
   #permutation

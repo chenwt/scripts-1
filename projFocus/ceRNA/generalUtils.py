@@ -74,6 +74,18 @@ class Mutation :
     def __init__(self, chr, ps):
         self.chr = chr
         self.ps = long(ps)
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) \
+                and self.__dict__ == other.__dict__)
+    def __comp__(self, mut2):
+        if self.chr == mut2.chr and self.ps == mut2.ps:
+            return 1
+        else:
+            return 0
+    def __repr__(self):
+        return 'Mutation(%s,%r)' % (self.chr, self.ps)
+    def __str__(self):
+        return '(%s,%r)' % (self.chr, self.ps)
     def disp(self):
         print str(self.chr) + "\t" + str(self.ps) 
 

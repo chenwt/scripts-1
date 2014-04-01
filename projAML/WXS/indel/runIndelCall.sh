@@ -130,23 +130,62 @@ outDir=$(pwd)
 # awk '{print $1":"$2}' *2ndfilter.snpeff.intersect.relapse| sort |uniq -c |sort -k 1 -r  
 
 
-#-----------ln file
-vcf2ndDir=/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/indel/filter2nd
-while read pid
-do
-  normal=`grep -w $pid pid.txt.inputBamlist |awk -F"/" '$13~/14A/{print $16}'`
-  normal=${normal}_dindel_ouput.variantCalls.VCF.filtered.VCF.snpeff.vcf.parsed...var
-  ln -s $vcf2ndDir/$normal $CWD/${pid}_normal.vcf.snpeff.var 
+# #-----------ln file
+# vcfDir=/ifs/scratch/c2b2/ac_lab/jh3283/projAML/WXS/indel/raw
+# while read pid
+# do
+#   normal=`grep -w $pid pid.txt.inputBamlist |awk -F"/" '$13~/14A/{print $16}'`
+#   normal=${normal}_dindel_ouput.variantCalls.VCF
+#   # ln -s $vcfDir/$normal $CWD/${pid}_normal.vcf 
 
-  tumor=`grep -w $pid pid.txt.inputBamlist |awk -F"/" '$13~/0[93]A/{print $16}'`
-  tumor=${tumor}_dindel_ouput.variantCalls.VCF.filtered.VCF.snpeff.vcf.parsed...var
-  ln -s $vcf2ndDir/$tumor $CWD/${pid}_tumor.vcf.snpeff.var 
+#   tumor=`grep -w $pid pid.txt.inputBamlist |awk -F"/" '$13~/0[93]A/{print $16}'`
+#   tumor=${tumor}_dindel_ouput.variantCalls.VCF
+#   # ln -s $vcfDir/$tumor $CWD/${pid}_tumor.vcf 
 
-  relapse=`grep -w $pid pid.txt.inputBamlist |awk -F"/" '$13~/04A/{print $16}'`
-  relapse=${relapse}_dindel_ouput.variantCalls.VCF.filtered.VCF.snpeff.vcf.parsed...var
-  ln -s $vcf2ndDir/$relapse $CWD/${pid}_relapse.vcf.snpeff.var 
+#   relapse=`grep -w $pid pid.txt.inputBamlist |awk -F"/" '$13~/04A/{print $16}'`
+#   relapse=${relapse}_dindel_ouput.variantCalls.VCF
+#   # ln -s $vcfDir/$relapse $CWD/${pid}_relapse.vcf 
   
-done < pid.txt
 
+#   ##-----
+#   cosmic=/ifs/data/c2b2/ac_lab/jh3283/database/cosmic/CosmicMutantExportCensus_v68.tsv.locus
+#   normal=$CWD/${pid}_normal.vcf
+#   normalout=$normal.cosmic.vcf
+#   tumor=$CWD/${pid}_tumor.vcf
+#   tumorout=$tumor.cosmic.vcf
+#   relapse=$CWD/${pid}_relapse.vcf
+#   relapseout=$relapse.cosmic.vcf
+#   # $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/indel/getCosmicIndel.py -i ${normal} -c $cosmic -o $normalout
+#   # $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/indel/getCosmicIndel.py -i ${tumor} -c $cosmic -o $tumorout
+#   # $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/indel/getCosmicIndel.py -i ${relapse} -c $cosmic -o $relapseout
+#   pidCosmic=${pid}.cosmic.vcf
+#   awk 'NR==1||FNR!=1{print FILENAME,"\t", $0}'  $normalout $tumorout $relapseout > $pidCosmic
+# done < pid.txt
+
+##-----------find cosmic mutations
+###----get cosmic indels (short indel)
 
 echo "#-----END---"
+
+function pidFilter(){
+  pid=$1
+  pattern=$2
+  dir=$3
+  normal=`grep -w $pid $CWD/pid.txt.inputBamlist |awk -F"/" '$13~/14A/{print $16}'`
+  normal=$dir/${normal}${pattern}
+
+  tumor=`grep -w $pid $CWD/pid.txt.inputBamlist |awk -F"/" '$13~/0[93]A/{print $16}'`
+  tumor=$dir/${tumor}${pattern}
+
+  relapse=`grep -w $pid $CWD/pid.txt.inputBamlist |awk -F"/" '$13~/04A/{print $16}'`
+  relapse=$dir/${relapse}${pattern}  
+  annofile=~/DATA/database/refseq/refseq_gene_hg19_selected_Mar22_Tsstse.tsv.single.tsv 
+  out=${pid}.snpeff.2ndftilter_mar31
+  $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/indel/filterIndel_v4.py  -r ${relapse} -t ${tumor} -n ${normal} -a $annofile -o $out
+
+}
+
+pid="PASFEW"
+ptn="_dindel_ouput.variantCalls.VCF.filtered.VCF.snpeff.vcf.parsed...var"
+dir=/ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projAML/WXS/indel/filter2nd
+pidFilter $pid $ptn $dir

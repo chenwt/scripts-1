@@ -145,8 +145,8 @@ def getMut(filename, geneAnno):
     return data
 
 relapse = getMut(rf, gAnno)
-tumor = getMut(tf, gAnno)
-normal = getMut(nf, gAnno)
+tumor   = getMut(tf, gAnno)
+normal  = getMut(nf, gAnno)
 allDict = {}
 
 
