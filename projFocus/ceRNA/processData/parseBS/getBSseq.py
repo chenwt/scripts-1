@@ -46,6 +46,7 @@ print " %s sequence for %s genes" % (cnt, len(seq3pUTR.keys()) )
 
 geneprev = 'Symbol'
 outseq = ['sequence']
+# outbindStart = ['bindStart']
 outputH = open(output,'w')
 with(open(cupidfile)) as f:
     line = f.readline()
@@ -59,7 +60,7 @@ with(open(cupidfile)) as f:
                 for gSeq in  seq3pUTR[genename]:
                     ps = max( int(tps) - 1 - 25, 0)
                     pe = min( int(tpe) + 25, len(gSeq) )  
-                    outseq.append(gSeq[ps:pe])
+                    outseq.append(str(int(tps)-ps) + ":" + gSeq[ps:pe])
                 geneprev = genename
 
             else:
@@ -72,7 +73,7 @@ with(open(cupidfile)) as f:
                 for gSeq in  seq3pUTR[genename] :
                     ps = max( int(tps) - 1 - 25, 0)
                     pe = min( int(tpe) + 25, len(gSeq) )  
-                    outseq.append(gSeq[ps:pe])
+                    outseq.append(str(int(tps)-ps) + ":" + gSeq[ps:pe])
         line = f.readline()
 
 outputH.write(geneprev + "\t" + ";".join(list(set(outseq))) + "\n")
