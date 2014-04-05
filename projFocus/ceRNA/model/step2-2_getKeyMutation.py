@@ -1,8 +1,7 @@
 #!/usr/bin/python
 #J.HE
-#Desp.: given the output file from step2-1_getKeyReg.r
+#Desp.: given key regulators, group together all 3 prime utr/ promoter region
 #run association to get driver mutations.
-
 
 import sys,getopt
 argv = sys.argv[1:]

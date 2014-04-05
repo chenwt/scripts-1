@@ -5,13 +5,33 @@
 
 ### reference 
 from collections import OrderedDict
+
+class RefGene:
+    ''' reference genomic coordinates for each gene, using entrez gene name as
+    key '''
+    def __init__(self, name, chr, strand, tss, utr3s, utr3e, utr5s, utr5e):
+        self.name = name
+        self.chr =  chr
+        self.strand = strand
+        self.tss    = int(tss)
+        self.utr3s  = int(utr3s)
+        self.utr3e  = int(utr3e)
+        self.utr5s  = int(utr5s)
+        self.utr5e  = int(utr5e)
+    def __hash__(self):
+        return hash((self.name, self.tss))
+    def __repr__(self):
+        return 'RefGene(%s, %r, %r)' % (self.name, self.chr, self.tss)
+    def __str__(self):
+        return '(%s, %r, %r)' % (self.name, self.chr, self.tss)
+
 class GeneCoord :
     ''' reference genomic coordinates for each gene, using entrez gene name as
     key '''
     def __init__(self, name, chr, tss):
         self.name = name
         self.chr =  chr
-        self.tss = long(tss)
+        self.tss = int(tss)
 
     def __hash__(self):
         return hash((self.name, self.tss))
@@ -73,7 +93,7 @@ class GeneCoord :
 class Mutation :
     def __init__(self, chr, ps):
         self.chr = chr
-        self.ps = long(ps)
+        self.ps = int(ps)
     def __eq__(self, other):
         return (isinstance(other, self.__class__) \
                 and self.__dict__ == other.__dict__)
@@ -92,8 +112,8 @@ class Mutation :
 class CNV :
     def __init__(self, chr, ps, pe, val):
         self.chr = chr
-        self.ps = long(ps)
-        self.pe = long(pe)
+        self.ps = int(ps)
+        self.pe = int(pe)
         self.val = float(val)
 
 class Cernet:

@@ -111,7 +111,6 @@ def getMut(filename, geneAnno):
                     dp = int( infos['DP'] )
                     alt = int(infos['NF']) + int( infos['NR'])
                     maf = round(float(alt) / dp, 4)
-
                     ##----filter maf and dp
                     if len(tempref) > 15 or len(tempalt) > 15:
                         flag = 0
@@ -161,10 +160,10 @@ print len(allDict)
 # cntT = 0 
 for key, mutList in tumor.items() :
     for mut in mutList:
-        # cntT = cntT + 1 
         if allDict.get((mut.chr,mut.ps),0):
             allDict[(mut.chr,mut.ps)] = allDict[(mut.chr,mut.ps)] + 2
         else:
+            # cntT = cntT + 1 
             allDict[(mut.chr,mut.ps)] = 2
 # cntR = 0 
 for key, mutList in relapse.items() :
@@ -176,16 +175,32 @@ for key, mutList in relapse.items() :
             allDict[(mut.chr,mut.ps)] = 4
 
 cnt1 = 0; cnt2 = 0; cnt3 = 0; 
-cnt4 = 0; cnt5 = 0; cnt6 = 0; 
-cnt7 = 0; 
+cnt4 = 0; cnt5 = 0; cnt6 = 0; cnt7 = 0; 
 outputH = open(output + ".relapse",'w') 
 outputCountH = open(outputCount, 'w')
+outputNormH  = open(output + ".normal", 'w')
+outputTumH   = open(output + ".tumor", 'w')
 
 for k, v in allDict.items():
     if v == 1:
         cnt1 = cnt1 + 1
+        try:
+            mut = [m for m in normal[k[0]] if (m.chr, m.ps) == k]
+            mut = mut[0]
+            outRec = "\t".join(map(str, list(k) + [mut.gene, mut.dp, mut.alt, mut.maf, mut.func, mut.eff, mut.imp ])) 
+            outputNormH.write(outRec + "\n")
+        except IndexError:
+            # print relapse[k[0]]
+            print k, v 
     elif v == 2:
         cnt2 = cnt2 + 1
+        try:
+            mut = [m for m in tumor[k[0]] if (m.chr, m.ps) == k]
+            mut = mut[0]
+            outRec = "\t".join(map(str, list(k) + [mut.gene, mut.dp, mut.alt, mut.maf, mut.func, mut.eff, mut.imp ])) 
+            outputTumH.write(outRec + "\n")
+        except IndexError:
+            print k, v 
     elif v == 3:
         cnt3 = cnt3 + 1
     elif v == 4:
@@ -215,4 +230,6 @@ outputCountH.write("mutationNum\t" + "\t".join(map(str,[cnt1+cnt3+cnt5+cnt7, cnt
                                       cnt6+cnt7, cnt1, cnt2, cnt4])) + "\n") 
 
 outputCountH.close()
+outputNormH.close()
+outputTumH.close()
 outputH.close()

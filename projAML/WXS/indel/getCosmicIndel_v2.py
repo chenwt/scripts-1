@@ -1,6 +1,5 @@
 #!/usr/bin/python
 #J.HE
-## only look at positiion, not pattern
 
 import sys,getopt
 import generalUtils as gu
@@ -56,19 +55,38 @@ print "cosmic mutation number\t", cnt
 outputH = open(output,'w')
 
 cnt = 0
+cntd = 0 
 cntk = 0
 with(open(input)) as f:
     line = f.readline()
     while line:
         if not re.match("^#",line):
-            tchr, tps, _, _, _, _, _, _, _,=\
+            tchr, tps, _, tseqref, tseqalt, _, tfilter, tinfo, _,_ =\
                     line.strip().split("\t")
-            crtmut = gu.Mutation(tchr, tps)
-            if  [x for x in cosmicDict[tchr] if x.ps == crtmut.ps ]:
-                outputH.write(line)
-                cntk = cntk + 1
+            if len(tseqref) > 15 or len(tseqalt) > 15:
+                line = f.readline()
+                cntd = cntd + 1
+                continue
+            if not tfilter == 'PASS':
+                line = f.readline()
+                cntd = cntd + 1
+                continue
             else:
-                pass
+                if len(tseqref) > len(tseqalt):
+                    type = "del" + tseqref.replace(tseqalt,'',len(tseqalt))
+                elif len(tseqref) == len(tseqalt):
+                    type = tseqref + ">" + tseqalt 
+                else:
+                    type = "ins" + tseqalt.replace(tseqref,'',len(tseqref))
+                crtmut = gu.Mutation(tchr, tps)
+                crtmut.pe = crtmut.ps + len(tseqref) - 1
+                crtmut.type = type
+                if  [x for x in cosmicDict[tchr] if x.ps == crtmut.ps and
+                     x.type == crtmut.type]:
+                    outputH.write(line)
+                    cntk = cntk + 1
+                else:
+                    pass
         elif re.match("^#CHROM",line):
             outputH.write(line)
         else:
@@ -76,6 +94,7 @@ with(open(input)) as f:
         cnt = cnt + 1
         line = f.readline()
 print  "total mutation\t" + str(cnt) 
+print "filtered mutation \t" + str(cntd) 
 print  "cosmic mutation\t" + str(cntk) 
 
 outputH.close()

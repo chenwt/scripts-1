@@ -188,4 +188,17 @@ function pidFilter(){
 pid="PASFEW"
 ptn="_dindel_ouput.variantCalls.VCF.filtered.VCF.snpeff.vcf.parsed...var"
 dir=/ifs/home/c2b2/ac_lab/jh3283/SCRATCH/projAML/WXS/indel/filter2nd
-pidFilter $pid $ptn $dir
+# while read pid 
+# do 
+#   echo "#-----${pid}-----"
+#   pidFilter $pid $ptn $dir
+# done < pid.txt  
+while read pid 
+# pid="PASFEW"
+do
+  tu=${pid}.snpeff.2ndftilter_mar31.tumor
+  re=${pid}.snpeff.2ndftilter_mar31.relapse
+  cosmic=/ifs/data/c2b2/ac_lab/jh3283/database/cosmic/CosmicMutantExportCensus_v68.tsv.locus
+  $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/indel/getCosmicIndel.py -i ${re} -c $cosmic -o $re.cosmic
+  $PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projAML/WXS/indel/getCosmicIndel.py -i ${tu} -c $cosmic -o $tu.cosmic
+done < pid.txt
