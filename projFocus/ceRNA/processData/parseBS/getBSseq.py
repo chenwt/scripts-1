@@ -27,6 +27,7 @@ for opt, arg in opts:
         seqfile = arg
     elif opt in ("-o"):
         output = arg
+        outputlog = output + ".log"
 print('Script path:\t'+ sys.argv[0])
 print('Input file:\t' +cupidfile)
 print('Output file:\t'+ output)
@@ -43,31 +44,36 @@ with(open(seqfile)) as f:
         line = f.readline()
 print " %s sequence for %s genes" % (cnt, len(seq3pUTR.keys()) )
 
-geneprev = ''
-outseq = ['Symbol', 'sequence']
+geneprev = 'Symbol'
+outseq = ['sequence']
+outputH = open(output,'w')
 with(open(cupidfile)) as f:
     line = f.readline()
     while line:
         if not re.match("^Symbol", line):
-            _, genename, refseqid, _, ps, pe = \
+            # _, genename, refseqid, _, ps, pe = \
+                    # re.split(r":|\s+|,", line.strip().replace("[","").replace("]",""))
+            _, genename, refseqid,  tps,tpe = \
                     re.split(r":|\s+|,", line.strip().replace("[","").replace("]",""))
-            # if not geneprev == genename:
-                # outseq = list(set(outseq))
-                # print geneprev + "\t" + ";".join(outseq)
+            if genename == geneprev:
+                for gSeq in  seq3pUTR[genename]:
+                    ps = max( int(tps) - 1 - 25, 0)
+                    pe = min( int(tpe) + 25, len(gSeq) )  
+                    outseq.append(gSeq[ps:pe])
                 geneprev = genename
-                outseq = []
-                for gSeq in  seq3pUTR[genename] :
-                    ps = max( int(ps) - 1 - 25, 0)
-                    pe = min( int(pe) + 25, len(gSeq) )  
-                    if not gSeq[ps:pe] in outseq:
-                        outseq.append(gSeq[ps:pe]) 
-            else:     
-                for gSeq in  seq3pUTR[genename] :
-                   ps = max( int(ps) - 1 - 25, 0)
-                   pe = min( int(pe) + 25, len(gSeq) )  
-                   if not gSeq[ps:pe] in outseq:
-                       outseq.append(gSeq[ps:pe]) 
+
+            else:
+                # print geneprev + "\t" + ";".join(list(set(outseq)))
+                outputH.write(geneprev + \
+                    "\t" + ";".join(list(set(outseq))) + "\n")
+                if geneprev in seq3pUTR : del seq3pUTR[geneprev]
+                outseq = []; 
                 geneprev = genename
+                for gSeq in  seq3pUTR[genename] :
+                    ps = max( int(tps) - 1 - 25, 0)
+                    pe = min( int(tpe) + 25, len(gSeq) )  
+                    outseq.append(gSeq[ps:pe])
         line = f.readline()
 
-print geneprev + "\t" + ";".join(outseq)
+outputH.write(geneprev + "\t" + ";".join(list(set(outseq))) + "\n")
+ 
