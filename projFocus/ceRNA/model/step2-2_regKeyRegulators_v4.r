@@ -25,6 +25,12 @@ setRootd  = function(){
 rootd     = setRootd()
 source(paste(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R",sep=""))
 source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
+##---test
+# fexp = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-gslist.Gintset_Mar31.txt_59/LRRK1_candidateRegs_Apr-5-2014.txt_reg_exp_tumor.temp"
+# setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-gslist.Gintset_Mar31.txt_59/")
+# output  = "LRRK1_candidateRegs_Apr-6-2014.txt"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/test.out.txt"
+##---test
 
 #---funcs
 regfit      = function(X, y, group){
@@ -96,13 +102,13 @@ regfitPermu = function(X, y,group, nperm) {
 }
 getCandi    = function(fitPermuBeta, pcut){
   xname = rownames(fitPermuBeta)[which(fitPermuBeta[,2] <= pcut)]
-  x = t(as.data.frame(fitPermuBeta[which(fitPermuBeta[,2] <= pcut),]))
+  x = as.data.frame(fitPermuBeta[which(fitPermuBeta[,2] <= pcut),])
   rownames(x) = xname
-  if (dim(x)[1] > 1){
-    x = x[x[,1]>0,]
+  if (length(x[,1]) > 1){
     x = x[order(x[,1],decreasing=T),]
+    x = x[x[,1]>0,]
     return(x)
-  }else if( dim(x)[1] == 1){
+  }else if( length(x[,1]) == 1){
     return(x)
   }else {
     return(c("", ""))
@@ -114,12 +120,7 @@ nperm     = 1000
 pvalcut   = 0.01
 
 
-##---test
-# fexp = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-gslist.Gintset_Mar31.txt_41/WNT1_candidateRegs_Mar-31-2014.txt_reg_exp_tumor.temp"
-# setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-gslist.Gintset_Mar31.txt_41/")
-# output  = "WNT1_candidateRegs_Mar-31-2014.txt"
-# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/test.out.txt"
-##---test
+
 ##---init---
 
 # #----getting command line parameters
@@ -172,7 +173,8 @@ if (numReg > 2){
 }else{
   fitlm  = lm(dataExp[,1]~dataExp[,-1])
   sumfit = summary(fitlm)
-  if (sumfit$coefficients[2,4] < pcut){
+  save(sumfit,target, regulators, file=jxy(output,".rda"))
+  if (sumfit$coefficients[2,4] < pvalcut){
       out = rbind(c("#target", target),
                 c("#totalReg",1),
                 c("#sigReg", 0),
@@ -199,6 +201,8 @@ require(grpreg)
 print("Doing regression...")
 print(table(groups))
 fitpermut = regfitPermu(X=dataExp[,-1],y=dataExp[,1], groups, nperm)
+save(fitpermut,numReg,target, regulators, file=jxy(output,".rda"))
+
 resBeta = fitpermut$beta
 resBeta[,2] = p.adjust(fitpermut$beta[,2],method="bonferroni")
 candi = getCandi(resBeta,pcut=pvalcut)

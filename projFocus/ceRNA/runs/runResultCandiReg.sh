@@ -58,7 +58,7 @@ qsubGetKeyRegs() {
 	# echo $cmd |qsub -l mem=16g,time=120:: -N ${gene}.KeyReg -e $CWD/log -o $CWD/log -cwd  >> $CWD/qsubGKR.logs
 
 	cmd="$PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-1_getKeyReg_v4.py -c $cernet -g $gene  -t $expTum -n $expNorm -a $geneAnnofile -l $gslist -o $out"
-	echo $cmd |qsub -l mem=8g,time=40:: -N ${gene}.KeyReg -e $CWD/log -o $CWD/log -cwd  >> $CWD/qsubGKR.logs
+	echo $cmd |qsub -l mem=8g,time=120:: -N ${gene}.KeyReg -e $CWD/log -o $CWD/log -cwd  >> $CWD/qsubGKR.logs
 	tail -1 $CWD/qsubGKR.logs
 	((cnt=cnt+1)) 	
     # else
