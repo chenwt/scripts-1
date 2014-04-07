@@ -14,11 +14,11 @@ from generalUtils import GeneCoord
 argv = sys.argv[1:]
 input = ''
 output = ''
-usage = 'python ' + sys.argv[0] + ' -s <binding site file>  -a <annotation file> \
+usage = 'python ' + sys.argv[0] + ' -s <binding site file> \
 -m <mutations> -o <output> '
 example = 'python ' + sys.argv[0] + ' -i <input>  -o <output>'
 try:
-    opts,args = getopt.getopt(argv,"hs:a:m:o:")
+    opts,args = getopt.getopt(argv,"hs:m:o:")
 except getopt.GetoptError:
     print usage + "\n" + example 
     sys.exit(2)
@@ -28,71 +28,84 @@ for opt, arg in opts:
         sys.exit()
     elif opt in ("-s"):
         bsfile = arg
-    elif opt in ("-a"):
-        annofile = arg
     elif opt in ("-m"):
         mutfile = arg
     elif opt in ("-o"):
         output = arg
 print('Script path:\t'+ sys.argv[0])
-print('Input file:\t' + input)
+print('Input file:\t' + bsfile)
+print('Input file:\t' + mutfile)
 print('Output file:\t'+ output)
 
 
-annoChrDict = defaultdict(list)
-class Gene3UTR:
-    def __init__(self, name, chr, utr3s, utr3e):
-        self.name = name
-        self.chr = chr
-        self.utr3s = int(utr3s)
-        self.utr3e = int(utr3e)
-    def __str__(self):
-        return '(%s, %s, %r, %r)' % \
-                (self.name, self.chr, self.utr3s, self.utr3e)
 class MutRecord:
-    def __init__(self, targ, tarchr, tarps, tarpe, mutg, mutps, mutpe, val):
+    # def __init__(self, targ, tarchr, tarps, tarpe, mutg, mutps, mutpe, val):
+    def __init__(self,   targ, tarchr,  mutg, mutps, mutpe, val):
         self.targ = targ
-        self.tarchr = tarchr
-        self.tarps = tarps
-        self.tarpe = tarpe
+        self.chr = tarchr
+        # self.tarps = tarps
+        # self.tarpe = tarpe
         self.mutg = mutg 
-        self.mutps = mutps
-        self.mutpe = mutpe
+        self.ps = int(mutps)
+        self.pe = int(mutpe)
         self.val = val
+    def __eq__(self,other):
+        return self.mutg == other.mutg and self.chr == other.chr \
+                and self.ps == other.ps and self.pe == other.pe
+        
     def __str__(self):
-        return '(%s, %s, %s, %s)' % (self.targ, self.tarchr, self.tarps, self.mutg) 
-# with(open(annofile)) as f:
-#     line = f.readline()
-#     while line:
-#         tgene, tchr, tps, tpe, tstrand =  line.strip().split("\t")
-#         tgObj = Gene3UTR(tgene, tchr, tps, tpe )
-#         tgObj.strand = tstrand
-#         print tgObj
-#         annoChrDict[tchr].append(tgObj) 
-#         line = f.readline()
+        return '(%s, %s, %s, %s)' % (self.tarchr, self.mutg, self.ps, self.pe ) 
+    def inRegion(self, regObj):
+        if self.chr == regObj.chr:
+            if self.pe < regObj.ps or self.ps > regObj.pe:
+                return 0
+            else:
+                return 1 
+        else:
+            return 0 
+    def allInfo(self):
+        return "\t".join(map(str, [self.targ, self.mutg, self.chr, self.ps, \
+                                   self.pe] )) + "\t" + self.val 
+
+class Region:
+    def __init__(self, chr, ps, pe):
+        self.chr = chr
+        self.ps = int(ps)
+        self.pe = int(pe)
 
 mutDict = defaultdict(list)
 with(open(mutfile)) as f:
+    head = f.readline()
     line = f.readline()
     while line:
-        targ, tarchr, tarps, tarpe, mutg, mutps, mutpe, val = \
+        # targ, tarchr, tarps, tarpe, mutg, mutps, mutpe, val = \
+        targ, tarchr, _,  _, mutg, mutps, mutpe, val = \
                 line.strip().split("\t",7)
-        mutDict[tarchr].append(\
-             MutRecord(targ, tarchr, tarps, tarpe, mutg, mutps, mutpe, val) )
+        crtMut = MutRecord(targ, tarchr,  mutg, mutps, mutpe, val) 
+        if not crtMut in mutDict[mutg]: 
+            mutDict[mutg].append(crtMut)
         line = f.readline()
-
-cnt = 0
-bsDict = {}
+print "mutation matrix loaded : %s" % len(mutDict.keys())
+bsDict = defaultdict(list)
+outputH = open(output, 'wt')
+outputH.write("\t".join(\
+            ["geneTar", "geneMut", "chrome", "psMut", "peMut"] ) \
+            + "\t" +  head.split("\t",7)[7]   )
+cnt = 0 
 with(open(bsfile)) as f:
     line = f.readline()
-    line = f.readline()
     while line:
-        ptn = r":|\s|\t|\[|,|\]" 
-        _, tg, _, _, trbs, trbe, _ = re.split(ptn, line.strip())
-        # print tg, trbs, trbe 
-        bsDict[tg] = [trbs,trbe]
-        cnt = cnt + 1
-        if cnt == 10:
-            break
+        if not line.strip().endswith(':') :
+            gene, chrom, bsPos = re.split(":|\t", line.strip())
+            for crtmut in mutDict[gene]:
+                for x in bsPos.split(";"):
+                    x = int(x)
+                    if crtmut.inRegion(Region(chrom, x, x + 7)) :
+                        outputH.write(crtmut.allInfo() + "\n") 
+                        cnt = cnt + 1
+                        break
         line = f.readline()
-         
+
+print "mutations find in binding area:\t %s" % cnt 
+outputH.close()
+
