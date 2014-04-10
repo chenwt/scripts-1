@@ -31,7 +31,6 @@ fsmps = "samples.txt"
 fexp = "exp.mat"
 fsom = "som.mat"
 fcnv = "cnv.mat"
-fsnp = "snp.mat"
 fmeth = "meth.mat"
 
 ##loading data

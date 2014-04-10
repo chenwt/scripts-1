@@ -8,12 +8,13 @@ argv = sys.argv[1:]
 input = ''
 output = ''
 usage = 'python ' + sys.argv[0] + ' \n\
-        -g <target gene>\n \
-        -d <dir for results from> \n \
-        -m <mutation file> \n\
-        -b <binding site> \n\
+        -r <regulator file> \n \
+        -c <copy number data> \n \
+        -m <methylation data > \n\
+        -s <somatic mutation data > \n\
+        -g < gslist > \n \  
+        -e < expression data> \n \
         -o <output file > '
-
 example = 'python'  + sys.argv[0] + ' -i <input>  -o <output>'
 
 try:
