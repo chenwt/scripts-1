@@ -36,47 +36,58 @@ print('Output file:\t'+ output)
 outputSig = output + ".sigcnt"
 pval_cut = 0.01 
 def parseFile(file, pval_cut):
-    print file
     with(open(file)) as f:
         line = f.readline()
-        tgene = file.strip().split("_",1)[0]
+        if re.findall("/", file):
+            tgene = file.strip().split("/")[-1]
+        else :
+            tgene = file 
+        tgene = tgene.split("_",1)[0]
         tsum = [tgene, 0.0, 0.0, 0, 0]
+        regs = []
         for i, line in enumerate(f):
-            if i >= 5:
-                break
-            else:
-                if re.match(r"^#r2\t", line):
-                   tsum[1] = line.strip().split("\t")[1] 
-                elif re.findall(r"^#r2.pval", line):
-                    _, pval = line.strip().split("\t")
-                    if float(pval) <= pval_cut:
-                        tsum[2] = str(pval)
-                    else:
-                        tsum = '' 
-                        break
-                elif re.match(r"^#totalReg", line):
-                    tsum[3] = line.strip().split("\t")[1]
-                elif re.match(r"^#sigReg",line):
-                    tsum[4] = line.strip().split("\t")[1]
-                elif re.match(r"^#target", line):
-                    if not line.strip().split("\t")[1] == tgene:
-                        print "error at gene name matching"
+            if re.match(r"^#r2\t", line):
+               tsum[1] = line.strip().split("\t")[1] 
+            elif re.findall(r"^#r2.pval", line):
+                _, pval = line.strip().split("\t")
+                if float(pval) <= pval_cut:
+                    tsum[2] = str(pval)
                 else:
-                    pass
-    return tsum
+                    tsum = '' 
+                    regs = ''
+                    break
+            elif re.match(r"^#totalReg", line):
+                tsum[3] = line.strip().split("\t")[1]
+            elif re.match(r"^#sigReg",line):
+                tsum[4] = line.strip().split("\t")[1]
+            elif re.match(r"^#target", line):
+                if not line.strip().split("\t")[1] == tgene:
+                    print "error at gene name matching"
+            elif re.match(r"^#regulator", line):
+                pass 
+            else:
+                reg, beta, pval = line.strip().split("\t")
+                if float(beta) > 0.:
+                    regs.append(reg)
+    return tsum, regs 
 
 fArray = os.listdir(fileDir)
 outheader = "\t".join(['gene_tar','r2', 'r2pval', 'regTotal', 'regSig']) 
 sufix = '.txt'
 cntSig = 0 
 outputH = open(output, 'w')
+outputRegH = open(output + ".driverRegs.list", 'w')
 outputH.write(outheader + "\n")
 for name in [name for name in fArray if name.endswith(sufix)]:
-    out = parseFile(name, pval_cut)
+    out, regs = parseFile(fileDir + "/" + name, pval_cut)
     if out :
         cntSig = cntSig + 1
         outputH.write("\t".join(map(str,out)) + "\n")
-open(outputSig,'w').write("totalTargets\t" + str(len(fArray)) + \
+    if regs:
+        outputRegH.write("\n".join(regs)+"\n")
+        
+open(output + ".summary" ,'w').write("totalTargets\t" + str(len(fArray)) + \
                           "\tsigTarget\t" + str(cntSig) + "\n")
 outputH.close()
+outputRegH.close()
 

@@ -16,14 +16,14 @@ class MutRecord:
         self.val = val
 
     def __eq__(self,other):
-        return self.mutg == other.mutg and self.chr == other.chr \
+        return self.targ == other.targ and self.chr == other.chr \
                 and self.ps == other.ps and self.pe == other.pe
         
     def updateVallist(self, mut2):
         ##make sure valarray is np array 
         return self.valarray + mut2.valarray
     def __str__(self):
-        return '(%s, %s, %s, %s)' % (self.tarchr, self.mutg, self.ps, self.pe ) 
+        return '(%s, %s, %s, %s)' % (self.mutg, self.chr, self.ps, self.pe ) 
     def inRegion(self, regObj):
         if self.chr == regObj.chr:
             if self.pe < regObj.ps or self.ps > regObj.pe:
