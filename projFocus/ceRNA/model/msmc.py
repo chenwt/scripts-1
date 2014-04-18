@@ -133,17 +133,20 @@ def findAllSol(population, mutDict, \
 #----optimizing solution
 def  getMinSizeSets(resultD):
     ssMin   = 1000
-    gRes    = []
+    # gRes    = []
+    gRes    = {} 
     for k, v in resultD.items():
         if v[0] < ssMin :
             ssMin = v[0]
-            gRes  = [] 
-            gRes.append(k)  
+            # gRes  = [] 
+            # gRes.append(k) 
+            gRes    = {} 
+            gRes[k] = v  
         elif v[0] == ssMin:
-            gRes.append(k) 
+            # gRes.append(k) 
+            gRes[k] = v  
         else:
             pass
-    print "selected value", v
     return gRes 
 
 def getMinSizeOverlapSets(result):
@@ -151,19 +154,22 @@ def getMinSizeOverlapSets(result):
 
 def getMaxFreq(resultD):
     freqMax = -1 
-    gRes    = []
+    # gRes    = []
+    gRes    = {} 
     for k, v in resultD.items():
         if  v[1] > freqMax:
             freqMax = v[1]
-            gRes.append(k)
+            # gRes.append(k)
+            gRes    = {} 
+            gRes[k] = v  
         elif v[1] == freqMax:
-            gRes.append(k)
+            # gRes.append(k)
+            gRes[k] = v  
         else:
             continue
     return gRes
 
 def selectSets(resultD, type = 'minsize'):
-    print type 
     if   type == "minsize":
         return getMinSizeSets(resultD)
     elif type == "maxfreq":
