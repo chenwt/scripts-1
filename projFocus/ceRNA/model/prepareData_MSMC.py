@@ -7,39 +7,14 @@ imput: matrix of mutation
 output: selected set as well as covered samples
 '''
 
-import sys,getopt
-import re
-from collections import defaultdict
-from parseKeyRegFile import parseKeyRegFile 
-from parseGslistFile import parseGslistFile  
-import numpy as np
-from   collections import Counter, Sequence
-from flattenSeq import flatten
-# argv    = sys.argv[1:]
-# input   = ''
-# output  = ''
-# usage = 'python ' + sys.argv[0] + ' -i <input>  -o <output>'
-# example = 'python ' + sys.argv[0] + ' -i <input>  -o <output>'
-# try:
-#     opts,args = getopt.getopt(argv,"hm:g:c:o:")
-# except getopt.GetoptError:
-#     print usage + "\n" + example 
-#     sys.exit(2)
-# for opt, arg in opts:
-#     if opt == '-h':
-#         print usage + "\n" + example 
-#         sys.exit()
-#     elif opt in ("-m"):
-#         mutfile = arg
-#     elif opt in ("-g"):
-#         gslistfile = arg
-#     elif opt in ("-c"):
-#         keygenefile = arg
-#     elif opt in ("-o"):
-#         output = arg
-# print('Script path:\t'+ sys.argv[0])
-# print('Input file:\t' + mutfile + "\t" + gslistfile + "\t" + keygenefile)
-# print('Output file:\t'+ output)
+import  sys,getopt
+import  re
+from    collections     import defaultdict
+from    parseKeyRegFile import parseKeyRegFile 
+from    parseGslistFile import parseGslistFile  
+import  numpy           as      np
+from    collections     import Counter, Sequence
+from    flattenSeq      import flatten
 
 def formatSampleName(code19):
     if len(code19) >11:
@@ -56,6 +31,8 @@ def unionDictList(d):
 keyRegMutDict = defaultdict(set)
 def prepareDataMSMC( gslistfile, mutfile, keygenefile, pvalCut = 0.01, debug = False ):
     tgeneSum, regsSum   = parseKeyRegFile(keygenefile, pvalCut)
+    if not regsSum or not tgeneSum:
+        return tgeneSum, ''
     reglist             = regsSum
     tgene = tgeneSum[0]
     gintsmplist         = parseGslistFile(tgene, gslistfile)
@@ -94,9 +71,11 @@ def prepareDataMSMC( gslistfile, mutfile, keygenefile, pvalCut = 0.01, debug = F
     outInfo['mutGintSmpNum']    = tempCounter.keys()
     outInfo['mutGintSmpWeight'] = tempCounter.values()
     outInfo['tgene']            = tgene
+    outInfo['mutRegs']          = keyRegMutDict.keys() 
     outInfo['mutGintSmp']       = map(gIntSmps.__getitem__,\
                                    map(lambda x:x-1, outInfo['mutGintSmpNum']))  
     return  keyRegMutDict, outInfo  
+
 def __test__():
     prepareDataMSMC(gslistfile, mutfile, keygenefile, debug = True)
 
