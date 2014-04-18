@@ -14,57 +14,68 @@ import random
 from parseKeyRegFile import parseKeyRegFile   
 from parseGslistFile import parseGslistFile  
 from prepareData_MSMC import prepareDataMSMC  
-from msmc import msmc, findMin, updateSets
+from msmc import * 
 from flattenSeq import flatten
 
-argv     = sys.argv[1:]
-input    = ''
-output   = ''
-debug    = True
-usage    = 'python ' + sys.argv[0] + ' -m <mutataion matrix>  -g <genesample \
-list file -c <keyRegulator result file> -o <output>'
-example  = 'python ' + sys.argv[0] + ' -i <input>  -o <output>'
-try:
-    opts,args = getopt.getopt(argv,"hm:g:c:o:")
-except getopt.GetoptError:
-    print usage + "\n" + example 
-    sys.exit(2)
-for opt, arg in opts:
-    if opt == '-h':
+def getCmdArgs():
+    argv     = sys.argv[1:]
+    input    = ''
+    output   = ''
+    debug    = True
+    usage    = 'python ' + sys.argv[0] + ' -m <mutataion matrix>  -g <genesample \
+    list file -c <keyRegulator result file> -o <output>'
+    example  = 'python ' + sys.argv[0] + ' -i <input>  -o <output>'
+    try:
+        opts,args = getopt.getopt(argv,"hm:g:c:o:")
+    except getopt.GetoptError:
         print usage + "\n" + example 
-        sys.exit()
-    elif opt in ("-m"):
-        mutfile = arg
-    elif opt in ("-g"):
-        gslistfile = arg
-    elif opt in ("-c"):
-        keygenefile = arg
-    elif opt in ("-o"):
-        output = arg
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print usage + "\n" + example 
+            sys.exit()
+        elif opt in ("-m"):
+            mutfile = arg
+        elif opt in ("-g"):
+            gslistfile = arg
+        elif opt in ("-c"):
+            keygenefile = arg
+        elif opt in ("-o"):
+            output = arg
+
+mutfile     = "kegRegs_Apr-18-2014.summary.driverRegs.list.uniq.mut.matrix" 
+gslistfile  = "gslist_Mar-24-2014_CnvMethSomFree.10smapMore.deg_20140325.txt.10more.hasReg.list" 
+keygenefile = "RNF11_candidateRegs_Mar-31-2014.txt" 
+output      = "RNF11.sigGeneset"
+log         = output + ".log"
+
 ##-----------------params
 numIter     = 1000
-result      = [ [] for _ in range(numIter)]
 pvalCut     = 0.01 
 alpha       = 0.8
-outResFile  = output + '_' + str(alpha) + "_" + str(numIter)
-outReslog   = outResFile + ".log"
-logH        = open(outReslog, 'wt')
+logH        = open(log, 'wt')
+debug       = True
 
-# print('Script path:\t'+ sys.argv[0])
-# print('#Input files\ngene sample list file\t' + gslistfile +\
-#       "\nkeyRegulatorfile\t" + keygenefile +\
-#       "\nmutation matrix file\t" + mutfile)
-# print('Output file:\t'+ output)
-# print("#parameters:\npvalue for group lasso model\t %f\
-#       \nportion of mutation gint sample\t %f\n " % (pvalCut, alpha))
+if debug:
+    print "mutation file", mutfile
+    print "gene sample list file", gslistfile
+    print "result from group lasso ", keygenefile
+    print "output file", output
+    print "log file ", log
 
-
+if debug:
+    print('Script path:\t'+ sys.argv[0])
+    print('#Input files\ngene sample list file\t' + gslistfile +\
+          "\nkeyRegulatorfile\t" + keygenefile +\
+          "\nmutation matrix file\t" + mutfile)
+    print('Output file:\t'+ output)
+    print("#parameters:\npvalue for group lasso model\t %f\
+          \nportion of mutation gint sample\t %f\n " % (pvalCut, alpha))
+    
 ##-----------------run MSMC
 mutDict, mutDictInfo = prepareDataMSMC(gslistfile, mutfile, keygenefile,\
                                        pvalCut = 0.01)
 
-# logH.write(outInfo['gene'] + "\t" + str(len(mutDictInfo['mutGintSmpNum']))+ \
-        # "\t" + str(len(mutDictInfo['mutRegs'])) + "\n")
 if not mutDict or not mutDictInfo:
     print "#not significant"
     # outputH = open(outResFile, 'w')
@@ -73,63 +84,23 @@ if not mutDict or not mutDictInfo:
     # logH.write("group lasso model r2.pval %s fail to pvalCutoff %f\n" % (mutDict, pvalCut) )
     sys.exit()
 
-print mutDictInfo['tgene'] + "\t" + str(len(mutDictInfo['mutGintSmpNum']))+ \
-        "\t" + str(len(mutDictInfo['mutRegs'])) 
+if debug:
+    print mutDictInfo['tgene'] + "\t" + str(len(mutDictInfo['mutGintSmpNum']))+ \
+            "\t" + str(len(mutDictInfo['mutRegs'])) 
+    print mutDict.items()
+    print mutDictInfo['mutGintSmpNum']
+    # print "number of mutation gint samples:\t %d" % k
+    # logH.write(mutDictInfo['tgene'] + "\t" + str(len(mutDictInfo['mutGintSmpNum']))+ \
+            # "\t" + str(len(mutDictInfo['mutRegs'])) + "\n")
 
-sys.exit()
-k           = int(alpha * len(mutDictInfo['mutGintSmpNum'] ) ) 
-print "number of mutation gint samples:\t %d" % k
+allSolD  = findAllSol( mutDictInfo['mutGintSmpNum'], mutDict, debug = True) 
+resGSet  = selectSets(allSolD)
 
-##----subsampling 
-for i in range(numIter):
-    '''# tempsample    = weighted_sample(mutdictinfo['mutgintsmpnum'], \
-                mutdictinfo['mutgintsmpweight'],k) 
-        ## weighted sampling methods
-    '''
-    tempsample     = random.sample(mutDictInfo['mutGintSmpNum'],k) 
-    tempmutdict    = updateSets(mutDict, tempsample)
-    tempressets, _ = msmc(tempmutdict.values(), set(tempsample))
-    # print tempmutdict.keys(), set(tempsample)
-    # print tempressets
-    for gene, v in tempmutdict.items() :
-        if v in tempressets:
-            result[i].append(gene)   
-    print "iteration " + str(i) + " selected genes " +  ";".join(result[i])
-
-#----optimizing solution
-
-out = defaultdict(int)
-while result:
-    gset = result.pop()
-    g = ";".join(gset)
-    if out.get(g,''):
-        out[g][1] = out[g][1] + 1
-    else:
-        out[g] = [len(gset),1]
-
-# print sorted(out,key= out.get,reverse=True) 
-print sorted(out.items(),key=lambda x:x[1],reverse=True) 
-
-valMax = 0 
-keyMax = []
-for k, v in out.items():
-    if v > valMax :
-        valMax = v
-        keyMax  = k  
-    elif v == valMax and len(keyMax) > len(k):
-        valMax = v
-        keyMax  = k  
-    else:
-        continue
-
-print keyMax, valMax
-
+if debug:
+    print "all solution\t", allSolD
+    print "selected sets\t",resGSet
 ##-----------------prepare output 
 
-outputH = open(output + '_' + str(alpha) + "_" + str(numIter), 'w')
-outputH.write(keyMax.replace(";","\n") + "\n")
-
-outputH.close()
 logH.close()
 
 

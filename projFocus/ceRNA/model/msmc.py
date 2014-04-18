@@ -124,8 +124,10 @@ def findAllSol(population, mutDict, \
         else:
             resultD[tempgeneset] = [cntg, 1] 
         if debug:
-            print "iteration " + str(i) +  "\tpopulation", tempsample, "\tselected " + str(cntg) + \
-                    " genes:", tempressets, "\tkey value:", tempgeneset
+            # print "iteration " + str(i) +  "\tpopulation", tempsample, "\tselected " + str(cntg) + \
+                    # " genes:", tempressets, "\tkey value:", tempgeneset
+            print "iteration " + str(i) +  "\tpopulation size", len(tempsample), "\tselected " + str(cntg) + \
+                    " genes:", tempgeneset
     return resultD
 
 #----optimizing solution
@@ -135,11 +137,13 @@ def  getMinSizeSets(resultD):
     for k, v in resultD.items():
         if v[0] < ssMin :
             ssMin = v[0]
-            gRes  = k  
-        elif v == ssMin:
+            gRes  = [] 
+            gRes.append(k)  
+        elif v[0] == ssMin:
             gRes.append(k) 
         else:
-            continue
+            pass
+    print "selected value", v
     return gRes 
 
 def getMinSizeOverlapSets(result):
@@ -151,7 +155,7 @@ def getMaxFreq(resultD):
     for k, v in resultD.items():
         if  v[1] > freqMax:
             freqMax = v[1]
-            gRes = k 
+            gRes.append(k)
         elif v[1] == freqMax:
             gRes.append(k)
         else:
