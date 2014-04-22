@@ -68,29 +68,34 @@ def updateSets(Sdict,Unew):
     return Sout
 
 def findSsCutUp(alpha, csCutUp):
-    i       = 1 
-    sseff   = math.ceil(math.sqrt(csCutUp))
-    ss      = 2 * sseff 
+    i       = 0 
+    ss      = int(math.ceil(math.sqrt(csCutUp))) + 1
+    sseff   = int(ss * alpha)
     while True:
+        # print "combs", scipy.misc.comb(ss, sseff), "size",ss, "effsize", sseff, csCutUp
         if scipy.misc.comb(ss, sseff) <= csCutUp:
-            return int(ss/alpha)
+            return ss
         else:
-            ss = ss - 1 
+            ss      = ss - 1 
+            sseff   = int( alpha * ss )
             i = i + 1
         
 def genCombination(population, alpha, sseffCutLow, csCutUp):
     ss      = len(population)
     sseff   = int(math.ceil( ss * alpha))
-    combs   = scipy.misc.comb( ss, sseff)
+    combs   = scipy.misc.comb(ss, sseff)
+    combt   = '2'
     if sseff <= sseffCutLow:
         combSet = [population]
-    elif scipy.misc.comb(ss, sseff) > csCutUp:
-        ##----need to optimized
-        combSet  = random.sample(list(combination_sample(population,\
-                                sseff)), csCutUp)
-        
+        combt = '1'
+    elif combs  > csCutUp and sseff > sseffCutLow:
+        combSet = []
+        for i in range(csCutUp):
+            combSet.append(random.sample(population, sseff))
+        combt = '3'
     else:
         combSet = combination_sample(population, sseff) 
+    print 'Combination type:\t', combt
     return combSet
 
 #-----------------find all solution
@@ -226,14 +231,18 @@ def __testSample__():
     # print "whole set\t", list(genCombination(seq, 0.6, 4, 100))
     # print "get at most 5 set\t", list(genCombination(seq, 0.6, 2, 5))
 
-    result  = findAllSol(seq, seqSet, ssCutLow = 2, csCutUp = 100, debug = False) 
-    print selectSets(result)
+    # print findSsCutUp(0.8, 40)
+    # print findSsCutUp(0.8, 119)
+
+    result  = findAllSol(seq, seqSet,alpha = 0.5,  ssCutLow = 2, csCutUp = 9, \
+                         debug = True) 
+    # print selectSets(result)
     # result,log  =  findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = \
                               # 100, debug = True, log = True) 
     # print result,log, selectSets(result)
-    result  = findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = 7, debug = False) 
-    print selectSets(result)
-    print selectSets(result, type = "maxfreq")
+    # result  = findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = 7, debug = False) 
+    # print selectSets(result)
+    # print selectSets(result, type = "maxfreq")
 
 # __testSample__()
 

@@ -14,9 +14,10 @@ from parseGslistFile import parseGslistFile
 from prepareData_MSMC import prepareDataMSMC  
 from msmc import * 
 import time
-
+# '''
 argv     = sys.argv[1:]
 debug    = False
+# debug    = True
 sltype   = "maxfreq" ## maxfreq, and other type underwork 
 alpha    = 0.8
 usage    = 'python ' + sys.argv[0] + '\n\
@@ -46,18 +47,23 @@ for opt, arg in opts:
         sltype    = arg
     elif opt in ("-o"):
         output      = arg
+# '''
 '''
 mutfile     = "kegRegs_Apr-18-2014.summary.driverRegs.list.uniq.mut.matrix" 
 gslistfile  = "gslist_Mar-24-2014_CnvMethSomFree.10smapMore.deg_20140325.txt.10more.hasReg.list" 
 keyGeneFileDir = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/sigMut/step4_MSMC/test/test_sigKeygeneDir" 
 output      = "sigGeneset_testSigKeyGeneDir.txt"
 log         = output + ".log"
+maxCombs    = 18
 alpha       = 0.8
+sltype      = 'minsize'
+debug       = False
 '''
 ##-----------------params
 pvalCut     = 0.01 
-effSSCutLow = 5
+effSSCutLow = 2
 maxCombs    = 1000000
+gssCut      = 1
 output      = output + "_" + str(round(alpha,2)) + "_" + sltype 
 log         = output + ".log"
 logH        = open(log, 'wt')
@@ -92,7 +98,7 @@ if debug:
     
 ##-----------------run MSMC
 outH   = open(output, 'w') 
-outH.write("targetGene\tnumSelectedSet\tselectedSet\n")
+outH.write("targetGene\tselectedSize\tselectedSet\n")
 fileA  = [f for f in os.listdir(keyGeneFileDir) if f.endswith(".txt") ]
 for f in fileA:
     start_time  = time.time()
@@ -100,14 +106,14 @@ for f in fileA:
     mutDict, mutDictInfo = prepareDataMSMC(gslistfile, mutfile, keygenefile,\
                                            pvalCut = 0.01)
     if not mutDict or not mutDictInfo:
-        logH.write("######" + keygenefile + "\n")
+        logH.write("######" + f + "\n")
         logH.write("##r2.pval fail to  %f or no mutated regulator\n" %pvalCut )
         logH.write("##time for rurn(sec)\t" + str(time.time() - start_time) + "\n")
         continue
         sys.exit()
                
     allSolD, templog   = findAllSol( mutDictInfo['mutGintSmpNum'], mutDict, alpha = alpha,\
-                ssCutLow = 5, csCutUp = 1000000, gssCut = 1, log = True)
+                ssCutLow = effSSCutLow, csCutUp = maxCombs,  gssCut = gssCut, log = True)
     resGSet   = selectSets(allSolD, type = sltype) 
 
     if debug:
@@ -119,11 +125,11 @@ for f in fileA:
                "\t" + ";".join(resGSet)+"\n")
     outH.flush()
     ##---writing log file
-    logH.write("######" + f + "\n")
-    logH.write("##target gene\tmutDictInfo['tgene']\n"  + \
-               "##total mutated gint sample\t"+ str(len(mutDictInfo['mutGintSmpNum']))+"\n"+ \
-               "##total sample\t"+ str(len(mutDictInfo['mutGintSmpNum']))+"\n"+ \
-               "##total mutated driver\t" + str(len(mutDictInfo['mutRegs'])) + "\n")
+    logH.write("###----" + f + "\n")
+    logH.write("##target_gene\t" + mutDictInfo['tgene']+"\n"  + \
+               "##total_mutated_gint_sample\t"+ str(len(mutDictInfo['mutGintSmpNum']))+"\n"+ \
+               "##total_sample\t"+ str(len(mutDictInfo['mutGintSmpNum']))+"\n"+ \
+               "##total_mutated_driver\t" + str(len(mutDictInfo['mutRegs'])) + "\n")
     logH.write("#selection_type\t" + sltype + "\n" +\
                 "#totoal_combination\t" + str(templog['totalCombCnt']) + "\n" +\
                 "#effect_sample_size\t" + str(templog['effss']) + "\n" +\
