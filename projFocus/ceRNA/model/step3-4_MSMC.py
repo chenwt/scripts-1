@@ -17,13 +17,16 @@ import time
 
 argv     = sys.argv[1:]
 debug    = False
+sltype   = "maxfreq" ## maxfreq, and other type underwork 
+alpha    = 0.8
 usage    = 'python ' + sys.argv[0] + '\n\
+-a <alpha value: propotion of sample be covered> \n\
 -m <mutataion matrix> \n\
 -g <genesample list file>  \n\
 -d <directory for keyRegulator result file> \n\
 -o <output>'
 try:
-    opts,args = getopt.getopt(argv,"hm:g:d:o:")
+    opts,args = getopt.getopt(argv,"ha:m:g:d:t:o:")
 except getopt.GetoptError:
     print usage 
     sys.exit(2)
@@ -31,31 +34,33 @@ for opt, arg in opts:
     if opt == '-h':
         print usage  
         sys.exit()
+    elif opt in ("-a"):
+        alpha       = float(arg)
     elif opt in ("-m"):
         mutfile     = arg
     elif opt in ("-g"):
         gslistfile  = arg
     elif opt in ("-d"):
         keyGeneFileDir = arg
+    elif opt in ("-t"):
+        sltype    = arg
     elif opt in ("-o"):
         output      = arg
-        log         = output + ".log"
 '''
 mutfile     = "kegRegs_Apr-18-2014.summary.driverRegs.list.uniq.mut.matrix" 
 gslistfile  = "gslist_Mar-24-2014_CnvMethSomFree.10smapMore.deg_20140325.txt.10more.hasReg.list" 
 keyGeneFileDir = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/sigMut/step4_MSMC/test/test_sigKeygeneDir" 
 output      = "sigGeneset_testSigKeyGeneDir.txt"
 log         = output + ".log"
-debug       = True
+alpha       = 0.8
 '''
 ##-----------------params
 pvalCut     = 0.01 
-alpha       = 0.8
-logH        = open(log, 'wt')
-sltype      = "minsize" ## maxfreq, and other type underwork 
 effSSCutLow = 5
 maxCombs    = 1000000
-
+output      = output + "_" + str(round(alpha,2)) + "_" + sltype 
+log         = output + ".log"
+logH        = open(log, 'wt')
 
 if debug:
     print('Script path:\t'+ sys.argv[0])
@@ -100,10 +105,9 @@ for f in fileA:
         logH.write("##time for rurn(sec)\t" + str(time.time() - start_time) + "\n")
         continue
         sys.exit()
-    
                
-    allSolD   = findAllSol( mutDictInfo['mutGintSmpNum'], mutDict, alpha = alpha,\
-                ssCutLow = 5, csCutUp = 1000000, gssCut = 1)
+    allSolD, templog   = findAllSol( mutDictInfo['mutGintSmpNum'], mutDict, alpha = alpha,\
+                ssCutLow = 5, csCutUp = 1000000, gssCut = 1, log = True)
     resGSet   = selectSets(allSolD, type = sltype) 
 
     if debug:
@@ -112,7 +116,7 @@ for f in fileA:
         print mutDictInfo['tgene'],resGSet
 
     outH.write(mutDictInfo['tgene'] + "\t" + str(len(resGSet)) +\
-               "\t" + "||".join(resGSet)+"\n")
+               "\t" + ";".join(resGSet)+"\n")
     outH.flush()
     ##---writing log file
     logH.write("######" + f + "\n")
@@ -120,13 +124,12 @@ for f in fileA:
                "##total mutated gint sample\t"+ str(len(mutDictInfo['mutGintSmpNum']))+"\n"+ \
                "##total sample\t"+ str(len(mutDictInfo['mutGintSmpNum']))+"\n"+ \
                "##total mutated driver\t" + str(len(mutDictInfo['mutRegs'])) + "\n")
-    
-    logH.write( "#effect samplesize\t" +" "+ "\n" +\
-                "#totoal combination\t" +" " + "\n" +\
-                "#sample size region\t" + "" + "\n" +\
-                "#selection type\t" + "" + "\n" +\
-                "#minnimium cost selected\t" + "" + "\n"+\
-                "#time for run(sec)\t" + str(time.time() - start_time) +"\n")
+    logH.write("#selection_type\t" + sltype + "\n" +\
+                "#totoal_combination\t" + str(templog['totalCombCnt']) + "\n" +\
+                "#effect_sample_size\t" + str(templog['effss']) + "\n" +\
+                # "#sample size region\t" + templog['']+ "\n" +\
+                "#minnimium_cost_selected\t" + str(templog['minCost']) + "\n"+\
+                "#time_for_run(sec)\t" + str(time.time() - start_time) +"\n")
     logH.flush()
 outH.close()
 logH.close()

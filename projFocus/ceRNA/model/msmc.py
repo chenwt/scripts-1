@@ -96,7 +96,7 @@ def genCombination(population, alpha, sseffCutLow, csCutUp):
 #-----------------find all solution
 def findAllSol(population, mutDict, \
                alpha = 0.85, ssCutLow = 5, csCutUp = 100000, gssCut = 1, \
-               debug = False):
+               log = False,  debug = False):
     '''# tempsample    = weighted_sample(mutdictinfo['mutgintsmpnum'], \
                 mutdictinfo['mutgintsmpweight'],k) 
         ## weighted sampling methods
@@ -124,50 +124,61 @@ def findAllSol(population, mutDict, \
         else:
             resultD[tempgeneset] = [cntg, 1] 
         if debug:
-            # print "iteration " + str(i) +  "\tpopulation", tempsample, "\tselected " + str(cntg) + \
-                    # " genes:", tempressets, "\tkey value:", tempgeneset
             print "iteration " + str(i) +  "\tpopulation size", len(tempsample), "\tselected " + str(cntg) + \
                     " genes:", tempgeneset
-    return resultD
+    if log:
+        log = {'totalCombCnt': i, 'effss': len(tempsample), "minCost":cntg} 
+        return resultD, log
+    else:
+        return resultD
 
 #----optimizing solution
+def integrateGeneSets(gRes, minSize):
+    gfinal = {}
+    for k in gRes.keys():
+        for g in k.split(";"):
+            if g and gfinal.get(g,''):
+                gfinal[g] = gfinal[g] + 1
+            elif g:
+                gfinal[g] = 1
+            else:
+                pass
+    gSelect = sorted(gfinal, key = gfinal.get, \
+                         reverse = True)[:minSize + 1] 
+    return gSelect
+
 def  getMinSizeSets(resultD):
-    ssMin   = 1000
-    # gRes    = []
+    minSize   = 1000
     gRes    = {} 
     for k, v in resultD.items():
-        if v[0] < ssMin :
-            ssMin = v[0]
-            # gRes  = [] 
-            # gRes.append(k) 
+        if v[0] < minSize :
+            minSize = v[0]
             gRes    = {} 
             gRes[k] = v  
-        elif v[0] == ssMin:
-            # gRes.append(k) 
+        elif v[0] == minSize:
             gRes[k] = v  
         else:
             pass
-    return gRes 
+    return integrateGeneSets(gRes, minSize) 
 
 def getMinSizeOverlapSets(result):
     return ''
 
 def getMaxFreq(resultD):
     freqMax = -1 
-    # gRes    = []
+    minSize = 1000
     gRes    = {} 
     for k, v in resultD.items():
+        minSize = min(minSize, v[0])
         if  v[1] > freqMax:
             freqMax = v[1]
-            # gRes.append(k)
             gRes    = {} 
             gRes[k] = v  
         elif v[1] == freqMax:
-            # gRes.append(k)
             gRes[k] = v  
         else:
-            continue
-    return gRes
+            pass  
+    return integrateGeneSets(gRes, minSize)
 
 def selectSets(resultD, type = 'minsize'):
     if   type == "minsize":
@@ -215,13 +226,14 @@ def __testSample__():
     # print "whole set\t", list(genCombination(seq, 0.6, 4, 100))
     # print "get at most 5 set\t", list(genCombination(seq, 0.6, 2, 5))
 
-    result  = findAllSol(seq, seqSet, ssCutLow = 2, csCutUp = 100, debug = True) 
+    result  = findAllSol(seq, seqSet, ssCutLow = 2, csCutUp = 100, debug = False) 
     print selectSets(result)
-    result  =  findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = 100, debug = True) 
-    print result, selectSets(result)
-    result  = findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = 7, debug = True) 
-    print result, selectSets(result)
-    print result, selectSets(result, type = "maxfreq")
+    # result,log  =  findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = \
+                              # 100, debug = True, log = True) 
+    # print result,log, selectSets(result)
+    result  = findAllSol(seq, seqSet, alpha = 0.6, ssCutLow = 2, csCutUp = 7, debug = False) 
+    print selectSets(result)
+    print selectSets(result, type = "maxfreq")
 
-    __testSample__()
+# __testSample__()
 
