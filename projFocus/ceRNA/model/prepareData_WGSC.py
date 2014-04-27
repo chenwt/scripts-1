@@ -95,11 +95,6 @@ def __test__():
 
 ####-------compute the zscore matrix for each mutation
 import numpy as np
-# def myZscore(a,b):
-#     bArr = np.array(b)
-#     m  = np.mean(bArr)
-#     sd = np.std(bArr)
-#     return (np.array(a) - m)/sd
 def myZscore(a,b):
     return abs((np.array(a) - b[0])/b[1])
 
@@ -108,7 +103,6 @@ def formatSampleName(code19):
         return code19[5:16].replace("-",".")
     else :
         return code19.replace("-", ".")
-
 
 def loadNormExpfile(filename):
     expD = defaultdict(list)
@@ -164,10 +158,9 @@ def loadMutInfo(mutfile, zscoreD):
             mutZscoreD[gene] = map(zscoreD[gene].__getitem__, mutSmpInExpSmpID)
             mutD[gene] = mutSmpInExpSmp
             line = f.readline()
-    print " input target genes:\t",cnt 
     return mutD, mutZscoreD
 
-def prepareDataWGSC(mutfile, gslistfile, keygenefile, pvalCut = 0.01 ):
+def prepareDataWGSC(mutfile, gslistfile, keygenefile, zscoreD,  pvalCut = 0.01 ):
     '''
     given, mutation dict, zscore dict, 
     intact sample list for each cancer genen, 
@@ -183,11 +176,11 @@ def prepareDataWGSC(mutfile, gslistfile, keygenefile, pvalCut = 0.01 ):
     regMutObjL      = [] 
     tgene           = tgeneSum[0]
     gintsmplist     = parseGslistFile(tgene, gslistfile)
-   
     ##---check whether mutated samples are intact
     cnt = 0 
     regMutAllSmp = []
     mutRegs = []
+    mutD, mutZscoreD = loadMutInfo(mutfile, zscoreD)
     for gene in reglist:
         cnt = cnt + 1
         crtMut = mutD[gene]; crtMutZscore = mutZscoreD[gene]
@@ -196,11 +189,11 @@ def prepareDataWGSC(mutfile, gslistfile, keygenefile, pvalCut = 0.01 ):
         for idx, smp in enumerate(mutD[gene]) :
             if smp not in gintsmplist:
                 crtMut.remove(smp)
-                del crtMutZscore
+                del crtMutZscore[idx]
             else:
                 regMutAllSmp.append(smp)
                 pass
-        if crtMut:
+        if crtMut and crtMutZscore:
             regMutObjL.append(MutSet(gene, crtMut, crtMutZscore))
     tempCnter = Counter(regMutAllSmp)
     regMutAllSmp, regMutAllSmpLoad = tempCnter.keys(), tempCnter.values()
@@ -229,7 +222,7 @@ def __test__():
     keygenefile="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/run-Apr-1-2014/data/BCL9_candidateRegs_Mar-31-2014.txt"
     pvalCut=0.01
     
-    tRegMutObjDict, info = prepareDataWGSC(mutfile, gslistfile, keygenefile)
+    tRegMutObjDict, info = prepareDataWGSC(mutfile, gslistfile, keygenefile, mutZscoreD)
     targ = tRegMutObjDict.keys()[0]
     print wgsc(tRegMutObjDict[targ][0],tRegMutObjDict[targ][1] , wtype = "mean")
     print wgsc(tRegMutObjDict[targ][0],tRegMutObjDict[targ][1] , wtype = "total")

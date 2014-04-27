@@ -1,6 +1,7 @@
 import re
 def parseGslistFile(gene, file):
     # smplist = [] 
+    smps = ""
     with(open(file)) as f:
         line = f.readline()
         while line:

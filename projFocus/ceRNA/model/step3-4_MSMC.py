@@ -14,6 +14,7 @@ from parseGslistFile import parseGslistFile
 from prepareData_MSMC import prepareDataMSMC  
 from msmc import * 
 import time
+
 # '''
 argv     = sys.argv[1:]
 debug    = False
@@ -95,10 +96,30 @@ if debug:
     print('Output file:\t'+ output)
     print("#parameters:\npvalue for group lasso model\t %f\
           \nportion of mutation gint sample\t %f\n " % (pvalCut, alpha))
-    
+
+##---load overal gint sample info
+gslistfreqf = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/gslist/gslist_gint_deg_Mar-25-2014_stat.GintSmpCount"
+gslistD  = {}
+with(open(gslistfreqf)) as f:
+    line = f.readline()
+    line = f.readline()
+    while line:
+        crtt, crtsmp = line.strip().split("\t")
+        gslistD[crtt] = crtsmp
+        line = f.readline()
+
+candiRegSummaryf = "/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/run-Apr-1-2014/summary/keyReg_Apr-20-2014.summary" 
+regSumD = {}
+with(open(candiRegSummaryf)) as f:
+    line = f.readline()
+    line = f.readline()
+    while line:
+        crtt, _ ,_, crtregTotal, crtregSig = line.strip().split("\t")
+        regSumD[crtt] = [crtregTotal, crtregSig] 
+        line = f.readline()
 ##-----------------run MSMC
 outH   = open(output, 'w') 
-outH.write("targetGene\tselectedSize\tselectedSet\n")
+outH.write("tarGene\tnumSmp\tnumMutSmp\tnumCoveredSmp\tnumReg\tnumDrReg\tnumMutDrReg\tnumSelectedReg\tselectedRegs\n")
 fileA  = [f for f in os.listdir(keyGeneFileDir) if f.endswith(".txt") ]
 for f in fileA:
     start_time  = time.time()
@@ -120,9 +141,14 @@ for f in fileA:
         print mutDictInfo['tgene'] + "\t" + str(len(mutDictInfo['mutGintSmpNum']))+ \
                 "\t" + str(len(mutDictInfo['mutRegs'])) 
         print mutDictInfo['tgene'],resGSet
-
-    outH.write(mutDictInfo['tgene'] + "\t" + str(len(resGSet)) +\
-               "\t" + ";".join(resGSet)+"\n")
+    crtTarGene = mutDictInfo['tgene']
+    outH.write(crtTarGene + "\t" + gslistD[crtTarGene] + "\t" +
+               str(len(mutDictInfo['mutGintSmpNum'])) + "\t"  + \
+               str(templog['effss']) +"\t" + \
+               "\t".join(regSumD[crtTarGene]) + "\t" + \
+               str(len(mutDictInfo['mutRegs'])) + "\t" +\
+               str(len(resGSet)) + "\t" + \
+               ";".join(resGSet)+"\n")
     outH.flush()
     ##---writing log file
     logH.write("###----" + f + "\n")

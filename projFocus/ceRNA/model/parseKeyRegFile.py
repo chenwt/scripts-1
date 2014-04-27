@@ -17,7 +17,7 @@ def parseKeyRegFile(file, pval_cut):
                 if float(pval) <= pval_cut:
                     tsum[2] = str(pval)
                 else:
-                    tsum = '' 
+                    tsum = pval 
                     regs = ''
                     break
             elif re.match(r"^#totalReg", line):
