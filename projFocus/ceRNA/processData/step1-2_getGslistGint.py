@@ -96,17 +96,22 @@ if fsom:
         while line:
             if re.match("^gene|barcode",line) or re.findall(".01A", line):
                 bcSomlist = re.sub("-",".", line.strip()).split("\t")
-                bcSomlist = map(lambda x:x[6:17], bcSomlist[1:]) 
+                bcSomlist = map(lambda x:x[5:16], bcSomlist[1:]) 
             else: 
                 templine = line.strip().split("\t")
-                # print templine 
                 tempIdxSomfree = [ idx  for (idx, val) in \
                                    enumerate(templine[1:]) if \
                                    int(val) == 0 ]  
                 tempGintBcode = map(bcSomlist.__getitem__, tempIdxSomfree)
-                if  gintlist.get(templine[0],0):
+                tempCnvMethIntBcode = gintlist.get(templine[0],0)
+                if  tempCnvMethIntBcode :
                     gintlist[templine[0]] = [ ss for ss in tempGintBcode if ss in \
-                                          gintlist.get(templine[0],0) ] 
+                                          tempCnvMethIntBcode ] 
+                    out = [ ss for ss in tempGintBcode if ss in \
+                           tempCnvMethIntBcode ]
+                    # print "total somIntc:\t", len(tempGintBcode),tempGintBcode[:5], \
+                      # "CnvMetInt:\t",len(tempCnvMethIntBcode), tempCnvMethIntBcode[:5] ,\
+                            # "output number:\t", len(out), out[:5]
             cnt = cnt + 1
             line = f.readline()
     print "som:\t" + str(cnt)

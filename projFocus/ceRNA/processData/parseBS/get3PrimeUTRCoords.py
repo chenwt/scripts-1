@@ -7,6 +7,7 @@ import sys,getopt
 import re
 from collections import defaultdict
 from searchStr import bruteSearch 
+from searchStr import searchUTR
 argv = sys.argv[1:]
 input = ''
 output = ''
@@ -65,16 +66,14 @@ with(open(dnaseq)) as f:
             print " %s line processed" % cnt
         if not re.match("^Symbol",line):
             gene, coord, seq  = line.strip().split("\t")
+            chrom, tss, tse = re.split(":|-", coord) 
             if bsSeqDict.get(gene, ''):
                 outbss = []
                 for bsseq in bsSeqDict[gene]:
                     bsstart, querySeq =  bsseq.split(":")
                     bsstart = int(bsstart)
-                    for bsindex in find_all(querySeq, seq): 
-                        # print querySeq
-                        # print seq[bsindex:bsindex+57]
-                        chrom, tss, tse = re.split(":|-", coord) 
-                        outbss.append(int(tss) + bsindex + 1 - bsstart)
+                    for bsindex in searchUTR(querySeq, seq): 
+                        outbss.append(int(tss) + bsindex  + bsstart )
                 outRec = gene + "\t" +  chrom + ":" + \
                         ";".join(map(str, list(set(outbss))))
                 outputH.write(outRec + "\n" )

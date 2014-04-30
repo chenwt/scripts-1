@@ -1,0 +1,1 @@
+../../plot/getMutFreqForGene.sh
