@@ -1,98 +1,147 @@
-CWD = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/"
-setwd(CWD)
-# keyRegSumfile="/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/run-Apr-1-2014/summary/target_ceRNADriver_0.01"
-# expfile="/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_tumor_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix"
-# gslistfile="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/gslist/gslist_CnvMethSomFree.10smapMore.deg_20140430.txt.hasReg.list"
-# mutfile="/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/tcgal2som/brca_somlevel2_byGene.matrix.inExpSmp.matrix.nonzero"
+# CWD = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/"
+# setwd(CWD)
 
-expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/CEP55_exp"
-mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/CEP55_regMut"
-figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
+##test files------
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/CEP55_exp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/CEP55_regMut"
+# figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
+#  output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/CEP55_sigMut.txt"
+##test end------
+usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from python> -mut <mutation file from python>"
+ERR = "ERROR:"
+CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,3,6)],collapse="-")
+
+setRootd  = function(){
+  sysInfo = Sys.info()
+  if(sysInfo['sysname']=="Darwin" ){
+    print("working from MacOS")
+    rootd = "/Volumes/ifs/home/c2b2/ac_lab/jh3283/"
+  }else if(sysInfo['sysname']=="Linux" ){
+    print("working from Linux")
+    rootd = "/ifs/home/c2b2/ac_lab/jh3283/"
+  }
+  return(rootd)
+}
+rootd     = setRootd()
+source(paste(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R",sep=""))
+source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
+# #----getting command line parameters
+args = getArgs()
+if(length(args) < 1 || is.null(args)){
+  print(paste(usage,example,sep="\n"))
+  print(args)
+  stop(paste(error,"wrong input parameter!"))
+}
+
+setwd(system("pwd",intern=T))
+expfile     = args['exp']
+mutfile     = args['mut']
+output      = args['output']
+figd        = paste(rootd, "/DATA/projFocus/report/May2014/fig/", sep="")
+print(paste("inputfile",expfile, mutfile))
+print(paste("outputfile",output))
+#---init
+
 ###---func
 require(gplots)
 fisherZ = function(r) return(1/2*log((1 + r )/(1-r)))
-corrDiff = function(r1,r2,n1,n2)  {
+z2corr = function(z) return((exp(2 * z) -1)/(exp(2 * z) +1))
+corrDiff = function(z1,z2,n1,n2)  {
   if (n1 >=10 & n2 >=10){
-  z = (r2 - r1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
+  z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
   return(2*(1-pnorm(abs(z))))
   }else{
     return(NA)
   }
 }
+
 calCorr = function(expD, mutD, tarExp){
   sumExp = colSums(expD * mutD)
   sumExp = sumExp[which(sumExp != 0)]
   numCol = length(sumExp)
+  ##need further optimization  
   resCorr = fisherZ(cor(sumExp, tarExpD[names(sumExp)])) 
-  return(list(corr=resCorr, n = numCol))
+  return(list(zs=resCorr, n = numCol))
 }
 
 corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_init = corr_full, tol = 0){
   mutInd = which(mutD>0,arr.ind=T)
-  numMut = nrow(mutInd)
   numSmp = length(unique(mutInd[,2]))
   numReg = length(unique(mutInd[,1]))
-  mut_temp = mutD
-  corr_prev = corr_full
-  plot(x=1:numMut, ylim = c(0,1),type="n",xlab="iteration",ylab="Correlation",main = paste("Greedy optimization for correlation\ntol =",tol))
-  points(1, corr_prev$corr,col="red", pch = 16)
-  for (i in 1:numMut){
-    id_flip = mutInd[i,]
-    mut_temp[id_flip[1], id_flip[2]] <- 0
-    corr_temp = calCorr(regExpD,mut_temp,tarExpD)
-    if ( abs(corr_temp$corr) - abs(corr_prev$corr) < tol){
-      mut_temp[id_flip[1], id_flip[2]] <- 1
-      points(i+1, corr_temp$corr, col="gray",pch=16) 
-      corr_temp = list(corr=0,n=0)
-    }else{
-      points(i+1, corr_temp$corr, col="red",pch=16)
-      corr_prev = corr_temp
-      corr_temp = list(corr=0,n=0)
+  if (numSmp <= 3 | numReg <=3){
+    return(list(corr_opt =NA, sample =unique(mutInd[,2]) , cerna=unique(mutInd[,1]), corrDiff_pval=NA, mutD=mutD[rowSums(mutD)!=0,(colSums(mutD)!=0)]))
+  }else{
+    numMut = nrow(mutInd)
+    mutInd = mutInd[sample(numMut),]
+    mut_temp = mutD
+    corr_prev = corr_init
+    
+    plot(x=1:numMut, ylim = c(0,1),type="n",xlab="iteration",ylab="Correlation",main = paste("Greedy optimization for correlation\ntol =",tol))
+    points(1, z2corr(corr_prev$zs),col="red", pch = 16)
+    
+    for (i in 1:numMut){
+      id_flip = mutInd[i,]
+      mut_temp[id_flip[1], id_flip[2]] <- 0
+      corr_temp = calCorr(regExpD,mut_temp,tarExpD)
+      if (is.na(corr_temp$zs)) {break}
+      if ( abs(corr_temp$zs) - abs(corr_prev$zs) < tol){
+        mut_temp[id_flip[1], id_flip[2]] <- 1
+        
+        points(i+1, z2corr(corr_temp$zs), col="gray",pch=16) 
+        
+        corr_temp = list(corr=0,n=0)
+      }else{
+        
+        points(i+1, z2corr(corr_temp$zs), col="red",pch=16)
+        
+        corr_prev = corr_temp
+        corr_temp = list(corr=0,n=0)
+      }
     }
+    corrDiffPval = corrDiff(corr_prev$zs, corr_full$zs,corr_prev$n,corr_full$n)
+    
+    text(x=3,y=0.85,labels=paste("opt vs.full) p-val:", format(corrDiffPval,digits=4)), font = 2, pos=4)
+    
+    smpOpt = colSums(mut_temp)[colSums(mut_temp)>0]
+    numSmpOpt = length(smpOpt)
+    regOpt = rowSums(mut_temp)[rowSums(mut_temp)>0]
+    numRegOpt = length(regOpt)
+    corr_opt = corr_prev
+    corr_opt$corr <- (exp(2 * corr_prev$zs) -1)/(exp(2 * corr_prev$zs) +1)
+    text(x = 3, y = 0.95, labels=paste("Opt Smp:",numSmpOpt,"/",numSmp),font=2,pos=4)
+    text(x = 3, y = 0.9, labels=paste("Opt Gen:",numRegOpt,"/", numReg),font=2,pos=4)
+    return(list(corr_opt =corr_opt, sample = smpOpt, cerna=regOpt,corrDiff_pval=corrDiffPval, mutD=mut_temp))
   }
-  corrDiff_opt = corrDiff(corr_prev$corr, corr_full$corr,corr_prev$n,corr_full$n)
-  smpOpt = colSums(mut_temp)[colSums(mut_temp)>0]
-  numSmpOpt = length(smpOpt)
-  regOpt = rowSums(mut_temp)[rowSums(mut_temp)>0]
-  numRegOpt = length(regOpt)
-  corr_opt = corr_prev
-  corr_opt$corr <- (exp(2 * corr_prev$corr) -1)/(exp(2 * corr_prev$corr) +1)
-  text(x = 3, y = 0.95, labels=paste("Opt Smp:",numSmpOpt,"/",numSmp),font=2,pos=4)
-  text(x = 3, y = 0.9, labels=paste("Opt Gen:",numRegOpt,"/", numReg),font=2,pos=4)
-  return(list(corr_opt =corr_opt, sample = smpOpt, cerna=regOpt,corrDiff_pval=corrDiff_opt,mutD=mut_temp))
 }
-
+permuMutD = function(mutD){
+  colname_orig = colnames(mutD)
+  rowname_orig = row.names(mutD)
+  mutD_perm = mutD
+  mutD_perm = mutD_perm[sample(nrow(mutD_perm)),]
+  mutD_perm = mutD_perm[,sample(ncol(mutD_perm))]
+  colnames(mutD_perm) <- colname_orig
+  rownames(mutD_perm) <- rowname_orig 
+  return(mutD_perm)
+}
 doPermu = function(regExpD, mutD, tarExpD, nperm = 1000){
-  permuMutD = function(mutD){
-    colname_orig = colnames(mutD)
-    rowname_orig = row.names(mutD)
-    mutD_perm = mutD
-    mutD_perm = mutD_perm[sample(nrow(mutD_perm)),]
-    mutD_perm = mutD_perm[,sample(ncol(mutD_perm))]
-    colnames(mutD_perm) <- colname_orig
-    rownames(mutD_perm) <- rowname_orig 
-    return(mutD_perm)
-  }
   corr_perm = rep(0, nperm)
   for (i in 1:nperm){
-    corr_perm[i]  = calCorr(expD=regExpD,mutD=permuMutD(mutD),tarExp=tarExpD)$corr
+    corr_perm[i]  = calCorr(expD=regExpD,mutD=permuMutD(mutD),tarExp=tarExpD)$zs
   }
   return(corr_perm)
 }
 
-
 plot_perm = function(corr_perm, resCorr){
   hist(corr_perm, col="lightgray", xlim=c(-0.8,0.8),border="gray",
        xlab = "permut correlation", main = " correlation from permutation")
-  abline(v=resCorr$corr_opt$corr,col="red",lwd=4)
-  abline(v=corr_full$corr,col="orange",lwd=4)
+  abline(v=resCorr$corr_opt$zs,col="red",lwd=4)
+  abline(v=corr_full$zs,col="orange",lwd=4)
   abline(v=corr_total, col="green", lwd = 4,lty=2)
 }
+removeZeor = function(arr) return(arr[rowSums(arr)!=0, colSums(arr)!=0])
+
 ###----func
 
-
-
-require(useful)
 expD = read.table(expfile,sep="\t",header = T)
 rownames(expD) = expD[,1]
 expD = apply(expD[,-1],c(1,2),as.numeric)
@@ -110,34 +159,119 @@ regExpD = subset(expD[-1,],select= names(tarExpD))
 sumExpD = colSums(regExpD)
 corr_total = cor(sumExpD,tarExpD)
 sumExpD = colSums(tarExpD * mutD)
-cor(sumExpD,tarExpD)
 
 
 corr_full = calCorr(regExpD,mutD,tarExpD)
 nperm = 1000
-tolVec = seq(-0.005,0.005,by=0.0005)
+tolVec = seq(-0.005,0.005,by=0.001)
 nTol = length(tolVec)
-pdf(paste(figd, "/plot_step3-4_greedyOptCorr_May022013.pdf",sep=""))
-par(mfrow=c(2,2))
+
+pdf(paste(figd, "/plot_step3-4_greedyOptCorr_May",CDT, ".pdf",sep=""))
+
+par(mfrow=c(4,3),mar=c(1,1,2,0))
+iterTolSum = as.data.frame(matrix(NA, nrow=nTol,ncol=5))
+colnames(iterTolSum) = c("tol", "optcorr", "optSmpn","pvalPerm", "pvalfull")
 for (i in 1:nTol ){
   tol = tolVec[i]
   resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD,corr_full, tol = tol)
   corr_perm = doPermu(regExpD, resCorrOpt$mutD, tarExpD)
-  pval_perm = max(length(corr_perm[corr_perm>resCorrOpt$corr_opt$corr])/nperm, 0.00001)
+  pval_perm = max(length(corr_perm[corr_perm > resCorrOpt$corr_opt$zs])/nperm, 0.00001)
   pval_full = resCorrOpt$corrDiff_pval
-  print(c(tol, resCorrOpt$corr_opt$corr, resCorrOpt$corr_opt$n, pval_perm, pval_full)) 
+  iterTolSum[i, ]  = c(tol = tol, optcorr=z2corr(resCorrOpt$corr_opt$zs), optSmpn = round(resCorrOpt$corr_opt$n), pvalPerm = pval_perm, pvalfull=pval_full)
 }
-resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD,corr_full, tol = -0.001)
-par(mfrow=c(2,1))
-plot_perm(corr_perm, resCorrOpt)
+
+out = paste(output, ".iterTols.summary", sep="")
+write.table(iterTolSum, out, col.names=F,sep="\t",quote=F)
+
+tol = iterTolSum[which(iterTolSum[,4] < 0.001 & iterTolSum[,5] < 0.001),]
+if (length(tol[,1]) >0) {
+  tol = tol[which.max(tol[,2]),1]
+}else{
+  print("greedy didn't coverge!!")
+  q(save="no")
+}
+
+nIter = 100
+par(mfrow=c(1,2),mar=c(1,1,2,0))
+resIterMutD = matrix(0, nrow=nrow(resCorrOpt$mutD),ncol = ncol(resCorrOpt$mutD))
+iterRansInitSum = as.data.frame(matrix(NA, nrow=nTol,ncol=5))
+colnames(iterRansInitSum) = c("#inter", "optcorr", "optSmpn","pvalPerm", "pvalfull")
+pvalCut = 0.001; corr_max = 0.0
+for (i in 1:nIter ){
+  resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD,corr_full, tol = tol)
+  corr_perm = doPermu(regExpD, resCorrOpt$mutD, tarExpD)
+  pval_perm = max(length(corr_perm[corr_perm > resCorrOpt$corr_opt$zs])/nperm, 0.00001)
+  pval_full = resCorrOpt$corrDiff_pval
+#   if(pval_full > pvalCut & pval_perm >pvalCut & z2corr(resCorrOpt$corr_opt$zs) > corr_max){
+    outMutD = resCorrOpt$mutD
+    resIterMutD = resIterMutD + outMutD
+    outMutD = outMutD[which(rowSums(outMutD)!=0), which(colSums(outMutD) != 0 )]
+    iterRansInitSum[i, ]  = c(i, optcorr=z2corr(resCorrOpt$corr_opt$zs), optSmpn = round(resCorrOpt$corr_opt$n), pvalPerm = pval_perm, pvalfull=pval_full)
+#   }
+}
 
 
+out = paste(output, ".randomInti.summary", sep="")
+write.table(iterRansInitSum, out, row.names=F,sep="\t",quote=F)
 
-outTarExpD  = tarExpD[resCorrOpt$sample ]
-outTarExpD  = outTarExpD[order(outTarExpD)]
+par(mar=c(10,6,4,6),mgp=c(10,0.2,0))
+# heatmap.2(mutD, col=colorRampPalette(c("white","red"))(nIter), trace="none",Colv=F)
+# heatmap.2(resIterMutD, col=colorRampPalette(c("white","red"))(nIter), trace="none",Colv=F)
+# heatmap.2(removeZeor(resIterMutD), col=colorRampPalette(c("white","red"))(nIter), trace="none")
+ncut = 30
+resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x > ncut, 1, 0)})
+calCorr(expD=regExpD, mutD=resMut, tarExp=tarExpD)
 
-outD = rbind(CEP55=outTarExpD,subset(regExpD,select=names(outTarExpD),subset=rownames(regExpD) %in% names(resCorrOpt$cerna)))
-heatmap.2(outD,col=bluered(250),trace="none",scale="row",Rowv=F,dendrogram="none")
-heatmap.2(expD,col=bluered(250),trace="none",scale="row",Rowv=F,dendrogram="none")
+out = paste(output, ".final", sep="")
+write.table(removeZeor(resMut), out, quote=F, sep="\t")
+
+par(mfrow=c(1,1))
+# plot(hclust(dist(t(outD))))
+heatmap.2(removeZeor(resMut), col=colorRampPalette(c("white","red"))(nIter), trace="none")
 dev.off()
-save.image("step3-4_gdOptCorr.rda")
+
+# install.packages("biclust")
+# require("biclust")
+# drawHeatmap(outD, biclust(outD,method="BCBimax"),2)
+
+# outD = outD[rowSums(outD) >10, colSums(outD) > 10]
+# plot_perm(vapply(corr_perm,z2corr,0.2), resCorrOpt)
+
+## calculate final output
+# outTarExpD  = tarExpD[resCorrOpt$sample ]
+# outTarExpD  = outTarExpD[order(outTarExpD)]
+# outMutD = resCorrOpt$mutD
+# outMutD = outD[rowSums(outMutD)!=0, colSums(outMutD) != 0 ]
+# outD = rbind(CEP55=outTarExpD,subset(regExpD,select=names(outTarExpD),subset=rownames(regExpD) %in% names(resCorrOpt$cerna)))
+# outMutD = resCorrOpt$mutD
+# outMutD = outMutD[rowSums(outMutD) !=0,colSums(outMutD) !=0]
+# heatmap.2(outD,col=bluered(250),trace="none",scale="row",Rowv=F,dendrogram="none")
+# heatmap.2(expD,col=bluered(250),trace="none",scale="row",Rowv=F,dendrogram="none")
+# dev.off()
+# save.image("step3-4_gdOptCorr.rda")
+
+
+# require("plot3D ")
+# plotMutD3D = function(outMutD){
+#   outMutD = outMutD[order(rowSums(outMutD),decreasing=T),]
+#   
+#   
+#   z = outMutD 
+#   z = z[order(rowSums(z),decreasing=T),]
+#   z = z[,do.call(order, lapply(1:nrow(z), function(i) -z[i, ]))]
+#   myColVar = t(apply(z, 1, function(x) {x  * as.numeric(as.factor(colnames(z)))}))
+#   hist3D( x = seq(0, 1, length.out = nrow(z)), zlim = c(0,1.5),
+#           y = seq(0, 1, length.out = ncol(z)), z, 
+#           colvar =myColVar  , phi = 60, theta = 20,
+#           xlab = "ceRNA driver", ylab ="selected samples", 
+#           col = NULL, NAcol = "white", border = NA, facets = TRUE,
+#           colkey = NULL, image = FALSE, contour = FALSE,
+#           panel.first = NULL, clim = NULL, clab = NULL, bty = "b",
+#           lighting = T, shade = F, ltheta = -135, lphi = 0,
+#           space = 0.2, add = F, plot = TRUE)
+# # text3d( x = seq(0, 1, length.out = nrow(z)), zlim = c(0,1.5),
+# #         y = seq(0, 1, length.out = ncol(z)),  text=fileName,adj = 0.1, 
+# #        color=setRamp(6), family="serif", font=5, cex=1)
+# # heatmap.2(z,trace="none",col=c("white",'red'))
+# 
+# }
