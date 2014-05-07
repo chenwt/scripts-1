@@ -29,10 +29,14 @@ def parseKeyRegFile(file, pval_cut):
                     print "error at gene name matching"
             elif re.match(r"^#regulator", line):
                 pass 
-            else:
-                reg, beta, pval = line.strip().split("\t")
-                if float(beta) > 0.:
-                    regs.append(reg)
+            else : 
+                try :
+                    reg, beta, pval = line.strip().split("\t")
+                    if float(beta) > 0.:
+                        regs.append(reg)
+                except ValueError:
+                    print line
+                    pass
     # print tsum, regs 
     return tsum, regs 
 
