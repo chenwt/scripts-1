@@ -2,14 +2,14 @@
 # setwd(CWD)
 
 ##test files------
-# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/CEP55_exp"
-# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/CEP55_regMut"
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_BRD3_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_BRD3_regMut.temp"
 # figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
-#  output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/CEP55_sigMut.txt"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_BRD3.tsv"
 ##test end------
 usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from python> -mut <mutation file from python>"
 ERR = "ERROR:"
-CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,3,6)],collapse="-")
+CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
 
 setRootd  = function(){
   sysInfo = Sys.info()
@@ -86,21 +86,17 @@ corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_init = corr_full, tol = 
       if (is.na(corr_temp$zs)) {break}
       if ( abs(corr_temp$zs) - abs(corr_prev$zs) < tol){
         mut_temp[id_flip[1], id_flip[2]] <- 1
-        
-        points(i+1, z2corr(corr_temp$zs), col="gray",pch=16) 
-        
+        points(i+1, z2corr(corr_temp$zs), col="gray",pch=16)         
         corr_temp = list(corr=0,n=0)
       }else{
-        
-        points(i+1, z2corr(corr_temp$zs), col="red",pch=16)
-        
+        points(i+1, z2corr(corr_temp$zs), col="red",pch=16)        
         corr_prev = corr_temp
         corr_temp = list(corr=0,n=0)
       }
     }
     corrDiffPval = corrDiff(corr_prev$zs, corr_full$zs,corr_prev$n,corr_full$n)
     
-    text(x=3,y=0.85,labels=paste("opt vs.full) p-val:", format(corrDiffPval,digits=4)), font = 2, pos=4)
+    text(x=3,y=0.85,labels=paste("opt vs.full) p-val:", format(corrDiffPval,digits=4)), font = 2, pos=4,cex=0.8)
     
     smpOpt = colSums(mut_temp)[colSums(mut_temp)>0]
     numSmpOpt = length(smpOpt)
@@ -108,11 +104,12 @@ corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_init = corr_full, tol = 
     numRegOpt = length(regOpt)
     corr_opt = corr_prev
     corr_opt$corr <- (exp(2 * corr_prev$zs) -1)/(exp(2 * corr_prev$zs) +1)
-    text(x = 3, y = 0.95, labels=paste("Opt Smp:",numSmpOpt,"/",numSmp),font=2,pos=4)
-    text(x = 3, y = 0.9, labels=paste("Opt Gen:",numRegOpt,"/", numReg),font=2,pos=4)
+    text(x = 3, y = 0.95, labels=paste("Opt Smp:",numSmpOpt,"/",numSmp),font=2,pos=4,cex=0.8)
+    text(x = 3, y = 0.9, labels=paste("Opt Gen:",numRegOpt,"/", numReg),font=2,pos=4,cex=0.8)
     return(list(corr_opt =corr_opt, sample = smpOpt, cerna=regOpt,corrDiff_pval=corrDiffPval, mutD=mut_temp))
   }
 }
+
 permuMutD = function(mutD){
   colname_orig = colnames(mutD)
   rowname_orig = row.names(mutD)
@@ -123,6 +120,7 @@ permuMutD = function(mutD){
   rownames(mutD_perm) <- rowname_orig 
   return(mutD_perm)
 }
+
 doPermu = function(regExpD, mutD, tarExpD, nperm = 1000){
   corr_perm = rep(0, nperm)
   for (i in 1:nperm){
@@ -138,6 +136,7 @@ plot_perm = function(corr_perm, resCorr){
   abline(v=corr_full$zs,col="orange",lwd=4)
   abline(v=corr_total, col="green", lwd = 4,lty=2)
 }
+
 removeZeor = function(arr) return(arr[rowSums(arr)!=0, colSums(arr)!=0])
 
 ###----func
@@ -163,10 +162,10 @@ sumExpD = colSums(tarExpD * mutD)
 
 corr_full = calCorr(regExpD,mutD,tarExpD)
 nperm = 1000
-tolVec = seq(-0.005,0.005,by=0.001)
+tolVec = seq(-0.008, 0.001,by=0.001)
 nTol = length(tolVec)
 
-pdf(paste(figd, "/plot_step3-4_greedyOptCorr_May",CDT, ".pdf",sep=""))
+pdf(paste(figd, "/plot_step3-4_greedyOptCorr_",CDT, "_tol.pdf",sep=""))
 
 par(mfrow=c(4,3),mar=c(1,1,2,0))
 iterTolSum = as.data.frame(matrix(NA, nrow=nTol,ncol=5))
@@ -192,7 +191,7 @@ if (length(tol[,1]) >0) {
 }
 
 nIter = 100
-par(mfrow=c(1,2),mar=c(1,1,2,0))
+par(mfrow=c(3,4),mar=c(1,1,2,0))
 resIterMutD = matrix(0, nrow=nrow(resCorrOpt$mutD),ncol = ncol(resCorrOpt$mutD))
 iterRansInitSum = as.data.frame(matrix(NA, nrow=nTol,ncol=5))
 colnames(iterRansInitSum) = c("#inter", "optcorr", "optSmpn","pvalPerm", "pvalfull")
@@ -202,30 +201,49 @@ for (i in 1:nIter ){
   corr_perm = doPermu(regExpD, resCorrOpt$mutD, tarExpD)
   pval_perm = max(length(corr_perm[corr_perm > resCorrOpt$corr_opt$zs])/nperm, 0.00001)
   pval_full = resCorrOpt$corrDiff_pval
-#   if(pval_full > pvalCut & pval_perm >pvalCut & z2corr(resCorrOpt$corr_opt$zs) > corr_max){
-    outMutD = resCorrOpt$mutD
-    resIterMutD = resIterMutD + outMutD
-    outMutD = outMutD[which(rowSums(outMutD)!=0), which(colSums(outMutD) != 0 )]
+  if(!is.na(pval_full) & !is.na(pval_perm) & pval_full > pvalCut & pval_perm > pvalCut & z2corr(resCorrOpt$corr_opt$zs) > corr_max){
+    corr_max =  z2corr(resCorrOpt$corr_opt$zs)
+    print(paste(i,"corr_max", corr_max))
+    resMutD = resCorrOpt$muD
+  }
+    resIterMutD = resIterMutD + resCorrOpt$mutD
     iterRansInitSum[i, ]  = c(i, optcorr=z2corr(resCorrOpt$corr_opt$zs), optSmpn = round(resCorrOpt$corr_opt$n), pvalPerm = pval_perm, pvalfull=pval_full)
-#   }
+
 }
 
 
 out = paste(output, ".randomInti.summary", sep="")
 write.table(iterRansInitSum, out, row.names=F,sep="\t",quote=F)
 
+pdf(paste(figd, "/plot_step3-4_greedyOptCorr_",CDT, "_heatmap.pdf",sep=""))
 par(mar=c(10,6,4,6),mgp=c(10,0.2,0))
 # heatmap.2(mutD, col=colorRampPalette(c("white","red"))(nIter), trace="none",Colv=F)
 # heatmap.2(resIterMutD, col=colorRampPalette(c("white","red"))(nIter), trace="none",Colv=F)
-# heatmap.2(removeZeor(resIterMutD), col=colorRampPalette(c("white","red"))(nIter), trace="none")
+heatmap.2(removeZeor(resIterMutD), col=colorRampPalette(c("white","red"))(nIter), trace="none", Rowv=F,dendrogram="none", Colv=F)
+
 ncut = 30
 resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x > ncut, 1, 0)})
-calCorr(expD=regExpD, mutD=resMut, tarExp=tarExpD)
+heatmap.2(removeZeor(resMut), col=colorRampPalette(c("white","red"))(nIter), trace="none",Rowv=F,dendrogram="none",Colv=F)
+dev.off()
+corr_final = calCorr(expD=regExpD, mutD=resMut, tarExp=tarExpD)
+resMut = removeZeor(resMut)
+outGene = rownames(resMut)
+outSmp = colnames(resMut)
+outSmpMap = vector(length=length(outGene))
+for (i in 1:nrow(resMut)){
+  outSmpMap[i] = paste("[",paste(vapply(which(resMut[i,]!=0, arr.ind=T),function(x){outSmp[x]},'a'),collapse=""), "]",sep="")
+}
 
-out = paste(output, ".final", sep="")
-write.table(removeZeor(resMut), out, quote=F, sep="\t")
 
-par(mfrow=c(1,1))
+outNumbers = c(tgene, ncol(expD), corr_full$n, corr_final$n, nrow(expD) -1 , nrow(removeZeor(mutD)), nrow(resMut), corr_total, z2corr(corr_full$zs), z2corr(corr_final$zs), z2corr(mean(corr_perm)))
+outSmpMap = paste(outSmpMap,collapse=";")
+outGene = paste(outGene, collapse=";")
+outRecord = paste(c(outNumbers,outGene,outSmpMap),collapse="\t")
+write.table(outRecord, file=output, append=T, col.names=F, row.names=F, sep="\t",quote=F)
+# 
+# write.table(removeZeor(resMut), out, quote=F, sep="\t")
+# 
+par(mfrow=c(1,1),mar=c(6,2,2,4))
 # plot(hclust(dist(t(outD))))
 heatmap.2(removeZeor(resMut), col=colorRampPalette(c("white","red"))(nIter), trace="none")
 dev.off()
@@ -250,28 +268,29 @@ dev.off()
 # dev.off()
 # save.image("step3-4_gdOptCorr.rda")
 
+install.packages("plot3D")
+plotMutD3D = function(outMutD){
+  require("plot3D")
+  outMutD = outMutD[order(rowSums(outMutD),decreasing=T),]
+  z = outMutD 
+  z = z[order(rowSums(z),decreasing=T),]
+  z = z[,do.call(order, lapply(1:nrow(z), function(i) -z[i, ]))]
+  myColVar = t(apply(z, 1, function(x) {x  * as.numeric(as.factor(colnames(z)))}))
+  hist3D( x = seq(0, 1, length.out = nrow(z)), zlim = c(0,1.5),
+          y = seq(0, 1, length.out = ncol(z)), z, 
+          colvar =myColVar  , phi = 40, theta = 40,
+          xlab = "ceRNA driver", ylab ="selected samples", 
+          col = NULL, NAcol = "white", border = NA, facets = TRUE,
+          colkey = NULL, image = FALSE, contour = FALSE,
+          panel.first = NULL, clim = NULL, clab = NULL, bty = "b",
+          lighting = T, shade = F, ltheta = -135, lphi = 0,
+          space = 0.2, add = F, plot = TRUE)
+# text3d( x = seq(0, 1, length.out = nrow(z)), zlim = c(0,1.5),
+#         y = seq(0, 1, length.out = ncol(z)),  text=fileName,adj = 0.1, 
+#        color=setRamp(6), family="serif", font=5, cex=1)
+# heatmap.2(z,trace="none",col=c("white",'red'))
 
-# require("plot3D ")
-# plotMutD3D = function(outMutD){
-#   outMutD = outMutD[order(rowSums(outMutD),decreasing=T),]
-#   
-#   
-#   z = outMutD 
-#   z = z[order(rowSums(z),decreasing=T),]
-#   z = z[,do.call(order, lapply(1:nrow(z), function(i) -z[i, ]))]
-#   myColVar = t(apply(z, 1, function(x) {x  * as.numeric(as.factor(colnames(z)))}))
-#   hist3D( x = seq(0, 1, length.out = nrow(z)), zlim = c(0,1.5),
-#           y = seq(0, 1, length.out = ncol(z)), z, 
-#           colvar =myColVar  , phi = 60, theta = 20,
-#           xlab = "ceRNA driver", ylab ="selected samples", 
-#           col = NULL, NAcol = "white", border = NA, facets = TRUE,
-#           colkey = NULL, image = FALSE, contour = FALSE,
-#           panel.first = NULL, clim = NULL, clab = NULL, bty = "b",
-#           lighting = T, shade = F, ltheta = -135, lphi = 0,
-#           space = 0.2, add = F, plot = TRUE)
-# # text3d( x = seq(0, 1, length.out = nrow(z)), zlim = c(0,1.5),
-# #         y = seq(0, 1, length.out = ncol(z)),  text=fileName,adj = 0.1, 
-# #        color=setRamp(6), family="serif", font=5, cex=1)
-# # heatmap.2(z,trace="none",col=c("white",'red'))
-# 
-# }
+}
+pdf(paste(figd, "/plot_step3-4_greedyOptCorr_",CDT, "_3D.pdf",sep=""))
+plotMutD3D(removeZeor(resMut))
+dev.off()
