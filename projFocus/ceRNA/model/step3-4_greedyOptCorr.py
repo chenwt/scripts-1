@@ -128,7 +128,7 @@ mutExpsmpL = getMutExpSmp(expfile, mutfile)
 expD = loadExp(expfile, mutExpsmpL)
 mutD = loadMut(mutfile, mutExpsmpL)
 
-for tgene in tarRegD.keys(): 
+for tgene in tarRegD.keys()[40:80]: 
     # def startOpt4Gene(tgene, tarIntSmpD, tarRegD, mutD, expD, output):
     tIntSmp = tarIntSmpD[tgene]
     allRegsL = tarRegD[tgene]
@@ -141,8 +141,11 @@ for tgene in tarRegD.keys():
     expMutRegL = set(regExpD.keys()).intersection(set(regMutD.keys()))
     outTempMut = output + "_" + tgene + "_regMut.temp"
     outTempExp = output + "_" + tgene + "_exp.temp"
-    print outTempMut 
-    print outTempExp 
+
+    if len(regExpD.keys()) <= 3:
+        print tgene + "\t" + ";".join(regMutD.keys())
+        continue
+
     outTempMutH = open(outTempMut,'w')
     outTempExpH = open(outTempExp,'w')
     
