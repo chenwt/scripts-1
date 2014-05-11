@@ -18,6 +18,14 @@ cupidSeq=$cupidPrediction.sequence57bp
 # $cmd
 
 dnaseq=$CWD/refseq_hg19_refflat_cupid3pGene.fasta_Apr4.tsv.uniq
-~/bin/splitByN $dnaseq 3000
-# cupidCoord=$cupidPrediction.genomicCoord_Apr6
-# $PYTHON $srcDir/processData/parseBS/get3PrimeUTRCoords.py -c $cupidSeq  -d $dnaseq  -o $cupidCoord 
+# ~/bin/splitByN $dnaseq 1000
+# for file in `ls ${dnaseq}_*`
+# do
+#   i=`echo $file|awk -F"/|_" '{print $NF}'`
+#   cupidCoord=$file.cupidGenomicCoord
+#   cmd="$PYTHON $srcDir/processData/parseBS/get3PrimeUTRCoords.py -c $cupidSeq  -d $file  -o $cupidCoord "
+#   echo $cmd|qsub -l mem=16g,time=4:: -N bs_$i -cwd -e $CWD/log -o $CWD/log >> $CWD/qsub.log
+#   tail -1 $CWD/qsub.log
+# done
+
+awk 'NR==1||FNR!=1{print $0}' ${dnaseq}_*.cupidGenomicCoord > cupid.GenomicCoord

@@ -60,7 +60,7 @@ def wgsc(S, U, alpha = 0.8, tol = 0.001, wtype = 'mean'):
        G.append(g_i)
        R = list(set(R).difference(set(S_i)))
        costs.append(cost)
-       if len(R) < int((1 - alpha) * len(U)):
+       if len(R) <= int((1 - alpha) * len(U)) :
             break
     return G, C, costs
 
@@ -81,7 +81,7 @@ def __test__():
                    'G6':[3.0]}
     setObjL = []
     for sk, ss in seqSet.items():
-    setObjL.append(MutSet(sk,ss,weightSet[sk]))
+        setObjL.append(MutSet(sk,ss,weightSet[sk]))
     geneL, smpL, costL = wgsc(setObjL, seq, wtype = "mean")
     geneL, smpL, costL = wgsc(setObjL, seq, wtype = "total")
     geneL, smpL, costL =  wgsc(setObjL, seq, wtype = "max")

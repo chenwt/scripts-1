@@ -32,7 +32,7 @@ def parseKeyRegFile(file, pval_cut):
             else : 
                 try :
                     reg, beta, pval = line.strip().split("\t")
-                    if float(beta) > 0.:
+                    if float(beta) > 0. and float(pval) <= 0.05:
                         regs.append(reg)
                 except ValueError:
                     print line

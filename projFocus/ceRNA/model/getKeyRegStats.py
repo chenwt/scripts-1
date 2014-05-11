@@ -66,9 +66,15 @@ def parseFile(file, pval_cut):
             elif re.match(r"^#regulator", line):
                 pass 
             else:
-                reg, beta, pval = line.strip().split("\t")
-                if float(beta) > 0.:
-                    regs.append(reg)
+                if len(line.strip()) > 1: 
+                    reg, beta, pval = line.strip().split("\t")
+                    if float(beta) > 0.:
+                        regs.append(reg)
+                else:
+                    tsum = '' 
+                    regs = ''
+                    break
+
     return tsum, regs 
 
 fArray = os.listdir(fileDir)

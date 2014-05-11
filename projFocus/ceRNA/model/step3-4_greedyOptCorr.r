@@ -5,7 +5,8 @@ ERR = "ERROR:"
 CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
 typeSelect = "20" #which type of output <all> to select a cutoff <max> to select random optimal(n = 100), or a number to set cutoff value
 typeTol = "fix" # < fix> to set tol == 0 , < flex> to select tol adaptively
-  
+timeStart = Sys.time()
+
 setRootd  = function(){
   sysInfo = Sys.info()
   if(sysInfo['sysname']=="Darwin" ){
@@ -43,8 +44,8 @@ print(paste("inputfile",expfile, mutfile))
 #---init
 
 ##test files------
-# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_exp.temp"
-# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp"
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
 # figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
@@ -351,6 +352,8 @@ if (typeTol == "flex") {
 }
 
 ##random initiation-----
+print(paste("Finished Tol time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
+
 nIter = 100
 pval_full_min <- pval_perm_min <- 1
     
@@ -424,4 +427,4 @@ output = paste(output , "_", tol, sep="")
 writeOut(output, mutD, tgene,corr_total=corr_total, corr_full=corr_full, resCorrOpt)
 write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
 
-print(paste("[END]",tgene))
+print(paste("[END]",tgene, "\tRunning time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))

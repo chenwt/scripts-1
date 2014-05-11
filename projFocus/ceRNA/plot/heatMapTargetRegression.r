@@ -16,6 +16,7 @@ setRootd = function(){
 rootd = setRootd()
 figd = paste(rootd,"/DATA/projFocus/report/topDown_02042014/fig/",sep="")
 cdt = paste(unlist(strsplit(date()," "))[c(2,4,6)],collapse="-")
+source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
 
 ###-------------plot
 dataExpPlot = matrix(val2col(unlist(dataExp),col=myCol),nrow=nrow(dataExp), byrow=F)

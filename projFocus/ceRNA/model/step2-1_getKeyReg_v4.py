@@ -18,7 +18,7 @@ output = ''
 usage = 'python " + sys.argv[0] + " -i <input>  -o <output>'
 example = 'python " + sys.argv[0] + " -i <input>  -o <output>'
 try:
-    opts,args = getopt.getopt(argv,"hg:a:l:t:n:c:o:")
+    opts,args = getopt.getopt(argv,"hg:a:l:t:n:c:p:o:")
 except getopt.GetoptError:
     print usage + "\n" + example 
     sys.exit(2)
@@ -40,6 +40,9 @@ for opt, arg in opts:
         cernetf = arg
     elif opt in ("-o"):
         output = arg
+    elif opt in ("-p"):
+        nperm = arg
+
 print('Script path:\t"'+ sys.argv[0])
 print('Input file:\t' + gene)
 print('tumor file:\t' + exptf)
@@ -122,13 +125,11 @@ for regObj in regObjlist:
 
 outputTumH.close()
 cmd = "/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript \
-    /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators_v4.r\
+    /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators_v6.R\
     --vanilla --input "\
-     +  outTumTemp + " --output " + output
+     +  outTumTemp + " --nperm " + nperm + " --output " + output
 print cmd 
-# p = Popen(cmd, shell = True, stderr = PIPE, stdout = PIPE)
 rtncode  = subprocess.call(cmd, shell = True)
-# stdout, err = p.communicate()
 if rtncode != 0 :
     print "Error in regression!"
     sys.exit()

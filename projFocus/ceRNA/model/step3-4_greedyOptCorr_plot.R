@@ -76,9 +76,9 @@ corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_init = corr_full, tol = 
     mut_temp = mutD
     corr_prev = corr_init
     
-    plot(x=1:numMut, ylim = c(0,1),type="n",xlab="number of Mutation",ylab="Correlation",main = paste("Greedy optimization for correlation\ntol =",tol))
-    points(1, z2corr(corr_prev$zs),col="red", pch = 16)
-    
+#     plot(x=1:numMut, ylim = c(0,1),type="n",xlab="number of Mutation",ylab="Correlation",main = paste("Greedy optimization for correlation\ntol =",tol))
+#     points(1, z2corr(corr_prev$zs),col="red", pch = 16)
+#     
     for (i in 1:numMut){
       id_flip = mutInd[i,]
       mut_temp[id_flip[1], id_flip[2]] <- 0
@@ -93,18 +93,21 @@ corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_init = corr_full, tol = 
         corr_prev = corr_temp
         corr_temp = list(corr=0,n=0)
       }
+      heatmap.2(mut_temp, 
+                col=colorRampPalette(c("white","red"))(50), 
+                trace="none", Rowv=F,dendrogram="none", Colv=F, main=paste("Random init\n target:", tgene, "\nIter(n):",nIter))
     }
     corrDiffPval = corrDiff(corr_prev$zs, corr_full$zs,corr_prev$n,corr_full$n)
     
-    text(x=3,y=0.85,labels=paste("opt vs.full, p-val:", format(corrDiffPval,digits=4)), font = 2, pos=4,cex=0.8)    
+#     text(x=3,y=0.85,labels=paste("opt vs.full, p-val:", format(corrDiffPval,digits=4)), font = 2, pos=4,cex=0.8)    
     smpOpt = colSums(mut_temp)[colSums(mut_temp)>0]
     numSmpOpt = length(smpOpt)
     regOpt = rowSums(mut_temp)[rowSums(mut_temp)>0]
     numRegOpt = length(regOpt)
     corr_opt = corr_prev
     corr_opt$corr <- (exp(2 * corr_prev$zs) -1)/(exp(2 * corr_prev$zs) +1)
-    text(x = 3, y = 0.95, labels=paste("Opt Smp:",numSmpOpt,"/",numSmp),font=2,pos=4,cex=0.8)
-    text(x = 3, y = 0.9, labels=paste("Opt Gen:",numRegOpt,"/", numReg),font=2,pos=4,cex=0.8)
+#     text(x = 3, y = 0.95, labels=paste("Opt Smp:",numSmpOpt,"/",numSmp),font=2,pos=4,cex=0.8)
+#     text(x = 3, y = 0.9, labels=paste("Opt Gen:",numRegOpt,"/", numReg),font=2,pos=4,cex=0.8)
     return(list(corr_opt =corr_opt, sample = smpOpt, cerna=regOpt,corrDiff_pval=corrDiffPval, mutD=mut_temp))
   }
 }

@@ -33,7 +33,7 @@ promotersize=2000
 output=$input.promoter2k.$CDT.matrix
 # cmd="~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $tssfile -c $promotersize -o $output &"
 # echo $cmd
-~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $tssfile -c $promotersize -o $output &
+# ~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $tssfile -c $promotersize -o $output &
 # promotersize=1000
 # output=$input.promoter1k.$CDT.matrix
 # ~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $tssfile -c $promotersize -o $output &
@@ -42,11 +42,18 @@ output=$input.promoter2k.$CDT.matrix
 utr3pfile=/ifs/data/c2b2/ac_lab/jh3283/database/refseq/refseq_gene_hg19_selected_Mar20_3pUTR.tsv
 size=0
 output=$input.utr3p.$CDT.matrix
-~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $utr3pfile -c $size -o $output &
+# ~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $utr3pfile -c $size -o $output &
 
 
 # utr5pfile=/ifs/data/c2b2/ac_lab/jh3283/database/refseq/refseq_gene_hg19_selected_coords_5pUTR.tsv
 utr5pfile=/ifs/data/c2b2/ac_lab/jh3283/database/refseq/refseq_gene_hg19_selected_Mar20_5pUTR.tsv
 size=0
 output=$input.utr5p.$CDT.matrix
-~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $utr5pfile -c $size -o $output &
+# ~/tools/python/Python_current/python $crnsc/processData/selectTargetRegionRow.py -i $input -t $utr5pfile -c $size -o $output &
+
+
+##---getRecurrence 
+# ~/scripts/projFocus/ceRNA/plot/getMutFreqInSamples.sh genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix &
+## sort -k 5n genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix.sorted.mutFreq|tac |less
+#sortxh /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/03102014/tcgal2som/genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix > /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/03102014/tcgal2som/genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix.sorted
+#/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/plot/getMutFreqForGene.sh brca_som_utr3p.Mar-20-2014.matrix.mutFreq.sorted

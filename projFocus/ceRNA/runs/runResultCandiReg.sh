@@ -142,9 +142,55 @@ getErrGene(){
 ####-------------------------
 # qst |awk 'NR>2&&$3!="QRLOGIN"{split($3,a,".");print a[1]}' > pid_running.txt
 # for i in `seq 1 60` ##resub with longer time
-for i in `seq 3 60` ##resub with longer time
-do
-  qsubGetKeyRegs gslist.Gintset_Mar31.txt_${i}
-done
+# for i in `seq 3 60` ##resub with longer time
+# for i in `seq 1 2 ` ##resub with longer time
+# do
+  # qsubGetKeyRegs gslist.Gintset_Mar31.txt_${i}
+# done
 
+# qst |awk 'NR>2&&$3!="QRLOGIN"{split($3,a,".");print a[1]}' > pid_running.txt
+
+##-------runing the 47 remaining ones with large memory and long time  
+qsubGetKeyRegs() {
+  # CWD=$candiRegDir/temp-bigTarget
+  CWD=$candiRegDir/temp-$1
+  if [ ! -d $CWD ] ; then mkdir $CWD ; fi 
+  if [ ! -d $CWD/log ] ; then mkdir $CWD/log ; fi 
+  cnt=0
+  while read gene
+  do
+    if [ ! -d $candiRegDir/log ] ; then mkdir $candiRegDir/log ; fi 
+    gene=$gene
+    gslist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/gslist/gslist_Mar-24-2014_CnvMethSomFree.10smapMore.deg_20140325.txt.10more.hasReg.list
+    geneAnnofile=/ifs/data/c2b2/ac_lab/jh3283/database/refseq/refseq_gene_hg19_selected_Mar22_Tsstse.tsv.single.tsv
+    out=$CWD/${gene}_candidateRegs_${CDT}.txt
+    oldout=$CWD/${gene}_candidateRegs_*2014.txt
+    if [ ! -f $oldout ] ; then
+	cmd="$PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-1_getKeyReg_v5.py -c $cernet -g $gene  -t $expTum -n $expNorm -a $geneAnnofile -l $gslist -o $out"
+	# cmd="$PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-1_getKeyReg_v4.py -c $cernet -g $gene  -t $expTum -n $expNorm -a $geneAnnofile -l $gslist -o $out"
+	echo $cmd |qsub -l mem=20g,time=140:: -N ${gene}.KeyReg -e $CWD/log -o $CWD/log -cwd  >> $CWD/qsubGKR.logs
+	tail -1 $CWD/qsubGKR.logs
+	((cnt=cnt+1)) 	
+    fi
+  done < $1
+  echo $cnt "submitted!"
+}
+
+# qsubGetKeyRegs pten.txt
+###---run with 100 permutation
+# qsubGetKeyRegs pid_running_Apr10.txt
+# qsubGetKeyRegs genelist.failed_Apr11.txt 
+
+###-------change to v4 to run below
+# qsubGetKeyRegs genelist.failed_Apr102014  
+
+
+
+CWD=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg
+resDir=$CWD/run-Apr-1-2014
+# mkdir $resDir 
+cd $resDir
+# cp $CWD/temp-*/*txt . 
+$PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/getKeyRegStats.py -d $resDir -o $resDir/kegRegs_${CDT}.summary
+sort $resDir/kegRegs_${CDT}.summary.driverRegs.list |uniq > $resDir/kegRegs_${CDT}.summary.driverRegs.list.uniq
 
