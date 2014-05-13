@@ -1,138 +1,154 @@
+---
+title: "Explaining the ceRNA effects from genomic variants"
+author: Jing He
+date: May, 09, 2014
+output: pdf_document
+---
+
 ```{r,echo=FALSE,message=FALSE,error=FALSE,warning=FALSE,prompt=FALSE}
+# install.packages("devtools")
+# devtools::install_github("rstudio/rmarkdown")
 library(knitr)
 library(markdown)
-setwd("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/doc/")
+setwd("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/report/")
 setwd("/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/")
+render("genReport.Rmd", "pdf_document")
+
 ```
 Explaining the ceRNA effects from genomic variants
 =============================================
-**Jing; Hua-sheng; Pavel**
+**Jing He;Hua-sheng Chiu;Pavel Sumazin**
+
+Abstract:
 
 
-1. Introduction
+1. Background and introduction
 -------------------------------
-There is a need to leverage all genomic aberrants information and map them to regulatory/post-regulatory analysis. Computational method is feasible for such hight-throughtput and large-scale task.
+Previous work has shown that ceRNA network cany integrate genetic and epigenetic alterations, such as Copy Number Variabtion(CNV), methylations,  of cognate ceRNA regulators to dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors. While at the same time, many evidence has shown that mutations in cancer are frequent genetic variation which would be oncogeneic. 
+  
+Here in this study, we investigate the regulation variability accounted by ceRNA driver mutation, especially focuse on those in regulatory region in genome, denomstrate cancer genes and tumor suppressors missing genomic variablity can be explained by regulatory somatic mutations of it's cognate ceRNA dirver. 
 
-This is a data-driven algorithm that takes matched copy number, somatic mutation, snp, indel and gene expression data from tumors as input and combines these to identify driving aberrations and associate these with the genes/ceRNA effect they modulate. 
+This is a data-driven algorithm that takes matched copy number, somatic mutation, methylation and gene expression, predicted TF binding sites, as well as predicted microRNA binding sites to identify functional mutated ceRNA drivers which are associate with the cancer gene and tumor suppressor expression variability.
 
 This appoach is also based on hierarchical regression model that evaluates candidate group/aberrants, or ‘modulators’. The association coefficient measures how well a modulator (or combination of modulators) contribute to the behavior of ceRNA effection through gene expression across tumor samples.
-
 
 2. Data
 ------------------------------
 
-TCGA data is publicly avaible, relatively has high quality, and most importly, have reasonable sufficient data of different level. All data are downloaded from TCGA, snp level2 is controlled access. WXS bam can access using lab key. [data table](figure/data_v1.png) 
+TCGA data is publicly avaible, relatively has high quality, and most importly, have reasonable sufficient data of different level. All data are downloaded from TCGA, an access using lab key. 
 
-- rnaSeq: level 3 raw counts was used in edgeR to get differential expressed genes(DEG) , 839 samples in total, 71 normal sample. Differential expressed gene(FDR < 0.01) [code](/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/getDEG_Mat_edgeR.r)
+- rnaSeq: version 1, level 3 raw counts was used in edgeR to get differential expressed genes(DEG), total sample size 778, normal sample 100
   
-- snpArray:  level 2 birdseed data in hg18 annotation; for snp data usage
-   [birdsuite algorithm description][bs]; Affymetrix SNP 6.0
-   The SNP locations were translated from HG18 to HG19 using the UCSC liftOver application([kent et al., 2002](liftOver))
-  
-- somaticMutation:  level 3 called somatic variants data for 731 tumor samples was collected; mapped to genes as binary[0/1] using TSS site.
+- somaticMutation:  level 2 maf file from tcga, total sample size 1001,
 
-- CNV_snparray:  level 3 copy number variation was collected for 731 tumor samples, CNVs with log2 value between [-0.3,0.3] were removed
+- CNV_snparray: level 2, total sample size 1049
 
-- wxs:  bam files of whole exome sequencing breast cancer in TCGA for 663 tumor samples were downloaded.
+- methylation: level 3 data from TCGA, both tumor and normal are used to get differential methylation genes. ( sample size ,tumor ,normal )
 
 
 3. Methods
 ---------------------------------
 
-- [current work flow](figure/workflow.png)
-- Differential expressed genes
-   - EdgeR: using rowcounts as expression
-      - TMM normalization
-      - FDR[0.01]
-      - [plots](/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/result/exp/edgeR_brca_l3_distribution.pdf)
-      
-- snp :  from Affymetrix SNParray 6.0,since its avaiable, even thought its' limitation on the number of snps(n=906,600). To noted, we didn't use [Hardy–Weinberg principle][hwe] filtering, which was mostly used in GWAS study since this population is general cancer population, the HWE assumption is basically not hold since HWE is to make sure the sample comes from a normal population. for preprocessing, 2 filtering process used as following. 
-  - confidence filtering: necessary to make sure all the SNPs are real SNP < 0.01 sample size > 0.1  total(731)
-  - MAF fréquence filtration: 
-  - MAF top small would make no sense to do the calculation  > 0.05 
+###  3.1 identify genomic intact dysregulated cancer genes(Gint) and samples
+
+- Differential expressed cancer genes
+   - voom normalization with all normal sample
+   - t.test for the different expression, 712 in 502 out
+   - FC and bonferroni correction p-value: vocano plot 
+- cancer genes' ceRNET regulators expression
+  - 3793 regulators for 503 UCGgenes
+  - EdgeR: using rowcounts as expression
+- UCGR genomic aberrants :
+  - SNP: get throught large sample size 
+
+1). cancer genes got from ceRNA project.(n= 776) in UC-ceRNET
+
+2). cnv sample elimination : renames all cnv files using barcode; get unique gene start, end site file; list all available cnv file(sample have cnv); segment mean is log2 ratio of copy number (0.8, 1.2) ==> copy number(1.74,2.3); for genes have multiple cnvs cover it, we choose the one have higher cnv value(either del or amp) [documentation](https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/read/cgcc/broad.mit.edu/genome_wide_snp_6/snp/broad.mit.edu_READ.Genome_Wide_SNP_6.mage-tab.1.2003.0/DESCRIPTION.txt)
+    - some figures show number of samples for each gene
+3). methylation sample elimination: 
+    - tumor sample(n=117), normal sample(n=96); for genes with multiple probes, we only use the probe that is unique to this gene. sva package in bioconductor was used to normalize out batch effect. 7 normal samples which show  as outlier were removed(n = 89). samples with differential methylation were eliminated for each gene( z-score > 2.5)
+
+    -  cancer ceRNE genes were seleted. most of them have around 100 tumor samples
+4). mutation sample 
+    tcga somatic mutation level2 data
+
+###  3.2 identify candidate driver ceRNA regulator for each Gint
+1). clustering 
+   running successive K-means with an increasing number of clusters (k), after transforming data using a principal component analysis (PCA). For each model, a statistical measure of goodness of fit (by default, BIC) is computed, which allows to choose the optimal k
+2). group lasso
+3). premutation
+4). filtering and get candidate driver
+
+###  3.3 identify driver mutations for ceRNA driver 
+method 1-- MSMC
+1). identify all somatic mutations in promoter region, 3'UTR region
+
+2). grouping mutations by each gene
+
+3). identify mutated driver ceRNA regulator(mutations)
+
+4). identify dirver mutation sets for each cancer target gene
+
+  - Biological Question:
+    identify a minimum set of mutation, which can account for the regulation of driver CeRNA in majority of Genomic Intact samples 
+  - formulaize question in Mathmatical word:
   
-- cnv : useing the segment mean copy number, exclude segments whose log2 value were in interval [-0.3, 0.3]. and then intersect segments with TSS to get DEG's CNV, log2 values were used
+  -  using multiset multicover algorithm 
+    -  solution 1 exact solution:
+        NP problem http://max.cs.kzoo.edu/~kschultz/CS510/ClassPresentations/NPCartoons.html 
+        super fast computer ~2hrs, 50 vars
+        using integer linear program to solve, but for n > 100, have to relaxe the probelm to linear, if n < 100, can use branch-and-bound to get exact solution.
+    -  solution 2 approximation:
+        -greedy run setcover for constrains $\sum_i^mS_m(i)~=~k$, using sampling methods(MCMC) to get solution
+method 2 -----optimization correlation
 
-- somatic mutations: mapped to genes as binary[0/1] using it's relative position to DEG TSS site.
 
-- indel matrix: wating for indel calling. [calling status](doc/brca_wxs_processing_plan.xlsx)
 
-- **[genomic variants count](data_summary.txt)**
+5). find functional mutations using TF binding sites, miRNA binding sites information, as well as expression/activity information
 
-4. Hierarchical Model of genomic aberrant's effect on gene expression 
+###  3.4 functional filtering of ceRNA driver mutations
+
+###  3.5 validation of functional ceRNA driver mutations
+
+4. Results
 -------------------------------------------------------
-- [current model](figure/model.png)
+1). Identify genomic intact samples and cancer genes(Gint)
+    - 593 cancer genes were identified as dysregulated genomic intact genes for downstream analysis
+    - big venn diagram < figure 1> 
+2). Identify candidate driver regulators for each Gint
+    - MBD2; MAX;has no effective regulator; DDX3X is still running..
+    - 343 cancer genes are identified as having at least one driver regulators, 2749 unique candidate driver regulators
+    - summerizing file(/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/run-Apr-1-2014/kegRegs_Apr-16-2014.summary)
+    - example of one gene ( heatmap, )
+    
+3) Identify functional ceRNA driver somatic mutation
 
-- [Kruskal–Wallis test][kw]: an extension of the Mann–Whitney U test to 3 or more groups was used as the second filtering for SNPs. SNPs whose didn't show a significant correlation with any DEGS(cis effect) table: [kw filtration snp count: All genes](reportData_1.xlsx) [example plots]()
-```{r,background="white",results='hide', message=FALSE, warning=FALSE,echo=FALSE}
-# rootd="/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA"
-# jxy = function(x,y){paste(x,y,sep="")}
-# data = read.table(jxy(rootd,"/result/snp/kwtestSummary.txt"),header=T,sep="\t",stringsAsFactors=F)
-# require(ggplot2)
-# require(gplots)
-# layout(matrix(1:4,2,byrow=T),)
-# data = data[-nrow(data),]
-# indes = vapply(c("X","Y"),FUN=function(x){grep(x,data$chr)},1)
-# data  = data[c(order(as.integer(data$chr[-indes])),indes),]
-# rownames(data)=data$chr
-# data = as.matrix(apply(data[,-1],2,as.numeric))
-# ggplot(data,aes(x=factor(chr),y=numTest)) + geom_bar() + scale_x_discrete(limits=c(1:22,'X','Y')) + xlab(label="Chrom")+ylab(label="number of gene-snp pairs")
-# plot(x=1:24,ylim=c(0,1),type='n')
-# (x=factor(data$chr),y=data$numTest/max(data$numTest),col='blue')
-# barplot(t(data[,-1]),beside=T)
-```
-           
-- ftest:(-SNP/indel) contribution
-- group lasso regression --<still testing other model...>
-  - [cohen's kappa][ck]:Cohen's kappa measures the agreement between two raters who each classify N items into C mutually exclusive categories. similarity distance 
-  - svd: dimension that catch 80% variation 
-  - grouping of SNPs: kmeans
-- regression: models for different cases [cases]()
-  - logit transform of expression 
-  
-  - fitting using group lasso
-  
-  - random sampling residual and 1000 permutation 
-  
-
-- filtering:  p value < 0.005 for 1000 permutation
-
-5. bridging gene-variants association with gene-ceRNA effects
----------------------------------------------
-- Thoughts
-
-6. validation use population genomic variants
-------------------------------------------------
-- 1000 Genome SNP / Indel
-- UK10K 
-
-7. Test Run using GWAScatalog related genes
-----------------------------------------
-- [GWAS catalog genes](GWAS_catalog_brca_allGeneName.txt): 70 in total, 27 was found in the having the filtered snp around +/- 1M of the gene TSS
-
-- [Gene-SNP pairs] : 3767 for KW test cutoff 0.01, 1555 for KW test cutoff 1e-6
-
-- snp significantly contribution [genes](fTest_pval_all__snp_cnv_som.txt.sig): relatively lose currently pvalue 0.05
-  
-- Find [snps] significantly associate with gene: 3 genes
-  - [CCND1](grplasso_coeff_grplasso_CCND1.txt)
-  - [GDI2](grplasso_coeff_grplasso_GDI2.txt)
-  - [NT5C1B](grplasso_coeff_grplasso_NT5C1B.txt)
-- ceRNA effect for those genes
-
-- some interesting SNPs
-  - [RANBP9 genetic variants network](figure/RANBP9_geneticVars_net.pdf) 
-      - rs16874698 [[ref 1 mooney lab]](http://mutdb.org/cgi-bin/mutdb.pl?id=CD83&geneid=9308)       [[ref 2 umbc]](http://bioinf.umbc.edu/dmdm/mut_on_prot.php?id=232223&range=174.25_184.5)
-  - [RANBP9 ceRNA network] (figure/RANBP9_ceRNA_net.pdf)
-  
+    - Step 1
+      TCGA level 2 BRCA somatic mutations(both curated and validated) 95371 mutations(locus) in at least 1 patients(data in /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/tcgal2som )      
+      18,828 in promoter Regions; 
+      7,417 3' utr Regions
+    - step 2
+      9,829 regulatory mutated genes
+    - step 3 (if run functional regulatory mutaiton at first)
+      72 mutated driver regulators
+    - step 4
+    
+    
+      
+5. Further work
+    -  
   
   
 8. Acknowledgement 
-- 
-- 
-    
+
+
+9. Reference
+
+  
 [ck]: http://en.wikipedia.org/wiki/Cohen's_kappa
 [kw]: http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance
 [hwe]:http://en.wikipedia.org/wiki/HWE
 [bs]: http://www.broadinstitute.org/science/programs/medical-and-population-genetics/birdsuite/birdsuite-analysis#birdsuite_snps
 [lifeOver]: http://genome.cshlp.org/cgi/pmidlookup?view=long&pmid=12045153
+[cluster]:Jombart, Thibaut, Sébastien Devillard, and François Balloux. "Discriminant analysis of principal components: a new method for the analysis of genetically structured populations." BMC genetics 11.1 (2010): 94.
+[residual permutation]: Potter, Douglas M. "A permutation test for inference in logistic regression with small‐and moderate‐sized data sets." Statistics in medicine 24.5 (2005): 693-708.
