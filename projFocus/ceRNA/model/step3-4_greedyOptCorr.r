@@ -61,9 +61,9 @@ print(paste("output",class(output), output))
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
 
-# typeTol = "fix"
+# typeTol = "flex"
 # typeSelect = "max"
-# numRandom = 1000
+# numRandom = 10
 ##test end------
 
 
@@ -329,6 +329,7 @@ if (!flag) {
 nperm = 1000
 pvalCut = 0.05
 
+
 if (typeTol == "flex") {
     tolVec = seq(-0.02,0.005,by=0.001)
     nTol = length(tolVec)
@@ -356,8 +357,10 @@ if (typeTol == "flex") {
     # write.table(iterTolSum, out, col.names=F, sep="\t",quote=F)
     
     
-    tol = iterTolSum[which(iterTolSum$pvalPerm == min(iterTolSum$pvalPerm) & iterTolSum$pvalfull< pvalCut),]
+    tol = iterTolSum[which( !is.na(iterTolSum$pvalPerm) | is.na(iterTolSum$pvalfull)),]
     # tol = tol[do.call(order, list(tol$optcorr, tol$pvalPerm, tol$pvalfull,tol$optRegn)),]
+
+    
     # pvalue QC
     if (NROW(tol)  == 0 ){
         tol = iterTolSum[do.call(order, list(iterTolSum$pvalPerm, 
@@ -368,8 +371,13 @@ if (typeTol == "flex") {
         q(save="no")
     }
     
-    tol = tol[order(tol$optcorr, decreasing=T),]
-    tol = tol$tol[1]
+    tol = tol$tol[ which.max( vapply(tol$pvalfull, FUN=function(x){ifelse(is.na(x), 0, -log(x))},0.1) + 
+                              vapply(tol$pvalPerm, FUN=function(x){ifelse(is.na(x), 0, -log(x))},0.1) )[1] ]
+    
+#     tol = tol[order(tol$optcorr, decreasing=T),]
+#     tol = tol$tol[1]
+#     
+    
 }else if (typeTol == "fix") {
   tol = 0
 #   resCorr_crt = doCorropt_perm(mutD, regExpD, tarExpD, corr_full, tol, nperm)
@@ -455,4 +463,4 @@ output = paste(output , "_", tol, sep="")
 writeOut(output, mutD, tgene,corr_total=corr_total, corr_full=corr_full, resCorrOpt)
 write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
 
-print(paste("[END]",tgene, "\tRunning time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
+print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
