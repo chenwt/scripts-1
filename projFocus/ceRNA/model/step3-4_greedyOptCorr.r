@@ -52,9 +52,18 @@ print(paste("output",class(output), output))
 ##test files------
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_exp.temp"
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
+
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_regMut.temp"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_debug_05182014_SPRY1.txt"
+
 # figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
+
+# typeTol = "fix"
+# typeSelect = "max"
+# numRandom = 1000
 ##test end------
 
 
@@ -76,6 +85,10 @@ z2corr = function(z) return((exp(2 * z) -1)/(exp(2 * z) +1))
 
 corrDiff = function(z1,z2,n1,n2)  {
   if (n1 >=10 & n2 >=10){
+    z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
+    return(2*(1-pnorm(abs(z))))
+  }else if ( ( n1 > 3 & n1 <10) | (n2 >3 & n2 < 10)){
+    print( paste(" samples should be larger than 10",n1, n2))
     z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
     return(2*(1-pnorm(abs(z))))
   }else{
@@ -211,14 +224,21 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, optCorrRes = NA, t
     pvalP = optCorrRes$pval_perm
     optCorrReg = length(optCorrRes$reg)
     resMut  = removeZeor(resMut)
-    outGene = optCorrRes$reg
-    outSmp  = optCorrRes$sample
-    outSmpMap = vector(length=length(outGene))
-    for (i in 1:nrow(resMut)){
-      outSmpMap[i] = paste("[",paste(vapply(which(resMut[i,]!=0, arr.ind=T),
-                                    function(x){outSmp[x]},'a'),collapse=";"),
-                         "]",sep="")
-    } 
+    if (NROW(resMut) == 0){
+      outSmpMap = c(paste("[",'', "]",sep=""), paste("[",'', "]",sep=""))
+    
+    }else{
+    
+    
+      outGene = optCorrRes$reg
+      outSmp  = optCorrRes$sample
+      outSmpMap = vector(length=length(outGene))
+      for (i in 1:nrow(resMut)){
+        outSmpMap[i] = paste("[",paste(vapply(which(resMut[i,]!=0, arr.ind=T),
+                                      function(x){outSmp[x]},'a'),collapse=";"),
+                           "]",sep="")
+      }
+    }
   }else{
     resMut = removeZeor(mutD)
     outGene = rownames(mutD); outSmp = colnames(mutD)
@@ -285,6 +305,7 @@ if (is.null(removeZeor(mutD))){
 
 ##calculate corr_total(no mutation), corr_full(full mutation matrix)----
 regExpD = subset(expD,select = names(tarExpD))[-1,]
+
 if (NCOL(regExpD) == 1){ 
   sumExpD = regExpD 
 }else{
@@ -365,6 +386,7 @@ pval_full_min <- pval_perm_min <- 1
     
 if ( typeSelect == "max" ) {
   print("seletion using optimal")
+  resRandInitOptCorr = doCorropt_perm(mutD, regExpD, tarExpD, corr_full, tol, nperm)
   for (i in 1:nIter){
     resCorrOpt = doCorropt_perm(mutD, regExpD, tarExpD, corr_full, tol, nperm)
       if(!is.na(resCorrOpt$pval_full) & !is.na(resCorrOpt$pval_perm) & 
@@ -380,7 +402,7 @@ if ( typeSelect == "max" ) {
     # write.table(iterRansInitSum, out, row.names=F,sep="\t",quote=F)
 }else{
   resIterMutD = matrix(0, nrow= nrow(mutD),ncol =ncol(mutD) )
-  
+
   iterRansInitSum = as.data.frame(matrix(NA, nrow=nIter,ncol=7))
   colnames(iterRansInitSum) = c(paste("tol",tol,sep="_"), "optcorr", "permcorr", 
                                 "optSmpn",'optRegn', "pvalfull", "pvalPerm")
