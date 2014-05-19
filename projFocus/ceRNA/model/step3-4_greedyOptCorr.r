@@ -32,14 +32,20 @@ if(length(args) < 1 || is.null(args)){
 }
 
 setwd(system("pwd",intern=T))
-expfile     = args['exp']
-mutfile     = args['mut']
+expfile     = args[['exp']]
+mutfile     = args[['mut']]
 typeTol     = args['ttol']
 typeSelect  = args['tsel']
-output      = paste(args['output'], "_", typeTol, "_", typeSelect, sep="")
+numRandom   = args['nrand']
+output      = paste(args['output'], "_", typeTol, "_", typeSelect, "_", numRandom, sep="")
 figd        = paste(rootd, "/DATA/projFocus/report/May2014/fig/", sep="")
 print("###------------------------")
-print(paste("inputfile",expfile, mutfile))
+print(paste("inputfile 1",class(expfile), expfile))
+print(paste("inputfile 2",class(mutfile), mutfile))
+print(paste("ttol ",class(typeTol), typeTol))
+print(paste("tsel",class(typeSelect), typeSelect))
+print(paste("output",class(output), output))
+
 # print(paste("outputfile",output))
 #---init
 
@@ -354,7 +360,7 @@ if (typeTol == "flex") {
 ##random initiation-----
 print(paste("Finished Tol time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
 
-nIter = 100
+nIter = as.integer(numRandom)
 pval_full_min <- pval_perm_min <- 1
     
 if ( typeSelect == "max" ) {
