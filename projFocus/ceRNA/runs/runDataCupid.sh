@@ -28,4 +28,21 @@ dnaseq=$CWD/refseq_hg19_refflat_cupid3pGene.fasta_Apr4.tsv.uniq
 #   tail -1 $CWD/qsub.log
 # done
 
-awk 'NR==1||FNR!=1{print $0}' ${dnaseq}_*.cupidGenomicCoord > cupid.GenomicCoord
+# awk 'NR==1||FNR!=1{print $0}' ${dnaseq}_*.cupidGenomicCoord > cupid.GenomicCoord
+
+dnaseq=$CWD/tempfile/refseq_hg19_refflat_cupid3pGene.fasta_Apr4.tsv.uniq
+mycode="/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step4-1_genMirBS.py"
+utrseqfile="/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cupidPrediction/3PrimeUTR"
+cupidfile="/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/cupidPrediction/CupidPred"
+output="/ifs/data/c2b2/ac_lab/jh3283/projFocus/data/miBS/mircoRNA_BindSite_cupidPredict.hg19.test"
+# for file in `ls ${dnaseq}_*`
+# do
+#   i=`echo $file|awk -F"/|_" '{print $NF}'`
+#   cmd="$PYTHON $mycode -c $cupidfile  -u $utrseqfile -d $file  -o ${output}_$i"
+#   # echo $cmd
+#   echo $cmd|qsub -l mem=8g,time=4:: -N bs_$i -cwd -e $CWD/log -o $CWD/log >> $CWD/qsub.log
+#   tail -1 $CWD/qsub.log
+# done
+
+
+

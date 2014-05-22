@@ -125,7 +125,7 @@ getCandi    = function(fitPermuBeta, pcut){
 }
 
 #---func
-nperm     = 1000
+nperm     = 100
 pvalcut   = 0.01
 
 ##---init---
@@ -144,7 +144,8 @@ nperm       = as.integer(args$nperm)
 output      = args$output
 print(fexp)
 print(paste("inputfile",fexp,class(fexp)))
-print(paste("outputfile",output))
+print(paste("nperm", nperm))
+print(paste("outputfile", output))
 #---init
 
 ##loading data

@@ -3,7 +3,7 @@
 usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from python> -mut <mutation file from python>"
 ERR = "ERROR:"
 CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
-typeSelect = "max" #which type of output <all> to select a cutoff <max> to select random optimal(n = 100), or a number to set cutoff value
+typeSelect = "20" #which type of output <all> to select a cutoff <max> to select random optimal(n = 100), or a number to set cutoff value
 typeTol = "fix" # < fix> to set tol == 0 , < flex> to select tol adaptively
 timeStart = Sys.time()
 
@@ -24,44 +24,50 @@ source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
 
 
 # #----getting command line parameters
-# args = getArgs()
-# if(length(args) < 1 || is.null(args)){
-#   print(paste(usage,example,sep="\n"))
-#   print(args)
-#   stop(paste(error,"wrong input parameter!"))
-# }
-# 
-# setwd(system("pwd",intern=T))
-# expfile     = args[['exp']]
-# mutfile     = args[['mut']]
-# typeTol     = args['ttol']
-# typeSelect  = args['tsel']
-# output      = paste(args['output'], "_", typeTol, "_", typeSelect, sep="")
-# figd        = paste(rootd, "/DATA/projFocus/report/May2014/fig/", sep="")
-# print("###------------------------")
-# print(paste("inputfile 1",class(expfile), expfile))
-# print(paste("inputfile 2",class(mutfile), mutfile))
-# print(paste("ttol ",class(typeTol), typeTol))
-# print(paste("tsel",class(typeSelect), typeSelect))
-# print(paste("output",class(output), output))
+args = getArgs()
+if(length(args) < 1 || is.null(args)){
+  print(paste(usage,example,sep="\n"))
+  print(args)
+  stop(paste(error,"wrong input parameter!"))
+}
+
+setwd(system("pwd",intern=T))
+expfile     = args[['exp']]
+mutfile     = args[['mut']]
+typeTol     = args['ttol']
+typeSelect  = args['tsel']
+numRandom   = args['nrand']
+output      = paste(args['output'], "_", typeTol, "_", typeSelect, "_", numRandom, sep="")
+figd        = paste(rootd, "/DATA/projFocus/report/May2014/fig/", sep="")
+print("###------------------------")
+print(paste("inputfile 1",class(expfile), expfile))
+print(paste("inputfile 2",class(mutfile), mutfile))
+print(paste("ttol ",class(typeTol), typeTol))
+print(paste("tsel",class(typeSelect), typeSelect))
+print(paste("output",class(output), output))
 
 # print(paste("outputfile",output))
 #---init
 
 ##test files------
-tgene = "IGF2R"
-expfile = paste("/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_",tgene,"_exp.temp",sep="")
-mutfile = paste("/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_",tgene, "_regMut.temp",sep="")
-figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
-driMutfile = paste("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_", tgene, ".tsv.fullMatrix", sep = "")
-output = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/diffExp/test/diffmut.test.out"
-output = paste(output, "_", typeTol, "_", typeSelect, sep="")
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
+
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_regMut.temp"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_debug_05182014_SPRY1.txt"
+
+# figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
+# output = paste(output, "_", typeTol, "_", typeSelect, sep="")
+
+# typeTol = "flex"
+# typeSelect = "max"
+# numRandom = 10
 ##test end------
 
 
 ###func-----
-require(useful)
-require(gplots)
 fisherZ = function(r) {
   if (is.na(r)){
     return(NA)
@@ -79,6 +85,10 @@ z2corr = function(z) return((exp(2 * z) -1)/(exp(2 * z) +1))
 
 corrDiff = function(z1,z2,n1,n2)  {
   if (n1 >=10 & n2 >=10){
+    z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
+    return(2*(1-pnorm(abs(z))))
+  }else if ( ( n1 > 3 & n1 <10) | (n2 >3 & n2 < 10)){
+    print( paste(" samples should be larger than 10",n1, n2))
     z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
     return(2*(1-pnorm(abs(z))))
   }else{
@@ -214,14 +224,21 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, optCorrRes = NA, t
     pvalP = optCorrRes$pval_perm
     optCorrReg = length(optCorrRes$reg)
     resMut  = removeZeor(resMut)
-    outGene = optCorrRes$reg
-    outSmp  = optCorrRes$sample
-    outSmpMap = vector(length=length(outGene))
-    for (i in 1:nrow(resMut)){
-      outSmpMap[i] = paste("[",paste(vapply(which(resMut[i,]!=0, arr.ind=T),
-                                    function(x){outSmp[x]},'a'),collapse=";"),
-                         "]",sep="")
-    } 
+    if (NROW(resMut) == 0){
+      outSmpMap = c(paste("[",'', "]",sep=""), paste("[",'', "]",sep=""))
+    
+    }else{
+    
+    
+      outGene = optCorrRes$reg
+      outSmp  = optCorrRes$sample
+      outSmpMap = vector(length=length(outGene))
+      for (i in 1:nrow(resMut)){
+        outSmpMap[i] = paste("[",paste(vapply(which(resMut[i,]!=0, arr.ind=T),
+                                      function(x){outSmp[x]},'a'),collapse=";"),
+                           "]",sep="")
+      }
+    }
   }else{
     resMut = removeZeor(mutD)
     outGene = rownames(mutD); outSmp = colnames(mutD)
@@ -271,135 +288,10 @@ mutD = read.table(mutfile,sep="\t", header = T)
 rownames(mutD) = mutD[,1]
 mutD = apply(mutD[,-1], c(1,2), as.numeric)
 
-smpNonMut = colnames(mutD)[which(colSums(mutD)==0)]
-smpMut = colnames(mutD)[which(colSums(mutD)!=0)]
-
 tarExpD = expD[1,]
 tgene = rownames(expD)[1]
 tarExpD = tarExpD[order(tarExpD)]
 
-dmutD = read.table(driMutfile,sep="\t", header=T)
-smpDrMut = colnames(dmutD)[which(colSums(dmutD)!=0)]
-drReg = rownames(dmutD[rowSums(dmutD)>0])
-mycolor = colorRampPalette(c("blue","white", "red"))(256)
-
-mutDrD1 = expD[c(tgene,drReg),smpDrMut]
-mutDrD = mutDrD1[,order(mutDrD1[1,])]
-
-
-###--t test for clusters
-heatmap.2(mutDrD,col=mycolor,scale="row",trace="none",Colv=F)
-heatmap.2(subset(expD,select=smpNonMut)[drReg,],col=mycolor, scale="row",trace="none", Rowv=F)
-
-cls.all = cutree(hclust(dist(t(expD[,c(smpDrMut,smpNonMut)]))), k = 3)
-expNonmutD = subset(expD,select=smpNonMut)[drReg,]
-topleft(dmutD)
-
-cls.fit = hclust(dist(t(expNonmutD)))
-cls = cutree(cls.fit,k = 3)
-table(cls)
-t.test(subset(expD, select=smpDrMut)[drReg,], expNonmutD[,names(cls[cls==1])])
-t.test(subset(expD, select=smpDrMut)[drReg,], expNonmutD[,names(cls[cls==2])])
-t.test(subset(expD, select=smpDrMut)[drReg,], expNonmutD[,names(cls)])
-
-plot(cls.fit)
-plot(rect.hclust(cls.fit,k=3))
-
-table(cls.all); table(cls)
-cls.all[cls.all==3]
-smpDrMut
-table(cls.all[smpDrMut])
-
-##---GSEA for mutated versus non-mutated samples---
-install.packages("/Volumes/ifs/data/c2b2/ac_lab/malvarez/packages/aanot_1.0.tar.gz",type="source")
-install.packages("/Volumes/ifs/data/c2b2/ac_lab/malvarez/packages/GSEA_1.0.tar.gz",type="source")
-require(aanot)
-require(GSEA)
-source("~/HOME/scripts/projAML/old/gsea_Jing.R")
-
-mexp = expD[-1,]
-mexp.matrix = as.matrix(mexp)
-rownames(mexp.matrix) = rownames(mexp)
-
-phyne <- vapply(colSums(mutD),FUN=function(x){ifelse(x==0,1,2)},1)
-index_1 <- which(phyne==1)
-index_2 <- which(phyne==2)
-nulldist = getNull(mexp=mexp.matrix, pheno1.col=colnames(mexp.matrix)[index_1],pheno2.col=colnames(mexp.matrix)[index_2], np=1000)
-geneset.new = colnames(removeZeor(mutD))
-gsea_result = gsea(mexp=mexp.matrix, pheno1.col=colnames(mexp.matrix)[index_1],pheno2.col=colnames(mexp.matrix)[index_2],gs=geneset.new,nullDist=nulldist,plot=T,plotFile=paste(figd,"step4-2_gsea_mutVSnonmut.pdf",sep=""))               
-gsea_result = gsea(mexp=mexp.matrix,gs=geneset.new,plot=T,nulldist=NULL, plotFile=paste(figd,"step4-2_gsea_mutVSnonmut.pdf",sep=""))               
-
-
-###after runnning greedy opt get mutD
-mexp = tarExpD[order(tarExpD)]
-mexp = sumExpD[order(sumExpD)]
-mexp.matrix = t(as.matrix(mexp))
-signature = mexp
-indices = (1:1000)
-myset = colnames(removeZeor(mutD))
-dnull = sapply( indices, function(x){ return( sample(signature,size=length(signature), replace=F)) })
-rownames(dnull) = names(signature)
-topleft(dnull)
-
-pdf(paste(figd,"/step4-2_gsea_try.pdf",sep=""))
-gsea_result = GSEA::gsea(mexp, myset, null=NULL,otype="none",plotp=T)
-dev.off()
-sort(rank(mexp)[myset])
-length(mexp)
-mexp[myset]
-phyne <- vapply(colSums(mutD),FUN=function(x){ifelse(x==0,1,2)},1)
-index_1 <- which(phyne==1)
-phyne[which(phyne==2)] <- vapply(names(phyne[which(phyne==2)]),FUN=function(x){ifelse(length(grep(x,smpDrMut))>0, 3, 2)},1)
-index_2 <- which(phyne==2)
-index_3 <- which(phyne==3)
-myset = resCorrOpt$sample
-gsea_result = gsea(mexp=mexp.matrix,gs=geneset.new,nullDist=dnull,plot=T,plotFile=paste(figd,"step4-2_gsea_drmutVSnonmut.pdf",sep=""))               
-
-
-
-##---viper----
-# install.packages("~/tools/viper_1.05.tar.gz",type="source")
-require(viper)
-require(useful)
-
-expTAll = read.table("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_tumor_Mar-21-2014.matrix_Mar-23-2014.voomNormed.matrix",sep="\t",header=T)
-expNAll = read.table("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_normal_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix",sep="\t",header=T)
-expTuZsAll = as.data.frame(matrix(NA, ncol=ncol(expTAll), nrow=nrow(expTAll)))
-
-meanN = apply(expNAll, 1, mean)
-sdN = apply(expNAll, 1, sd)
-meanN <- meanN
-sdN <- sdN
-expTuZsAll <- (expTAll - meanN )/ sdN
-
-# source("http://bioconductor.org/biocLite.R")
-biocLite("org.Hs.eg.db")
-library(org.Hs.eg.db)
-
-## Get the entrez gene identifiers that are mapped to a gene symbol (and viceversa
-mapped_genes <- mappedkeys(org.Hs.egSYMBOL2EG)
-list_symbol2eg <- as.character(org.Hs.egSYMBOL2EG[mapped_genes])
-mapped_genes <- mappedkeys(org.Hs.egSYMBOL)
-list_eg2symbol <- as.character(org.Hs.egSYMBOL[mapped_genes])
-egs <- list_symbol2eg[rownames(expTuZsAll)]
-
-
-expViper <- expTuZsAll[which(duplicated(egs)==FALSE,arr.ind=T), ]
-idx.na <- which(is.na(unique(egs)) == TRUE,arr.ind=T)
-expViper <- expViper[-idx.na, ]
-rownames(expViper) <- unique(egs)[-idx.na]
-
-
-head(regul)
-load("/Volumes//ifs/data/c2b2/ac_lab/shares/yao/brca_networks/brca_tcga_rnaseq851_geneid-regulon.rda")
-
-output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/exp/brca_exp_tumor_toRunViper_05202014.rda"
-save(file=output,expViper,regul,list_eg2symbol,list_eg2symbol,egs)
-# viper_result  <- viper(eset=expViper, regulon=regul , method="none")
-load()
-
-##----------------------------------this is a line to seperate -------------------------------
-###------------------------------------------------
 ##simple QC-------
 if (is.null(removeZeor(mutD))){
   flag = FALSE
@@ -413,6 +305,7 @@ if (is.null(removeZeor(mutD))){
 
 ##calculate corr_total(no mutation), corr_full(full mutation matrix)----
 regExpD = subset(expD,select = names(tarExpD))[-1,]
+
 if (NCOL(regExpD) == 1){ 
   sumExpD = regExpD 
 }else{
@@ -435,6 +328,7 @@ if (!flag) {
 ##select tolence------
 nperm = 1000
 pvalCut = 0.05
+
 
 if (typeTol == "flex") {
     tolVec = seq(-0.02,0.005,by=0.001)
@@ -463,8 +357,10 @@ if (typeTol == "flex") {
     # write.table(iterTolSum, out, col.names=F, sep="\t",quote=F)
     
     
-    tol = iterTolSum[which(iterTolSum$pvalPerm == min(iterTolSum$pvalPerm) & iterTolSum$pvalfull< pvalCut),]
+    tol = iterTolSum[which( !is.na(iterTolSum$pvalPerm) | is.na(iterTolSum$pvalfull)),]
     # tol = tol[do.call(order, list(tol$optcorr, tol$pvalPerm, tol$pvalfull,tol$optRegn)),]
+
+    
     # pvalue QC
     if (NROW(tol)  == 0 ){
         tol = iterTolSum[do.call(order, list(iterTolSum$pvalPerm, 
@@ -475,8 +371,13 @@ if (typeTol == "flex") {
         q(save="no")
     }
     
-    tol = tol[order(tol$optcorr, decreasing=T),]
-    tol = tol$tol[1]
+    tol = tol$tol[ which.max( vapply(tol$pvalfull, FUN=function(x){ifelse(is.na(x), 0, -log(x))},0.1) + 
+                              vapply(tol$pvalPerm, FUN=function(x){ifelse(is.na(x), 0, -log(x))},0.1) )[1] ]
+    
+#     tol = tol[order(tol$optcorr, decreasing=T),]
+#     tol = tol$tol[1]
+#     
+    
 }else if (typeTol == "fix") {
   tol = 0
 #   resCorr_crt = doCorropt_perm(mutD, regExpD, tarExpD, corr_full, tol, nperm)
@@ -488,11 +389,12 @@ if (typeTol == "flex") {
 ##random initiation-----
 print(paste("Finished Tol time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
 
-nIter = 100
+nIter = as.integer(numRandom)
 pval_full_min <- pval_perm_min <- 1
     
 if ( typeSelect == "max" ) {
   print("seletion using optimal")
+  resRandInitOptCorr = doCorropt_perm(mutD, regExpD, tarExpD, corr_full, tol, nperm)
   for (i in 1:nIter){
     resCorrOpt = doCorropt_perm(mutD, regExpD, tarExpD, corr_full, tol, nperm)
       if(!is.na(resCorrOpt$pval_full) & !is.na(resCorrOpt$pval_perm) & 
@@ -508,7 +410,7 @@ if ( typeSelect == "max" ) {
     # write.table(iterRansInitSum, out, row.names=F,sep="\t",quote=F)
 }else{
   resIterMutD = matrix(0, nrow= nrow(mutD),ncol =ncol(mutD) )
-  
+
   iterRansInitSum = as.data.frame(matrix(NA, nrow=nIter,ncol=7))
   colnames(iterRansInitSum) = c(paste("tol",tol,sep="_"), "optcorr", "permcorr", 
                                 "optSmpn",'optRegn', "pvalfull", "pvalPerm")
@@ -561,4 +463,4 @@ output = paste(output , "_", tol, sep="")
 writeOut(output, mutD, tgene,corr_total=corr_total, corr_full=corr_full, resCorrOpt)
 write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
 
-print(paste("[END]",tgene, "\tRunning time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
+print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))

@@ -113,12 +113,12 @@ localGetKeyRegs() {
   do
     gene=$gene
     echo "#-----------$gene-------------------"
-    gslist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/gslist/gslist_Mar-24-2014_CnvMethSomFree.10smapMore.deg_20140325.txt.10more.hasReg.list
-    expTum=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_tumor_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix
-    expNorm=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_normal_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix
-    geneAnnofile=/ifs/data/c2b2/ac_lab/jh3283/database/refseq/refseq_gene_hg19_selected_Mar22_Tsstse.tsv.single.tsv
-    cernet=/ifs/data/c2b2/ac_lab/jh3283/projFocus/other/brca_ceRNA_network.txt
-    out=$CWD/${gene}_candidateRegs_${CDT}.txt
+    # gslist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/gslist/gslist_Mar-24-2014_CnvMethSomFree.10smapMore.deg_20140325.txt.10more.hasReg.list
+    # expTum=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_tumor_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix
+    # expNorm=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_normal_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix
+    # geneAnnofile=/ifs/data/c2b2/ac_lab/jh3283/database/refseq/refseq_gene_hg19_selected_Mar22_Tsstse.tsv.single.tsv
+    # cernet=/ifs/data/c2b2/ac_lab/jh3283/projFocus/other/brca_ceRNA_network.txt
+    # out=$CWD/${gene}_candidateRegs_${CDT}.txt
     if [ ! -f $out ]; then
 	cmd="$PYTHON /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-1_getKeyReg.py -c $cernet -g $gene  -t $expTum -n $expNorm -a $geneAnnofile -l $gslist -o $out"
 	$cmd > $CWD/${gene}.local_stdout
@@ -163,6 +163,24 @@ gslist=/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/gslist/gslist_CnvM
 #   qsubGetKeyRegsSmall ${tgBig}_${i} 
 #   sleep 280m
 # done
+
+# qsubGetKeyRegsBig $candiRegDir/jobs.fail.05162014  
+
+##----debugging for genes without expression data
+checksubFolder() {
+  # for file in `ls -1 temp-tgene_small.txt_$1/*tumor.temp` 
+  for file in `ls -1 temp-tgene_big.txt_$1/*tumor.temp` 
+    do awk 'NR==2{split(FILENAME,a,"/|_"); if (a[4]!= $1) print a[4]}' $file >> tgene_noExpdata.txt_$1
+  done
+}
+
+# for i in `seq 1 20`
+# for i in `seq 1 3`
+# do 
+#   checksubFolder $i &
+# done  
+# cat tgene_noExpdata.txt_* > tgene_noExpdata.txt
+
 
 ##step2.4 check job running
 #ls -1 temp-tgene_*/*txt|awk -F"-|_|/" '{print $5}' > jobs.done

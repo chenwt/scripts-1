@@ -8,8 +8,14 @@ output: pdf_document
 ```{r,echo=FALSE,message=FALSE,error=FALSE,warning=FALSE,prompt=FALSE}
 # install.packages("devtools")
 # devtools::install_github("rstudio/rmarkdown")
+# library(devtools)
+# install_github("knitcitations", "cboettig")
 library(knitr)
 library(markdown)
+library(knitcitations)
+library(bibtex)
+write.bib(c('bibtex', 'knitr', 'knitcitations'), file="genReport.bib")
+biblio <- read.bib("genReport.bib")
 setwd("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/report/")
 setwd("/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/")
 render("genReport.Rmd", "pdf_document")
@@ -21,16 +27,19 @@ Explaining the ceRNA effects from genomic variants
 
 Abstract:
 
+Recent evidence suggests that RNAs compete for binding and regulation by a finite pool of microRNAs (miRNAs), thus regulating each other through a competitive endogenous RNA (ceRNA) mechanism. ceRNA mechanism cooperate with genomic variance to regulate oncogenic genes and tumor suppressor. On the other hand, accumulation evidence has shown the significant role of somatic mutations in tumorigenesis, many of them through high frequent nonsynonmous mutations. In this study, we show that somatci mutation on cognate ceRNA regulators, silent or non-silent, could dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors.
+
 
 1. Background and introduction
 -------------------------------
-Previous work has shown that ceRNA network cany integrate genetic and epigenetic alterations, such as Copy Number Variabtion(CNV), methylations,  of cognate ceRNA regulators to dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors. While at the same time, many evidence has shown that mutations in cancer are frequent genetic variation which would be oncogeneic. 
+Accumulating evidence has shown that mutations in cancer are frequent genetic variation which would be oncogeneic. Previous work has shown that ceRNA network cany integrate genetic and epigenetic alterations, such as Copy Number Variabtion(CNV), methylations,  of cognate ceRNA regulators to dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors. 
   
 Here in this study, we investigate the regulation variability accounted by ceRNA driver mutation, especially focuse on those in regulatory region in genome, denomstrate cancer genes and tumor suppressors missing genomic variablity can be explained by regulatory somatic mutations of it's cognate ceRNA dirver. 
 
 This is a data-driven algorithm that takes matched copy number, somatic mutation, methylation and gene expression, predicted TF binding sites, as well as predicted microRNA binding sites to identify functional mutated ceRNA drivers which are associate with the cancer gene and tumor suppressor expression variability.
 
-This appoach is also based on hierarchical regression model that evaluates candidate group/aberrants, or ‘modulators’. The association coefficient measures how well a modulator (or combination of modulators) contribute to the behavior of ceRNA effection through gene expression across tumor samples.
+This appoach is also based on hierarchical regression model that evaluates candidate group/aberrants, or ‘modulators’. The association coefficient measures how well a modulator (or combination of modulators) contribute to the behavior of ceRNA effection through gene expression across tumor samples. 
+
 
 2. Data
 ------------------------------
@@ -50,9 +59,15 @@ TCGA data is publicly avaible, relatively has high quality, and most importly, h
 ---------------------------------
 
 ###  3.1 identify genomic intact dysregulated cancer genes(Gint) and samples
+- Hypothesis 1, CNV, methylation, and somatic mutation can cause expression dysregulation of cancer genes. < experimental validated >
+- Hypothesis 2. For those cancer genes which are dysregulated but did not show somatic mutations, CNV, methylations, we suspect that ceRNA might be accounting for their dysregulation < previous study computational validated>
+  Are the any other type of regulations which can play this role? <epigenetic level regulatory, other forms of genetic abberrants which we haven't included into this study so far> 
+  <But, for cancer patients, somatic mutations are more frequent, while other forms of genetic factors such as chromosome reorganization, 
+- Hypothesis 3. ceRNA effect was affected by multiple factors: 1> ceRNA abundance, 2> microRNA abundance. 3> targe abundance . Genetic abberants of ceRNA can lead to ceRNA abundance change, which pertublent the ceRNA regulation on target cancer gene.
 
+0) data pre-processing
 - Differential expressed cancer genes
-   - voom normalization with all normal sample
+   - voom normalization for all normal sample
    - t.test for the different expression, 712 in 502 out
    - FC and bonferroni correction p-value: vocano plot 
 - cancer genes' ceRNET regulators expression
@@ -62,35 +77,50 @@ TCGA data is publicly avaible, relatively has high quality, and most importly, h
   - SNP: get throught large sample size 
 
 1). cancer genes got from ceRNA project.(n= 776) in UC-ceRNET
-
-2). cnv sample elimination : renames all cnv files using barcode; get unique gene start, end site file; list all available cnv file(sample have cnv); segment mean is log2 ratio of copy number (0.8, 1.2) ==> copy number(1.74,2.3); for genes have multiple cnvs cover it, we choose the one have higher cnv value(either del or amp) [documentation](https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/read/cgcc/broad.mit.edu/genome_wide_snp_6/snp/broad.mit.edu_READ.Genome_Wide_SNP_6.mage-tab.1.2003.0/DESCRIPTION.txt)
+    
+2). cnv sample elimination : 
+    - renames all cnv files using barcode; get unique gene start, end site file; list all available cnv file(sample have cnv); segment mean is log2 ratio of copy number (0.8, 1.2)     copy number(1.74,2.3); for genes have multiple cnvs cover it, we choose the one have higher cnv value(either del or amp) [documentation](https://tcga-data.nci.nih.gov/tcgafiles/ftp_auth/distro_ftpusers/anonymous/tumor/read/cgcc/broad.mit.edu/genome_wide_snp_6/snp/broad.mit.edu_READ.Genome_Wide_SNP_6.mage-tab.1.2003.0/DESCRIPTION.txt)
     - some figures show number of samples for each gene
-3). methylation sample elimination: 
-    - tumor sample(n=117), normal sample(n=96); for genes with multiple probes, we only use the probe that is unique to this gene. sva package in bioconductor was used to normalize out batch effect. 7 normal samples which show  as outlier were removed(n = 89). samples with differential methylation were eliminated for each gene( z-score > 2.5)
 
-    -  cancer ceRNE genes were seleted. most of them have around 100 tumor samples
+
+3). methylation sample elimination: 
+    - tumor sample(n=1051), normal sample(n=115); for genes with multiple probes, we only use the probe that is unique to this gene. sva package in bioconductor was used to normalize out batch effect. 7 normal samples which show  as outlier were removed(n = 89). zscore was calculated between normalized tumore and normal samples, and genes with a z-score > 2 was considered as differential methylated 
+    - R package(sva) was used to do batch normalization, all NA data was filled with mean value of this gene [sva]
+    - all beta value was transformed to M value for differential methylation analysis
+    
 4). mutation sample 
     tcga somatic mutation level2 data
-
+5). dysregulated genomic intact cancer genes and samples
+  
 ###  3.2 identify candidate driver ceRNA regulator for each Gint
-1). clustering 
-   running successive K-means with an increasing number of clusters (k), after transforming data using a principal component analysis (PCA). For each model, a statistical measure of goodness of fit (by default, BIC) is computed, which allows to choose the optimal k
-2). group lasso
-3). premutation
-4). filtering and get candidate driver
-
+   
+1). group lasso
+    We are interested to find the explantory factors accounting for the response variables, where each explantory factor may be represented by a group a derived input variable. A classical lasso which was designed to select individual input variables, could not select multiple variables if they are co-ordinated. Instead, group lasso 
+    
+    i). clustering 
+   running successive K-means with an increasing number of clusters (k), after transforming data using a principal component analysis (PCA). For each model, a statistical measure of goodness of fit (by default, BIC) is computed, which allows to choose the optimal k.
+    ii). regression 
+      after assign a group to each of the input variables, a group lasso was using the Voom normalized expression data for both target and its ceRNA regulators.
+      
+    iii). premutation
+      a residual permuatation precedure was used to compute whether the coefficient determinant of R2 is significant. ( n = 1000 permutation)
+      
+4). filtering and get candidate ceRNA driver
+    based on a permuation of 1000, a permutated r2 p-value < 0.01 indicate a significant ceRNA drivers regulation of their' cognate target genes. For thos target gene, all ceRNA regulators which have a regression coefficient > 0 and permuation pvalue < 0.01  were selected as ceRNA drivers.
+  
+  
 ###  3.3 identify driver mutations for ceRNA driver 
-method 1-- MSMC
-1). identify all somatic mutations in promoter region, 3'UTR region
+1). get all somatic mutation from TCGA level2, including 7 kinds of mutations
 
-2). grouping mutations by each gene
+2). collapsing mutations by each gene as the annotation
 
-3). identify mutated driver ceRNA regulator(mutations)
+3). identify mutated ceRNA driver mutations 
 
 4). identify dirver mutation sets for each cancer target gene
 
   - Biological Question:
-    identify a minimum set of mutation, which can account for the regulation of driver CeRNA in majority of Genomic Intact samples 
+    - identify a subset of samples in which ceRNA drivers total expression correlated with target expression
+    - compute the differential expresion of this set of samples versus non-mutated samples
   - formulaize question in Mathmatical word:
   
   -  using multiset multicover algorithm 
@@ -100,21 +130,30 @@ method 1-- MSMC
         using integer linear program to solve, but for n > 100, have to relaxe the probelm to linear, if n < 100, can use branch-and-bound to get exact solution.
     -  solution 2 approximation:
         -greedy run setcover for constrains $\sum_i^mS_m(i)~=~k$, using sampling methods(MCMC) to get solution
-method 2 -----optimization correlation
-
-
-
-5). find functional mutations using TF binding sites, miRNA binding sites information, as well as expression/activity information
 
 ###  3.4 functional filtering of ceRNA driver mutations
+    - TF binding sites mutations
+    - miRNA binding sites information 
+    - expression/activity information
+      - impact of the selected genes and subsets. < choose the right control group>
+      - single mutation in one ceRNA dirver not going to help
+    - Dnase strong signal region
+    - chromatin open region
 
-###  3.5 validation of functional ceRNA driver mutations
+###  3.5 hub analysis 
+     idea: network analysis, find the nodes of diver/target with hight degrees/centrality 
+    - targets share common dirvers
+    - common drivers share targets
+
+
+###  3.6 validation of functional ceRNA driver mutations (TBD)
 
 4. Results
 -------------------------------------------------------
 1). Identify genomic intact samples and cancer genes(Gint)
     - 593 cancer genes were identified as dysregulated genomic intact genes for downstream analysis
     - big venn diagram < figure 1> 
+    
 2). Identify candidate driver regulators for each Gint
     - MBD2; MAX;has no effective regulator; DDX3X is still running..
     - 343 cancer genes are identified as having at least one driver regulators, 2749 unique candidate driver regulators
@@ -136,15 +175,19 @@ method 2 -----optimization correlation
     
       
 5. Further work
+-------------------------------------------------------
     -  
   
   
 8. Acknowledgement 
+-------------------------------------------------------
+
 
 
 9. Reference
+-------------------------------------------------------
 
-  
+[sva]: http://bioinformatics.oxfordjournals.org/content/early/2012/01/17/bioinformatics.bts034
 [ck]: http://en.wikipedia.org/wiki/Cohen's_kappa
 [kw]: http://en.wikipedia.org/wiki/Kruskal%E2%80%93Wallis_one-way_analysis_of_variance
 [hwe]:http://en.wikipedia.org/wiki/HWE

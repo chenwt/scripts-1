@@ -47,13 +47,13 @@ require(gplots)
 range(expRegD)
 
 myCol = colorRampPalette(c("blue","white","red"))(n=299)
-colors = c(seq(-10,-1,length=100),seq(-1,1,length=100),seq(1,5.5,length=100))
+myBreaks = c(seq(-10,-1,length=100),seq(-1,1,length=100),seq(1,5.5,length=100))
 lmat = rbind(c(0,3),c(2,1),c(0,4)) ; lwid = c(0.5,4.2); lhei = c(1,4,0.5)
 par(cex.main = 2.5, )
 heatmap.2(expRegD, Rowv=F,Colv=F,key=F,trace = "none",dendrogram="none",labCol="", font = 2,cex.main = 2.5,
           xlab= "Tumor samples",
           main = paste(tgene,"driver CeRNA dirvers from group lasso"),
-          symm=F,symkey=F,symbreaks=T,breaks = colors,
+          symm=F,symkey=F,symbreaks=T,breaks = myBreaks,
           lmat = lmat, lwid = lwid, lhei = lhei,
           scale='none',col = myCol)
 
@@ -117,7 +117,7 @@ heatmap.2(as.matrix(t(dataExpSort)),col=mycol,scale="none",trace="none",Rowv="no
 
 dev.off()
 
-###-------------plot by ggplot2----
+###-----plot by ggplot2----
 require(ggplot2)
 require(reshape2)
 require(grid)
@@ -141,17 +141,24 @@ ploty <-  ggplot(datf1y, aes( variable, indv)) + geom_tile(aes(fill = value),
 py <- ploty  +  theme(legend.position="left",  axis.title=element_blank())
 
 # plot XY quantative fill
+allRegs = row.names(expRegD)
+allSmps = colnames(expRegD)
 datfxy <- data.frame(indv=factor(paste("ID", 1:20, sep = ""),
-                                 levels =rev(paste("ID", 1:20, sep = ""))), matrix(rnorm (400, 50, 10), ncol = 20))
-names (datfxy) <- c("indv",paste("ID", 21:40, sep = ""))
-datfxy <- melt(datfxy, id.var = 'indv')
-levels (datfxy$ variable) <- rev(paste("ID", 21:40, sep = ""))
-pxy <- plotxy <-  ggplot(datfxy, aes(indv, variable)) + geom_tile(aes(fill = value),
-                                                                  colour = "white")  + scale_fill_gradient(low="red", high="yellow") + theme(
-                                                                    axis.title=element_blank())
+                                levels =rev(paste("ID", 1:20, sep = ""))), 
+                     matrix(rnorm (400, 50, 10), ncol = 20))
+datfxy = data.frame(gene=factor(allRegs,levels=allRegs),expRegD)
+names (datfxy) <- c("gene",allSmps)
+datfxy <- melt(datfxy, id.var = 'gene')
+levels (datfxy$ variable) <- rev(allSmps)
+pxy <- plotxy <-  ggplot(datfxy, aes(gene, variable)) + 
+  geom_tile(aes(fill = value),colour = "white")  + 
+  scale_fill_gradient2(low="blue",mid= "white",high="red",
+                       breaks=c(seq(-10,-1,length=100),seq(-1,1,length=100),seq(1,5.5,length=100)),
+                       guide = "colorbar") + 
+  theme(axis.title=element_blank())
 
 #Define layout for the plots (2 rows, 2 columns)
-layt<-grid.layout(nrow=2,ncol=2,heights=c(6/8,2/8),widths=c(2/8,6/8),default.units=c('null','null'))
+layt<-grid.layout(nrow=2,ncol=2,heights=c(7/8,1/8),widths=c(2/8,6/8),default.units=c('null','null'))
 #View the layout of plots
 grid.show.layout(layt)
 
