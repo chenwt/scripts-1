@@ -1,7 +1,18 @@
+# 
+# install.packages("sna")
+# install.packages("statnet");update.packages("statnet")
+# install.packages("rgl")
+# install.packages("coda")
+# install.packages("numDeriv")
+# install.packages("yacca")
+# install.packages("informR")
+# demo(package="igraph")
+
 ##after running regression to indentify candidate driver ceRNA, plot heatmap of target-regulator
 ## to show the predictibility of ceRNA regulators
 ###----under development----
 rm(list=ls())
+require("igraph");require(sna)
 setRootd = function(){
   sysInfo = Sys.info()
   if(sysInfo['sysname']=="Darwin" ){
@@ -11,6 +22,7 @@ setRootd = function(){
     print("working from Linux")
     rootd = "/ifs/home/c2b2/ac_lab/jh3283/projFocus/"
   }
+  return(rootd)
 }
 
 rootd = setRootd()
@@ -22,23 +34,21 @@ cdt = paste(unlist(strsplit(date()," "))[c(2,3,5)],collapse="-")
 source(paste(rootd, "/scripts/myR/general.r",sep=""))
 
 
+
 # args = getArgs()
 # cwd = system("pwd",intern=T)
 # require(igraph)
 # file =  args[1]
 
-netfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/optCorr.result_flex_max_1000.tsv.significant.summary.netfile"
-netfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/keyRegSummary_allRunMay_05212014_0.01"
+# netfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/optCorr.result_flex_max_1000.tsv.significant.summary.netfile"
+# netfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/keyRegSummary_allRunMay_05212014_0.01"
 netfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/optCorr.result_flex_max_1000.tsv.significant.summary.netfile.cancertargetgene"
 
 mutTFbsfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/fucFilt/mut_in_TFBindSite_05142014.hg19.uniq"
 mutMirbsfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/fucFilt/mut_in_MiRNABindSite_05152014.hg19.uniq"
-
 expfile = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_tumor_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix"
 
-
 ###---func---
-require(igraph)
 loadNetFromKeyregsumfile <- function (netfile) {
   ##load 2 column network file from keyRegsummary file
   dataDF = as.data.frame(matrix(NA, ncol=2))
@@ -64,7 +74,6 @@ loadMutGene <- function (mutTFbsfile) {
   return(as.data.frame(table(mutTF)))
 }
 
-
 ##--load data----
 mutTF = loadMutGene(mutTFbsfile)
 mutMir = loadMutGene(mutMirbsfile)
@@ -73,65 +82,111 @@ mutMir = loadMutGene(mutMirbsfile)
 netRaw = loadNetFromKeyregsumfile(netfile)
 netRaw = netRaw[-1,]
 
-allDrRegs = unique(netRaw[,2])
-
-c(drRegInTF= length(intersect(allDrRegs,mutTF$mutTF)), drRegInMir=length(intersect(allDrRegs,mutMir$mutTF)))
-intersect(intersect(allDrRegs,mutTF$mutTF), intersect(allDrRegs,mutMir$mutTF))
-
-write.table(file=paste(netfile,"_regmut_tf_BS.txt",sep=""), as.matrix(intersect(allDrRegs,mutTF$mutTF)), quote=F, col.names=F, row.names=F )
-write.table(file=paste(netfile,"_regmut_miRNA_BS.txt",sep=""), as.matrix(intersect(allDrRegs,mutMir$mutTF)), quote=F, col.names=F, row.names=F )
-
-write.table(file=paste(netfile,"_full.2col_",cdt,sep=""), netRaw, sep="\t", quote=F,row.names=F)
-##-----
-
-###----
-
 data2 = graph.data.frame(netRaw,directed=FALSE)
 g = simplify(data2)
 orderedVertex = get.data.frame(g,what = "vertices")
-g = simplify(data2)
+
+expD <- read.table(expfile, header=T,sep="\t")
+exp2D <- na.omit(expD[unlist(orderedVertex), ])
+summary(exp2D)
+rm(expD)
 
 targets = unique(netRaw[,1])
 mutTFgene = unique(vapply(mutTF[,1], as.character,'a'))
 mutMirgene = unique(vapply(mutMir[,1], as.character, 'a'))
-mutAll  = unique(vapply(mutTF[,1],as.character,'a'), vapply(mutMir[,1], as.character, 'a'))
+mutAll  = unique(c(vapply(mutTF[,1],as.character,'a'), vapply(mutMir[,1], as.character, 'a')))
+
+require(tsne)
+exp2D_tsne <- tsne(exp2D,k=3,max_iter=100)
+require(rgl)
+plot3d(exp2D_tsne[rownames(exp2D) %in% mutAll == FALSE, ],col = "gray", xlab="x", ylab="y",zlab="z" )
+plot3d(exp2D_tsne[rownames(exp2D) %in% mutAll == TRUE,], col = "red",add = T)
+
+plot(exp2D_tsne[,1:2])
+points(exp2D_tsne[rownames(exp2D) %in% mutAll,1:2], col = "red")
+# exp2D_pca <- princomp(exp2D)
+
 
 ##----reg mutated network----
-net2 = unique(rbind(netRaw[netRaw[,1] %in% mutAll, ], netRaw[netRaw[,2] %in% mutAll,]))
-write.table(file=paste(netfile,"_BS_mut.2col_",cdt,sep=""), net2, sep="\t", quote=F,row.names=F)
 
-dim(unique(netRaw)); dim(unique(net2))
-c(regMutatedCeRNAdriver=length(unique(net2[,2])), target=length(unique(net2[,1]))) 
-net2 <- net2[order(net2[,1]),]
-tgene_regMutNum <- as.matrix(sort(table(net2[,1]),decreasing=T))
-colnames(tgene_regMutNum) <- "BSmutRegNum"
-write.table(file=paste(netfile,"_tgene_regMutNum_",cdt,sep=""), tgene_regMutNum,sep="\t",quote=FALSE)
-
-net2 <- net2[order(net2[,2]),]
-regMut_tgeneNum <- as.matrix(sort(table(net2[,2]),decreasing=T))
-colnames(regMut_tgeneNum) <- "targetNum"
-write.table(file=paste(netfile,"_regMut_tgeneNum_",cdt,sep=""), regMut_tgeneNum,sep="\t",quote=FALSE)
-###--------------------------
-
-##---network analysis
-tarMutRegCount <- table(netRaw[netRaw[,2] %in% mutTFgene,1])
-table(
-      tarMutRegCount[order(tarMutRegCount,decreasing=T)]
-      )
-
-netMutRegMir <- table(netRaw[netRaw[,2] %in% mutMirgene,1])
-table(netMutRegMir[order(netMutRegMir,decreasing=T)])
-netRaw[netRaw[,2] %in% mutTFgene,][grep('ZEB2' , netRaw[netRaw[,2] %in% mutTFgene,1]),2]
-
-# V(g)$color <- ifelse(vapply(orderedVertex$name,FUN=function(x){length(grep(paste("^",x,"$",sep=""),mutAll))},1) > 0,
-#                      "red", "lightblue")
-
-
-##--visulization--
 data2 = graph.data.frame(net2,directed=FALSE)
 g = simplify(data2)
 orderedVertex = get.data.frame(g,what = "vertices")
+
+data2 = graph.data.frame(netRaw,directed=FALSE)
 g = simplify(data2)
+orderedVertex = get.data.frame(g,what = "vertices")
+
+g = simplify(data2)
+
+allVertexName <- orderedVertex$name
+for (i in 1: length(allVertexName)){
+  pattern = paste("^", allVertexName[i], "$", sep="")
+  if (length(grep(pattern,mutTFgene)) > 0 & length(grep(pattern, mutMirgene)) > 0 ){
+    V(g)$color [i] <- "red"
+    V(g)$label[i] <- allVertexName[i]
+  }else if(length(grep(pattern,mutTFgene)) == 0 & length(grep(pattern, mutMirgene)) > 0){
+    V(g)$color [i] <- "orange"
+    V(g)$label[i] <- allVertexName[i]
+    
+  }else if(length(grep(pattern,mutTFgene)) > 0 & length(grep(pattern,mutMirgene)) == 0) {
+    V(g)$color [i] <- "green"
+    V(g)$label[i] <- allVertexName[i]
+    
+  }else{
+    V(g)$color[i] <- "lightblue"
+    V(g)$label[i] <- ''
+  }
+}
+
+V(g)$color <- ifelse(vapply(allVertexName,FUN=function(x){pattern = paste("^", x, "$", sep="");length(grep(pattern,mutAll))},1) > 0, 'red', 'lightblue')
+
+V(g)$size <- ifelse(vapply(allVertexName,FUN=function(x){pattern = paste("^", x, "$", sep="");length(grep(pattern,mutAll))},1) > 0, 3, 2)
+
+V(g)$label.cex <- ifelse(vapply(allVertexName,FUN=function(x){pattern = paste("^", x, "$", sep="");length(grep(pattern,mutAll))},1) > 0, 0.6, 0.1)
+
+E(g)$color <- rep("lightgray",length(E(g)))
+pdf(paste(figd,"/sep4-3_summary_cancerGene_optCorr_mutatedNetowrk.", cdt, ".2.pdf",sep=""))
+par(mar=c(0,0,0,0),mfrow=c(1,1))
+plot(g,vertex.size = V(g)$size,
+     edge.color = E(g)$color,
+     vertex.label=V(g)$label,
+     vertex.label.cex  = V(g)$label.cex,
+     vertex.label.color = "black",
+     vertex.color = V(g)$color,
+     vertex.frame.color =  V(g)$color,
+     #      layout = layout.drl 
+     #      layout = layout.reingold.tilford
+     layout=layout.fruchterman.reingold(g, niter=3000, area=30*vcount(g)^2)
+)
+dev.off()
+
+# tkplot(g, layout=layout.kamada.kawai)
+l <- layout.reingold.tilford
+
+l <- layout.drl(g)
+rglplot(g, layout=l)
+
+summary(g)
+
+##---analysis---
+cumty_ws <- walktrap.community(g)
+cumty_fg <- fastgreedy.community(g)
+cumty_lev <- leading.eigenvector.community(g)
+cumty_im <- infomap.community(g)
+par(mfrow=c(2,2))
+plot(cumty_ws, g)
+plot(cumty_fg, g)
+plot(cumty_lev, g)
+plot(cumty_im, g)
+
+modularity(cumty_fg); modularity(cumty_ws); modularity(cumty_im); modularity(cumty_lev)
+barplot(table(membership(cumty_fg)[mutAll]))
+barplot(table(membership(cumty_fg)))
+
+kruskal.test(table(membership(cumty_fg)), table(membership(cumty_fg)[mutAll]))
+
+
 
 ##--network properties--
 degNet2 <- degree(g, v = V(g), mode = "all")
@@ -180,8 +235,6 @@ g <- simplify(data2)
 
 orderedVertex = get.data.frame(g,what = "vertices")
 allVertexName <- orderedVertex$name
-
-str(V(g))
 for (i in 1: length(allVertexName)){
   pattern = paste("^", allVertexName[i], "$", sep="")
   if (length(grep(pattern,mutTFgene)) > 0 & length(grep(pattern, mutMirgene)) > 0 ){
@@ -204,18 +257,17 @@ for (i in 1: length(allVertexName)){
   }
 }
 
-V(g)$color <- ifelse(vapply(orderedVertex$name,FUN=function(x){pattern = paste("^", x, "$", sep=""); length(grep(pattern,hubRegs100))},1) > 0,
-                    "red", "lightblue")
-V(g)$size <- ifelse(vapply(orderedVertex$name,FUN=function(x){pattern = paste("^", x, "$", sep="");length(grep(pattern,hubRegs100))},1) > 0,
-                    2, 0.8)
+V(g)$size <- ifelse(vapply(orderedVertex$name,FUN=function(x){pattern = paste("^", x, "$", sep="");length(grep(pattern,hubRegs100))},1) > 0, 5, 1)
 
 V(g)$label.cex <- ifelse(vapply(orderedVertex$name,FUN=function(x){pattern = paste("^", x, "$", sep="");length(grep(pattern,hubRegs100))},1) > 0,
                          0.5, 0.1)
+
+
 for (i in 1: length(allVertexName)){
   pattern = paste("^", allVertexName[i], "$", sep="")
   if (length(grep(pattern,hubRegs100)) > 0 ){
     V(g)$label[i] <- allVertexName[i]
-   }else{
+  }else{
     V(g)$label[i] = ""
   }
 }
@@ -223,7 +275,7 @@ for (i in 1: length(allVertexName)){
 # pdf(paste(figd,"/step4-3_hubAnalsyis_hubReg_mutnet_",cdt,".pdf",sep=""))
 pdf(paste(figd,"/step4-3_hubAnalsyis_hubReg_",cdt,".pdf",sep=""),width=10,)
 E(g)$color <- rep("lightgray",length(E(g)))
-par(mar=c(0,0,0,0))
+par(mar=c(0,0,0,0),mfrow=c(1,1))
 plot(g,vertex.size = V(g)$size,
      edge.color = E(g)$color,
      vertex.label=V(g)$label,
@@ -231,9 +283,9 @@ plot(g,vertex.size = V(g)$size,
      vertex.label.color = "black",
      vertex.color = V(g)$color,
      vertex.frame.color =  V(g)$color,
-     layout = layout.drl 
-#      layout = layout.reingold.tilford
-#      layout=layout.fruchterman.reingold(g, niter=3000, area=30*vcount(g)^2)
+#      layout = layout.drl 
+     #      layout = layout.reingold.tilford
+          layout=layout.fruchterman.reingold(g, niter=3000, area=30*vcount(g)^2)
 )
 dev.off()
 
@@ -285,5 +337,5 @@ plot(g,vertex.size = V(g)$size,
      vertex.color = V(g)$color,
      vertex.frame.color =  V(g)$color,
      layout=layout.fruchterman.reingold(g, niter=3000, area=30*vcount(g)^2)
-    )
+)
 dev.off()

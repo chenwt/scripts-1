@@ -1,5 +1,5 @@
 ---
-title: "Explaining the ceRNA effects from genomic variants"
+title: "Somatic mutations modulate ceRNA drivers of tumorigenesis"
 author: Jing He
 date: May, 09, 2014
 output: pdf_document
@@ -21,22 +21,28 @@ setwd("/Volumes/ifs/scratch/c2b2/ac_lab/jh3283/projFocus/ceRNA/report/")
 render("genReport.Rmd", "pdf_document")
 
 ```
-Explaining the ceRNA effects from genomic variants
+Somatic mutations modulate ceRNA drivers of tumorigenesis
 =============================================
-**Jing He;Hua-sheng Chiu;Pavel Sumazin**
+**Jing He;Hua-sheng Chiu;Pavel Sumazin; Andrea Califano**
 
 Abstract:
 
-Recent evidence suggests that RNAs compete for binding and regulation by a finite pool of microRNAs (miRNAs), thus regulating each other through a competitive endogenous RNA (ceRNA) mechanism. ceRNA mechanism cooperate with genomic variance to regulate oncogenic genes and tumor suppressor. On the other hand, accumulation evidence has shown the significant role of somatic mutations in tumorigenesis, many of them through high frequent nonsynonmous mutations. In this study, we show that somatci mutation on cognate ceRNA regulators, silent or non-silent, could dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors.
+Pan-cancer studies have shown that competitive endogenous RNA (ceRNA) networks can cooperate with chromosome instability and abnormal DNA methylation in tumors to dysregulate tumor suppressors and oncogenes. However, ceRNA cooperative association with mutations in cancer has not been studied. Integrating data from TCGA and ENCODE, we show that the cooperation between ceRNA interactions and mutations of unknown function contribute to the dysregulation of cancer genes. 
+
+We integrated ceRNA networks and mutations in an attempt to mechanistically recover missing genomic variability of cancer genes in TCGA breast cancer biopsies. Genes have missing genomic variability in a tumor dataset when their dysregulation cannot be explained through profiling of their DNA locus. Using a group lasso regression model we showed that ceRNA drivers cooperating with somatic mutations, CNV, and methylation, could account for a large fraction of the missing genomic variability of cancer genes in breast cancer.  Moreover, using a greedy-forward optimization algorithm, we identified ceRNA driver mutations that could potentially drive tumorigenesis through the ceRNA mechanism. Furthermore, we showed that driver ceRNA mutations are enriched in known and predicted binding sites of transcription factors and microRNAs. 
+
+In summary, our results suggest that somatic mutations, often of unknown function, cooperate with ceRNA regulators to alter the expression of cancer genes in breast cancer tumors.
 
 
 1. Background and introduction
 -------------------------------
-Accumulating evidence has shown that mutations in cancer are frequent genetic variation which would be oncogeneic. Previous work has shown that ceRNA network cany integrate genetic and epigenetic alterations, such as Copy Number Variabtion(CNV), methylations,  of cognate ceRNA regulators to dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors. 
-  
-Here in this study, we investigate the regulation variability accounted by ceRNA driver mutation, especially focuse on those in regulatory region in genome, denomstrate cancer genes and tumor suppressors missing genomic variablity can be explained by regulatory somatic mutations of it's cognate ceRNA dirver. 
+Pan-cancer studies has shown that mutations in cancer are frequent genetic variation which would be oncogeneic. Previous work has shown that ceRNA network can integrate genetic and epigenetic alterations, such as Copy Number Variabtion(CNV), methylations,  of cognate ceRNA regulators to dysregulate established oncogenes and tumor suppressors, accounting for a large fraction of the missing genomic variability in tumors. However, ceRNA coooperative association with mutations in cancer has not been studied.  
 
-This is a data-driven algorithm that takes matched copy number, somatic mutation, methylation and gene expression, predicted TF binding sites, as well as predicted microRNA binding sites to identify functional mutated ceRNA drivers which are associate with the cancer gene and tumor suppressor expression variability.
+On the other hand, accumulating evidence showed that somatic mutations are frequent genomic abberrants, and play an important role in cancer ongenesis. Recurrent somatic mutations in genes account for specific subtypes of cancer. Several studies have shown that mutations in coding regions, especially non-synonmous ones, might cause bad prognosis of cancers. But the impact or function for mutations with low recurrence, or in non-coding regions are still not clear. 
+
+Genes have missing genomic variability in a tumor dataset when their dysregulation cannot be explained through profiling of their DNA locus. 
+In this study, we investigate the potential function of mutations in regulatory region, including transcription factor(TF) binding sites and microRNA binding sites, explored their regulatory ability throught ceRNA network. especially focuse on those in regulatory regions. we find taht cancer genes and tumor suppressors missing genomic variablity can be explained by regulatory mutations of it's cognate ceRNA dirver. 
+
 
 This appoach is also based on hierarchical regression model that evaluates candidate group/aberrants, or ‘modulators’. The association coefficient measures how well a modulator (or combination of modulators) contribute to the behavior of ceRNA effection through gene expression across tumor samples. 
 
@@ -54,7 +60,7 @@ TCGA data is publicly avaible, relatively has high quality, and most importly, h
 
 - methylation: level 3 data from TCGA, both tumor and normal are used to get differential methylation genes. ( sample size ,tumor ,normal )
 
-
+ENCODE data
 3. Methods
 ---------------------------------
 
@@ -95,16 +101,21 @@ TCGA data is publicly avaible, relatively has high quality, and most importly, h
 ###  3.2 identify candidate driver ceRNA regulator for each Gint
    
 1). group lasso
-    We are interested to find the explantory factors accounting for the response variables, where each explantory factor may be represented by a group a derived input variable. A classical lasso which was designed to select individual input variables, could not select multiple variables if they are co-ordinated. Instead, group lasso 
+    We are interested to find the explantory factors accounting for the response variables, where each explantory factor may be represented by a group a derived input variable. A classical lasso which was designed to select individual input variables, could not select multiple variables if they are co-ordinated. Instead, group lasso which allows group selection. 
     
     i). clustering 
-   running successive K-means with an increasing number of clusters (k), after transforming data using a principal component analysis (PCA). For each model, a statistical measure of goodness of fit (by default, BIC) is computed, which allows to choose the optimal k.
+    r package adegenet was used to do clustering. The clustering procedure consists in running successive K-means with an increasing number of clusters (k), after transforming data using a principal component analysis (PCA). For each model, Alkaike Information Criteria(AIC) is computed, the minimum AIC model was choosen as the model for optimal k.
+    
     ii). regression 
-      after assign a group to each of the input variables, a group lasso was using the Voom normalized expression data for both target and its ceRNA regulators.
+      After assign a group to each of the input variables, a group lasso was using the Voom normalized expression data for both target and its ceRNA regulators. Both l1 group lasso penalty(lambda) and l2 ridge penalty(alpha) was applied. 100 lambda value was tried, and best model was selected according to AIC.  10 alpha values from 0 to 1 was tried, and the one which minimum regression rss(residual sum of square) was selected as the best one. A maximun of 5000 iteration was use, with an tolenrance of 0.05 (eps=0.05,max.iter=5000) for each alpha value iteration.
+      
+      A group lasso allows us to do a group level seletcion, which allows selection of collinear variables which are assigned to one group compared to classical lasso model.  
       
     iii). premutation
-      a residual permuatation precedure was used to compute whether the coefficient determinant of R2 is significant. ( n = 1000 permutation)
-      
+      After running lasso model on discovered groups, a residual permuatation precedure was used to compute significance level of this model. This process is to ensure the residual nomality and error indenpendence of the previous linear regression mode. A pvalue of 0.05 was used to discover any significant regression aftering 1000 permutation. < the coefficient determinant of R2 is significant >
+    iv). test to check if selected mutation are significantly representative. (fisher exact test) (loose promoter to 2 kb)
+      1. compare to results from lasso: (lasso number of ceRNA driver v.s greedy number of ceRNA driver)
+      2. compare to 
 4). filtering and get candidate ceRNA driver
     based on a permuation of 1000, a permutated r2 p-value < 0.01 indicate a significant ceRNA drivers regulation of their' cognate target genes. For thos target gene, all ceRNA regulators which have a regression coefficient > 0 and permuation pvalue < 0.01  were selected as ceRNA drivers.
   
@@ -117,23 +128,25 @@ TCGA data is publicly avaible, relatively has high quality, and most importly, h
 3). identify mutated ceRNA driver mutations 
 
 4). identify dirver mutation sets for each cancer target gene
-
   - Biological Question:
     - identify a subset of samples in which ceRNA drivers total expression correlated with target expression
     - compute the differential expresion of this set of samples versus non-mutated samples
   - formulaize question in Mathmatical word:
   
-  -  using multiset multicover algorithm 
-    -  solution 1 exact solution:
-        NP problem http://max.cs.kzoo.edu/~kschultz/CS510/ClassPresentations/NPCartoons.html 
-        super fast computer ~2hrs, 50 vars
-        using integer linear program to solve, but for n > 100, have to relaxe the probelm to linear, if n < 100, can use branch-and-bound to get exact solution.
-    -  solution 2 approximation:
-        -greedy run setcover for constrains $\sum_i^mS_m(i)~=~k$, using sampling methods(MCMC) to get solution
+  - using greedy optmizaion of correlation to select samples and ceRNA drivers
+  
+  - fisher exact test to test if driver mutation/genes are significantly enriched in regulatory region(promoter region/3p UTR region)
+        -- do this for whole set of genes
+        -- do this only for cancer genes(starting from 984)
 
 ###  3.4 functional filtering of ceRNA driver mutations
-    - TF binding sites mutations
-    - miRNA binding sites information 
+    - binding sites mutations 
+            TF binding sites mutations
+            miRNA binding sites information 
+    - ENCODE data 
+            --peak and hotspot data are downloaded from ENCODE website. for availabe cell line of breast cancer
+            treated v.s none, ctrl v.s none 
+            
     - expression/activity information
       - impact of the selected genes and subsets. < choose the right control group>
       - single mutation in one ceRNA dirver not going to help
@@ -172,9 +185,10 @@ TCGA data is publicly avaible, relatively has high quality, and most importly, h
       72 mutated driver regulators
     - step 4
     
+4)  mutations in ceRNA TF binding sites and microRNA binding sites enriched for cancer genes
     
       
-5. Further work
+5. Discussion
 -------------------------------------------------------
     -  
   

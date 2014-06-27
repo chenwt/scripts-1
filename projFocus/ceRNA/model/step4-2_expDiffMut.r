@@ -286,6 +286,7 @@ mycolor = colorRampPalette(c("blue","white", "red"))(256)
 mutDrD1 = expD[c(tgene,drReg),smpDrMut]
 mutDrD = mutDrD1[,order(mutDrD1[1,])]
 
+##--data loaded---
 
 ###--t test for clusters
 heatmap.2(mutDrD,col=mycolor,scale="row",trace="none",Colv=F)
@@ -309,6 +310,7 @@ table(cls.all); table(cls)
 cls.all[cls.all==3]
 smpDrMut
 table(cls.all[smpDrMut])
+##--end t-test---
 
 ##---GSEA for mutated versus non-mutated samples---
 install.packages("/Volumes/ifs/data/c2b2/ac_lab/malvarez/packages/aanot_1.0.tar.gz",type="source")
@@ -329,6 +331,7 @@ geneset.new = colnames(removeZeor(mutD))
 gsea_result = gsea(mexp=mexp.matrix, pheno1.col=colnames(mexp.matrix)[index_1],pheno2.col=colnames(mexp.matrix)[index_2],gs=geneset.new,nullDist=nulldist,plot=T,plotFile=paste(figd,"step4-2_gsea_mutVSnonmut.pdf",sep=""))               
 gsea_result = gsea(mexp=mexp.matrix,gs=geneset.new,plot=T,nulldist=NULL, plotFile=paste(figd,"step4-2_gsea_mutVSnonmut.pdf",sep=""))               
 
+##---end--GSEA
 
 ###after runnning greedy opt get mutD
 mexp = tarExpD[order(tarExpD)]
@@ -355,8 +358,6 @@ index_3 <- which(phyne==3)
 myset = resCorrOpt$sample
 gsea_result = gsea(mexp=mexp.matrix,gs=geneset.new,nullDist=dnull,plot=T,plotFile=paste(figd,"step4-2_gsea_drmutVSnonmut.pdf",sep=""))               
 
-
-
 ##---viper----
 # install.packages("~/tools/viper_1.05.tar.gz",type="source")
 require(viper)
@@ -373,7 +374,7 @@ sdN <- sdN
 expTuZsAll <- (expTAll - meanN )/ sdN
 
 # source("http://bioconductor.org/biocLite.R")
-biocLite("org.Hs.eg.db")
+# biocLite("org.Hs.eg.db")
 library(org.Hs.eg.db)
 
 ## Get the entrez gene identifiers that are mapped to a gene symbol (and viceversa
@@ -381,7 +382,6 @@ mapped_genes <- mappedkeys(org.Hs.egSYMBOL2EG)
 list_symbol2eg <- as.character(org.Hs.egSYMBOL2EG[mapped_genes])
 mapped_genes <- mappedkeys(org.Hs.egSYMBOL)
 list_eg2symbol <- as.character(org.Hs.egSYMBOL[mapped_genes])
-egs <- list_symbol2eg[rownames(expTuZsAll)]
 
 
 expViper <- expTuZsAll[which(duplicated(egs)==FALSE,arr.ind=T), ]
@@ -396,8 +396,20 @@ load("/Volumes//ifs/data/c2b2/ac_lab/shares/yao/brca_networks/brca_tcga_rnaseq85
 output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/exp/brca_exp_tumor_toRunViper_05202014.rda"
 save(file=output,expViper,regul,list_eg2symbol,list_eg2symbol,egs)
 # viper_result  <- viper(eset=expViper, regulon=regul , method="none")
-load()
+load("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/exp/brca_exp_tumor_vp_activity_1.rda")
+list_symbol2eg[tgene]
+actD <- viper_result
+topleft(actD)
+rownames(actD) <- list_eg2symbol[rownames(actD)]
+actD <- data.frame(actD)
+actKeyRegD <- na.omit(actD[resCorrOpt$regs,])
+viper_result[rownames(viper_result) %in% unlist(list_symbol2eg[resCorrOpt$regs]) ,]
+viper_result[,]
 
+actTar <- actD[tgene,]
+heatmap.2(as.matrix(actKeyRegD),col=mycolor)
+lapply(1:nrow(actKeyRegD), function(i){t.test(actKeyRegD[i,resCorrOpt$sample], actKeyRegD[i,smpNonMut])})
+resCorrOpt$sample
 ##----------------------------------this is a line to seperate -------------------------------
 ###------------------------------------------------
 ##simple QC-------

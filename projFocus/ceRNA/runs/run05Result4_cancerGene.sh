@@ -28,8 +28,8 @@ cd $CWD
 flasso=$CWD/CG_target_Mar-23-2014.list.tarcg.lasso
 fgreedy=$CWD/CG_target_Mar-23-2014.list.tarcg.greedy
 
-awk '{print $2}' $flasso |tr ";" "\n" | sort |uniq > $CWD/cg_ceRNA_driver_lasso_Jun-13-2014.uniq
-awk '{print $2}' $fgreedy |tr ";" "\n" | sort |uniq > $CWD/cg_ceRNA_driver_greedy_Jun-13-2014.uniq
+# awk '{print $2}' $flasso |tr ";" "\n" | sort |uniq > $CWD/cg_ceRNA_driver_lasso_Jun-13-2014.uniq
+# awk '{print $2}' $fgreedy |tr ";" "\n" | sort |uniq > $CWD/cg_ceRNA_driver_greedy_Jun-13-2014.uniq
 
 ##--- get cancer gene ceRNA dirver mutations in regions 
 function regSpecDriver {
@@ -61,7 +61,7 @@ function regSpecDriver {
   ~/bin/grepf2f $fgreedy $allmut $foutgreedyall 
 
 }
-regSpecDriver
+# regSpecDriver
 
 ##---- counting numbers 
 function getMutCounts {
@@ -101,5 +101,5 @@ function getMutCounts {
   
 }
 
-getMutCounts
+# getMutCounts
 

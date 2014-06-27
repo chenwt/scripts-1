@@ -139,6 +139,11 @@ def chr2Num(chrom):
         chrom = 25
     return int(chrom)
 
+def formatBarcode(barcode):
+    ''' TCGA-A1-A0SF-01A-11 to E2.A1L7.01A'''
+    return barcode.replace("-",".")[5:16]
+
+
 # def bSearch(x,list):
 #    '''sorted list binary search'''
 #     med = list[len(list)/2]

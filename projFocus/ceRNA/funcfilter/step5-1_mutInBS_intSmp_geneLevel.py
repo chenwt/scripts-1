@@ -81,23 +81,27 @@ with(open(fmut)) as f:
     line = f.readline()
     while line:
         line = line.strip().split("\t")
-        gname = line[5]
+        gname = line[0]
         crtIntSmp = getUnionOfIntSmp(gname, rTarDict, intsmpDict)
         regIntSmpDict[gname].extend(crtIntSmp)
         regIntSmpDict[gname] = list(set(regIntSmpDict[gname]))
         line = f.readline()
+print "mut file load"
 
 outRecDict = defaultdict(list)
 regMutSmpCnt = defaultdict(list)
+# regMutSmpDict = defaultdict(list)
 with(open(fmut)) as f:
     line = f.readline()
     line = f.readline()
     while line:
         line = line.strip().split("\t")
-        gname = line[5]
+        gname = line[0]
         crtIntSmp= regIntSmpDict[gname]
 
         idx = [i for (i,s) in enumerate(allsmpArry) if s in crtIntSmp] 
+        smps = [s for (i,s) in enumerate(allsmpArry) if s in crtIntSmp] 
+        
         if len(idx) == 0:
             line = f.readline()
             continue
@@ -107,6 +111,7 @@ with(open(fmut)) as f:
         totalTarCnt = len(rTarDict[gname])
 
         outRecDict[gname] = [gname,str(totalTarCnt)]
+        
         line = f.readline()
 
 
@@ -115,7 +120,6 @@ outHeader = "\t".join(["genename","totalTarget", "mutCnt", "mutsmp" ])
 
 fhout = open(output,'w')
 fhout.write(outHeader + "\n")
-
 
 for k,v in outRecDict.items():
         crtCnt = regMutSmpCnt[k]

@@ -11,9 +11,9 @@ logd='log/'
 FILENAME=$1
 count=0
 #yslab key
-KEY="/ifs/scratch/c2b2/ys_lab/jh3283/school/compGenomic/key/cghub.key"
+# KEY="/ifs/scratch/c2b2/ys_lab/jh3283/school/compGenomic/key/cghub.key"
 #aclab key
-#KEY="/ifs/scratch/c2b2/TCGA/soft/GeneTorrent/mykey.pem"
+KEY="/ifs/scratch/c2b2/TCGA/soft/GeneTorrent/cghub.key"
 while read LINE
 do	
 	anaid=$(echo ${LINE} | awk '{print $2}')

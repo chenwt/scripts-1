@@ -57,3 +57,5 @@ output=$input.utr5p.$CDT.matrix
 ## sort -k 5n genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix.sorted.mutFreq|tac |less
 #sortxh /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/03102014/tcgal2som/genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix > /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/03102014/tcgal2som/genome.wustl.edu__Illumina_All.maf.matrix.promoter2k.Mar-20-2014.matrix.sorted
 #/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/plot/getMutFreqForGene.sh brca_som_utr3p.Mar-20-2014.matrix.mutFreq.sorted
+
+awk 'BEGIN{FS=OFS="\t"}{print $1,$5,$6,$7,$8,$9";"$11";"$12";"$13}' /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/03102014/tcgal2som/genome.wustl.edu__Illumina_Genome_Analyzer_DNA_Sequencing_level2.maf /ifs/data/c2b2/ac_lab/jh3283/projFocus/data/03102014/tcgal2som/genome.wustl.edu__IlluminaGA_curated_DNA_sequencing_level2.maf | ~/bin/sortxh |uniq > brca_somaticMutation_all.annotation_Jun172014

@@ -130,6 +130,57 @@ class Cernet:
                 continue
         return list(OrderedDict.fromkeys(reg))          
 
+class Region:
+    def __init__(self, chr, ps, pe):
+        self.chr = chr
+        self.ps = int(ps)
+        self.pe = int(pe)
+
+    def __hash__(self):
+        return hash((self.chr, self.ps))
+ 
+    def __repr__(self):
+        return 'Region(%s, %r, %r)' % (self.chr, self.ps, self.pe)
+
+    def __str__(self):
+        return '(%s, %r, %r)' % (self.chr, self.ps, self.pe)
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) \
+                and self.__dict__ == other.__dict__)
+
+    def __comp__(self,rgn2):
+        if self.chr == rgn2.chr and self.ps == rgn2.ps and self.pe == rgn2.pe:
+            return 1
+        else:
+            return 0
+    
+    def __intersect__(self, rgn2):
+        if self.chr == rgn2.chr:
+            if self.ps > rgn2.pe or self.pe < rgn2.ps:
+                return 0
+            else:
+                return 1
+        else:
+            return 0
+
+    def intersectCombine(self, rgn2):
+        if self.__intersect__(rgn2):
+            return Region(self.chr, max(self.ps, rgn2.ps),\
+                          min(self.pe, rgn2.pe))
+        else:
+            return NA
+
+    def unionCombine(self, rng2):
+        if self.__intersect__(rgn2):
+            return Region(self.chr, min(self.ps, rgn2.ps),\
+                          max(self.pe, rgn2.pe))
+        else:
+            return NA
+
+
+     
+
 def chr2Num(chrom):
     if chrom in ['x', 'X'] :
         chrom = 23
