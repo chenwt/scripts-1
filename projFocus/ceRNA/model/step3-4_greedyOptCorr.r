@@ -4,7 +4,7 @@ usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from pyth
 ERR = "ERROR:"
 CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
 typeSelect = "20" #which type of output <all> to select a cutoff <max> to select random optimal(n = 100), or a number to set cutoff value
-typeTol = "fix" # < fix> to set tol == 0 , < flex> to select tol adaptively
+typeTol = "flex" # < fix> to set tol == 0 , < flex> to select tol adaptively
 timeStart = Sys.time()
 
 setRootd  = function(){
@@ -46,25 +46,25 @@ print(paste("ttol ",class(typeTol), typeTol))
 print(paste("tsel",class(typeSelect), typeSelect))
 print(paste("output",class(output), output))
 
-# print(paste("outputfile",output))
+print(paste("outputfile",output))
 #---init
 
-##test files------
+# ##test files------
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_exp.temp"
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
-
+# 
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_exp.temp"
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_regMut.temp"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_debug_05182014_SPRY1.txt"
-
+# 
 # figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
-
+# 
 # typeTol = "flex"
 # typeSelect = "max"
 # numRandom = 10
-##test end------
+# ##test end------
 
 
 ###func-----
@@ -168,28 +168,47 @@ corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_full = corr_full, tol = 
 
 }
 
-permuMutD = function(regmutD){
-  colname_orig = colnames(regmutD)
-  rowname_orig = row.names(regmutD)
-  mutD_perm = regmutD
-  mutD_perm = mutD_perm[sample(nrow(mutD_perm)),]
-  mutD_perm = mutD_perm[,sample(ncol(mutD_perm))]
-  colnames(mutD_perm) <- colname_orig
-  rownames(mutD_perm) <- rowname_orig 
-  return(mutD_perm)
+# permuMutD = function(regmutD){
+#   ### permute row and column labels
+#   colname_orig = colnames(regmutD)
+#   rowname_orig = row.names(regmutD)
+#   mutD_perm = regmutD
+#   mutD_perm = mutD_perm[sample(nrow(mutD_perm)),]
+#   mutD_perm = mutD_perm[,sample(ncol(mutD_perm))]
+#   colnames(mutD_perm) <- colname_orig
+#   rownames(mutD_perm) <- rowname_orig 
+#   return(mutD_perm)
+# }
+
+permuMutD = function(mutD, n) {
+  ##random select n mutations from original mutation matrix
+  allSmp = colnames(mutD);  allReg = rownames(mutD)
+  cnts = ncol(mutD); cntg = nrow(mutD)
+  
+  mutInd = which(mutD>0,arr.ind=T)  
+  mutInd = mutInd[sample(1:nrow(mutInd),n),]
+  
+  mutD[1:cntg, 1:cnts] = 0
+  for (i in 1:n){
+    mutD[mutInd[i,1], mutInd[i,2]] <- 1
+  } 
+  
+  return(mutD)
 }
 
-doPermu = function(regExpD, regmutD, tarExpD, nperm = 1000){
+
+doPermu = function(regExpD, mutD, tarExpD, cntReg, nperm = 1000){
   corr_perm = rep(0, nperm)
   for (i in 1:nperm){
-    corr_perm[i]  = calCorr(expD=regExpD,mutD=permuMutD(regmutD),tarExp=tarExpD)$zs
+    corr_perm[i]  = calCorr(expD=regExpD,mutD=permuMutD(mutD,cntReg),tarExp=tarExpD)$zs
   }
   return(corr_perm)
 }
 
 doCorropt_perm = function(mutD, regExpD, tarExpD, corr_full, tol, nperm){
   resCorr_crt = corrOpt_binflip(mutD,regExpD,tarExpD,corr_full, tol = tol)
-  corr_perm = doPermu(regExpD, resCorr_crt$mutD, tarExpD)
+  cntReg = resCorr_crt$corr_opt$n
+  corr_perm = doPermu(regExpD, mutD, tarExpD, cntReg)
   pval_perm = max(length(corr_perm[abs(corr_perm) > abs(resCorr_crt$corr_opt$zs)])/nperm, 
                   1/nperm)
   resCorr_crt$corr_perm = list(zs=mean(corr_perm), n = resCorr_crt$corr_opt$n)
@@ -327,7 +346,7 @@ if (!flag) {
 
 ##select tolence------
 nperm = 1000
-pvalCut = 0.05
+pvalCut = 0.1
 
 
 if (typeTol == "flex") {
@@ -340,7 +359,8 @@ if (typeTol == "flex") {
     for (i in 1:nTol ){
       tol = tolVec[i]
       resCorr_crt = corrOpt_binflip(mutD,regExpD,tarExpD, corr_full, tol = tol)
-      corr_perm = doPermu(regExpD, resCorr_crt$mutD, tarExpD)
+      cntReg = resCorr_crt$corr_opt$n
+      corr_perm = doPermu(regExpD, mutD, tarExpD, cntReg = cntReg )
       ## compare because the same n
       pval_perm = max(length(corr_perm[abs(corr_perm) > abs(resCorr_crt$corr_opt$zs)])/nperm, 
                       1/nperm)
@@ -429,7 +449,10 @@ if ( typeSelect == "max" ) {
     print("seletion uisng  all ")
     ncut = 0  
     resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x >= ncut, 1, 0)})
-    zs_perm = doPermu(regExpD, resMut, tarExpD)
+    
+    cntReg = resCorrOpt$corr_opt$n
+    zs_perm = doPermu(regExpD, mutD, tarExpD, cntReg)
+    
     final_corr = calCorr(expD=regExpD, mutD=resMut, tarExp=tarExpD)
     corr_perm = list(zs = (mean(zs_perm)), n = final_corr$n)
     resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
@@ -441,7 +464,9 @@ if ( typeSelect == "max" ) {
     print(paste("seletion using cutoff", ncut))
     
     resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x >= ncut, 1, 0)})
-    zs_perm = doPermu(regExpD, resMut, tarExpD)
+    cntReg = resCorrOpt$corr_opt$n
+    
+    zs_perm = doPermu(regExpD, mutD, tarExpD, cntReg)
     final_corr = calCorr(expD=regExpD, mutD=resMut, tarExp=tarExpD)
     corr_perm = list(zs = (mean(zs_perm)), n = final_corr$n)
     resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
@@ -453,7 +478,6 @@ if ( typeSelect == "max" ) {
 #     q(save='no')
   }
 }
-
 
 ##-------select and update resCorrOpt object
 
