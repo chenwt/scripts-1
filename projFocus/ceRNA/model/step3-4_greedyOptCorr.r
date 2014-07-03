@@ -1,5 +1,5 @@
 #!/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript
-
+rm(list=ls())
 usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from python> -mut <mutation file from python>"
 ERR = "ERROR:"
 CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
@@ -61,9 +61,14 @@ print(paste("outputfile",output))
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
 # 
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runJul1/test//optCorr.result_FAM126B_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runJul1/test/optCorr.result_FAM126B_regMut.temp"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/test/test_optCorr_FAM126B.txt"
+
+# 
 # typeTol = "flex"
 # typeSelect = "max"
-# numRandom = 10
+# numRandom = 1000
 # ##test end------
 
 
@@ -200,7 +205,7 @@ permuMutD = function(mutD, n) {
 doPermu = function(regExpD, mutD, tarExpD, cntReg, nperm = 1000){
   corr_perm = rep(0, nperm)
   for (i in 1:nperm){
-    corr_perm[i]  = calCorr(expD=regExpD,mutD=permuMutD(mutD,cntReg),tarExp=tarExpD)$zs
+    corr_perm[i]  = calCorr(expD=regExpD, permuMutD(mutD,cntReg),tarExp=tarExpD)$zs
   }
   return(corr_perm)
 }
@@ -208,13 +213,16 @@ doPermu = function(regExpD, mutD, tarExpD, cntReg, nperm = 1000){
 doCorropt_perm = function(mutD, regExpD, tarExpD, corr_full, tol, nperm){
   resCorr_crt = corrOpt_binflip(mutD,regExpD,tarExpD,corr_full, tol = tol)
   cntReg = resCorr_crt$corr_opt$n
+  
   corr_perm = doPermu(regExpD, mutD, tarExpD, cntReg)
+  
   pval_perm = max(length(corr_perm[abs(corr_perm) > abs(resCorr_crt$corr_opt$zs)])/nperm, 
                   1/nperm)
   resCorr_crt$corr_perm = list(zs=mean(corr_perm), n = resCorr_crt$corr_opt$n)
   resCorr_crt$pval_perm = pval_perm
   return(resCorr_crt)
 }
+
 
 plot_perm = function(corr_perm, resCorr, corr_full){
   hist(corr_perm, col="lightgray", xlim=c(-0.8,0.8),border="gray",
@@ -426,8 +434,6 @@ if ( typeSelect == "max" ) {
   }
   resCorrOpt = resRandInitOptCorr
   resIterMutD = resRandInitOptCorr$mutD
-    # out = paste(output, ".randomInit.temp", sep="")
-    # write.table(iterRansInitSum, out, row.names=F,sep="\t",quote=F)
 }else{
   resIterMutD = matrix(0, nrow= nrow(mutD),ncol =ncol(mutD) )
 

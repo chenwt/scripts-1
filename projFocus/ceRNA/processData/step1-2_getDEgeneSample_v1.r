@@ -10,7 +10,7 @@
 # 		  <string:name of your output files>
 #output: <file:pdf of 2 plots> <file: txt of differetial expresssed genes>
 ####TODO: need more development
-
+rm(list=ls())
 sysInfo = Sys.info()
 if(sysInfo['sysname']=="Darwin" ){
   source("/Volumes/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/projFocusCernaFunctions.R")

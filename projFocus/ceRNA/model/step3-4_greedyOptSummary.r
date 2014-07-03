@@ -1,10 +1,10 @@
 #!/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript
-
+rm(list=ls())
 usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from python> -mut <mutation file from python>"
 ERR = "ERROR:"
 CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
 typeSelect = "max" #which type of output <all> to select a cutoff <max> to select random optimal(n = 100), or a number to set cutoff value
-typeTol = "fix" # < fix> to set tol == 0 , < flex> to select tol adaptively
+typeTol = "flex" # < fix> to set tol == 0 , < flex> to select tol adaptively
 timeStart = Sys.time()
 
 setRootd  = function(){
@@ -19,43 +19,31 @@ setRootd  = function(){
   return(rootd)
 }
 rootd     = setRootd()
-figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
+figd = paste(rootd, "/DATA/projFocus/report/Jul2014/fig/",sep="")
 
 source(paste(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R",sep=""))
 source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
 
 
-resultfixfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/optCorr.result_fix_max_1000.tsv"
-resultflexfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runMay5/optCorr.result_flex_max_1000.tsv"
+args = getArgs()
+if(length(args) < 1 || is.null(args)){
+  print(paste(usage,example,sep="\n"))
+  print(args)
+  stop(paste(error,"wrong input parameter!"))
+}
+setwd(system("pwd",intern=T))
+input     = args[['greedy']]
+param     = args['param']
 output = paste(resultflexfile,".significant.summary",sep="")
-# 
-# resultfile <- resultfixfile
-# loadData <- function (resultfile) {
-#   
-#   con <- file(resultfile, open="r")
-#   dataDF = as.data.frame(matrix(NA, ncol=13))
-#   colnames(dataDF) = paste(rep("col",13), 1:13, sep="")
-#   i = 0
-#   while(length((linecrt <- readLines(con,n=1,warn = F) )>0)){
-#     i = i+ 1
-#     vectcrt <- unlist(strsplit(linecrt,"\t"))
-#     if(length(vectcrt)!=13)print(c(i,vectcrt))
-#     names(vectcrt) <- colnames(dataDF)
-#     dataDF <- rbind(dataDF, vectcrt)
-#   }
-#   close(con)
-#   dataDF <- na.omit(dataDF)
-# #   colnames(dataDF) <- dataDF[1,]
-# #   dataDF <- dataDF[-1,]
-# #   
-#   return(dataDF)
-# }
 
-fixDF = read.delim(resultfixfile, sep="\t", header=T)
-flexDF = read.delim(resultflexfile, sep="\t", header=T)
 
-# dataDF <- fixDF; param <- "fix_max_1000"
-dataDF <- flexDF; param <- "flex_max_1000"
+#---test on local--
+input = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/optCorr.result_flex_max_1000.tsv"
+output = paste(input,".significant.summary",sep="")
+param = "flex_max_1000"
+#--test-end-
+
+dataDF = read.delim(input, sep="\t", header=T)
 
 rownames(dataDF) <- dataDF$tgene
 
@@ -64,6 +52,7 @@ rownames(fullCorr_Pval) <- dataDF[,9]
 
 permCorr_Pval <- t(vapply(dataDF[,10], FUN=function(x){vapply(unlist(strsplit(gsub("< ","",x),":")),as.numeric,0.1)}, c(0.1,0.1)))
 rownames(permCorr_Pval) <- dataDF[,10]
+
 
 source(paste(rootd, "/scripts/myR/jingGraphic.R",sep=""))
 dataDF$optCorr <- as.numeric(dataDF$optCorr)
@@ -76,7 +65,8 @@ xvalue = -log10(permCorr_Pval[,2])
 xvalue[which(xvalue=='NA')] <- 0 
 names(xvalue) <- dataDF$tgene
 
-pdf(paste(figd,"/step3-4_greedyOptSummary_05212014", param, ".pdf",sep=""))
+### plot significance level plot
+pdf(paste(figd,"/step3-4_greedyOptSummary_07021014_", param, ".pdf",sep=""))
 plot(xvalue,yvalue,pch=16,col=mycolor, font = 2, font.lab = 2,
      xlab="-log10(pval_perm)", ylab="-log10(pval_full)",main= paste("Greedy algorithm result \n [", param,"]"))
 abline(h=2,col = "green", lwd=3)
@@ -84,12 +74,19 @@ abline(v=2,col= "green", lwd=3)
 legend(x=1.5, y=16,legend=c("negative","positive"),fill=c("blue","red"))
 dev.off()
 
-c(bothsig=length(names(xvalue[xvalue>=2 & yvalue>=2])),bothnosig= length(xvalue[xvalue<2 & yvalue<2]), permsig=length(xvalue[xvalue>=2 & yvalue<2]), fullfig=length(xvalue[xvalue<2 & yvalue>=2]) )
 
 finalSig = xvalue[xvalue>=2 & yvalue>=2]
-table(cut(dataDF[names(finalSig),11],breaks=c(-1,0,1)))
-table(cut(dataDF[,11],breaks=c(-1,0,1)))
 
+fileConn = file(paste(output,".counts",sep=""))
+writeLines( paste(paste("bothsig",length(names(xvalue[xvalue>=2 & yvalue>=2])),sep=":"),
+              paste("bothnosig",length(xvalue[xvalue<2 & yvalue<2]), sep=":"), 
+              paste("permsig",length(xvalue[xvalue>=2 & yvalue<2]),sep=":"), 
+              paste("fullsig",length(xvalue[xvalue<2 & yvalue>=2]),sep=":"), 
+              paste("finalSig(-1,0]:(0,1]", paste(table(cut(dataDF[names(finalSig),11],breaks=c(-1.1,0,1.1))),sep=":"),sep=":"),
+#               paste("finalSig(-1,0]:(0,1]", paste(table(cut(dataDF[,11],breaks=c(-1,0,1))),":"),":"), 
+              collapse="\n"), fileConn)
+
+close(fileConn)
 # text(x=0,y=1,labels="both not sig",pos=2)
 # text(x=3,y=1,labels="full not sig",pos=1)
 
@@ -99,13 +96,44 @@ datafinalD <- datafinalD[datafinalD[,11]>0, ]
 datafinalD <- datafinalD[order(datafinalD$optCorr,decreasing=T),]
 
 write.table(datafinalD, output,row.names=F,sep="\t",quote=F)
-# paste(datafinalD$tgene,collapse=";")
+write.table(datafinalD[,c(1,12)], paste(output,".netfile",sep=""),row.names=F,sep="\t",quote=F)
 
+allRegulators = NA
+for (i in 1:nrow(datafinalD)){
+  allRegulators = c( allRegulators, unlist(strsplit(as.character(datafinalD[i,12]),";")))
+}
+allRegulators = unique(allRegulators[-1])
+
+write.table(allRegulators, paste(output,".regulators",sep=""),col.names=F, row.names=F,sep="\t",quote=F)
+
+
+########-----------exploratory analysis
 # rect(xleft=0,xright=2,ybottom=0,ytop=2,border="green",lwd=2)
-# 
 # points(x=dataDF$optCorr, y=-log10(permCorr_Pval[,2]), col="orange", pch = 16)
 # abline(h = 2, col="red",lwd=2)
-legend(x=1.5, y=16,legend=c("negative","positive"),fill=c("blue","red"))
+
+####----
+#regulator
+plot(density(datafinalD$mutReg/datafinalD$totalReg), col="red", lwd=3)
+lines(density(datafinalD$optCorrReg/datafinalD$mutReg),col="blue",lwd=3)
+lines(density(datafinalD$optCorrReg/datafinalD$totalReg),col="green",lwd=3)
+legend(x=0.25, y=7, legend=c("mut_candidate / candidate","driver / mut_candidate","driver / candidate"), 
+#        box.lwd = 0,box.col = "white",bg = "white",
+       bty="n",
+       col=c("red", "blue","green"),lty=1, lwd=2)
+
+plot(datafinalD$mutReg/datafinalD$totalReg, datafinalD$optCorrReg/datafinalD$mutReg, 
+     pch=16, col="blue")
+
+#intact sample
+plot(density(datafinalD$optCorrSmp/datafinalD$totalSmp),col="green",lwd=3, type='l', lty=2)
+lines(density(datafinalD$mutSmp/datafinalD$totalSmp), col="red", lwd=3, type='l', lty=2)
+lines(density(datafinalD$optCorrSmp/datafinalD$mutSmp),col="blue",lwd=3, type='l', lty=2)
+
+plot(datafinalD$mutSmp/datafinalD$totalSmp, datafinalD$optCorrSmp/datafinalD$mutSmp, 
+     pch=19, col="blue")
+
+###---
 pdf(paste(figd,"/step3-4_summary_boxplot_05212014.pdf",sep=""))
 boxplot(cbind(allSample=datafinalD[,2], mutatedSample=datafinalD[,3] ,selectedSample=datafinalD[,4]), col="lightblue",
         main="sample number")
@@ -117,8 +145,9 @@ boxplot(cbind(mutatedReg=datafinalD[,6] ,selectedReg=datafinalD[,7]), col="light
         main="regulator number")
 dev.off()
 
-datafinalD[order(datafinalD[,6],decreasing=T),1:11][1:100,]
 
+###---
+# datafinalD[order(datafinalD[,6],decreasing=T),1:11][1:100,]
 boxplot(cbind(mutatedSample=datafinalD[,6]/datafinalD[,5] * 100 ,selectedSample=datafinalD[,7]/datafinalD[,5] * 100),
         main="Percentage of regulator number")
 
