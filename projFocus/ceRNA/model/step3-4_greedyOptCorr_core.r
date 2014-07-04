@@ -53,11 +53,11 @@ print(paste("outputfile",output))
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_exp.temp"
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
 # 
-expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/flex_max_1000/optCorr.result_SPRY1_exp.temp"
-mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/flex_max_1000/optCorr.result_SPRY1_regMut.temp"
-output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul4/test/test_optCorr_SPRY1.txt"
-
-figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/Jul2014/test/"
+# expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/flex_max_1000/optCorr.result_SPRY1_exp.temp"
+# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/flex_max_1000/optCorr.result_SPRY1_regMut.temp"
+# output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul4/test/test_optCorr_SPRY1.txt"
+# 
+# figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/Jul2014/test/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
 # 
@@ -66,9 +66,9 @@ figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/Jul2014/test/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/test/test_optCorr_FAM126B.txt"
 
 
-typeTol = "fix"
+typeTol = "flex"
 typeSelect = "max"
-numRandom = 1000
+numRandom = 10
 # ##test end------
 
 
@@ -178,7 +178,7 @@ permuMutD = function(mutD){
   ### permute row and column labels
   colname_orig = colnames(mutD)
   rowname_orig = row.names(mutD)
-  mutD_perm = regmutD
+  mutD_perm = mutD
   mutD_perm = mutD_perm[sample(nrow(mutD_perm)),]
   mutD_perm = mutD_perm[,sample(ncol(mutD_perm))]
   colnames(mutD_perm) <- colname_orig
@@ -186,26 +186,145 @@ permuMutD = function(mutD){
   return(mutD_perm)
 }
 
-doPermu = function(regExpD, mutD, tarExpD, nperm = 1000){
-  corr_perm = rep(0, nperm)
-  for (i in 1:nperm){
-    corr_perm[i]  = calZscore(expD=regExpD, permuMutD(mutD),tarExp=tarExpD)$zs
+optCorr = function(mutD, regExpD, tarExpD, nperm) {
+  ##simple QC-------
+  if (is.null(removeZeor(mutD))){
+    flag = FALSE
+  }else if (NROW(removeZeor(mutD)) < 2){
+    flag = FALSE
+  }else if (NCOL(removeZeor(mutD)) < 10) {
+    flag = FALSE
+  }else {
+    flag = TRUE
+  } 
+  ##----
+  regExpD = subset(expD,select = names(tarExpD))[-1,]
+  
+  if (NCOL(regExpD) == 1){ 
+    sumExpD = regExpD 
+  }else{
+    sumExpD = colSums(regExpD)
   }
-  return(corr_perm)
-}
-
-doCorropt_perm = function(mutD, regExpD, tarExpD, zs_full, tol, nperm){
-  resCorr_crt = corrOpt_binflip(mutD,regExpD,tarExpD,zs_full, tol = tol)
+  ###------permute actual mutation started he
   
-  corr_perm = doPermu(regExpD, mutD, tarExpD)
+  ### all expression Mreg v.s Etar
+  zs_total = list(zs = fisherZ(cor(sumExpD, tarExpD)),
+                  n = length(sumExpD) ) 
   
-  pval_perm = max(length(corr_perm[abs(corr_perm) > abs(resCorr_crt$corr_opt$zs)])/nperm, 
-                  1/nperm)
-  resCorr_crt$corr_perm = list(zs=mean(corr_perm), n = resCorr_crt$corr_opt$n)
-  resCorr_crt$pval_perm = pval_perm
-  return(resCorr_crt)
+  ### full mutation matrix Mreg * Ereg v.s Etar
+  zs_full = calZscore(regExpD,mutD,tarExpD)
+  
+  if (!flag) {
+    #fail qc, exit 
+    writeOut(output, mutD, tgene, zs_total, zs_full, tag="failQC")
+    q(save = "no")
+  }
+  
+  ##select tolence------
+  ### keeping the original method of selecting tol
+  nperm = as.integer(numRandom)
+  pvalCut = 0.1
+  
+  if (typeTol == "flex") {
+    tolVec = seq(-0.02,0.005,by=0.001)
+    nTol = length(tolVec)
+    
+    iterTolSum = as.data.frame(matrix(NA, nrow=nTol,ncol=5))
+    colnames(iterTolSum) = c("tol", "optcorr", "optSmpn",'optRegn', "pvalfull")
+    
+    for (i in 1:nTol ){
+      tol = tolVec[i]
+      resCorr_crt = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
+      pval_full = resCorr_crt$zDiff_pval
+      iterTolSum[i, ]  = c(tol = tol, optcorr=z2corr(resCorr_crt$corr_opt$zs),
+                           optSmpn = resCorr_crt$corr_opt$n, 
+                           optRegn = length(resCorr_crt$regs),
+                           pvalfull = resCorr_crt$pval_full)
+    }
+    
+    
+    tol = iterTolSum[which(is.na(iterTolSum$pvalfull)),]
+    
+    # pvalue QC
+    if (NROW(tol)  == 0 ){
+      tol = iterTolSum[do.call(order, list(iterTolSum$pvalfull,iterTolSum$optRegn)),][1,1]
+      resCorr_crt = corrOpt_binflip(mutD, regExpD, tarExpD, zs_full, tol = tol)
+      writeOut(output, mutD, tgene,zs_total=zs_total, zs_full=zs_full, 
+               resCorr_crt, tag="failOptTol")
+      q(save="no")
+    }
+    
+    tol = tol$tol[ which.max( vapply(tol$pvalfull, FUN=function(x){ifelse(is.na(x), 0, -log(x))},0.1) )[1] ]
+    
+  }else if (typeTol == "fix") {
+    tol = 0
+  }else{
+    print(paste(ERR, "ttol < flex/fix> :", typeTol))
+    q(save="no")
+  }
+  
+  ##random starting-----
+  print(paste("Finished Tol time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
+  
+  nIter = as.integer(numRandom)
+  pval_full_min <- pval_perm_min <- 1
+  
+  if ( typeSelect == "max" ) {
+    print("seletion using optimal")
+    resRandInitOptCorr = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
+    
+    for (i in 1:nIter){
+      resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
+      if(!is.na(resCorrOpt$pval_full) & 
+           resCorrOpt$pval_full < pval_full_min){
+        pval_full_min = resCorrOpt$pval_full
+        resRandInitOptCorr = resCorrOpt
+      }
+    }
+    resCorrOpt = resRandInitOptCorr
+    resIterMutD = resRandInitOptCorr$mutD
+  }else{
+    resIterMutD = matrix(0, nrow= nrow(mutD),ncol =ncol(mutD) )
+    
+    iterRansInitSum = as.data.frame(matrix(NA, nrow=nIter,ncol=5))
+    colnames(iterRansInitSum) = c(paste("tol",tol,sep="_"), "optcorr",  
+                                  "optSmpn",'optRegn', "pvalfull")
+    for (i in 1:nIter){
+      resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
+      resIterMutD = resIterMutD + resCorrOpt$mutD
+      iterRansInitSum[i, ]  = c(iter = paste(tol,i,sep="_"), 
+                                optcorr = z2corr(resCorrOpt$corr_opt$zs),
+                                optSmpn = resCorrOpt$corr_opt$n, 
+                                optRegn = length(resCorrOpt$regs),
+                                pvalfull = resCorrOpt$pval_full)
+    }  
+    if (typeSelect == 'all' | typeSelect == 'max'){
+      print("seletion uisng  all ")
+      ncut = 0  
+      resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x >= ncut, 1, 0)})
+      
+      cntReg = resCorrOpt$corr_opt$n    
+      final_corr = calZscore(expD=regExpD, mutD=resMut, tarExp=tarExpD)
+      resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
+                          regs = rownames(removeZeor(resMut)), sample = colnames(removeZeor(resMut)),
+                          zs_full = zs_full, pval_full = zDiff(final_corr$zs, zs_full$zs, final_corr$n, zs_full$n))
+      
+    }else if (length(grep('[0-9.]+', typeSelect)) == 1 & length((grep('[a-z]+', typeSelect))) == 0){
+      ncut = as.integer(typeSelect)
+      print(paste("seletion using cutoff", ncut))
+      
+      resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x >= ncut, 1, 0)})
+      final_corr = calZscore(expD=regExpD, mutD=resMut, tarExp=tarExpD)
+      resCorrOpt <- list( corr_opt = final_corr,
+                          regs = rownames(removeZeor(resMut)), sample = colnames(removeZeor(resMut)),
+                          zs_full = zs_full, pval_full = zDiff(final_corr$zs, zs_full$zs,final_corr$n,zs_full$n)) 
+    }else{
+      print( paste(ERR, "tinit should be <max> < all> or <0-100 numbers>", typeSelect))
+      #     q(save='no')
+    }
+  }
+  return(corrOptObj=resCorrOpt)
 }
-
 
 plot_perm = function(corr_perm, resCorr, zs_full){
   hist(corr_perm, col="lightgray", xlim=c(-0.8,0.8),border="gray",
@@ -302,6 +421,7 @@ tarExpD = expD[1,]
 tgene = rownames(expD)[1]
 tarExpD = tarExpD[order(tarExpD)]
 
+
 ##simple QC-------
 if (is.null(removeZeor(mutD))){
   flag = FALSE
@@ -315,7 +435,6 @@ if (is.null(removeZeor(mutD))){
 
 ##----
 regExpD = subset(expD,select = names(tarExpD))[-1,]
-
 
 if (NCOL(regExpD) == 1){ 
   sumExpD = regExpD 
@@ -337,19 +456,17 @@ if (!flag) {
   q(save = "no")
 }
 
-
-
 ##select tolence------
 ### keeping the original method of selecting tol
-nperm = 1000
+nperm = numRandom
 pvalCut = 0.1
 
 if (typeTol == "flex") {
     tolVec = seq(-0.02,0.005,by=0.001)
     nTol = length(tolVec)
     
-    iterTolSum = as.data.frame(matrix(NA, nrow=nTol,ncol=7))
-    colnames(iterTolSum) = c("tol", "optcorr", "permcorr", "optSmpn",'optRegn', "pvalfull", "pvalPerm")
+    iterTolSum = as.data.frame(matrix(NA, nrow=nTol,ncol=5))
+    colnames(iterTolSum) = c("tol", "optcorr", "optSmpn",'optRegn', "pvalfull")
     
     for (i in 1:nTol ){
       tol = tolVec[i]
@@ -372,7 +489,7 @@ if (typeTol == "flex") {
                  resCorr_crt, tag="failOptTol")
         q(save="no")
     }
-    
+    ##get tol
     tol = tol$tol[ which.max( vapply(tol$pvalfull, FUN=function(x){ifelse(is.na(x), 0, -log(x))},0.1) )[1] ]
     
 }else if (typeTol == "fix") {
@@ -390,13 +507,13 @@ pval_full_min <- pval_perm_min <- 1
     
 if ( typeSelect == "max" ) {
   print("seletion using optimal")
-  resRandInitOptCorr = doCorropt_perm(mutD, regExpD, tarExpD, zs_full, tol, nperm)
+  resRandInitOptCorr = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
+
   for (i in 1:nIter){
-    resCorrOpt = doCorropt_perm(mutD, regExpD, tarExpD, zs_full, tol, nperm)
-      if(!is.na(resCorrOpt$pval_full) & !is.na(resCorrOpt$pval_perm) & 
-           resCorrOpt$pval_full < pval_full_min & resCorrOpt$pval_perm < pval_perm_min){
+    resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
+    if(!is.na(resCorrOpt$pval_full) & 
+           resCorrOpt$pval_full < pval_full_min){
         pval_full_min = resCorrOpt$pval_full
-        pval_perm_min = resCorrOpt$pval_perm
         resRandInitOptCorr = resCorrOpt
       }
   }
@@ -405,48 +522,38 @@ if ( typeSelect == "max" ) {
 }else{
   resIterMutD = matrix(0, nrow= nrow(mutD),ncol =ncol(mutD) )
 
-  iterRansInitSum = as.data.frame(matrix(NA, nrow=nIter,ncol=7))
-  colnames(iterRansInitSum) = c(paste("tol",tol,sep="_"), "optcorr", "permcorr", 
-                                "optSmpn",'optRegn', "pvalfull", "pvalPerm")
+  iterRansInitSum = as.data.frame(matrix(NA, nrow=nIter,ncol=5))
+  colnames(iterRansInitSum) = c(paste("tol",tol,sep="_"), "optcorr",  
+                                "optSmpn",'optRegn', "pvalfull")
   for (i in 1:nIter){
-    resCorrOpt = doCorropt_perm(mutD, regExpD, tarExpD, zs_full, tol, nperm)
+    resCorrOpt = corrOpt_binflip(mutD,regExpD,tarExpD, zs_full, tol = tol)  
     resIterMutD = resIterMutD + resCorrOpt$mutD
     iterRansInitSum[i, ]  = c(iter = paste(tol,i,sep="_"), 
                               optcorr = z2corr(resCorrOpt$corr_opt$zs),
-                              permcorr = z2corr(resCorrOpt$corr_perm$zs),
                               optSmpn = resCorrOpt$corr_opt$n, 
                               optRegn = length(resCorrOpt$regs),
-                              pvalfull = resCorrOpt$pval_full, 
-                              pvalPerm = resCorrOpt$pval_perm)
+                              pvalfull = resCorrOpt$pval_full)
   }  
   if (typeSelect == 'all'){
     print("seletion uisng  all ")
     ncut = 0  
     resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x >= ncut, 1, 0)})
     
-    cntReg = resCorrOpt$corr_opt$n
-    zs_perm = doPermu(regExpD, mutD, tarExpD)
-    
+    cntReg = resCorrOpt$corr_opt$n    
     final_corr = calZscore(expD=regExpD, mutD=resMut, tarExp=tarExpD)
-    corr_perm = list(zs = (mean(zs_perm)), n = final_corr$n)
     resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
                         regs = rownames(removeZeor(resMut)), sample = colnames(removeZeor(resMut)),
-                        zs_full = zs_full, pval_full = zDiff(final_corr$zs, zs_full$zs,final_corr$n,zs_full$n),
-                        corr_perm = corr_perm, pval_perm = max(length(zs_perm[zs_perm > final_corr$zs])/nperm, 0.00001))
+                        zs_full = zs_full, pval_full = zDiff(final_corr$zs, zs_full$zs, final_corr$n, zs_full$n))
+    
   }else if (length(grep('[0-9.]+', typeSelect)) == 1 & length((grep('[a-z]+', typeSelect))) == 0){
     ncut = as.integer(typeSelect)
     print(paste("seletion using cutoff", ncut))
     
     resMut = apply(resIterMutD, c(1,2), function(x){ifelse(x >= ncut, 1, 0)})
-    cntReg = resCorrOpt$corr_opt$n
-    
-    zs_perm = doPermu(regExpD, mutD, tarExpD)
     final_corr = calZscore(expD=regExpD, mutD=resMut, tarExp=tarExpD)
-    corr_perm = list(zs = (mean(zs_perm)), n = final_corr$n)
     resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
                         regs = rownames(removeZeor(resMut)), sample = colnames(removeZeor(resMut)),
-                        zs_full = zs_full, pval_full = zDiff(final_corr$zs, zs_full$zs,final_corr$n,zs_full$n),
-                        corr_perm = corr_perm, pval_perm = max(length(zs_perm[zs_perm > final_corr$zs])/nperm, 0.00001)) 
+                        zs_full = zs_full, pval_full = zDiff(final_corr$zs, zs_full$zs,final_corr$n,zs_full$n)) 
   }else{
     print( paste(ERR, "tinit should be <max> < all> or <0-100 numbers>", typeSelect))
 #     q(save='no')
@@ -455,10 +562,22 @@ if ( typeSelect == "max" ) {
 
 ##-------select and update resCorrOpt object
 
+permuRes = t(sapply(seq(1,numRandom),FUN=function(x){
+  mutD_perm  = permuMutD(mutD)
+  print(t(which(mutD_perm>0, arr.ind=T)))
+  return(optCorr(mutD_perm,regExpD,tarExpD, numRandom))
+}))
 
-##-------output
-output = paste(output , "_", tol, sep="")
-writeOut(output, mutD, tgene,zs_total=zs_total, zs_full=zs_full, resCorrOpt)
-write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
-
-print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
+save.image(file=paste(output,".Rdata",sep=""))
+# 
+# print(c(resCorrOpt$pval_full, unlist(permuRes[,3])))
+# print(c(resCorrOpt$corr_opt$zs, unlist(vapply(permuRes[,1], FUN=function(x){x$zs},1))))
+# print(c(resCorrOpt$corr_opt$n, unlist(vapply(permuRes[,1], FUN=function(x){x$n},1))))
+# 
+# 
+# ##-------output
+# output = paste(output , "_", tol, sep="")
+# writeOut(output, mutD, tgene,zs_total=zs_total, zs_full=zs_full, resCorrOpt)
+# write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
+# 
+# print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
