@@ -48,15 +48,14 @@ print(paste("output",class(output), output))
 
 print(paste("outputfile",output))
 #---init
-
 # ##test files------
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_exp.temp"
-# mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
-# 
+# # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_1_regMut.temp"
+# # 
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/flex_max_1000/optCorr.result_SPRY1_exp.temp"
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/flex_max_1000/optCorr.result_SPRY1_regMut.temp"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul4/test/test_optCorr_SPRY1.txt"
-# 
+
 # figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/Jul2014/test/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
@@ -65,11 +64,11 @@ print(paste("outputfile",output))
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runJul1/test/optCorr.result_FAM126B_regMut.temp"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/test/test_optCorr_FAM126B.txt"
 
-
-typeTol = "flex"
-typeSelect = "max"
-numRandom = 10
-# ##test end------
+# 
+# typeTol = "fix"
+# typeSelect = "max"
+# numRandom = 1000
+##test end------
 
 
 ###func-----
@@ -88,14 +87,22 @@ fisherZ = function(r) {
 
 z2corr = function(z) return((exp(2 * z) -1)/(exp(2 * z) +1))
 
-zDiff = function(z1,z2,n1,n2)  {
+zDiff = function(z1,z2,n1,n2, tag="")  {
   if (n1 >=10 & n2 >=10){
     z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
-    return(2*(1-pnorm(abs(z))))
+    if (tag=="zs"){
+      return(z)
+    }else{
+      return(2*(1-pnorm(abs(z))))
+    }
   }else if ( ( n1 > 3 & n1 <10) | (n2 >3 & n2 < 10)){
-    print( paste(" samples should be larger than 10",n1, n2))
+    print( paste(" samples should be larger than 10: n1", n1,"n2", n2))
     z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
-    return(2*(1-pnorm(abs(z))))
+    if (tag =="zs"){
+      return(z)
+    }else{
+      return(2*(1-pnorm(abs(z))))
+    }
   }else{
     return(NA)
   }
@@ -348,17 +355,17 @@ writeOut = function(file, mutD, tgene, zs_total, zs_full, optCorrRes = NA, tag =
     corr_opt  = optCorrRes$corr_opt
     optCorrSmp = corr_opt$n
     corr_opt  = z2corr(corr_opt$zs)
-    corr_perm = z2corr(optCorrRes$corr_perm$zs)
+    corr_perm = z2corr(optCorrRes$zs_perm$zs)
     pvalF = optCorrRes$pval_full
     pvalP = optCorrRes$pval_perm
     optCorrReg = length(optCorrRes$reg)
     resMut  = removeZeor(resMut)
+    
     if (NROW(resMut) == 0){
       outSmpMap = c(paste("[",'', "]",sep=""), paste("[",'', "]",sep=""))
     
     }else{
-    
-    
+   
       outGene = optCorrRes$reg
       outSmp  = optCorrRes$sample
       outSmpMap = vector(length=length(outGene))
@@ -479,7 +486,7 @@ if (typeTol == "flex") {
     }
         
     
-    tol = iterTolSum[which(is.na(iterTolSum$pvalfull)),]
+    tol = iterTolSum[which(!is.na(iterTolSum$pvalfull)),]
     
     # pvalue QC
     if (NROW(tol)  == 0 ){
@@ -561,23 +568,49 @@ if ( typeSelect == "max" ) {
 }
 
 ##-------select and update resCorrOpt object
+print(paste("Start ", numRandom," permutating..."))
+permuRes = as.data.frame(matrix(NA, ncol=7, nrow=numRandom))
+for (i in 1:numRandom){
+  
+    mutD_perm  = permuMutD(mutD)
+#     print(t(which(mutD_perm>0, arr.ind=T)))
+    optCorrObj = optCorr(mutD_perm, regExpD, tarExpD, numRandom)
+   permuRes[i,]=c(corr_opt_zs = optCorrObj$corr_opt$zs,
+              corr_opt_zsn=optCorrObj$corr_opt$n, 
+              zs_full = optCorrObj$zs_full$zs,
+              zsn_full = optCorrObj$zs_full$n,
+              pval_full = optCorrObj$pval_full,
+              cntSmp=length(optCorrObj$sample),
+              cntReg=length(optCorrObj$regs) ) 
+         
+  }))
 
-permuRes = t(sapply(seq(1,numRandom),FUN=function(x){
-  mutD_perm  = permuMutD(mutD)
-  print(t(which(mutD_perm>0, arr.ind=T)))
-  return(optCorr(mutD_perm,regExpD,tarExpD, numRandom))
-}))
+}
+rownames(permuRes) = paste(rep("permu",numRandom),seq(1,numRandom),sep="_")
+realRes = c(resCorrOpt$corr_opt$zs, resCorrOpt$corr_opt$n, resCorrOpt$zs_full$zs, 
+            resCorrOpt$zs_full$n, resCorrOpt$pval_full, length(resCorrOpt$sample), length(resCorrOpt$regs))
+write.table(x=rbind(realRes, permuRes), file= paste(output, ".permutRes.txt", sep=""), row.names=T, col.names=T,
+            quote=F, sep="\t")
 
-save.image(file=paste(output,".Rdata",sep=""))
+##pval_perm--
+##---using stouffer's method to integrate zscores 
+# zperm = sum(unlist(permuRes[,1])) / sqrt(numRandom)
+# zperm - resCorrOpt$corr_opt$zs
+# zDiff(z2=resCorrOpt$corr_opt$zs, z1=as.numeric(permuRes[i,1]), n2=resCorrOpt$corr_opt$n, n1=as.numeric(permuRes[i,2] ), tag="zs")
+pval_perm = max(length(which(permuRes[,1] > resCorrOpt$corr_opt$zs))/numRandom, 1/numRandom)
+
+# save.image(file=paste(output,".Rdata",sep=""))
 # 
 # print(c(resCorrOpt$pval_full, unlist(permuRes[,3])))
 # print(c(resCorrOpt$corr_opt$zs, unlist(vapply(permuRes[,1], FUN=function(x){x$zs},1))))
 # print(c(resCorrOpt$corr_opt$n, unlist(vapply(permuRes[,1], FUN=function(x){x$n},1))))
 # 
-# 
-# ##-------output
-# output = paste(output , "_", tol, sep="")
-# writeOut(output, mutD, tgene,zs_total=zs_total, zs_full=zs_full, resCorrOpt)
+
+##-------output
+output = paste(output,"_", typeSelect, "_", tol, sep="")
+resCorrOpt$zs_perm = list(zs = mean(unlist(permuRes[,1])), n = mean(unlist(permuRes[,2])) )
+resCorrOpt$pval_perm = pval_perm
+writeOut(output, mutD, tgene,zs_total=zs_total, zs_full=zs_full, resCorrOpt)
 # write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
-# 
-# print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
+
+print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
