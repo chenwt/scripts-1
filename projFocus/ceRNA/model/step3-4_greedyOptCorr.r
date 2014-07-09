@@ -1,5 +1,5 @@
 #!/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript
-
+rm(list=ls())
 usage = "Usage: Rscript step3-4_greedyOptCorr.r  -exp <expression file from python> -mut <mutation file from python>"
 ERR = "ERROR:"
 CDT = paste(unlist(strsplit(system('date',intern=T)," "))[c(2,4,7)],collapse="-")
@@ -56,14 +56,19 @@ print(paste("outputfile",output))
 # expfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_exp.temp"
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_regMut.temp"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_debug_05182014_SPRY1.txt"
-# 
+
+#
+# expfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/optCorr.result_ACSL6_exp.temp"
+# mutfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/optCorr.result_ACSL6_regMut.temp"
+# output = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/ACSL6.test"
+
 # figd = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/report/May2014/fig/"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
 # 
 # typeTol = "flex"
 # typeSelect = "max"
-# numRandom = 10
+# numRandom = 100
 # ##test end------
 
 
@@ -88,7 +93,7 @@ corrDiff = function(z1,z2,n1,n2)  {
     z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
     return(2*(1-pnorm(abs(z))))
   }else if ( ( n1 > 3 & n1 <10) | (n2 >3 & n2 < 10)){
-    print( paste(" samples should be larger than 10",n1, n2))
+    print( paste(" samples should be larger than 10 n1 ", n1, "n2", n2))
     z = (z2 - z1) / sqrt( 1/(n2-3) + 1/(n1-3) ) 
     return(2*(1-pnorm(abs(z))))
   }else{
@@ -181,7 +186,7 @@ corrOpt_binflip = function(mutD, regExpD, tarExpD, corr_full = corr_full, tol = 
 # }
 
 permuMutD = function(mutD, n) {
-  ##random select n mutations from original mutation matrix
+  ##random select k mutations from original n mutation matrix
   allSmp = colnames(mutD);  allReg = rownames(mutD)
   cnts = ncol(mutD); cntg = nrow(mutD)
   
@@ -207,10 +212,13 @@ doPermu = function(regExpD, mutD, tarExpD, cntReg, nperm = 1000){
 
 doCorropt_perm = function(mutD, regExpD, tarExpD, corr_full, tol, nperm){
   resCorr_crt = corrOpt_binflip(mutD,regExpD,tarExpD,corr_full, tol = tol)
-  cntReg = resCorr_crt$corr_opt$n
+  cntReg = resCorr_crt$corr_opt$n; cntMut = length(which(mutD>0, arr.ind=T))
   corr_perm = doPermu(regExpD, mutD, tarExpD, cntReg)
   pval_perm = max(length(corr_perm[abs(corr_perm) > abs(resCorr_crt$corr_opt$zs)])/nperm, 
-                  1/nperm)
+                  max(1/nperm,1/choose(cntMut,cntReg)) )
+  
+#   print(paste("smallest pvalue:", 1/choose(cntMut, cntReg), " output pval:", pval_perm ))
+  
   resCorr_crt$corr_perm = list(zs=mean(corr_perm), n = resCorr_crt$corr_opt$n)
   resCorr_crt$pval_perm = pval_perm
   return(resCorr_crt)
@@ -224,11 +232,11 @@ plot_perm = function(corr_perm, resCorr, corr_full){
   abline(v=corr_total, col="green", lwd = 4,lty=2)
 }
 
-writeOut = function(file, mutD, tgene, corr_total, corr_full, optCorrRes = NA, tag = NA){
+writeOut = function(file, mutD, tgene, corr_total, corr_full, cntMut, cntReg, optCorrRes = NA, tag = NA){
   #output
   outHeader = paste(c("tgene","totalSmp","mutSmp","optCorrSmp",
                       "totalReg","mutReg","optCorrReg",
-                      "totalCorr","fullCorr:pval","permuCorr:pval","optCorr",
+                      "totalCorr","fullCorr:pval","permuCorr:pval","optCorr", "totMut:optMut",
                       "selectGenes","selectSamples"),collapse="\t")
   
   optCorrSmp  <- optCorrReg <- outGene <- corr_opt <- corr_perm <- pvalF <- pvalP <- NA
@@ -287,6 +295,7 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, optCorrRes = NA, t
                       paste(format(z2corr(corr_full$zs),digits=4), format.pval(pvalF),sep=":"),
                       paste(format(corr_perm,digits=4),format.pval(pvalP),sep=":"), 
                       format(corr_opt,digits=4),
+                      paste(cntMut,cntReg, sep=":"),
                       paste(outGene, collapse=";"),
                       paste(outSmpMap,collapse=";") ), collapse="\t")
   
@@ -306,7 +315,8 @@ expD = expD - exp_min
 mutD = read.table(mutfile,sep="\t", header = T)
 rownames(mutD) = mutD[,1]
 mutD = apply(mutD[,-1], c(1,2), as.numeric)
-
+cntMut = length(which(mutD>0,arr.ind=T))
+  
 tarExpD = expD[1,]
 tgene = rownames(expD)[1]
 tarExpD = tarExpD[order(tarExpD)]
@@ -363,7 +373,7 @@ if (typeTol == "flex") {
       corr_perm = doPermu(regExpD, mutD, tarExpD, cntReg = cntReg )
       ## compare because the same n
       pval_perm = max(length(corr_perm[abs(corr_perm) > abs(resCorr_crt$corr_opt$zs)])/nperm, 
-                      1/nperm)
+                      max(1/nperm,1/choose(cntMut,cntReg)))
       corr_perm = mean(corr_perm)
       pval_full = resCorr_crt$corrDiff_pval
       iterTolSum[i, ]  = c(tol = tol, optcorr=z2corr(resCorr_crt$corr_opt$zs),
@@ -458,7 +468,7 @@ if ( typeSelect == "max" ) {
     resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
                         regs = rownames(removeZeor(resMut)), sample = colnames(removeZeor(resMut)),
                         corr_full = corr_full, pval_full = corrDiff(final_corr$zs, corr_full$zs,final_corr$n,corr_full$n),
-                        corr_perm = corr_perm, pval_perm = max(length(zs_perm[zs_perm > final_corr$zs])/nperm, 0.00001))
+                        corr_perm = corr_perm, pval_perm = max(length(zs_perm[zs_perm > final_corr$zs])/nperm, 1/choose(cntMut,cntReg)))
   }else if (length(grep('[0-9.]+', typeSelect)) == 1 & length((grep('[a-z]+', typeSelect))) == 0){
     ncut = as.integer(typeSelect)
     print(paste("seletion using cutoff", ncut))
@@ -472,7 +482,7 @@ if ( typeSelect == "max" ) {
     resCorrOpt <- list( mutD = resMut, corr_opt = final_corr,
                         regs = rownames(removeZeor(resMut)), sample = colnames(removeZeor(resMut)),
                         corr_full = corr_full, pval_full = corrDiff(final_corr$zs, corr_full$zs,final_corr$n,corr_full$n),
-                        corr_perm = corr_perm, pval_perm = max(length(zs_perm[zs_perm > final_corr$zs])/nperm, 0.00001)) 
+                        corr_perm = corr_perm, pval_perm = max(length(zs_perm[zs_perm > final_corr$zs])/nperm, 1/choose(cntMut,cntReg))) 
   }else{
     print( paste(ERR, "tinit should be <max> < all> or <0-100 numbers>", typeSelect))
 #     q(save='no')
@@ -482,9 +492,11 @@ if ( typeSelect == "max" ) {
 ##-------select and update resCorrOpt object
 
 
-##-------output
+##output---
 output = paste(output , "_", tol, sep="")
-writeOut(output, mutD, tgene,corr_total=corr_total, corr_full=corr_full, resCorrOpt)
-write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
+cntReg = length(which(resIterMutD >0, arr.ind=T))
+writeOut(output, mutD, tgene,corr_total=corr_total, corr_full=corr_full, cntMut = cntMut, cntReg = cntReg, resCorrOpt)
+
+# write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
 
 print(paste("[END]",tgene, " Running time :", format.difftime(difftime(Sys.time(), timeStart)), sep=""))
