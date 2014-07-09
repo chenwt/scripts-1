@@ -315,7 +315,7 @@ expD = expD - exp_min
 mutD = read.table(mutfile,sep="\t", header = T)
 rownames(mutD) = mutD[,1]
 mutD = apply(mutD[,-1], c(1,2), as.numeric)
-cntMut = length(which(mutD>0,arr.ind=T))
+cntMut = NROW(which(mutD>0,arr.ind=T))
   
 tarExpD = expD[1,]
 tgene = rownames(expD)[1]
