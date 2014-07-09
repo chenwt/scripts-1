@@ -57,7 +57,7 @@ print(paste("outputfile",output))
 # mutfile = "/Users/jh3283/HOME/DATA/projFocus/result/05012014/sigMut/runMay5/fix_max_1000/optCorr.result_SPRY1_regMut.temp"
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_debug_05182014_SPRY1.txt"
 
-#
+# 
 # expfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/optCorr.result_ACSL6_exp.temp"
 # mutfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/optCorr.result_ACSL6_regMut.temp"
 # output = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/ACSL6.test"
@@ -237,7 +237,7 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, cntMut, cntReg, op
   outHeader = paste(c("tgene","totalSmp","mutSmp","optCorrSmp",
                       "totalReg","mutReg","optCorrReg",
                       "totalCorr","fullCorr:pval","permuCorr:pval","optCorr", "totMut:optMut",
-                      "selectGenes","selectSamples"),collapse="\t")
+                      "optGene:optSmp"),collapse="\t")
   
   optCorrSmp  <- optCorrReg <- outGene <- corr_opt <- corr_perm <- pvalF <- pvalP <- NA
   options(warn=-1)
@@ -249,6 +249,11 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, cntMut, cntReg, op
     corr_perm = z2corr(optCorrRes$corr_perm$zs)
     pvalF = optCorrRes$pval_full
     pvalP = optCorrRes$pval_perm
+    idxOptMut = which(resCorr_crt$mutD>0,arr.ind=T)
+    
+    optGeneSmp = paste(paste("[",rownames(resCorr_crt$mutD)[idxOptMut[,1]],sep=""),
+                       paste(colnames(resCorr_crt$mutD)[idxOptMut[,2]], "]",sep=""),
+                       sep=":")
     optCorrReg = length(optCorrRes$reg)
     resMut  = removeZeor(resMut)
     if (NROW(resMut) == 0){
@@ -296,8 +301,7 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, cntMut, cntReg, op
                       paste(format(corr_perm,digits=4),format.pval(pvalP),sep=":"), 
                       format(corr_opt,digits=4),
                       paste(cntMut,cntReg, sep=":"),
-                      paste(outGene, collapse=";"),
-                      paste(outSmpMap,collapse=";") ), collapse="\t")
+                      paste(optGeneSmp, collapse=";")), collapse="\t")
   
   write.table(outHeader, file=file, append=FALSE, col.names=F, row.names=F, sep="\t",quote=F)
   write.table(outRecord, file=file, append=TRUE, col.names=F, row.names=F, sep="\t",quote=F)
@@ -489,12 +493,10 @@ if ( typeSelect == "max" ) {
   }
 }
 
-##-------select and update resCorrOpt object
-
 
 ##output---
 output = paste(output , "_", tol, sep="")
-cntReg = length(which(resIterMutD >0, arr.ind=T))
+cntReg = NROW(which(resIterMutD >0, arr.ind=T))
 writeOut(output, mutD, tgene,corr_total=corr_total, corr_full=corr_full, cntMut = cntMut, cntReg = cntReg, resCorrOpt)
 
 # write.table(file = paste(output,".fullMatrix", sep=""), x=removeZeor(resIterMutD), quote=F,col.names=T,sep="\t", row.names=T)
