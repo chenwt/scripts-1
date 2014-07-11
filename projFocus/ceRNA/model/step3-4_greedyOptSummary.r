@@ -38,14 +38,16 @@ output = paste(resultflexfile,".significant.summary",sep="")
 
 
 #---test on local--
-input = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/optCorr.result_flex_max_1000.tsv"
+input = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul8/optCorr.result_flex_max_1000.tsv"
 output = paste(input,".significant.summary",sep="")
 param = "flex_max_1000"
 #--test-end-
 
 dataDF = read.delim(input, sep="\t", header=T)
 
+# dataDF = dataDF[match(unique(dataDF$tgene), dataDF$tgene),]
 rownames(dataDF) <- dataDF$tgene
+
 
 fullCorr_Pval <- t(vapply(dataDF[,9], FUN=function(x){vapply(unlist(strsplit(gsub("< ","",x),":")),as.numeric,0.1)}, c(0.1,0.1)))
 rownames(fullCorr_Pval) <- dataDF[,9]
@@ -66,7 +68,7 @@ xvalue[which(xvalue=='NA')] <- 0
 names(xvalue) <- dataDF$tgene
 
 ### plot significance level plot
-pdf(paste(figd,"/step3-4_greedyOptSummary_07021014_", param, ".pdf",sep=""))
+pdf(paste(figd,"/step3-4_greedyOptSummary_07101014_", param, ".pdf",sep=""))
 plot(xvalue,yvalue,pch=16,col=mycolor, font = 2, font.lab = 2,
      xlab="-log10(pval_perm)", ylab="-log10(pval_full)",main= paste("Greedy algorithm result \n [", param,"]"))
 abline(h=2,col = "green", lwd=3)
@@ -96,17 +98,42 @@ datafinalD <- datafinalD[datafinalD[,11]>0, ]
 datafinalD <- datafinalD[order(datafinalD$optCorr,decreasing=T),]
 
 write.table(datafinalD, output,row.names=F,sep="\t",quote=F)
-write.table(datafinalD[,c(1,12)], paste(output,".netfile",sep=""),row.names=F,sep="\t",quote=F)
+regSmpD = sapply(datafinalD$optGene.optSmp, FUN=function(x){
+    paste(t(sapply(unlist(strsplit(gsub("\\]","",gsub("\\[","",as.character(x))),";")), FUN=function(y){
+    unlist(strsplit(y,":"))
+  }))
+})
+
+### output netfile
+tarRegDF = t(sapply(1:NROW(datafinalD), FUN=function(i){
+    x = datafinalD$optGene.optSmp[i]
+    tgene = as.character(datafinalD$tgene[i])
+    c(tgene, paste(unique(t(sapply(unlist(strsplit(gsub("\\]","",gsub("\\[","",as.character(x))),";")), FUN=function(y){
+    unlist(strsplit(y,":"))
+  }))[,1]), collapse=";"))
+}))
+
+write.table(tarRegDF, paste(output,".netfile",sep=""),row.names=F,sep="\t",quote=F)
 
 allRegulators = NA
 for (i in 1:nrow(datafinalD)){
-  allRegulators = c( allRegulators, unlist(strsplit(as.character(datafinalD[i,12]),";")))
+  allRegulators = c( allRegulators, unlist(strsplit(as.character(tarRegDF[i,2]),";")))
 }
 allRegulators = unique(allRegulators[-1])
 
 write.table(allRegulators, paste(output,".regulators",sep=""),col.names=F, row.names=F,sep="\t",quote=F)
 
 
+
+#######----------plot 
+## permutation correlation v.s greedy correlation
+permCorr =  vapply(datafinalD$permuCorr.pval, FUN=function(x){as.numeric(unlist(strsplit(as.character(x),":"))[1])}, 1.0)
+par(mfrow=c(1,1))
+pdf(paste(figd,"/step3-4_greedyOptJuly82014.CorrPermVSOpt_07102014.pdf",sep=""))
+plot(datafinalD$optCorr,permCorr, xlim=c(0,1),ylim=c(0,1), pch=19, lwd = 0.1,  col = colors()[563], font = 2,
+     xlab = "Optimized correlation", ylab = "Random permutation correlation")
+abline(a= 0, b= 1, col = "gray")
+dev.off()
 ########-----------exploratory analysis
 # rect(xleft=0,xright=2,ybottom=0,ytop=2,border="green",lwd=2)
 # points(x=dataDF$optCorr, y=-log10(permCorr_Pval[,2]), col="orange", pch = 16)
