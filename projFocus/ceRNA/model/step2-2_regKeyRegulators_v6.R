@@ -108,10 +108,13 @@ regfitPermu = function(X, y,group, nperm) {
   
 }
 getCandi    = function(fitPermuBeta, pcut){
+  print("line 111")
   xname = rownames(fitPermuBeta)
 # xname = rownames(fitPermuBeta)[which(fitPermuBeta[,2] <= pcut)]
 # x = as.data.frame(fitPermuBeta[which(fitPermuBeta[,2] <= pcut),])
   x = as.data.frame(fitPermuBeta)
+  print("line 116")
+
   rownames(x) = xname
   if (length(x[,1]) > 1){
     x = x[x[,1]>0,]
@@ -156,6 +159,7 @@ samples = colnames(rawExp)[-1]
 numReg = length(regulators)
 numSmps = length(samples)
 regExp = as.data.frame(t(apply(rawExp[,-1],c(1,2),as.numeric)))
+print("line 163")
 rownames(regExp) = samples
 colnames(regExp) = c(target, regulators)
 regExp = regExp[order(regExp[,1]),]
@@ -163,6 +167,7 @@ regExp = regExp[order(regExp[,1]),]
 dataExp = regExp
 mycolor = colorRampPalette(c("blue","white","red"))(255)
 dataExp = apply(dataExp,2,normalize)
+print("line 171")
 rownames(dataExp) = samples
 
 if (numReg > 2){
