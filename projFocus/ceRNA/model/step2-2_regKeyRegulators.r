@@ -4,8 +4,8 @@
 ## including fdr p-valu adjustment 
 
 example = "Example: /ifs/home/c2b2/ac_lab/jh3283/tools/R/R_current/bin/Rscript 
-    /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r
-   /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/PTENreg_exp_tumor"
+/ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r
+/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/test/PTENreg_exp_tumor"
 
 usage = "Usage: Rscript step2-2_regKeyRegulators.r  <exp.matrix>"
 ERR = "ERROR here: "
@@ -25,23 +25,29 @@ setRootd  = function(){
 rootd     = setRootd()
 source(paste(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R",sep=""))
 source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
+##---test
+# fexp = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-genelist.failed_Apr11.txt/CDK12_candidateRegs_Apr-11-2014.txt_reg_exp_tumor.temp"
+# setwd("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-genelist.failed_Apr11.txt/")
+# output  = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/candiReg/temp-genelist.failed_Apr11.txt/CDK12_candidateRegs_Apr-11-2014.local.txt"
+##---test
 
 #---funcs
 regfit      = function(X, y, group){
-   if (setequal(colnames(X), names(group))){
-    rss   = NULL
-    a     = seq(0.01,1,0.1)
-    for (alpha in a){
-      grpfit            = grpreg(X,y,group=group,penalty="grLasso",
-                                 alpha = alpha,eps=0.05,max.iter=10000)
-      grpfit_selected   = select(grpfit,criterion="AIC")
-      rss               = c(rss,sum(y - grpfit_selected$beta[1] -
-                                      X %*% as.matrix(grpfit_selected$beta[-1])))
-    }
-    alpha = a[which.min(rss)[1]]
+  if (setequal(colnames(X), names(group))){
+        rss   = NULL
+        a     = seq(0.01,1,0.1)
+        for (alpha in a){
+          grpfit            = grpreg(X,y,group=group,penalty="grLasso",
+                                     alpha = alpha,eps=0.05,max.iter=5000)
+          grpfit_selected   = select(grpfit,criterion="AIC")
+          rss               = c(rss,sum(y - grpfit_selected$beta[1] -
+                                          X %*% as.matrix(grpfit_selected$beta[-1])))
+        }
+        alpha = a[which.min(rss)[1]]
     #fit model
     grpfit              = grpreg(X, y, group=group,penalty="grLasso",
-                                 alpha = alpha,eps=0.005,max.iter=5000)
+                                  alpha = alpha,eps=0.05,max.iter=5000)
+#                                  eps=0.05,max.iter=5000)
     grpfit_selected     = select(grpfit,criterion="AIC")   
     beta                = grpfit_selected$beta
     residual            = y - beta[1] - X %*% as.matrix(beta[-1])
@@ -58,34 +64,41 @@ regfit      = function(X, y, group){
   else { print("ERROR! group not match data!")
   }
 }
+bpval = function(x, list){
+  xbar = mean(list)
+  z <- (xbar-x)/(sd(list)/sqrt(length(list)))
+  return(2*pnorm(-abs(z)))
+}
 regfitPermu = function(X, y,group, nperm) {
   #Desp: function to calculate the significance of one fitting
   y               =  as.matrix(y)
   X               =  as.matrix(X)  
+  nperm           =  as.numeric(nperm)
+  lenY            =   length(y)
+  print("Doing first fitting...")
   fit_grpreg      =  regfit(X, y, group)
+#   save(fit_grpreg,numReg,target,regulators, file=jxy(output,"permut-temp.rda"))
   count_perm      = 0 
   r_square_perm   = seq_len(nperm)
-  beta_permu      = as.data.frame(matrix(0, nrow=nperm, ncol = length(fit_grpreg$beta))) 
-  while (count_perm < as.numeric(nperm) ) {
-    y_permu       =  y + sample(fit_grpreg$residual,size=length(y),replace=TRUE)
-    reg_permu     =  regfit(X, y_permu, group)
+  beta_permu      = as.data.frame(matrix(0, nrow=nperm, ncol = length(fit_grpreg$beta)))
+  print("Start permutation ...")
+  pb              = txtProgressBar(min=1, max = nperm, style = 3)
+  while (count_perm < nperm ) {
+    y_permu                   =  y + sample(fit_grpreg$residual,size=lenY,replace=TRUE)
+    reg_permu                 =  regfit(X, y_permu, group)
     r_square_perm[count_perm] = reg_permu$r_square
     beta_permu[count_perm,]   =  reg_permu$beta
     count_perm    =   count_perm  + 1
-    if(count_perm > 100 && (count_perm %% 100) == 0) {
-      print(paste("Permutation", count_perm))}
+    setTxtProgressBar(pb,count_perm)
+    if((count_perm %% 10) == 0) {
+      print(paste("Permutation", count_perm))
+    }
   }
   r_square_perm   = r_square_perm[-1]
   pvalue.r2       = max(1/nperm, 
-                          length(r_square_perm[which(r_square_perm > fit_grpreg$r_square)]) / nperm)
-  bpval = function(x, list){
-    xbar = mean(list)
-    z <- (xbar-x)/(sd(list)/sqrt(length(list)))
-    return(2*pnorm(-abs(z)))
-  }
+                        length(r_square_perm[which(r_square_perm > fit_grpreg$r_square)]) / nperm)
   pvalue          = vapply(seq_along(fit_grpreg$beta), FUN=function(x){bpval(fit_grpreg$beta[x],beta_permu[,x])},0.2)
-  names(pvalue)   = names(fit_grpreg$beta)
-  
+  names(pvalue)   = names(fit_grpreg$beta) 
   return(list(RSS      = fit_grpreg$RSS,
               fit_residual = fit_grpreg$residual,
               fit_r2   = c(fit_grpreg$r_square,pvalue = pvalue.r2),
@@ -95,19 +108,29 @@ regfitPermu = function(X, y,group, nperm) {
   
 }
 getCandi    = function(fitPermuBeta, pcut){
-  x = fitPermuBeta[which(fitPermuBeta[,2] <= pcut),]
-  if (dim(x)[1] > 0){
-    x = x[x[,1]>0,]
+  print("line 111")
+  xname = rownames(fitPermuBeta)
+# xname = rownames(fitPermuBeta)[which(fitPermuBeta[,2] <= pcut)]
+# x = as.data.frame(fitPermuBeta[which(fitPermuBeta[,2] <= pcut),])
+  x = as.data.frame(fitPermuBeta)
+  print("line 116")
+
+  rownames(x) = xname
+  if (length(x[,1]) > 1){
+    # x = x[x[,1]!=0,]
     x = x[order(x[,1],decreasing=T),]
     return(x)
-  }else{
+  }else if( length(x[,1]) == 1){
+    return(x)
+  }else {
     return(c("", ""))
   }
 }
 
-#---funce
-nperm     = 1000
+#---func
+nperm     = 100
 pvalcut   = 0.01
+
 ##---init---
 
 # #----getting command line parameters
@@ -120,11 +143,12 @@ if(length(args) < 1 || is.null(args)){
 
 setwd(system("pwd",intern=T))
 fexp        = args$input
+nperm       = as.integer(args$nperm)
 output      = args$output
 print(fexp)
 print(paste("inputfile",fexp,class(fexp)))
-print(paste("outputfile",output))
-
+print(paste("nperm", nperm))
+print(paste("outputfile", output))
 #---init
 
 ##loading data
@@ -135,6 +159,7 @@ samples = colnames(rawExp)[-1]
 numReg = length(regulators)
 numSmps = length(samples)
 regExp = as.data.frame(t(apply(rawExp[,-1],c(1,2),as.numeric)))
+print("line 163")
 rownames(regExp) = samples
 colnames(regExp) = c(target, regulators)
 regExp = regExp[order(regExp[,1]),]
@@ -142,6 +167,7 @@ regExp = regExp[order(regExp[,1]),]
 dataExp = regExp
 mycolor = colorRampPalette(c("blue","white","red"))(255)
 dataExp = apply(dataExp,2,normalize)
+print("line 171")
 rownames(dataExp) = samples
 
 if (numReg > 2){
@@ -152,30 +178,56 @@ if (numReg > 2){
   groups = as.numeric(as.character(expcls$grp))
   names(groups) = names(expcls$grp)
   if(length(unique(groups)) == 1){
-    groups = 1:length(groups)
-    names(groups) = regulators
+      groups = 1:length(groups)
+      names(groups) = regulators
   }
 }else if(numReg == 2){
   groups = 1:length(regulators)
   names(groups) = regulators
 }else{
-  stop(paste("only one regulator!"))
+  fitlm  = lm(dataExp[,1]~dataExp[,-1])
+  sumfit = summary(fitlm)
+  save(sumfit,target, regulators, file=jxy(output,".rda"))
+  if (sumfit$coefficients[2,1] > 0 ){
+    out = rbind(c("#target", target),
+                c("#totalReg",1),
+                c("#sigReg", 1),
+                c("#r2",sumfit$r.squared),
+                c("#regulator\tcoeff","pvalue"),
+                c(paste(regulators[1], sumfit$coefficients[2,1],sep="\t"),sumfit$coefficients[2,4]) 
+    )  
+  }else{
+    out = rbind(c("#target", target),
+                c("#totalReg",1),
+                c("#sigReg",0),
+                c("#r2",sumfit$r.squared),
+                c("#regulator\tcoeff","pvalue")
+    )
+  }
+  write.table(as.matrix(out),
+              output,
+              quote=F,col.names=F,sep="\t",row.names = F)
+  q(save="no")
 }
-
 
 require(grpreg)
 print("Doing regression...")
 print(table(groups))
 fitpermut = regfitPermu(X=dataExp[,-1],y=dataExp[,1], groups, nperm)
+
+save(fitpermut,numReg,target, regulators, file=jxy(output,".rda"))
+
 resBeta = fitpermut$beta
-resBeta[,2] = p.adjust(fitpermut$beta[,2],method="bonferroni")
+resBeta[,2] = p.adjust(fitpermut$beta[,2],method="fdr")
 candi = getCandi(resBeta,pcut=pvalcut)
+# candi = resBeta[resBeta[,1]>0,]
+
 out = rbind(c("#target", target),
             c("#totalReg",numReg),
             c("#sigReg", nrow(candi)),
             cbind(c("#r2","#r2.pval"),fitpermut$fit_r2),
             c("#regulator\tcoeff","pvalue")
-            )
+)
 
 write.table(as.matrix(out),
             output,
