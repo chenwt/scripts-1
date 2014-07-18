@@ -66,9 +66,9 @@ print(paste("outputfile",output))
 # output = "/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/test/test_optCorr_05062014_NLK_regMut.temp.txt_test"
 # output = paste(output, "_", typeTol, "_", typeSelect, sep="")
 # 
-# typeTol = "flex"
-# typeSelect = "max"
-# numRandom = 100
+typeTol = "fix"
+typeSelect = "max"
+numRandom = 100
 # ##test end------
 
 
@@ -249,10 +249,10 @@ writeOut = function(file, mutD, tgene, corr_total, corr_full, cntMut, cntReg, op
     corr_perm = z2corr(optCorrRes$corr_perm$zs)
     pvalF = optCorrRes$pval_full
     pvalP = optCorrRes$pval_perm
-    idxOptMut = which(resCorr_crt$mutD>0,arr.ind=T)
+    idxOptMut = which(optCorrRes$mutD>0,arr.ind=T)
     
-    optGeneSmp = paste(paste("[",rownames(resCorr_crt$mutD)[idxOptMut[,1]],sep=""),
-                       paste(colnames(resCorr_crt$mutD)[idxOptMut[,2]], "]",sep=""),
+    optGeneSmp = paste(paste("[",rownames(optCorrRes$mutD)[idxOptMut[,1]],sep=""),
+                       paste(colnames(optCorrRes$mutD)[idxOptMut[,2]], "]",sep=""),
                        sep=":")
     optCorrReg = length(optCorrRes$reg)
     resMut  = removeZeor(resMut)
