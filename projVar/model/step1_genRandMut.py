@@ -32,7 +32,7 @@ for opt, arg in opts:
     elif opt in ("-o"):
         output = arg
 print('Script path:\t'+ sys.argv[0])
-print('Input file:\t' + input)
+print('Input file:\t' + somfile)
 print('Output file:\t'+ output)
 
 # functions 
@@ -47,8 +47,8 @@ def loadPosMut(file):
     with(open(file)) as f:
         line = f.readline()
         while line:
-            info1, info2 = line.strip().split("\t")[:2]
-            if info1 in chromL:
+            info1, info2 = line.strip().split()[:2]
+            if info1.replace("chr","") in chromL:
                 posMutD[info1].append(info2)
                 cnt = cnt + 1
             line = f.readline()
@@ -99,7 +99,6 @@ with open(file) as f:
 
 
 somMut1D , n = loadPosMut(somfile)
-
 n = int( n * 1.2)
 
 rdMut1D = genRandPtMut(n, chromLenD)
@@ -112,13 +111,21 @@ randMutD = rmSomFromRandMut(rdMut1D, somMut1D)
 outf = open(output, 'w')
 
 for k, vL in randMutD.items():
-    k = str(k)
+    # print 
+    # if k == 23:
+    #     k = 'X'
+    # elif k == 24:
+    #     k = 'Y'
+    # else:
+    #     k = str(k)
     for v in vL:
         v = str(v)
-        outf.write(k + "\t" + v + "\t" + v + "\n" )
+        outf.write( "chr" + chromL[k-1]  + "\t" + v + " " + v + "\n" )
+
 outf.close()
-import pickle 
-pickle.dump(randMutD, open(output  +".pkl","wb"))
+
+# import pickle 
+# pickle.dump(randMutD, open(output  +".pkl","wb"))
 
 print "[----END----]"
 

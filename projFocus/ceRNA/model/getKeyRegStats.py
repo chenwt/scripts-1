@@ -79,7 +79,8 @@ def parseFile(file, pval_cut):
 
 fArray = os.listdir(fileDir)
 outheader = "\t".join(['gene_tar','r2', 'r2pval', 'regTotal', 'regSig']) 
-sufix = '.txt'
+# sufix = '.txt'
+sufix = '.txt.sigreg'
 cntSig = 0 
 outputH = open(output, 'w')
 outputRegH = open(output + ".driverRegs.list", 'w')

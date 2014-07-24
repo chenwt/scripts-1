@@ -60,7 +60,7 @@ with(open(maffile)) as f:
 outf = open(output, 'w')
 
 for k,v in sorted(outDict.items()):
-    outf.write(k + "\t" + ";".join(v) + "\n")
+    outf.write("chr"+ k + "\t" + ";".join(v) + "\n")
 
 outf.close()
 

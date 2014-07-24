@@ -33,7 +33,8 @@ pvalCut = 0.01
 output  = output + "_" + str(pvalCut) 
 outputH = open(output, 'w')
 outputH.write("targetGene\tselectedCeRNADriver\n")
-fileA = [f for f in os.listdir(grpLasoResDir) if f.endswith(".txt")] 
+# fileA = [f for f in os.listdir(grpLasoResDir) if f.endswith(".txt")] 
+fileA = [f for f in os.listdir(grpLasoResDir) if f.endswith(".txt.sigreg")] 
 for f in fileA:
     file = grpLasoResDir +"/" + f
     print f

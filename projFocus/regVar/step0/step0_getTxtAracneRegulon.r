@@ -9,7 +9,6 @@ outheader = c("tf","tfmod","val1","likelihood")
 write.table(file=output, paste(outheader,collapse="\t"),col.names=F,quote=F,row.names=F,sep="\t")
 
 for (i in 1:length(regul)){
-  i = 1
   tflikhd_crt = as.matrix(regul[[i]]$likelihood)
   ntfmod = length(tflikhd_crt)
   out_crtD = as.data.frame(matrix(NA, ncol=4, nrow=ntfmod))
@@ -30,7 +29,6 @@ output = paste(rdafile,".4col.txt",sep="")
 outheader = c("tf","tfmod","val1","likelihood")
 write.table(file=output, paste(outheader,collapse="\t"),col.names=F,quote=F,row.names=F,sep="\t")
 for (i in 1:length(regul)){
-  i = 1
   tflikhd_crt = as.matrix(regul[[i]]$likelihood)
   ntfmod = length(tflikhd_crt)
   out_crtD = as.data.frame(matrix(NA, ncol=4, nrow=ntfmod))

@@ -4,10 +4,10 @@
 # This subset should optimized the correlation between sum-up ceRNA driver expression and target expression.
 # steps involved:
 
-# 'Cell method'
-# -1 prepareData
-# -2 calculated fullMatrix correlation corr_0, fisher transformed 
-# -3 set corr_k-1 = corr_prev, flip one mutation from 1 to 0(deactive it)
+# 'Column method' to optimized differential expression(K-S test)
+# -1 prepareData, extract all sample, make sure the sample order is the sample
+# -2 calculated fullMatrix test statistics, p-value corr_0,
+# -3 set tk-1 = corr_prev, flip one mutation from 1 to 0(deactive it)
 # -4 calculate corr_k, fisher transformed, 
 # -5 if corr_k - corr_k-1 > tolenrance: deactivate mutation , otherwise filp it back to 1 (active mutation) 
 # -6 repeat step4-5 until all mutations have been visited.
@@ -39,13 +39,13 @@ import  os.path
 
 usage = 'python ' + sys.argv[0] + ' -i <input>  -o <output>'
 example = 'python ' + sys.argv[0] + \
-        '-i <gslistfile> \
-        -k <keyreg sum file> \
-        -m < mutfile>\
+        '-n <tf network> \
+        -g <target gene list> \
+        -m <mutfile>\
         -e <expfile> \
         -o <output> \
         -t <tolenrence type, fix/flex> \
-        -r <randome init iteration, 1000/> \
+        -r <random init iteration, 1000/> \
         -p <random permut actual matrix, 100/> \
         -s <selection type, max/all/<any number < r> > \
         -l <logdir> '
@@ -55,7 +55,7 @@ nrand = 1000
 
 argv = sys.argv[1:]
 try:
-    opts,args = getopt.getopt(argv,"hi:k:m:e:t:s:r:p:l:o:")
+    opts,args = getopt.getopt(argv,"hn:g:m:e:t:s:r:p:l:o:")
 except getopt.GetoptError:
     print usage + "\n" + example 
     sys.exit(2)
@@ -63,12 +63,12 @@ for opt, arg in opts:
     if opt == '-h':
         print usage + "\n" + example 
         sys.exit()
-    elif opt in ("-i"):
-        gslistfile = arg
+    elif opt in ("-n"):
+        netfile = arg
     elif opt in ("-m"):
         mutfile = arg
-    elif opt in ("-k"):
-        keyRegSumfile = arg
+    elif opt in ("-g"):
+        tgfile = arg
     elif opt in ("-e"):
         expfile = arg
     elif opt in ("-t"):
@@ -83,10 +83,11 @@ for opt, arg in opts:
         logDir = arg
     elif opt in ("-o"):
         output = arg
-print('Inputs:\n' + gslistfile + "\n" + keyRegSumfile + "\n" + \
-     mutfile + "\n" + logDir + "\n" + "ttol: " + ttol + "\n" +\
-     "tsel:" +  tsel + "\n" + "nrand:" +  nrand  )
-print('Output file:\t'+ output)
+
+# print('Inputs:\n' + gslistfile + "\n" + keyRegSumfile + "\n" + \
+#      mutfile + "\n" + logDir + "\n" + "ttol: " + ttol + "\n" +\
+#      "tsel:" +  tsel + "\n" + "nrand:" +  nrand  )
+# print('Output file:\t'+ output)
 
 def formatSampleName(code19):
     if len(code19) >11:
@@ -94,15 +95,14 @@ def formatSampleName(code19):
     else :
         return code19.replace("-", ".")
 
-def loadTarReg(keyRegSumfile):
-    resD = defaultdict(list)
-    with open(keyRegSumfile) as f:
+def loadTgs(genefile):
+    resL = []
+    with open(genefile) as f:
         line = f.readline()
         while line:
-            crt_t, ctr_r = line.strip().split("\t")
-            resD[crt_t] = ctr_r.split(";")
+            resL.append(line.strip().split()[0])
             line = f.readline()
-    return(resD)
+    return(resL)
 
 def getMutExpSmp(expfile, mutfile):
     resL = []
@@ -114,21 +114,16 @@ def getMutExpSmp(expfile, mutfile):
         resL = [a for a in map(formatSampleName, allMutSmp) if a in resL]
     return resL
 
-def loadTarIntSmp(gslistfile):
-    resD = defaultdict(list)
-    with open(gslistfile) as f:
-        line = f.readline()
-        while line:
-            crt_t, crt_s = line.strip().split("\t")
-            resD[crt_t] = crt_s.split(";")
-            line = f.readline()
-    return(resD)
 
 def loadExp(expfile, smpsL):
     resD = defaultdict(list)
     with open(expfile) as f:
         allExpSmp = map(formatSampleName, f.readline().strip().split("\t"))
+
         smpIndx = [id for (id, v) in enumerate(allExpSmp) if v in smpsL]
+		## sort sample order according to smpsL
+		smpIndx = [ id for id,v in sorted(zip(smpsL, smpIndx))]
+
         resD['gene'] = map(allExpSmp.__getitem__, smpIndx)
 
         line = f.readline()
@@ -136,6 +131,7 @@ def loadExp(expfile, smpsL):
             crt_g, crt_e = line.strip().split("\t",1)
             temp = map(float,crt_e.split("\t"))
             resD[crt_g] = map(temp.__getitem__, smpIndx)
+
             line = f.readline()
     return resD
 
@@ -145,6 +141,7 @@ def loadMut(mutfile, smpsL):
         _, allMutSmp = f.readline().strip().split("\t",1)
         allMutSmp = map(formatSampleName, allMutSmp.split("\t"))
         smpIndx = [id for (id, v) in enumerate(allMutSmp) if v in smpsL]
+		smpIndx = [ id for id,v in sorted(zip(smpsL, smpIndx))]
         resD['gene'] = map(allMutSmp.__getitem__, smpIndx)
         line = f.readline()
         while line:
@@ -154,52 +151,44 @@ def loadMut(mutfile, smpsL):
             line = f.readline()
     return resD
 
-def __test__():
-    from collections import defaultdict
-    seqSet  = {'G1':['S2','S4','S6'],
-                'G2':['S1','S3'],
-                'G3':['S1'],
-                'G4':['S1'],
-                'G5':['S5'],
-                'G6':['S3']}
-    seq     = ['S1', 'S2', 'S3', 'S4', 'S5','S6']
-    weightSet = {'G1':[1.0,0.5,1.5],
-                 'G2':[2.0, 2.5],
-                 'G3':[2.3],
-                 'G4':[1.2],
-                 'G5':[2.5],
-                 'G6':[3.0]}
-    setObjL = []
-    for sk, ss in seqSet.items():
-        setObjL.append(MutSet(sk,ss,weightSet[sk]))
-    geneL, smpL, costL = wgsc(setObjL, seq, wtype = "mean")
-    geneL, smpL, costL = wgsc(setObjL, seq, wtype = "total")
-    geneL, smpL, costL =  wgsc(setObjL, seq, wtype = "max")
-
 def format2Dlist(l2d):
     out = []
     for i in l2d:
         out.append("["+",".join(map(str,i)) + "]")
     return ";".join(out)
 
-tarRegD = loadTarReg(keyRegSumfile)
-tarIntSmpD = loadTarIntSmp(gslistfile)
-mutExpsmpL = getMutExpSmp(expfile, mutfile)
-expD = loadExp(expfile, mutExpsmpL)
+def loadTarReg(net, tgL):
+	resD = defaultdict(list)
+	with (open(netfile) ) as f:
+		line = f.readline()
+		while line:
+			g1, g2 = line.split()[:2]
+			if g2 in tgL:
+				resD[g2].append(g1)
+			line = f.readline()
+	return resD
 
-mutD = loadMut(mutfile, mutExpsmpL)
+### loading data
+tgeneList = loadTgs(tgfile)
+mutExpSmpL = getMutExpSmp(expfile, mutfile)
+
+expD = loadExp(expfile, mutExpSmpL, tgeneList)
+
+mutD = loadMut(mutfile, mutExpSmpL, tgeneList)
+
+tarRegD = loadTarReg(netfile, tgeneList)
+
 outputH = open(output + ".lt3keyReg", 'w') 
 outputErrH = open(output + ".errTargetGene", 'w')
+
 cntqsub = 0 
 
-for tgene in tarRegD.keys(): 
-    tIntSmp = tarIntSmpD[tgene] 
+for tgene in tarRegD.keys():
+
     allRegsL = tarRegD[tgene]
-    intMutSmpIdL = [id for (id, s) in enumerate(mutD['gene']) if s in tIntSmp]
-    intExpSmpIdL = [id for (id, s) in enumerate(expD['gene']) if s in tIntSmp]
-    
-    regMutD = {k:map(v.__getitem__, intMutSmpIdL) for (k,v) in mutD.items() if k in allRegsL}
-    regExpD = {k:map(v.__getitem__, intExpSmpIdL) for (k,v) in expD.items() if k in allRegsL}
+
+    regMutD = {k:v for (k,v) in mutD.items() if k in allRegsL}
+    regExpD = {k:v for (k,v) in expD.items() if k in allRegsL}
     
     expMutRegL = set(regExpD.keys()).intersection(set(regMutD.keys()))
     outTempMut = output + "_" + tgene + "_regMut.temp"

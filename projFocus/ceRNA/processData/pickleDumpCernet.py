@@ -17,13 +17,12 @@ with open(input) as f:
     line = f.readline()
     while line:
         if cnt == 1:
-            net = gu.Cernet(line.strip().split("\t",2)[:2])
+            cernet = gu.Cernet(line.strip().split("\t",2)[:2])
         else:
-            net.__append__(line.strip().split("\t",2)[:2])
+            cernet.__append__(line.strip().split("\t",2)[:2])
         cnt = cnt + 1
         line = f.readline()
 outputH = open(output, 'w')
-
-pickle.dump(net, outputH)
+pickle.dump(cernet, outputH)
 
 print "#----END------"

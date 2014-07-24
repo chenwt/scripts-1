@@ -15,10 +15,25 @@ import subprocess
 argv = sys.argv[1:]
 input = ''
 output = ''
-usage = 'python " + sys.argv[0] + " -i <input>  -o <output>'
-example = 'python " + sys.argv[0] + " -i <input>  -o <output>'
+usage = 'python " + sys.argv[0] + " -g \
+        -a <gene annotation file>\
+        -l <target sample list file>\
+        -t <tf expression tumor file>\
+        -n <tf expression  normal file> \
+        -c <network>\
+        -p <number of permuation :default 1000>\
+        -o <output>'
+
+usage = 'python " + sys.argv[0] + " -g \
+        -a \
+        -l \
+        -t \
+        -n \
+        -c \
+        -p \
+        -o <output>'
 try:
-    opts,args = getopt.getopt(argv,"hg:a:l:t:n:c:o:")
+    opts,args = getopt.getopt(argv,"hg:a:l:t:n:c:p:o:")
 except getopt.GetoptError:
     print usage + "\n" + example 
     sys.exit(2)
@@ -40,17 +55,24 @@ for opt, arg in opts:
         cernetf = arg
     elif opt in ("-o"):
         output = arg
+    elif opt in ("-p"):
+        nperm = arg
+
 print('Script path:\t"'+ sys.argv[0])
-print('Input file:\t' + gene)
-print('tumor file:\t' + exptf)
+print('target gene -g:\t' + gene)
+print('tumor file -t :\t' + exptf)
 print('normal file:\t' + expnf)
+print('gslistf -l :\t ' + gslistf)
+print('network pickle -c :\t ' + cernetf + ".pickle")
+print('gene annotation file -a :\t ' +  annof )
+print('permutation time  -p:\t ' +  nperm )
 print('output file:\t'+ output)
 
 cernet = pickle.load(open(cernetf + ".pickle"))
-print len(cernet._r)
+
 regs = cernet.getReg(gene) ## targene is the first one 
 geneAnno = pickle.load(open(annof + ".pickle")) 
-print len(geneAnno)
+
 
 regObjlist= [] 
 for g in regs:
@@ -74,6 +96,7 @@ with open(gslistf) as f:
             smps = re.split("\t|;",line.strip())[1:]
             break
         line = f.readline()
+
 print "number of samples:\t" + str(len(smps))
 
 ## get expression matrix
@@ -124,11 +147,9 @@ outputTumH.close()
 cmd = "/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript \
     /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r\
     --vanilla --input "\
-     +  outTumTemp + " --output " + output
+     +  outTumTemp + " --nperm " + nperm + " --output " + output
 print cmd 
-# p = Popen(cmd, shell = True, stderr = PIPE, stdout = PIPE)
 rtncode  = subprocess.call(cmd, shell = True)
-# stdout, err = p.communicate()
 if rtncode != 0 :
     print "Error in regression!"
     sys.exit()

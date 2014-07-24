@@ -18,7 +18,13 @@ ji = sapply(1:nrow(data1), FUN=function(x) {
 } )
 
 ji = t(ji)
-ji
+colnames(ji) = c("cntm", "cntc", "cntmatch", "cntmonly", "cntcnvonly", "cntunion", "percent_cntmatch/cntm", "percent_cntmatch/cntunion")
+rownames(ji) = data1$tgene
+ji[order(ji[,3],decreasing=T),]
+
+
+data2[,1:8]
+data1[,1:8]
 par(mfrow=c(2,2))
 hist(ji[,7], col = "lightblue")
 boxplot(ji[,1], col = 'lightblue')
@@ -29,3 +35,6 @@ plot(sort(ji[,1]))
 plot(density(ji[,3]))
 
 t.test(ji[,2], ji[,1],alternative='greater')
+t.test(data1[,3],data2[,3],alternative='greater')
+mean(data1[,3])
+mean(data2[,3])

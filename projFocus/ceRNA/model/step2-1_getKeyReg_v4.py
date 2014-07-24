@@ -125,7 +125,7 @@ for regObj in regObjlist:
 
 outputTumH.close()
 cmd = "/ifs/home/c2b2/ac_lab/jh3283/tools/R/R-3-02/bin/Rscript \
-    /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators_v6.R\
+    /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step2-2_regKeyRegulators.r\
     --vanilla --input "\
      +  outTumTemp + " --nperm " + nperm + " --output " + output
 print cmd 

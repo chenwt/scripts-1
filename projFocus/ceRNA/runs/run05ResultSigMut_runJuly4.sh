@@ -50,24 +50,31 @@ function test_one_gene {
 
 # test_one_gene
 
+# awk '{print $1}' /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/optCorr.result_flex_max_1000.tsv.significant.summary  >$CWD/test.gene
+# ~/bin/splitByN $CWD/test.gene 10
+
 function qsub_flex_max {
+    genefile=$1
     t=flex
     nrand=1000
     s=max
-    nperm=1000
+    nperm=100
 
     outdir=$sigMutDir/${t}_${s}_${nrand}
     if [[ ! -d $outdir ]]; then 
       mkdir $outdir
       mkdir $outdir/log
     # else
-      # rm $outdir/*
+      # rm -rf $outdir/*
     fi
 
-    awk 'NR>21&&NR<26' /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/optCorr.result_flex_max_1000.tsv.significant.summary |awk '{print $1}' >$CWD/test.gene
-   ~/bin/grepf2f $CWD/test.gene $keyRegfile $keyRegfile.test
+    # awk 'NR>25&&NR<30' /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/optCorr.result_flex_max_1000.tsv.significant.summary |awk '{print $1}' >$CWD/test.gene
+    # awk '{print $1}' /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/sigMut/runJul1/optCorr.result_flex_max_1000.tsv.significant.summary  >$CWD/test.gene
+   # ~/bin/grepf2f $CWD/test.gene $keyRegfile $keyRegfile.test
+
+   ~/bin/grepf2f $genefile $keyRegfile $keyRegfile.test
+
     keyRegfile=${keyRegfile}.test
-    
     output=$outdir/optCorr.result
     logdir=$outdir/log/
     cmd="$PYTHON $mycode -i $intactSmplist -k $keyRegfile -m $mutfile -e $expfile -t $t -r $nrand -p $nperm -s $s -l $logdir -o $output > $PWD/qsublog_${CDT}_${t}_${nrand}_${s}"
@@ -78,7 +85,13 @@ function qsub_flex_max {
     echo "[END time]"`date` >> $sigMutDir/logs.run
 }
 
-qsub_flex_max
+qsub_flex_max $CWD/test.gene_1 
+
+# for genefile in `ls $CWD/test.gene_*`
+# do 
+#   echo $genefile 
+#   # qsub_flex_max $genefile  
+# done 
 
 
 ##--------------clean results
@@ -103,9 +116,6 @@ function sumResult {
 
 ##------get significant ones and generate plot
 #run /ifs/home/c2b2/ac_lab/jh3283/scripts/projFocus/ceRNA/model/step3-4_greedyOptSummary.r 
-
-
-
 
 
 function singleTest {
