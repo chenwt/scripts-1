@@ -28,14 +28,14 @@ usage = 'python ' + sys.argv[0] + '\
         -a <ptAct>  \
         -p <ptPerm>  \
         -m <ptMatrix>  \
-        -o <output file prefix in dataDir>'
+        -o <output file prefix in working dir, 4 outputs, >'
 
 example = 'python ' + sys.argv[0] + '\
         -d /ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/tfMut/test  \
         -a _act_  \
         -p _pmLable  \
         -m _mutSampleVector  \
-        -o test_summary_'
+        -o test_summary'
 
 try:
     opts,args = getopt.getopt(argv,"hd:a:p:m:o:")
@@ -132,7 +132,7 @@ def summaryOpt(fileAct, t = 'act'):
                 line = fh.readline()
      
     actSumDF = DataFrame(actSumDt).T; actSumDF.columns = headerSts
-    print "all genes", len(fileAct)
+    # print "all genes", len(fileAct)
     return actSumDF, actOptSmpDt
 
 
@@ -157,6 +157,15 @@ def summaryAllPerm(filePm):
     print "permutated genes", CNT
     return allSumDF
 
+def writeOptTgSmp(output, actOptSmpDt):
+    '''
+    given the dictionary of tgene: tf-smp; tfsmp, output it 
+    '''
+    outh = open(output + "_actOptTgSmp", 'w')
+    outh.write("tgene\ttf_smp\n")
+    for k,v in actOptSmpDt.items():
+        outh.write(k + "\t" + v + "\n")
+    outh.close()
 
 ### main -----
  
@@ -167,11 +176,15 @@ permSumDF = summaryAllPerm(filePm)
 
 ### output data----
 summaryMutSample(fileSmp)
-actSumDF.to_csv(output + "actSummary", sep= "\t")
-permSumDF.to_csv(output + "permSummary", sep= "\t")
+
+actSumDF.to_csv(output + "_actSummary", sep= "\t")
+
+writeOptTgSmp(output, actOptSmpDt)
+
+permSumDF.to_csv(output + "_permSummary", sep= "\t")
 
 
-### visulization 
+### visulization for further develop 
 def pyViz():
   import matplotlib.pyplot as plt
   
