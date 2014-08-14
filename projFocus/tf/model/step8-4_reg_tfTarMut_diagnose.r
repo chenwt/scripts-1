@@ -89,7 +89,7 @@ orderSampleLable = function(dataExp){
 }
 
 noseHeatmap = function(inputdata){
-  data = data.frame(inputdata)
+  data = inputdata
 #   tgene =   unlist(strsplit( tail(unlist(strsplit(x= inputdata, "/")),1), "\\."))[1]
 #   data = data.frame(t(read.table(inputdata, header=T, sep="\t",row.names=1,stringsAsFactors=T)))
   data = data[order(as.numeric(as.character(data$exp))),]
@@ -100,11 +100,11 @@ noseHeatmap = function(inputdata){
   colnames(data)
   library(reshape); library(ggplot2) ;library(scales);library(RCurl);  library (grid)
   dataTfMut  = data[,c('sample',allregs)]
-  dataTfMut.m = melt(dataTfMut,id.vars='sample')
+  dataTfMut.m = melt(dataTfMut)
   dataTfMut.m$value <- factor(dataTfMut.m$value, levels=c(0,1))
   dataTfMut.m <- orderSampleLable(dataTfMut.m)
   
-  head(dataTfMut.m)
+  sum(as.numeric(as.character(dataTfMut[,3])))
   
   dataCNV = data.frame(cbind(sample=data$sample,variable = rep('      cnv',NROW(data)), value=data$cnv))
   dataCNV$value <- factor(sign(as.numeric(as.character(dataCNV$value))), levels = c(-1,0,1))
@@ -126,6 +126,7 @@ noseHeatmap = function(inputdata){
           legend.position="none",
           axis.title.x = element_text(face="bold", colour="#990000", size=10),
           axis.text.x  = element_text(angle=90, vjust=0.5, size=10))
+    pmut
   
     p <- ggplot(dataCNV, aes(variable,sample)) + 
         geom_tile(aes(fill = value), color = 'white')
@@ -169,11 +170,10 @@ noseHeatmap = function(inputdata){
 # result = data.frame(t(result));rownames(result) = result[,1]; 
 # result = result[,-1]
 
-tarTFmutReg = function(tgene){
-  #       tgene = 'FUT8'
-  inputdata= paste("/Volumes/ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/runAug9/",tgene,".tgTFreg.input",sep="")
-  inputdata2 = paste("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/tfMut/runJuly27/data/tfGreedy_",tgene,".temp",sep="")
-  inputdata3 = paste("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/tfMut/runJuly27/data/tfGreedy_act_",tgene,"_1000_1000_mutSampleVector",sep="")
+tarTFmutReg = function(tgene, plot = "False"){
+  inputdata= paste("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/runAug13/data/",tgene,".tgTFreg.input",sep="")
+  inputdata2 = paste("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/runAug13/data/tfGreedy_",tgene,".temp",sep="")
+  inputdata3 = paste("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/runAug13/data/tfGreedy_act_",tgene,"_1000_1000_mutSampleVector",sep="")
   
   mutSmp = read.table(inputdata3, header=T,stringsAsFactors=F); smpMerg = colnames(mutSmp)[which(mutSmp[1,]>0)]
   mutD = read.table(inputdata2,header=T,stringsAsFactors=F); dataExp = t(mutD[1,]); mutD = data.frame(t(mutD[-1,] )); 
@@ -188,23 +188,38 @@ tarTFmutReg = function(tgene){
   data = data.frame(cbind(dataExp, mutD)); tgene = colnames(data)[1]; allregs = colnames(data)[-1]; colnames(data) <- c('exp',unlist(as.character(allregs)))
   data$cnv  <- 0; 
   data[allsmp,'cnv'] <-  unlist(as.numeric(datacnv[,2]))
-  head(data)
-  data[setdiff(allsmp,mutSmp),allregs] <-0
+  
+  data[setdiff(allsmp,smpMerg),allregs] <-0
   
   ftest = anova(lm(exp~cnv,data),lm(exp~.,data[,c('exp','cnv',allregs)]))
   res = c(tgene = tgene,  formatTestOut(ftest),allregs = paste(allregs, collapse=","))
-  print(res)
-  noseHeatmap(data)
+  if (plot == 'True'){noseHeatmap(data)}
   return(res)
 }
 
-targenes = c("HS3ST1", "IGDCC3", "LBR", "NCALD", "PAPD7", "PPARGC1B", "RAB12", "SLC45A1", "SLC16A6", "AMFR", "USP6NL", "B4GALT5", "CAMLG", "CDKN1B", "ERBB4", "FMNL2", "FSTL4", "FUT8", ## GATA3
-             "ATP7A","BMPR1A","NASP","ARL5A")
+# targenes = c("HS3ST1", "IGDCC3", "LBR", "NCALD", "PAPD7", "PPARGC1B", "RAB12", "SLC45A1", "SLC16A6", "AMFR", "USP6NL", "B4GALT5", "CAMLG", "CDKN1B", "ERBB4", "FMNL2", "FSTL4", "FUT8", ## GATA3
+#              "ATP7A","BMPR1A","NASP","ARL5A")
+targenes = unlist(read.table("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/runAug13/input.genelist.data",stringsAsFactors=F))
 result <- rep(NA,8 )
 for (tgene in targenes){
-  
+  tgene
   result <- rbind(result,tarTFmutReg(tgene))
 }
+
+result = result[-1,]; result <- result[order(result[,7]),]
+write.table(result,file="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/summary/reg_tfTarMut_runAug13.txt",
+            col.names=T,row.names=T, quote=F, sep="\t")
+
+### plot for failed genes
+targenes = unlist(read.table("/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/summary/runAug13_0.05_fail.genelist",stringsAsFactors=F))[-1]
+result <- rep(NA,8 )
+for (tgene in targenes){
+  result <- rbind(result,tarTFmutReg(tgene,plot='True'))
+}
+result = result[-1,]; result <- result[order(result[,7]),]
+write.table(result,file="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/summary/reg_tfTarMut_runAug13.txt",
+                        col.names=T,row.names=T, quote=F, sep="\t")
+
 ###---main----
 # inputDir= "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/runAug9/"
 # allInputFile =  vapply(list.files(path=inputDir,pattern="input"), FUN=function(x){
@@ -218,8 +233,8 @@ for (tgene in targenes){
 # 
 # write.table(result,file="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfTar/summary/reg_tfTarMut_runAug9.txt",
 #             col.names=T,row.names=T, quote=F, sep="\t")
-# length(which(as.numeric(as.character(result[,8]))<0.05))
-# result[(which(as.numeric(as.character(result[,8]))>0.05)),]
+length(which(as.numeric(as.character(result[,7]))<0.05))
+result[(which(as.numeric(as.character(result[,7]))>0.05)),]
 
 
 ####function
@@ -266,38 +281,3 @@ df.table <- ggplot(df, aes(x = a, y = 0,
         axis.title.x=element_blank(),
         axis.title.y=element_blank()) 
 
-# silly business to align the two plot panels    
-gA <- ggplotGrob(df.plot)
-gB <- ggplotGrob(df.table)
-
-maxWidth = grid::unit.pmax(gA$widths[2:3], gB$widths[2:3])
-gA$widths[2:3] <- as.list(maxWidth)
-gB$widths[2:3] <- as.list(maxWidth)
-
-require(gridExtra)
-grid.arrange(gA, gB, ncol=1, heights=c(10,1))
-install.packages("maps")
-install.packages("OIdata");
-library(ggplot2)
-library(gridExtra)
-
-# line breaks between words for levels of birds$effect:
-data(birds)
-library(ggplot2)
-
-levels(birds$effect) <- gsub(" ", "\n", levels(birds$effect))
-ggplot(birds,
-       aes(x = effect,
-           y = speed)) +
-  geom_boxplot() +   coord_flip()
-
-
-#### sample size
-pdf(paste(figd,"/boxplot_cnvsmpVStfmutsmp_Aug09.pdf",sep=""))
-boxplot(as.numeric(as.character(result$V2)), as.numeric(as.character(result$V3)), names=c("cnv_sample","tfmut_sample"), ylab = "event sample size", font=2,pch=19)
-dev.off()
-
-NROW(result[(which(as.numeric(as.character(result[,8]))<0.05)),])
-
-kruskal.test(exp ~ cnv, data=data)
-kruskal.test(exp~., data=data)
