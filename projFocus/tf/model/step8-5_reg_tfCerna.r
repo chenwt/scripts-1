@@ -35,8 +35,12 @@ orderSampleLable = function(dataExp){
   return(dataExp)
 }
 
-noseHeatmap = function(inputdata){
-  data = inputdata
+noseHeatmap = function(tgene){
+  data = read.csv2(inputfile, sep="\t", header=T,stringsAsFactors=F)
+  data = data[order(as.numeric(as.character(data$cTarExp))),]
+  allSmp = data$X; rownames(data) <- allSmp
+  data = data[,colSums(data!=0)!=0]
+  
   allFeatures = colnames(data)
   data$sample = rownames(data)
   ftr.cRegExp = allFeatures[grep("cRegExp", allFeatures)]
@@ -50,7 +54,7 @@ noseHeatmap = function(inputdata){
   
   ### ceRNA target expression
   data.cTarExp = data[,c('sample', 'cTarExp')]
-  data.cTarExp$variable = rep("cTarExp     ",NROW(data)); colnames(data.cTarExp) = c("sample", 'value', 'variable')
+  data.cTarExp$variable = rep("   cTarExp ",NROW(data)); colnames(data.cTarExp) = c("sample", 'value', 'variable')
   data.cTarExp$value <- as.numeric(as.character(data.cTarExp$value))
   data.cTarExp <- orderSampleLable(data.cTarExp)
   data.cTarExp$rescale <- rescale(data.cTarExp$value,to=c(-1,1))
@@ -85,40 +89,42 @@ noseHeatmap = function(inputdata){
     p <- ggplot(data.cTarExp, aes(variable, sample) )+ geom_tile(aes(fill = rescale), color = 'white') 
     p1 <- p + scale_fill_gradient2(low='green',mid='white',high='orange') + 
           theme_grey(base_size = base_size) + theme(axis.title=element_blank(), 
-#               axis.text.y = element_blank(), axis.text.x = element_blank(),            
+              axis.text.y = element_blank(),
+#               axis.text.x = element_blank(),            
               legend.position="none",
-              axis.title.x = element_text(face="bold", colour="#990000", size=16), axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-              axis.title.x = element_text(face="bold", colour="#990000", size=8), axis.text.x  = element_text(angle=90, vjust=0.5, size=8))
+#               axis.title.x = element_text(face="bold", colour="#990000", size=16), axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+              axis.title.x = element_text(face="bold", colour="#990000", size=16), axis.text.x  = element_text(angle=90, vjust=0.5, size=16))
 
 
     p <- ggplot(data.cRegExp.m, aes(variable, sample)) +   geom_tile(aes(fill = value), color = 'white')
     p2 <- p + scale_fill_gradient2(low='green',mid='white',high='orange') + 
             theme_grey(base_size = base_size) +  theme(axis.title=element_blank(), 
-#             axis.text.y = element_blank(),axis.text.x = element_blank(), 
+            axis.text.y = element_blank(),
+#             axis.text.x = element_blank(), 
             legend.position="none" ,
-            axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-            axis.title.x = element_text(face="bold", colour="#990000", size=8), axis.text.x  = element_text(angle=90, vjust=0.5, size=8))
+#             axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+            axis.title.x = element_text(face="bold", colour="#990000", size=6), axis.text.x  = element_text(angle=90, vjust=0.5, size=6))
         
     p <- ggplot(data.cRegCNV, aes(variable, sample)) +   geom_tile(aes(fill = value), color = 'white')
     p3 <- p + scale_fill_manual(values=c("lightblue","white",colors()[119])) +  
 #           theme_grey(base_size = base_size) +   
             theme(axis.title=element_blank(), 
-#                   axis.text.y = element_blank(),
+                  axis.text.y = element_blank(),
                     legend.position="none", 
-                    axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-            axis.title.x = element_text(face="bold", colour="#990000", size=8), axis.text.x  = element_text(angle=90, vjust=0.5, size=8))
+#                     axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+            axis.title.x = element_text(face="bold", colour="#990000", size=6), axis.text.x  = element_text(angle=90, vjust=0.5, size=6))
       
     p <- ggplot(data.cRegTFmut.m, aes(variable, sample)) +  geom_tile(aes(fill = value), colour =   "white") 
     p4 <- p + scale_fill_manual(values=c('white',"red")) + 
             theme(axis.title=element_blank(),  
-      #             axis.text.y = element_blank(), 
+                  axis.text.y = element_blank(), 
                     legend.position="none",
-            axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-            axis.title.x = element_text(face="bold", colour="#990000", size=8), axis.text.x  = element_text(angle=90, vjust=0.5, size=8))
+#             axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+            axis.title.x = element_text(face="bold", colour="#990000", size=6), axis.text.x  = element_text(angle=90, vjust=0.5, size=6))
     
      
-  len1 = length(unique(data.cTarExp$variable)); len2 = length(unique(data.cRegExp.m$variable)); len3= length(unique(data.cRegCNV$variable)); len4=length(unique(data.cRegTFmut.m$variable)); 
-  lensum = len1 + len2 + len3 + len4
+#   len1 = length(unique(data.cTarExp$variable)); len2 = length(unique(data.cRegExp.m$variable)); len3= length(unique(data.cRegCNV$variable)); len4=length(unique(data.cRegTFmut.m$variable)); 
+#   lensum = len1 + len2 + len3 + len4
   pdf(paste(figd,"/heatmap_diagnois_regCerna_Aug17_",tgene, ".pdf",sep=""),width=15,height=20)
 #   layt<-grid.layout(nrow=1,ncol=4,widths=c(len1/lensum,len2/lensum,len3/lensum,len4/lensum))
   
@@ -198,100 +204,89 @@ testNormality = function(tgene){
   return(c(res1,res2))
 }
 
+svReg = function(inputfile) {
+  tgene = tail(unlist(strsplit(inputfile,"_")),1)
+  
+  data = read.csv2(inputfile, sep="\t", header=T,stringsAsFactors=F)
+  data = data[order(as.numeric(as.character(data$cTarExp))),]
+  allSmp = data$X; rownames(data) <- allSmp
+  data = data[,colSums(data!=0)!=0]
+  
+  
+  allFeatures = colnames(data)
+  ftr.cTarExp = allFeatures[grep("cTarExp", allFeatures)]
+  ftr.cRegExp = allFeatures[grep("cRegExp", allFeatures)]
+  ftr.cRegCNV = allFeatures[grep("cRegCNV", allFeatures)]
+  ftr.cRegTFmut = allFeatures[grep("cRegTFmut", allFeatures)]
+  
+  if (length(ftr.cRegTFmut) == 0 ){
+    return(c(tgene, length(ftr.cRegCNV), 0, NROW(data), NA, NA))
+  }
+  data[,c(ftr.cRegTFmut, ftr.cRegCNV)] <- sign(apply(data[,c(ftr.cRegTFmut, ftr.cRegCNV)],2, as.numeric))
+  data[,c(ftr.cTarExp, ftr.cRegExp)] <- apply(data[,c(ftr.cTarExp, ftr.cRegExp)], 2, as.numeric)
+  
+  
+  
+  ### plot
+  # noseHeatmap(data)
+  
+  data.mod1 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV)])
+  data.mod2 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV, ftr.cRegTFmut)])
+  
+  require(e1071)
+  cost = 1000; gamma = 0.001
+  testReg1 = svm(cTarExp ~ ., data = data.frame(data.mod1), type="eps-regression",  kernel = "polynomial", cost = cost, gamma = gamma)
+  testReg2 = svm(cTarExp ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "polynomial", cost = cost, gamma = gamma)
+  
+  rss1 = sum(testReg1$residuals)^2 ; rss2 = sum(testReg2$residuals)^2
+  p1 = NCOL(data.mod1) ; p2 = NCOL(data.mod2)
+  n = NROW(data)
+  
+  ##alternative hypo: mod2 is bettern than mod1, rss1 is smaller than rss2
+  f = ((rss1-rss2)/(p2-p1))/(rss2/(n-p2))
+  f.pval = ifelse(f>0,pf(f, p2-p1, n-p2, lower.tail=T), 1)
+  out = c(tgene, p1, p2-p1, n, f, f.pval)
+  print(out)
+  return(out)
+}
 
 ###----main-------
 require(scales)
+inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/data" , sep="")
+inputfileLst = paste(inputDir, "/", list.files(inputDir), sep="")
 
-# gfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfCerna/test/input.gene"
-# tgenelist = unlist(read.table(gfile,stringsAsFactors=F,header=T)[,1])
-# tgene = tgenelist[1]
-# 
-# cnvfile="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/cnv/brca_cnv_l3_tumor_Mar-23-2014.matrix.uniq.matrix"
-# expfile="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/03102014/exp/brca_exp_l3_normal_Mar-21-2014.matrix_Mar-26-2014.voomNormed.matrix"
-# mutActfile="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/05012014/tcgal2som/brca_somlevel2_byGene.matrix"
-# mutOptfileCollapse="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/tfMut/runJuly27/summary/all_targets_mutSampleVector"
-# cernafile="/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/data/networks/brca_ceRNA_network.txt"
+output  = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfCerna/result/result_"
+# inputfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfCerna/test/input_PGM2L1"
+# inputfile = inputfileLst[2]
 
-inputfile = "/Volumes//ifs/data/c2b2/ac_lab/jh3283/projFocus/result/07152014/reg/tfCerna/test/input_PGM2L1"
-data = read.csv2(inputfile, sep="\t", header=T,stringsAsFactors=F)
-data = data[order(as.numeric(as.character(data$cTarExp))),]
-allSmp = data$X; rownames(data) <- allSmp
-data = data[,colSums(data!=0)!=0]
+resDF = sapply(inputfileLst,svReg)
+resDF = t(resDF)
+write.table(resDF, file= paste(output, "_Aug182014",sep=""),col.names=F, quote=F, sep="\t" )
+save.image(paste(output, ".Rda", sep=""))
 
+plot(which(as.numeric(resDF[,6]) < 0.01)
 
-allFeatures = colnames(data)
-ftr.cTarExp = allFeatures[grep("cTarExp", allFeatures)]
-ftr.cRegExp = allFeatures[grep("cRegExp", allFeatures)]
-ftr.cRegCNV = allFeatures[grep("cRegCNV", allFeatures)]
-ftr.cRegTFmut = allFeatures[grep("cRegTFmut", allFeatures)]
-
-data[,c(ftr.cRegTFmut, ftr.cRegCNV)] <- sign(apply(data[,c(ftr.cRegTFmut, ftr.cRegCNV)],2, as.numeric))
-data[,c(ftr.cTarExp, ftr.cRegExp)] <- apply(data[,c(ftr.cTarExp, ftr.cRegExp)], 2, as.numeric)
+colnames(resDF) <- c('cTar', 'cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')
+resDF = data.frame(resDF)
+row.names(resDF) <- resDF$cTar
+resDF[,c('cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')] <- apply(resDF[,c('cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')], 2, function(x){as.numeric(as.character(x))})
 
 
+pdf(paste(figd,"/scatterplot_regCernaTF_SVR_Aug19.pdf", sep=""))
+plot(x = resDF$cnt_cRegTFmut/resDF$cnt_cRegCNV, y = -log10(resDF$F.pvalue), col = 'blue', 
+     xlab = "cnt_CNV/cnt_mut", ylab = "-log10(p-value)", main ="P value of F test\n(SVR)" , 
+     font = 2)
+abline(h=2,col="red", lwd = 4);
+text(x=4, y=300, labels=paste("Significant:  ", round(length(which(resDF$F.pvalue<=0.01))/NROW(resDF) * 100,digits=3), "%\n       ", 
+                              length(which(resDF$F.pvalue<=0.01)), " / ", NROW(resDF), sep=""), font = 2)
+dev.off()
+ 
+resDF.sig = resDF[which(resDF$F.pvalue<=0.01),]
+resDF.nosig = resDF[which(resDF$F.pvalue>0.01),]
 
-### plot
-# noseHeatmap(data)
+### analysis not significant ones
+cTars.fail = as.character(unlist(resDF.nosig$cTar))
 
-require(glmnet)
+figd = paste(rootd, "/DATA/projFocus/report/Aug2014/fig/regCernaFail/",sep="")
 
-### elastic net, cRegCNV V.S cRegTFmut + cRegCNV 
-
-data.mod1 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV)])
-data.mod2 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV, ftr.cRegTFmut)])
-
-head(data.mod1)
-mod1 <- cv.glmnet(x=data.mod1[,-1],y=data.mod1[,1], family='gaussian',alpha=0, nfolds=10)
-mod1.lambdamin  = mod1$lambda.min; idx.lambda1 = which(mod1$lambda==mod1.lambdamin)
-
-idx.exlude = which(mod1$glmnet.fit$beta[,idx.lambda1] !=0)
-
-names(which(mod1$glmnet.fit$beta[,idx.lambda1] !=0))
-
-head(data.mod2)
-mod2 <- glmnet(x= data.mod2[,-1], y=data.mod2[,1], family='gaussian',alpha=0.95, exclude=idx.exlude)
-mod2 <- cv.glmnet(x= data.mod2[,-1], y=data.mod2[,1], family='gaussian',alpha=0, nfolds=10)
-plot(mod2)
-
-mod2.lambdamin  = mod2$lambda.min; idx.lambda2 = which(mod2$lambda==mod2.lambdamin)
-names(which(mod2$glmnet.fit$beta[,idx.lambda2] !=0))
-
-getRss = function(mod, data.mod){
-  beta = mod$glmnet.fit$beta[,which(mod$lambda == mod$lambda.min)]
-  y.hat = rowSums(beta * data.mod[,-1])
-  y = data.mod[,1]
-  rss = sum((y-y.hat)^2)
-  return(rss)
-}
-
-rss1 = getRss(mod1,data.mod1)
-rss2 = getRss(mod2,data.mod2)
-rss1
-rss2
-
-idx.minlambda = which(mod2$lambda == mod2$lambda.min); p2 = mod2$glmnet.fit$df[idx.minlambda]
-
-mod1 = glm(cTarExp~., data= data.frame(data.mod1),family='gaussian')
-mod2 = glm(cTarExp~., data= data.frame(data.mod2),family='gaussian')
-
-require(mixtools)
-require(e1071)
-cost = 1000; gamma = 0.001
-testReg1 = svm(cTarExp ~ ., data = data.frame(data.mod1), type="eps-regression",  kernel = "polynomial", cost = cost, gamma = gamma)
-testReg2 = svm(cTarExp ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "polynomial", cost = cost, gamma = gamma)
-
-rss1 = sum(testReg1$residuals) ^2
-rss2 = sum(testReg2$residuals)^2
-
-p1 = NCOL(data.mod1)
-p2 = NCOL(data.mod2)
-
-n = NROW(data)
-
-f = ((rss1-rss2)/(p2-p1))/(rss2/(n-p2))
-
-##alternative hypo: mod2 is bettern than mod1, rss1 is smaller than rss2
-f.pval = ifelse(f>0,pf(f, p2-p1, n-p2, lower.tail=T), 1)
-
-}
-
+noseHeatmap(cTars.fail[1])
