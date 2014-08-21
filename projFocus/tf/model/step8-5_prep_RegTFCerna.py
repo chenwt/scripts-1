@@ -16,9 +16,17 @@ import  pandas as pd
 from    pandas import DataFrame, Series
 import  re
 import  sys
+from    math import copysign
 
 # <codecell>
 
+def sign(x): 
+    if x > 0.0 : 
+        return 1
+    elif x == 0.0 or x == 0: 
+        return 0 
+    else: 
+        return -1 
 
 # <codecell>
 
@@ -94,6 +102,63 @@ def loadCNV(cnvfile):
 
 # <codecell>
 
+# def writeInputForRegCerna(cTar_crt):
+    
+if not cTar_crt in geneExp :
+#         print "no cTar expression"
+    return 0
+
+cRegs_crt = cTarsRegDt[cTar_crt]
+exp_cTar_crt = expDF.loc[[cTar_crt] + list(geneExp.intersection(set(cRegs_crt))), smpLst].T;
+exp_cTar_crt.columns = ['cTarExp'] + map(lambda x: "cRegExp_" + x, cRegs_crt)
+
+#     if cTar_crt in geneCnv:
+#         cnv_cTar_crt = cnvDF.loc[[cTar_crt],smpLst].T; cnv_cTar_crt.columns = ['cTarCNV']
+#     else:
+#         print "no selfCNV"
+
+# cRegs_crt = list(set(geneCnv).intersection(set(cRegs_crt)))
+cnv_cReg_crt = cnvDF.loc[set(geneCnv).intersection(set(cRegs_crt)), smpLst].T; 
+cnv_cReg_crt.columns = map(lambda x: 'cRegCNV_' + x, cnv_cReg_crt.columns)
+
+### collapsed TF profiles
+# # # cRegs_crt = list(set(geneTFmut).intersection(set(cRegs_crt)))
+mut_cRegTF_crt = mutOptMergeDF.loc[cRegs_crt,smpLst].T;
+mut_cRegTF_crt.columns = map(lambda x: 'cRegTFmut_' + x, mut_cRegTF_crt.columns)
+
+
+
+### prepare cReg TF's mutation matrix
+
+cRegs_crt = cTarsRegDt[cTar_crt]; 
+out_tfMutOptDF = pd.concat([exp_cTar_crt, cnv_cReg_crt], axis = 1)
+cntCol1 = len(list(out_tfMutOptDF.columns))
+for tmp_rg in list(set(cRegs_crt).intersection(set(cRegsTfDt.keys()))): 
+    cReg_TFs_crt = cRegsTfDt[tmp_rg]
+    
+    # print cTar_crt, cRegs_crt, tmp_rg, cReg_TFs_crt
+    
+    
+    tmp_tfMutAct = mutActDF.loc[cReg_TFs_crt,smpLst]
+    tmp_cRegOptMut = mutOptMergeDF.loc[tmp_rg, smpLst]
+    
+#         mutOptMergeDF.loc[[tmp_rg], smpLst].to_csv(output + ".optIntMut.temp", sep="\t")
+    
+#         tmp_tfMutAct.to_csv(output + ".actMut.temp", sep="\t")
+    noMutSmp = set(tmp_tfMutAct.columns).difference(set(tmp_cRegOptMut[tmp_cRegOptMut > 0].index))
+    tmp_tfMutAct.loc[:,noMutSmp] = 0
+    tmp_tfMutAct.index =  map(lambda x: 'cRegTFmut_' + x + "_" + tmp_rg, tmp_tfMutAct.index)
+    out_tfMutOptDF = pd.concat([out_tfMutOptDF, tmp_tfMutAct.T], axis=1)
+
+cntCol2 = len(list(out_tfMutOptDF.columns))
+
+#     if cntCol2 > cntCol1 : 
+#         out_tfMutOptDF.to_csv(output + cTar_crt, sep="\t")
+#         return 1
+#     else :
+# #         print cTar_crt + " no TFmut"
+#         return 0 
+    
 
 # <codecell>
 
@@ -170,16 +235,13 @@ smpLst = list(set(list(expDF.columns)).intersection(set(list(mutOptMergeDF.colum
 
 # <codecell>
 
-smpLst = list(set(list(expDF.columns)).intersection(set(list(mutOptMergeDF.columns))).intersection(set(list(cnvDF.columns))))
 geneExp = set(expDF.index)
-## create TF mutation matrix for each cReg
+geneActMut = set(mutActDF.index)
 
 def writeInputForRegCerna(cTar_crt):
     
-    if not cTar_crt in geneExp:
-        print "no cTar expression"
-        return 'NA'
-    
+    if not cTar_crt in geneExp :
+        return 0
     cRegs_crt = cTarsRegDt[cTar_crt]
     exp_cTar_crt = expDF.loc[[cTar_crt] + list(geneExp.intersection(set(cRegs_crt))), smpLst].T;
     exp_cTar_crt.columns = ['cTarExp'] + map(lambda x: "cRegExp_" + x, cRegs_crt)
@@ -188,8 +250,8 @@ def writeInputForRegCerna(cTar_crt):
 #         cnv_cTar_crt = cnvDF.loc[[cTar_crt],smpLst].T; cnv_cTar_crt.columns = ['cTarCNV']
 #     else:
 #         print "no selfCNV"
-    
-    # cRegs_crt = list(set(geneCnv).intersection(set(cRegs_crt)))
+
+    cRegs_crt = list(set(geneCnv).intersection(set(cRegs_crt)))
     cnv_cReg_crt = cnvDF.loc[set(geneCnv).intersection(set(cRegs_crt)), smpLst].T; 
     cnv_cReg_crt.columns = map(lambda x: 'cRegCNV_' + x, cnv_cReg_crt.columns)
     
@@ -201,34 +263,46 @@ def writeInputForRegCerna(cTar_crt):
     
     
     ### prepare cReg TF's mutation matrix
-    
     cRegs_crt = cTarsRegDt[cTar_crt]; 
     out_tfMutOptDF = pd.concat([exp_cTar_crt, cnv_cReg_crt], axis = 1)
+    cntCol1 = len(list(out_tfMutOptDF.columns))
     
-    for temp_rg in list(set(cRegs_crt).intersection(set(cRegsTfDt.keys()))): 
+    for tmp_rg in list(set(cRegs_crt).intersection(set(cRegsTfDt.keys()))): 
+        ## for each cRegulator, extract all it's TF optmized mutation profile
         cReg_TFs_crt = cRegsTfDt[tmp_rg]
         
-        # print cTar_crt, cRegs_crt, tmp_rg, cReg_TFs_crt
-        
-        
-        tmp_tfMutAct = mutActDF.loc[cReg_TFs_crt,smpLst]
+        tmp_tfMutAct = mutActDF.loc[geneActMut.intersection(set(cReg_TFs_crt)),smpLst]
         tmp_cRegOptMut = mutOptMergeDF.loc[tmp_rg, smpLst]
         
-#         mutOptMergeDF.loc[[tmp_rg], smpLst].to_csv(output + ".optIntMut.temp", sep="\t")
         
-#         tmp_tfMutAct.to_csv(output + ".actMut.temp", sep="\t")
         noMutSmp = set(tmp_tfMutAct.columns).difference(set(tmp_cRegOptMut[tmp_cRegOptMut > 0].index))
         tmp_tfMutAct.loc[:,noMutSmp] = 0
-#         tmp_tfMutAct.index =  map(lambda x: 'cRegTFmut_' +  temp_rg + "_" + x, tmp_tfMutAct.index)
+        tmp_tfMutAct.index =  map(lambda x: 'cRegTFmut_' + tmp_rg  + "_" +  x, tmp_tfMutAct.index)
         out_tfMutOptDF = pd.concat([out_tfMutOptDF, tmp_tfMutAct.T], axis=1)
     
-    out_tfMutOptDF.to_csv(output + cTar_crt, sep="\t")
+    cntCol2 = len(list(out_tfMutOptDF.columns))
+    
+    if cntCol2 > cntCol1 : 
+        out_tfMutOptDF.to_csv(output + cTar_crt, sep="\t")
+        return 1
+    else :
+        return 0 
+    
     
 
 # <codecell>
 
-len(list(cnvDF.index))
-map(writeInputForRegCerna, cTarsLst)
+# len(list(cnvDF.index))
+# map(writeInputForRegCerna, cTarsLst)
+
+cntFail = 0; cntSuc = 0 
+for cTar_crt in cTarsLst:
+    reOut = writeInputForRegCerna(cTar_crt)
+    if reOut == 0:
+        cntFail = cntFail + 1
+    else:
+        cntSuc = cntSuc + 1 
+print "fail: " + str(cntFail) + " output number " + str(cntSuc)
 
 # <codecell>
 
