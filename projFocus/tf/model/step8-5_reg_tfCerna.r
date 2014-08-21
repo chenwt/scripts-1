@@ -20,6 +20,23 @@ figd = paste(rootd, "/DATA/projFocus/report/Aug2014/fig",sep="")
 source(paste(rootd,"/scripts/projFocus/ceRNA/projFocusCernaFunctions.R",sep=""))
 source(paste(rootd,"/scripts/myR/jingGraphic.R",sep=""))
 
+
+#----getting command line parameters
+#--getting arguments
+args = getArgs()
+
+if(length(args) < 1 || is.null(args)){
+    print(paste(usage,example,sep="\n"))
+  print(args)
+    stop(paste(error,"wrong input parameter!"))
+}
+
+setwd(system("pwd",intern=T))
+tgene    = args[['ctar']]
+# imputfile = 
+nboot	 = as.integer(args[['nboot']])
+# output   = args[['out']]
+
 ###----func-------
 formatTestOut = function(test_aov){
   Res.DF_cnv_all = paste(test_aov$Res.Df, collapse="/")
@@ -151,14 +168,18 @@ noseHeatmap = function(inputfile){
 }
 
 svReg = function(inputfile) {
-  tgene = tail(unlist(strsplit(inputfile,"_")),1)
-  
+  # tgene = tail(unlist(strsplit(inputfile,"_")),1)
+ 
   data = read.csv2(inputfile, sep="\t", header=T,stringsAsFactors=F)
   data = data[order(as.numeric(as.character(data$cTarExp))),]
   allSmp = data$X; rownames(data) <- allSmp
+  
+   ### bootstrapping 
+  allSmp = sample(allSmp, replace = T)
+  data = data[allSmp, ] 
+  
   data = data[,colSums(data!=0)!=0]
-  
-  
+
   allFeatures = colnames(data)
   ftr.cTarExp = allFeatures[grep("cTarExp", allFeatures)]
   ftr.cRegExp = allFeatures[grep("cRegExp", allFeatures)]
@@ -172,10 +193,6 @@ svReg = function(inputfile) {
   data[,c(ftr.cRegTFmut, ftr.cRegCNV)] <- sign(apply(data[,c(ftr.cRegTFmut, ftr.cRegCNV)],2, as.numeric))
   data[,c(ftr.cTarExp, ftr.cRegExp)] <- apply(data[,c(ftr.cTarExp, ftr.cRegExp)], 2, as.numeric)
   
-  
-  
-  ### plot
-  # noseHeatmap(data)
   
   data.mod1 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV)])
   data.mod2 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV, ftr.cRegTFmut)])
@@ -184,46 +201,47 @@ svReg = function(inputfile) {
   cost1 = 100; cost2 = 1000; gamma = 0.001
   mod1 = svm(cTarExp ~ ., data = data.frame(data.mod1), type="eps-regression",  kernel = "polynomial", cost = cost1, gamma = gamma, cross=10)
   mod2 = svm(cTarExp ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "polynomial", cost = cost2, gamma = gamma, cross = 10)
-#   testReg1 = tune(svm, cTarExp ~ ., data = data.frame(data.mod1), ranges=list(type="eps-regression",  kernel = "polynomial", cost = 2^(5:10), gamma = 10^(-5:1)),
-#                       tunecontrol = tune.control(sampling = "fix")  )
-#   
-#   
-#   testReg2 = tune(svm, cTarExp ~ ., data = data.frame(data.mod2), ranges=list(type="eps-regression",  kernel = "polynomial", cost = 2^(5:10), gamma = 10^(-5:1)),
-#                       tunecontrol = tune.control(sampling = "fix"))
-#   print(c(testReg1$best.parameter, testReg2$best.parameter))
-#   mod1 = testReg1$best.model
-#   mod2 = testReg2$best.model
-  
+
   rss1 = sum(mod1$residuals)^2 ; rss2 = sum(mod2$residuals)^2
   p1 = NCOL(data.mod1) ; p2 = NCOL(data.mod2)
-  n = NROW(data)
+  n = length(allSmp)
+  # n = length(unique(allSmp))
   
   ##alternative hypo: mod2 is bettern than mod1, rss1 is smaller than rss2
   f = ((rss1-rss2)/(p2-p1))/(rss2/(n-p2))
   f.pval = ifelse(f>0,pf(f, p2-p1, n-p2, lower.tail=T), 1)
-  out = c(tgene, p1, p2-p1, n, f, f.pval)
+  out = c(tgene, mod1.mse=mod1$tot.MSE, mod1.r2 = mod1$scorrcoeff,
+	  mod2.mse=mod2$tot.MSE, mod2.r2=mod2$scorrcoeff,
+	  rss1=rss1, rss2=rss2,
+	  cntCNV=p1, cntMut=p2-p1, cntSmp=n, F=f, FPval=f.pval) 
   print(out)
+  # cat(sprintf("cv.svm> mse, r2 = %5.3f %5.3f\n", mod1$tot.MSE, mod1$scorrcoeff, mod2$tot.MSE, mod2$scorrcoeff))
+
   return(out)
+
 }
 
+####---test----
+# nboot=20
+# tgene = 'EN2'
 ###----main-------
 require(scales)
 inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/data" , sep="")
-inputfileLst = paste(inputDir, "/", list.files(inputDir), sep="")
-output  = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/result_", sep="")
-
-tgene = 'EN2'
 inputfile = paste(inputDir, '/', 'input_', tgene, sep="")
-# inputfile = sample(inputfileLst, 1)
-# = function(inputfile) {
-#   tgene = tail(unlist(strsplit(inputfile,"_")),1)
-  
+# inputfileLst = paste(inputDir, "/", list.files(inputDir), sep="")
+output  = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug21/result_", sep="")
+
+svReg_dev = function(inputfile){
   data = read.csv2(inputfile, sep="\t", header=T,stringsAsFactors=F)
   data = data[order(as.numeric(as.character(data$cTarExp))),]
   allSmp = data$X; rownames(data) <- allSmp
+  
+   ### bootstrapping 
+  allSmp = sample(allSmp, replace = T)
+  data = data[allSmp, ] 
+  
   data = data[,colSums(data!=0)!=0]
-  
-  
+
   allFeatures = colnames(data)
   ftr.cTarExp = allFeatures[grep("cTarExp", allFeatures)]
   ftr.cRegExp = allFeatures[grep("cRegExp", allFeatures)]
@@ -238,114 +256,100 @@ inputfile = paste(inputDir, '/', 'input_', tgene, sep="")
   data[,c(ftr.cTarExp, ftr.cRegExp)] <- apply(data[,c(ftr.cTarExp, ftr.cRegExp)], 2, as.numeric)
   
   
+  data.mod1 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV)])
+  data.mod2 = as.matrix(data[,c(ftr.cTarExp, ftr.cRegCNV, ftr.cRegTFmut)])
   
-  ### plot
-  # noseHeatmap(data)
-  
-  data.mod1 = data[,c(ftr.cTarExp, ftr.cRegCNV)]
-  data.mod2 = data[,c(ftr.cTarExp, ftr.cRegCNV, ftr.cRegTFmut)]
-  kruskal.test(cTarExp ~ ., data = data.mod1)
-  kruskal.test(cTarExp ~ ., data = data.mod2)
-
   require(e1071)
   cost1 = 100; cost2 = 1000; gamma = 0.001
   mod1 = svm(cTarExp ~ ., data = data.frame(data.mod1), type="eps-regression",  kernel = "polynomial", cost = cost1, gamma = gamma, cross=10)
   mod2 = svm(cTarExp ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "polynomial", cost = cost2, gamma = gamma, cross = 10)
-  #   testReg1 = tune(svm, cTarExp ~ ., data = data.frame(data.mod1), ranges=list(type="eps-regression",  kernel = "polynomial", cost = 2^(5:10), gamma = 10^(-5:1)),
-  #                       tunecontrol = tune.control(sampling = "fix")  )
-  #   
-  #   
-  #   testReg2 = tune(svm, cTarExp ~ ., data = data.frame(data.mod2), ranges=list(type="eps-regression",  kernel = "polynomial", cost = 2^(5:10), gamma = 10^(-5:1)),
-  #                       tunecontrol = tune.control(sampling = "fix"))
-  #   print(c(testReg1$best.parameter, testReg2$best.parameter))
-  #   mod1 = testReg1$best.model
-  #   mod2 = testReg2$best.model
-  
+
   rss1 = sum(mod1$residuals)^2 ; rss2 = sum(mod2$residuals)^2
   p1 = NCOL(data.mod1) ; p2 = NCOL(data.mod2)
-  n = NROW(data)
+  n = length(unique(allSmp))
   
   ##alternative hypo: mod2 is bettern than mod1, rss1 is smaller than rss2
   f = ((rss1-rss2)/(p2-p1))/(rss2/(n-p2))
   f.pval = ifelse(f>0,pf(f, p2-p1, n-p2, lower.tail=T), 1)
-  out = c(tgene, p1, p2-p1, n, f, f.pval)
-  print(out)
-  return(out)
-# }
+  out = c(tgene, mod1.mse=mod1$tot.MSE, mod1.r2 = mod1$scorrcoeff,
+	  mod2.mse=mod2$tot.MSE, mod2.r2=mod2$scorrcoeff,
+	  rss1=rss1, rss2=rss2,
+	  cntCNV=p1, cntMut=p2-p1, cntSmp=n, F=f, FPval=f.pval)
+  # print(out)
+  cat(sprintf("cv.svm> mse, r2 = %5.3f %5.3f\n", mod1$tot.MSE, mod1$scorrcoeff, mod2$tot.MSE, mod2$scorrcoeff))
+}
 
-
-
-# ---------------
-
-
-
-resDF = sapply(inputfileLst,svReg)
-
+print(inputfile)
+# resDF = sapply(inputfileLst,svReg)
+resDF = sapply(rep(inputfile, nboot), svReg)
 resDF = t(resDF)
-write.table(resDF, file= paste(output, "_Aug182014",sep=""),col.names=F, quote=F, sep="\t" )
-save.image(paste(output, ".Rda", sep=""))
+rownames(resDF)  <- paste(tgene, 1:nboot, sep="_")
+
+write.table(resDF, file= paste(output, tgene ,sep=""),col.names=F, quote=F, sep="\t" )
+# save.image(paste(output, ".Rda", sep=""))
 
 
-pcut = 0.01
-plot(which(as.numeric(resDF[,6]) <= pcut))
 
-colnames(resDF) <- c('cTar', 'cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')
-resDF = data.frame(resDF)
-row.names(resDF) <- resDF$cTar
-resDF[,c('cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')] <- apply(resDF[,c('cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')], 2, function(x){as.numeric(as.character(x))})
+# pcut = 0.01
+# plot(which(as.numeric(resDF[,6]) <= pcut))
+
+# colnames(resDF) <- c('cTar', 'cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')
+# resDF = data.frame(resDF)
+# row.names(resDF) <- resDF$cTar
+# resDF[,c('cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')] <- apply(resDF[,c('cnt_cRegCNV', 'cnt_cRegTFmut', 'cnt_smp','F', 'F.pvalue')], 2, function(x){as.numeric(as.character(x))})
 
 
-pdf(paste(figd,"/scatterplot_regCernaTF_SVR_Aug19.pdf", sep=""))
-plot.y = resDF$F.pvalue
-plot.y[which(plot.y == 0)] <- 1e-300
-plot(x = resDF$cnt_cRegTFmut/resDF$cnt_cRegCNV, y = -log10(plot.y), col = 'blue', 
-     xlab = "cnt_mut/cnt_cnv", ylab = "-log10(p-value)", main ="P value of F test\n(SVR)" , 
-     font = 2)
-
-# plot(x = resDF$cnt_cRegTFmut, y = -log10(resDF$F.pvalue), col = 'blue', 
-#      xlab = "cnt_mut", ylab = "-log10(p-value)", main ="P value of F test\n(SVR)" , 
+# pdf(paste(figd,"/scatterplot_regCernaTF_SVR_Aug19.pdf", sep=""))
+# plot.y = resDF$F.pvalue
+# plot.y[which(plot.y == 0)] <- 1e-300
+# plot(x = resDF$cnt_cRegTFmut/resDF$cnt_cRegCNV, y = -log10(plot.y), col = 'blue', 
+#      xlab = "cnt_mut/cnt_cnv", ylab = "-log10(p-value)", main ="P value of F test\n(SVR)" , 
 #      font = 2)
 
-abline(h=2,col="red", lwd = 4);
-text(x=40, y=300, labels=paste("Significant:  ", round(length(which(resDF$F.pvalue<=pcut))/NROW(resDF) * 100,digits=3), "%\n       ", 
-                              length(which(resDF$F.pvalue<=0.01)), " / ", NROW(resDF), sep=""), font = 2)
-dev.off()
+# # plot(x = resDF$cnt_cRegTFmut, y = -log10(resDF$F.pvalue), col = 'blue', 
+# #      xlab = "cnt_mut", ylab = "-log10(p-value)", main ="P value of F test\n(SVR)" , 
+# #      font = 2)
+
+# abline(h=2,col="red", lwd = 4);
+# text(x=40, y=300, labels=paste("Significant:  ", round(length(which(resDF$F.pvalue<=pcut))/NROW(resDF) * 100,digits=3), "%\n       ", 
+#                               length(which(resDF$F.pvalue<=0.01)), " / ", NROW(resDF), sep=""), font = 2)
+# dev.off()
  
-resDF.sig = resDF[which(resDF[,6]<=pcut),]
-resDF.nosig = resDF[which(resDF[,6]>pcut),]
+# resDF.sig = resDF[which(resDF[,6]<=pcut),]
+# resDF.nosig = resDF[which(resDF[,6]>pcut),]
 
 
-### analysis not significant ones
-# targs = inputfileLst[3:20]
-# for (inputfile in targs ) {
-#     noseHeatmap(inputfile)
+# ### analysis not significant ones
+# # targs = inputfileLst[3:20]
+# # for (inputfile in targs ) {
+# #     noseHeatmap(inputfile)
+# # }
+
+# cTars.fail = as.character(unlist(resDF.nosig$cTar))
+
+# figd = paste(rootd, "/DATA/projFocus/report/Aug2014/fig/regCernaFail/",sep="")
+
+# for (cTar in sample(cTars.fail,size=max(length(cTars.fail),20))){
+#   inputfile= paste(inputDir, "/input_", cTar, sep="")
+#   print(c(cTar, inputfile))
+#   noseHeatmap(inputfile)
 # }
 
-cTars.fail = as.character(unlist(resDF.nosig$cTar))
+# cTars.succ = as.character(unlist(resDF.sig$cTar))
+# figd = paste(rootd, "/DATA/projFocus/report/Aug2014/fig/regCernaSucc/",sep="")
+# plot.cTars = sample(cTars.succ,size=10,replace=F)
 
-figd = paste(rootd, "/DATA/projFocus/report/Aug2014/fig/regCernaFail/",sep="")
+# for (cTars.crt in plot.cTars){
+#   inputfile= paste(inputDir, "/input_", cTars.crt, sep="")
+#   print(c(cTars.crt, inputfile))
+#    noseHeatmap(inputfile)
+# }
 
-for (cTar in sample(cTars.fail,size=max(length(cTars.fail),20))){
-  inputfile= paste(inputDir, "/input_", cTar, sep="")
-  print(c(cTar, inputfile))
-  noseHeatmap(inputfile)
-}
-
-cTars.succ = as.character(unlist(resDF.sig$cTar))
-figd = paste(rootd, "/DATA/projFocus/report/Aug2014/fig/regCernaSucc/",sep="")
-plot.cTars = sample(cTars.succ,size=10,replace=F)
-
-for (cTars.crt in plot.cTars){
-  inputfile= paste(inputDir, "/input_", cTars.crt, sep="")
-  print(c(cTars.crt, inputfile))
-   noseHeatmap(inputfile)
-}
-
-resDF.sig[order(resDF.sig$F.pvalue),][1000:1030,]
-top.cTars = row.names(resDF.sig[order(resDF.sig$F.pvalue),][1000:1010,])
-top.cTars =c("STAT3", "TBX3")
-for (cTars.crt in top.cTars){
-  inputfile= paste(inputDir, "/input_", cTars.crt, sep="")
-  print(c(cTars.crt, inputfile))
-  noseHeatmap(inputfile)
-}
+# resDF.sig[order(resDF.sig$F.pvalue),][1000:1030,]
+# top.cTars = row.names(resDF.sig[order(resDF.sig$F.pvalue),][1000:1010,])
+# top.cTars =c("STAT3", "TBX3")
+# for (cTars.crt in top.cTars){
+#   inputfile= paste(inputDir, "/input_", cTars.crt, sep="")
+#   print(c(cTars.crt, inputfile))
+#   noseHeatmap(inputfile)
+# }
