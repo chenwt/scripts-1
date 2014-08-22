@@ -192,7 +192,6 @@ svReg = function(inputfile) {
   data[,c(ftr.cRegTFmut, ftr.cTarCNV, ftr.cRegCNV)] <- sign(apply(data[,c(ftr.cRegTFmut,ftr.cTarCNV, ftr.cRegCNV)],2, as.numeric))
   data[,c(ftr.cTarExp, ftr.cRegExp)] <- apply(data[,c(ftr.cTarExp, ftr.cRegExp)], 2, as.numeric)
   
-  
   data.mod1 = as.matrix(data[,c(ftr.cTarExp, ftr.cTarCNV)])
   data.mod2 = as.matrix(data[,c(ftr.cTarExp, ftr.cTarCNV, ftr.cRegCNV)])
   data.mod3 = as.matrix(data[,c(ftr.cTarExp, ftr.cTarCNV, ftr.cRegCNV, ftr.cRegTFmut)])
@@ -201,7 +200,7 @@ svReg = function(inputfile) {
   cost1 = 1; cost2 = 100 ; cost3 = 1000; gamma = 0.001
   mod1 = svm(data.mod1[,ftr.cTarExp] ~ ., data = data.frame(data.mod1), type="eps-regression",  kernel = "polynomial", cost = cost1, gamma = gamma, cross = 10)
   mod2 = svm(data.mod2[,ftr.cTarExp] ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "polynomial", cost = cost2, gamma = gamma, cross = 10)
-  mod3 = svm(data.mod3[,ftr.cTarExp] ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "polynomial", cost = cost3, gamma = gamma, cross = 10)
+  mod3 = svm(data.mod3[,ftr.cTarExp] ~ ., data = data.frame(data.mod3), type="eps-regression",  kernel = "polynomial", cost = cost3, gamma = gamma, cross = 10)
   
   rss1 = sum(mod1$residuals)^2 ; rss2 = sum(mod2$residuals)^2; rss3 = sum(mod3$residuals)^2; 
   p1 = NCOL(data.mod1) -1 ; p2 = NCOL(data.mod2) -1 ; p3 = NCOL(data.mod3) - 1
