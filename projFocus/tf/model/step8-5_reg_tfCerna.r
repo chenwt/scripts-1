@@ -193,18 +193,9 @@ svReg = function(inputfile) {
   data.mod3 = data.frame(as.matrix(data[,c(ftr.cTarExp, ftr.cTarCNV, ftr.cRegCNV, ftr.cRegTFmut)]))
   
   require(e1071)
-  #   cost1 = 1; cost2 = 100 ; cost3 = 1000; gamma = 0.001
-  #   cost = 1000
-  #   mod1 = svm(data.mod1[,ftr.cTarExp] ~ ., data = data.frame(data.mod1), type="eps-regression",  kernel = "linear", cost = 1/length(ftr.cTarCNV), gamma = gamma, cross = 10)
-  #   mod2 = svm(data.mod2[,ftr.cTarExp] ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "linear", cost = 1/length(c(ftr.cTarCNV,ftr.cRegCNV)), gamma = gamma, cross = 10)
-  #   mod3 = svm(data.mod3[,ftr.cTarExp] ~ ., data = data.frame(data.mod3), type="eps-regression",  kernel = "linear", cost = 1/length(c(ftr.cTarCNV,ftr.cRegCNV,ftr.cRegTFmut)), gamma = gamma, cross = 10)
-  #   
-  #   mod1 = svm(data.mod1[,ftr.cTarExp] ~ data.mod1[,-1], data = data.mod1, type="eps-regression",  kernel = "linear", cost = 1/length(ftr.cTarCNV), cross = 6)
-  #   mod2 = svm(data.mod2[,ftr.cTarExp] ~ ., data = data.frame(data.mod2), type="eps-regression",  kernel = "linear", cost = 1/length(c(ftr.cTarCNV,ftr.cRegCNV)), cross = 6)
-  #   mod3 = svm(data.mod3[,ftr.cTarExp] ~ ., data = data.frame(data.mod3), type="eps-regression",  kernel = "linear", cost = 1/length(c(ftr.cTarCNV,ftr.cRegCNV,ftr.cRegTFmut)), cross = 6)
-  mod = tune.svm(data.mod1[,1] ~ data.mod1[,-1] , data = data.mod1, range(type="eps-regression",  kernel = "linear", cost =10^c(0.01, 0.1, 1, 2, 3),cross = 6)); mod1 = mod$best.model
-  mod = tune.svm(data.mod2[,1] ~ as.matrix(data.mod2[,-1]) , data = data.mod2, range(type="eps-regression",  kernel = "linear", cost =10^c(0.01, 0.1, 1, 2, 3),cross = 6)); mod2 = mod$best.model
-  mod = tune.svm(data.mod3[,1] ~ as.matrix(data.mod3[,-1]) , data = data.mod3, range(type="eps-regression",  kernel = "linear", cost =10^c(0.01, 0.1, 1, 2, 3),cross = 6)); mod3 = mod$best.model
+  mod = tune.svm(data.mod1[,1] ~ data.mod1[,-1] , data = data.mod1,type="eps-regression", range(  kernel = c("radial","polynomial","linear"), cost =10^c(-2, -1, 0, 1, 2, 3)),gamma = 0.01,cross = 10); mod1 = mod$best.model
+  mod = tune.svm(data.mod2[,1] ~ as.matrix(data.mod2[,-1]) , data = data.mod2, type="eps-regression", range( kernel = c("radial","polynomial","linear"), cost =10^c(-2, -1, 0, 1, 2, 3)),gamma = 0.01,cross = 10); mod2 = mod$best.model
+  mod = tune.svm(data.mod3[,1] ~ as.matrix(data.mod3[,-1]) , data = data.mod3, type="eps-regression", range(  kernel = c("radial","polynomial","linear"), cost =10^c(-2, -1, 0, 1, 2, 3)),gamma = 0.01,cross = 10); mod3 = mod$best.model
   
   return(list(mod1=mod1,mod2=mod2,mod3=mod3))
   
@@ -270,9 +261,8 @@ svReg.boot = function(inputfile, mod1,mod2,mod3) {
 
 }
 
-
 plotMSEDensity = function(data){
-  data <- data.frame(resDF)
+  data <- data.frame(data)
   data[,-1] <- apply(data[,-1], 2, as.numeric)
   ymax = max(density(as.numeric(data$mod1.mse))$y, density(as.numeric(data$mod2.mse))$y, density(as.numeric(data$mod3.mse))$y)
   xmax = max(density(as.numeric(data$mod1.mse))$x, density(as.numeric(data$mod2.mse))$x, density(as.numeric(data$mod3.mse))$x)
@@ -293,7 +283,7 @@ plotMSEDensity = function(data){
 
 ####---test----
 #  nboot=10
-#  tgene = 'AFF3'
+#  tgene = 'BCL2L1'
 ###----main-------
 require(scales)
 inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/data" , sep="")
@@ -312,5 +302,12 @@ header = c("tgene", "mod1.mse", "mod1.r2", "mod2.mse", "mod2.r2",
                   "mod3.mse", "mod3.r2" ,  "rss1", "rss2", "rss3" ,
                  "cntSelfCNV", "cntCregCNV", "cntMut",  "cntSmp")
 colnames(resDF) = header
+
 write.table(resDF, paste(output, tgene ,sep=""), col.names=T, quote=F, sep="\t")
 
+
+###
+# plotMSEDensity(resDF)
+# plot(density(as.numeric(resDF[,8])), col="green")
+# lines(density(as.numeric(resDF[,9])), col="blue")
+# lines(density(as.numeric(resDF[,10])), col="red")
