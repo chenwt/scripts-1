@@ -60,18 +60,19 @@ noseHeatmap = function(tgene){
   
   allFeatures = colnames(data)
   data$sample = rownames(data)
+  ftr.cTarExp = allFeatures[grep("cTarExp", allFeatures)]
+  ftr.cTarCNV = allFeatures[grep("cTarCNV", allFeatures)]
   ftr.cRegExp = allFeatures[grep("cRegExp", allFeatures)]
   ftr.cRegCNV = allFeatures[grep("cRegCNV", allFeatures)]
   ftr.cRegTFmut = allFeatures[grep("cRegTFmut", allFeatures)]
-  data[,c('cTarExp', ftr.cRegExp, ftr.cRegCNV, ftr.cRegTFmut)] = apply(data[,c('cTarExp', ftr.cRegExp, ftr.cRegCNV, ftr.cRegTFmut)],2,as.numeric)
+  data[,c(ftr.cTarExp, ftr.cRegExp, ftr.cTarCNV, ftr.cRegCNV, ftr.cRegTFmut)] = 
+        apply(data[,c(ftr.cTarExp, ftr.cRegExp, ftr.cTarCNV,ftr.cRegCNV, ftr.cRegTFmut)],2,as.numeric)
   
   library(reshape); library(ggplot2) ;library(scales);library(RCurl);  library (grid)
-  
-  ####---underDevelopment
-  
+    
   ### ceRNA target expression
-  data.cTarExp = data[,c('sample', 'cTarExp')]
-  data.cTarExp$variable = rep("   cTarExp ",NROW(data)); colnames(data.cTarExp) = c("sample", 'value', 'variable')
+  data.cTarExp = data[,c('sample', ftr.cTarExp)]
+  data.cTarExp$variable = rep(ftr.cTarExp, NROW(data)); colnames(data.cTarExp) = c("sample", 'value', 'variable')
   data.cTarExp$value <- as.numeric(as.character(data.cTarExp$value))
   data.cTarExp <- orderSampleLable(data.cTarExp)
   data.cTarExp$rescale <- rescale(data.cTarExp$value,to=c(-1,1))
@@ -92,6 +93,12 @@ noseHeatmap = function(tgene){
   data.cRegExp.m <- orderSampleLable(data.cRegExp.m)
   head(data.cRegExp.m)
 
+  ## ceRNA target CNV
+  data.cTarCNV = data[,c('sample', ftr.cTarCNV)]
+  data.cTarCNV = melt(data.cTarCNV, id.vars='sample')
+  data.cTarCNV$value <- factor(sign(as.numeric(as.character(data.cTarCNV$value))), levels = c(-1,0,1))
+  data.cTarCNV <- orderSampleLable(data.cTarCNV)
+  head(data.cTarCNV)
   
   ## ceRNA regulator's CNV 
   data.cRegCNV = data[,c('sample', ftr.cRegCNV)]
@@ -110,37 +117,58 @@ noseHeatmap = function(tgene){
   
   ### ploting
     base_size <- 6
-    p <- ggplot(data.cTarExp, aes(variable, sample) )+ geom_tile(aes(fill = rescale), color = 'white') 
-    p1 <- p + scale_fill_gradient2(low='green',mid='white',high='orange') + 
-          theme_grey(base_size = base_size) + theme(axis.title=element_blank(), 
-              axis.text.y = element_blank(),
-#               axis.text.x = element_blank(),            
-              legend.position="none",
-#               axis.title.x = element_text(face="bold", colour="#990000", size=16), axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-              axis.title.x = element_text(face="bold", colour="#990000", size=16), axis.text.x  = element_text(angle=90, vjust=0.5, size=16))
+    p <- ggplot(data.cTarExp, aes(variable, sample) ) + geom_tile(aes(fill = rescale), color = 'white') 
+    p1 <- p + scale_y_discrete(breaks=NULL) + 
+              scale_fill_gradient2(low='#99CC00',mid='white',high='#FF6600') + 
+              theme(panel.background = element_blank(),
+                    axis.title=element_blank(), 
+                    axis.text.y = element_blank(),
+      #               axis.text.x = element_blank(),            
+                    legend.position="none",
+      #               axis.title.x = element_text(face="bold", colour="#990000", size=16), axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+                    axis.title.x = element_text(face="bold", colour="#990000", size=14), axis.text.x  = element_text(angle=90, vjust=0.5, size=14))
 
 
-    p <- ggplot(data.cRegExp.m, aes(variable, sample)) +   geom_tile(aes(fill = value), color = 'white')
-    p2 <- p + scale_fill_gradient2(low='green',mid='white',high='orange') + 
-            theme_grey(base_size = base_size) +  theme(axis.title=element_blank(), 
-            axis.text.y = element_blank(),
-#             axis.text.x = element_blank(), 
-            legend.position="none" ,
-#             axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-            axis.title.x = element_text(face="bold", colour="#990000", size=8), axis.text.x  = element_text(angle=90, vjust=0.5, size=8))
-        
-    p <- ggplot(data.cRegCNV, aes(variable, sample)) +   geom_tile(aes(fill = value), color = 'white')
-    p3 <- p + scale_fill_manual(values=c("lightblue","white",colors()[119])) +  
+#     p <- ggplot(data.cRegExp.m, aes(variable, sample)) +   geom_tile(aes(fill = value,height = .2),color = 'white')
+#     p2 <- p + scale_y_discrete(breaks=NULL) + 
+#               scale_fill_gradient2(low='green',mid='white',high='orange') + 
+#               theme_grey(base_size = base_size) + 
+#               theme(panel.background = element_blank(),
+#                     axis.title=element_blank(), 
+#                     axis.text.y = element_blank(),
+#       #             axis.text.x = element_blank(), 
+#                     legend.position="none" ,
+#       #             axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+#                     axis.title.x = element_text(face="bold", colour="#990000", size=14), axis.text.x  = element_text(angle=90, vjust=0.5, size=14))
+
+    p <- ggplot(data.cTarCNV, aes(variable, sample)) +   geom_tile(aes(fill = value ), color = 'white')
+    p2 <- p +  scale_y_discrete(breaks=NULL) +  
+              scale_fill_manual(values=c("#99CCFF","white","#FF99CC")) +  
+              theme(panel.background = element_blank(),
+                    axis.title=element_blank(), 
+                    axis.text.y = element_blank(),
+                    #axis.text.x = element_blank(), 
+                    legend.position="none" ,
+                    #axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
+                    axis.title.x = element_text(face="bold", colour="#990000", size=14), axis.text.x  = element_text(angle=90, vjust=0.5, size= 14))
+
+
+    p <- ggplot(data.cRegCNV, aes(variable, sample)) +   geom_tile(aes(fill = value ), color = 'white')
+    p3 <- p + scale_y_discrete(breaks=NULL) +  
+            scale_fill_manual(values=c("#99CCFF","white","#FF99CC")) +  
 #           theme_grey(base_size = base_size) +   
-            theme(axis.title=element_blank(), 
+            theme(panel.background = element_blank(),
+                  axis.title=element_blank(), 
                   axis.text.y = element_blank(),
                     legend.position="none", 
 #                     axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
-            axis.title.x = element_text(face="bold", colour="#990000", size=8), axis.text.x  = element_text(angle=90, vjust=0.5, size=8))
+            axis.title.x = element_text(face="bold", colour="#333333", size=10), axis.text.x  = element_text(angle=90, vjust=0.5, size=10))
       
     p <- ggplot(data.cRegTFmut.m, aes(variable, sample)) +  geom_tile(aes(fill = value), colour =   "white") 
-    p4 <- p + scale_fill_manual(values=c('white',"red")) + 
-            theme(axis.title=element_blank(),  
+    p4 <- p + scale_fill_manual(values=c('white',"#CC3366")) +
+            scale_y_discrete(breaks=NULL) + 
+            theme(panel.background = element_blank(),
+                  axis.title=element_blank(), 
                   axis.text.y = element_blank(), 
                     legend.position="none",
 #             axis.title.x = element_text(face="bold", colour="#990000", size=16),axis.text.x  = element_text(angle=90, vjust=0.5, size=16),
@@ -148,19 +176,21 @@ noseHeatmap = function(tgene){
     
      
   len1 = length(unique(data.cTarExp$variable)); len2 = length(unique(data.cRegExp.m$variable)); len3= length(unique(data.cRegCNV$variable)); len4=length(unique(data.cRegTFmut.m$variable)); 
-  lensum = len2 + len3 + len4
-  pdf(paste(figd,"/heatmap_nose_regCerna_Aug21_",tgene, ".pdf",sep=""),width=15,height=18)
+  lensum = len3 + len4
   layt<-grid.layout(nrow=1,ncol=4,widths=c(1/20,len2/lensum * 19/20,len3/lensum * 19/20,len4/lensum * 19/20))
-  
-  layt<-grid.layout(nrow=1,ncol=3,widths=c(1/21,len3/lensum * 10/21,len4/lensum * 10/21))
 
+  layt<-grid.layout(nrow=1,ncol=4,widths=c(1/22,1/22, len3/lensum * 10/22,len4/lensum * 10/22))
+
+
+  pdf(paste(figd,"/heatmap_nose_regCerna_Aug24_",tgene, ".pdf",sep=""),width=15,height=18)
   #   grid.show.layout(layt)
   grid.newpage()
   pushViewport(viewport(layout=layt))
   print(p1,  vp = viewport(layout.pos.row=1,layout.pos.col=1))
-#   print(p2, vp = viewport(layout.pos.row=1,layout.pos.col=2))
-  print(p3, vp = viewport(layout.pos.row=1,layout.pos.col=2))
-  print(p4, vp = viewport(layout.pos.row=1,layout.pos.col=3))
+  print(p2, vp = viewport(layout.pos.row=1,layout.pos.col=2))
+  print(p3, vp = viewport(layout.pos.row=1,layout.pos.col=3))
+  print(p4, vp = viewport(layout.pos.row=1,layout.pos.col=4))
+
   dev.off()
 
 }
@@ -171,76 +201,169 @@ calKS = function(inputfile){
     return(rep(NA,5))
   }
   print(inputfile)
-  data = read.csv(inputfile, stringsAsFactors= F, header=F,sep="\t")
-  colnames(data ) = c("btname","tgene", "mod1.mse", "mod1.r2",
-                      "mod2.mse", "mod2.r2",
-                      "rss1", "rss2",
-                      "cntCNV", "cntMut", "cntSmp", "F", "FPval")
-  
-  ks.mse = ks.test(as.numeric(data$mod1.mse), as.numeric(data$mod2.mse),alternative='less')
-  ks.r2 = ks.test(as.numeric(data$mod1.r2), as.numeric(data$mod2.r2),alternative='greater')
-  out= sprintf("%s\t%5.3f\t%5.3e\t%5.3f\t%5.3e" ,tgene,ks.mse$statistic,ks.mse$p.value, ks.r2$statistic, ks.r2$p.value)
+  data = read.csv(inputfile, stringsAsFactors= F, header=T,sep="\t")
+#   colnames(data ) = c("btname","tgene", "mod1.mse", "mod1.r2",
+#                       "mod2.mse", "mod2.r2",
+#                       "mod3.mse", "mod3.r2",
+#                       "rss1", "rss2", "rss3",
+#                       "cntTarCNV", "cntRegCNV", "cntRegTFMut", "cntSmp")
+#   
+  ks.12 = ks.test(as.numeric(data$mod1.mse), as.numeric(data$mod2.mse),alternative='less')
+  ks.23 =  ks.test(as.numeric(data$mod2.mse), as.numeric(data$mod3.mse),alternative='less')
+  ks.13 =  ks.test(as.numeric(data$mod1.mse), as.numeric(data$mod3.mse),alternative='less')
+  out= sprintf("%s\t%5.3f\t%5.3e\t%5.3f\t%5.3e\t%5.3f\t%5.3e" ,tgene, ks.12$statistic, ks.12$p.value, 
+               ks.23$statistic, ks.23$p.value, ks.13$statistic, ks.13$p.value)
   return(out)
 }
 
 #### main------
 require(scales)
-inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug21/" , sep="")
-
-output  = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/summary_runAug21", sep="")
-
+inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug22/" , sep="")
+output  = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/summary_runAug22", sep="")
 
 inputfileLst = paste(inputDir, "/", list.files(inputDir,pattern="result"), sep="")
+# tgene = 'ABCA1';
 # inputfile = paste(inputDir, '/', 'result_', tgene, sep="")
 resDF = sapply(inputfileLst, calKS)
-
 resDF = t(resDF)
-names(resDF) <- "cTarKS.mse\tKS.mse.pval\tKS.r2\tKS.r2.pval"
-write(resDF, file=output )
 
-resDF = read.table(output, sep="\t",stringsAsFactors=F)
-pcut = 0.001
+header <- "tgene\tks12.mse\tks12.mse.pval\tks23.mse\tks23.mse.pval\tks13.mse\tks13.mse.pval"
+write(header, file=output)
+write(resDF, file=output, append=T)
 
-NROW(resDF[which(as.numeric(resDF[,3]) <= pcut),])/ NROW(resDF)
-resDF.sig = resDF[which(as.numeric(resDF[,3]) <= pcut),]
-resDF.sig = resDF.sig[order(resDF.sig$V3),]
+resDF = read.table(output, sep="\t",stringsAsFactors=F,header=T)
+pcut = 0.01
+
+NROW(resDF[which(as.numeric(resDF$ks12.mse.pval) <= pcut),])/ NROW(resDF)
+NROW(resDF[which(as.numeric(resDF$ks23.mse.pval) <= pcut),])/ NROW(resDF)
+NROW(resDF[which(as.numeric(resDF$ks13.mse.pval) <= pcut),])/ NROW(resDF)
+
+NROW(resDF[which(as.numeric(resDF$ks12.mse.pval) <= pcut),])
+NROW(resDF[which(as.numeric(resDF$ks23.mse.pval) <= pcut),])
+NROW(resDF[which(as.numeric(resDF$ks13.mse.pval) <= pcut),])
+NROW(resDF)
+
+
+resDF.sig = resDF[which(  as.numeric(resDF$ks12.mse.pval) <= pcut & 
+                          as.numeric(resDF$ks23.mse.pval) <= pcut & 
+                          as.numeric(resDF$ks13.mse.pval) <= pcut),]
+
+
+resDF.sig = resDF.sig[order(resDF.sig$ks23.mse.pval),]
+
 head(resDF.sig)
 ###----plot density
-inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug21/" , sep="")
+inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug22" , sep="")
 plotMSEDensity = function(tgene){
-#   tgene = tail(unlist(strsplit(inputfile,"_")),1)
+  #   tgene = tail(unlist(strsplit(inputfile,"_")),1)
   inputfile = paste(inputDir, '/', 'result_', tgene, sep="")
   
   if( ! file.exists(inputfile) | file.info(inputfile)$size == 0 ){
     return(rep(NA,5))
   }
   print(inputfile)
-  data = read.csv(inputfile, stringsAsFactors= F, header=F,sep="\t")
-  colnames(data ) = c("btname","tgene", "mod1.mse", "mod1.r2",
-                      "mod2.mse", "mod2.r2",
-                      "rss1", "rss2",
-                      "cntCNV", "cntMut", "cntSmp", "F", "FPval")
-  data[,c(3,4,5,6)] = apply(data[,c(3,4,5,6)], 2, as.numeric)
+  data = read.csv(inputfile, stringsAsFactors= F, header=T,sep="\t")
+#   colnames(data ) = c("btname","tgene", "mod1.mse", "mod1.r2",
+#                       "mod2.mse", "mod2.r2",
+#                       "mod3.mse", "mod3.r2",
+#                       "rss1", "rss2", "rss3",
+#                       "cntTarCNV", "cntRegCNV", "cntRegTFMut", "cntSmp")
+  data[,-c(1,2)] <- apply(data[,-c(1,2)], 2, as.numeric)
+  ymax = max(density(as.numeric(data$mod1.mse))$y, density(as.numeric(data$mod2.mse))$y, density(as.numeric(data$mod3.mse))$y)
+  xmax = max(data$mod1.mse, data$mod2.mse,data$mod3.mse)
+  xmin = min(data$mod1.mse, data$mod2.mse, data$mod3.mse)
+  pdf(paste(figd,"/density_",tgene, "_Aug22.pdf", sep=""))
   
-  pdf(paste(figd,"/density_",tgene, ".pdf", sep=""))
-  
-    plot(0, type="n", ylab = "density", xlab="",xlim = c(min(data$mod1.mse, data$mod2.mse),max(data$mod1.mse, data$mod2.mse)),
-         ylim=c(0,max(density(as.numeric(data$mod1.mse))$y, density(as.numeric(data$mod2.mse))$y)),
-         main = paste(tgene, "MSE"))
-    lines(density(as.numeric(data$mod1.mse)),col='blue', lwd = 2,)
-    lines(density(as.numeric(data$mod2.mse)), col = 'red', lwd=2)
-    legend('topright',legend=c("model1 MSE", "model2 MSE"),lty=1, col=c("blue","red"), bty ='n', cex = .75, lwd=2)
-  dev.off()
-}
-plotMSEDensity("AFF3")
-plotMSEDensity("ABCA1")
-plotMSEDensity("CSF1")
 
+    plot(0, type="n", ylab = "density", xlab="",xlim = c(xmin,xmax),
+       ylim=c(0,ymax),
+       main = paste(tgene, "MSE"))
+
+  lines(density(as.numeric(data$mod1.mse)), col= '#FF9900', lwd = 2)
+  lines(density(as.numeric(data$mod2.mse)), col = '#006633', lwd=2) 
+  lines(density(as.numeric(data$mod3.mse)), col = '#990033', lwd=2) 
+  
+  legend('topright',legend=c("model1", "model2", "model3"),lty=1, 
+                col=c("#FF9900","#006633","#990033"), bty ='n', cex = .75, lwd=2)
+  
+    dev.off()
+}
+
+plotMulti_MseDensity = function(tglist){
+#   pdf(paste(figd,"/density_multiple_Aug24.pdf", sep=""))
+  par(mfrow=c(4,4),mar=c(0.1,.1,.1,.1))
+  for (tgene in tglist){
+    #   tgene = tail(unlist(strsplit(inputfile,"_")),1)
+    inputfile = paste(inputDir, '/', 'result_', tgene, sep="")
+    
+    #     if( ! file.exists(inputfile) | file.info(inputfile)$size == 0 ){
+    #       return(rep(NA,5))
+    #     }
+    print(inputfile)
+    data = read.table(inputfile, stringsAsFactors= F, header=T, sep="\t")
+    summary(data)
+    data[,-c(1,2)] <- apply(data[,-c(1,2)], 2, function(x){as.numeric(as.character(x))})
+    
+    ymax = max(density(as.numeric(data$mod1.mse))$y, density(as.numeric(data$mod2.mse))$y, density(as.numeric(data$mod3.mse))$y)
+    xmax = max(data$mod1.mse, data$mod2.mse,data$mod3.mse)
+    xmin = min(data$mod1.mse, data$mod2.mse, data$mod3.mse)
+    
+    plot(0, type="n", xlim = c(xmin,xmax), xaxt = 'n', yaxt = 'n',
+         ylim=c(0,ymax),tcl = 0  )
+    axis(side=1,labels=F,tick=F); axis(side=2, labels=F,tick=F)
+    lines(density(as.numeric(data$mod1.mse)), col= '#FF9900', lwd= 2)
+    lines(density(as.numeric(data$mod2.mse)), col = '#006633', lwd=2) 
+    lines(density(as.numeric(data$mod3.mse)), col = '#990033', lwd=2) 
+    
+    legend('topright',legend=c(tgene, "model 1", "model 2", "model 3"),lty=1, 
+           col=c("white", "#FF9900","#006633","#990033"), bty ='n', cex = .75, lwd=2)
+  }
+  
+#   dev.off()
+}
+
+plotMSEDensity("SV2A")
+
+inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug22" , sep="")
+op = par()
+tglist = sample(resDF.sig$tgene,min(NROW(resDF.sig),16))
+tglist = as.character(resDF.sig$tgene[1:16])
+pdf(paste(figd,"/density_multiple_Aug24_sig.pdf", sep=""))
+plotMulti_MseDensity(tglist)
+dev.off()
 
 inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/data/" , sep="")
-noseHeatmap('CSF1')
-noseHeatmap('AFF3')
+for (tgene in tglist ){
+  noseHeatmap(tgene)
+}
 
-resDF.nosig = resDF[which(as.numeric(resDF[,3])  > pcut),]
-resDF.nosig = resDF.nosig[order(resDF.nosig$V3,decreasing=T),]
-head(resDF.nosig)
+
+
+resDF.sig = resDF[which(  as.numeric(resDF$ks12.mse.pval) > pcut | 
+                            as.numeric(resDF$ks23.mse.pval) > pcut | 
+                            as.numeric(resDF$ks13.mse.pval) > pcut),]
+
+resDF.nosig = resDF.nosig[order(resDF.nosig$ks13.mse.pval,decreasing=T),]
+
+tglist = resDF.nosig$tgene[1:16]
+tglist = as.character(tglist)
+
+inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/result/runAug22" , sep="")
+pdf(paste(figd,"/density_multiple_Aug24_nosig.pdf", sep=""))
+plotMulti_MseDensity(tglist)
+dev.off()
+
+inputDir = paste(rootd, "/DATA/projFocus/result/07152014/reg/tfCerna/data/" , sep="")
+for (tgene in tglist ){
+  noseHeatmap(tgene)
+}
+
+
+
+###### 
+resDF.sig.plot <- resDF.sig
+x = as.numeric(as.character(resDF.sig.plot$ks12.mse.pval)); x = ifelse(x ==0, 1e-200, x)
+y = as.numeric(as.character(resDF.sig.plot$ks23.mse.pval)); y = ifelse(y ==0, 1e-200, y)
+z = as.numeric(as.character(resDF.sig.plot$ks13.mse.pval)); z = ifelse(z ==0, 1e-200, z)
+
+scatter3D(x =-log10(x), y = -log10(y),  z = -log10(z), pch= 19)
